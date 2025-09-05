@@ -25,8 +25,6 @@ Public Class SalesLog
 
     ' This method generates a new sales ID, either by incrementing the last ID or starting a new year.
 
-
-    ' The form loads and automatically generates a new sales ID and displays the table data.
     Private Sub SalesLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CenterToParent()
         Me.newSalesLogic.GenerateSalesID()
@@ -290,7 +288,6 @@ Public Class CarWashSales
         {"Van", 700},
         {"L300", 750},
         {"Travis", 750},
-        {"Jeep", 800},
         {"Big Bike", 250},
         {"150CC", 200},
         {"120CC", 150},
@@ -352,18 +349,20 @@ Public Class CarWashSales
         End If
 
         ' Calculate the total price based on the selected service and vehicle
-        If Not String.IsNullOrEmpty(vehicleType) AndAlso Not String.IsNullOrEmpty(serviceType) Then
+        If Not String.IsNullOrEmpty(vehicleType) Then
             Select Case serviceType
                 Case "Armor"
                     totalPrice = vehiclePrices(vehicleType) + armorAddOnPrice
                 Case "Wax"
                     If waxPrices.ContainsKey(vehicleType) Then
-                        totalPrice = waxPrices(vehicleType)
+                        totalPrice = waxPrices(vehicleType) + vehiclePrices(vehicleType)
                     End If
                 Case "Engine Wash"
                     If engineWashPrices.ContainsKey(vehicleType) Then
-                        totalPrice = engineWashPrices(vehicleType)
+                        totalPrice = engineWashPrices(vehicleType) + vehiclePrices(vehicleType)
                     End If
+                Case Else
+                    totalPrice = vehiclePrices(vehicleType)
             End Select
             TextBoxPrice.Text = totalPrice.ToString()
         End If
@@ -372,7 +371,7 @@ Public Class CarWashSales
     Public Sub AddSaleToDatabase()
 
         ' --- Consolidated Input Validation ---
-        If String.IsNullOrWhiteSpace(TextBoxPrice.Text) OrElse String.IsNullOrWhiteSpace(ComboBoxVehicle.Text) OrElse String.IsNullOrWhiteSpace(ComboBoxService.Text) Then
+        If String.IsNullOrWhiteSpace(ComboBoxVehicle.Text) Then
             MessageBox.Show("Please fill out all the fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
@@ -401,7 +400,7 @@ Public Class CarWashSales
                     insertCmd.Parameters.AddWithValue("@Vehicle", ComboBoxVehicle.Text)
                     insertCmd.Parameters.AddWithValue("@Service", ComboBoxService.Text)
                     insertCmd.Parameters.AddWithValue("@Price", TextBoxPrice.Text)
-                    insertCmd.Parameters.AddWithValue("@Date", Now.ToString("yyyy-MM-dd"))
+                    insertCmd.Parameters.AddWithValue("@Date", Now.ToString())
                     insertCmd.ExecuteNonQuery()
                 End Using
 

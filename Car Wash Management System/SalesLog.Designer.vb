@@ -53,6 +53,7 @@ Partial Class SalesLog
         TextBoxSales.Enabled = False
         TextBoxSales.Location = New Point(51, 376)
         TextBoxSales.Name = "TextBoxSales"
+        TextBoxSales.ReadOnly = True
         TextBoxSales.Size = New Size(145, 23)
         TextBoxSales.TabIndex = 1
         ' 
