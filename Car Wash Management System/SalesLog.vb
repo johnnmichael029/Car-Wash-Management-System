@@ -436,7 +436,7 @@ Public Class CarWashSales
         'End If
 
         ' --- Consolidated Input Validation ---
-        If String.IsNullOrWhiteSpace(TextBoxPrice.Text) OrElse String.IsNullOrWhiteSpace(ComboBoxVehicle.Text) OrElse String.IsNullOrWhiteSpace(ComboBoxService.Text) Then
+        If String.IsNullOrWhiteSpace(ComboBoxVehicle.Text) Then
             MessageBox.Show("Please fill out all the fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
