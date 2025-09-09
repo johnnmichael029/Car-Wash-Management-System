@@ -6,7 +6,7 @@ Public Class Inventory
     Dim cmd As New SqlCommand
     Dim adapter As New SqlDataAdapter
     Private Sub backBtn_Click(sender As Object, e As EventArgs) Handles backBtn.Click
-        Dashboard.Show()
+        Login.Show()
         Me.Close()
     End Sub
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click

@@ -6,7 +6,7 @@ Public Class SalesLog
     ' This class contains the logic for the main sales form.
 
     Dim sql As String
-    Dim constr As String = "Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\OOP Project and Test\Car Wash Management System\Database\CarWashDB.mdf;Integrated Security=True;Connect Timeout=30"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Dim con As New SqlConnection
     Dim cmd As New SqlCommand
     Dim adapter As New SqlDataAdapter
@@ -26,6 +26,7 @@ Public Class SalesLog
     ' This method generates a new sales ID, either by incrementing the last ID or starting a new year.
 
     Private Sub SalesLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         CenterToParent()
         Me.newSalesLogic.GenerateSalesID()
         DisplayTable()
@@ -38,34 +39,32 @@ Public Class SalesLog
         DisplayTable()
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
         Application.Exit()
     End Sub
 
     ' Displays the sales table in the DataGridView.
-    Sub DisplayTable()
-        Try
-            Using con As New SqlConnection(constr)
+    Public Function DisplayTable() As DataTable
+        Dim dt As New DataTable()
+        Using con As New SqlConnection(constr)
+            Try
                 con.Open()
-                sql = "Select * From salesTable"
-                cmd = New SqlCommand(sql, con)
-                Dim DT As New DataTable
-                Dim SDAdapter As New SqlDataAdapter(cmd)
-                SDAdapter.Fill(DT)
+                Dim selectQuery = "SELECT id, sales_id, vehicle, service, price, date FROM salesTable"
+                Using cmd As New SqlCommand(selectQuery, con)
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                        DataGridView1.DataSource = dt
+                        DataGridView1.Refresh()
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error viewing customers: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
+        Return dt
+    End Function
 
-                DataGridView1.DataSource = DT
-                DataGridView1.Refresh()
-                con.Close()
-            End Using
-        Catch ex As Exception
-            ' The method is now more robust and will handle errors gracefully.
-        End Try
-    End Sub
 
-    Private Sub backBtn_Click(sender As Object, e As EventArgs) Handles backBtn.Click
-        Dashboard.Show()
-        Me.Close()
-    End Sub
 
     ' This handles the delete button click event.
     Private Sub deleteBtn_Click(sender As Object, e As EventArgs) Handles deleteBtn.Click
@@ -419,8 +418,6 @@ Public Class CarWashSales
 
     Public Sub UpdateSaleInDatabase()
 
-
-
         'If String.IsNullOrWhiteSpace(TextBoxSales.Text) Then
         'MessageBox.Show("Please enter a Sales ID to update.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         'Return
@@ -516,4 +513,5 @@ Public Class CarWashSales
             MessageBox.Show("An error occurred while generating Sales ID: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
 End Class

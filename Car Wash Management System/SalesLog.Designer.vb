@@ -29,8 +29,6 @@ Partial Class SalesLog
         Label2 = New Label()
         Label3 = New Label()
         createBtn = New Button()
-        Button2 = New Button()
-        backBtn = New Button()
         updateBtn = New Button()
         deleteBtn = New Button()
         readBtn = New Button()
@@ -42,16 +40,18 @@ Partial Class SalesLog
         ' 
         ' DataGridView1
         ' 
+        DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Location = New Point(51, 48)
+        DataGridView1.Location = New Point(28, 57)
         DataGridView1.Name = "DataGridView1"
-        DataGridView1.Size = New Size(660, 286)
+        DataGridView1.Size = New Size(1221, 365)
         DataGridView1.TabIndex = 0
         ' 
         ' TextBoxSales
         ' 
         TextBoxSales.Enabled = False
-        TextBoxSales.Location = New Point(51, 376)
+        TextBoxSales.Location = New Point(28, 461)
         TextBoxSales.Name = "TextBoxSales"
         TextBoxSales.ReadOnly = True
         TextBoxSales.Size = New Size(145, 23)
@@ -59,7 +59,7 @@ Partial Class SalesLog
         ' 
         ' TextBoxPrice
         ' 
-        TextBoxPrice.Location = New Point(456, 376)
+        TextBoxPrice.Location = New Point(433, 461)
         TextBoxPrice.Name = "TextBoxPrice"
         TextBoxPrice.ReadOnly = True
         TextBoxPrice.Size = New Size(123, 23)
@@ -68,7 +68,7 @@ Partial Class SalesLog
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(51, 358)
+        Label1.Location = New Point(28, 443)
         Label1.Name = "Label1"
         Label1.Size = New Size(47, 15)
         Label1.TabIndex = 4
@@ -77,7 +77,7 @@ Partial Class SalesLog
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(202, 358)
+        Label2.Location = New Point(179, 443)
         Label2.Name = "Label2"
         Label2.Size = New Size(44, 15)
         Label2.TabIndex = 5
@@ -86,7 +86,7 @@ Partial Class SalesLog
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Location = New Point(456, 358)
+        Label3.Location = New Point(433, 443)
         Label3.Name = "Label3"
         Label3.Size = New Size(33, 15)
         Label3.TabIndex = 6
@@ -94,36 +94,20 @@ Partial Class SalesLog
         ' 
         ' createBtn
         ' 
+        createBtn.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         createBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        createBtn.Location = New Point(728, 48)
+        createBtn.Location = New Point(1291, 57)
         createBtn.Name = "createBtn"
-        createBtn.Size = New Size(150, 53)
+        createBtn.Size = New Size(150, 51)
         createBtn.TabIndex = 7
         createBtn.Text = "Create"
         createBtn.UseVisualStyleBackColor = True
         ' 
-        ' Button2
-        ' 
-        Button2.Location = New Point(993, 12)
-        Button2.Name = "Button2"
-        Button2.Size = New Size(99, 38)
-        Button2.TabIndex = 8
-        Button2.Text = "Exit"
-        Button2.UseVisualStyleBackColor = True
-        ' 
-        ' backBtn
-        ' 
-        backBtn.Location = New Point(993, 433)
-        backBtn.Name = "backBtn"
-        backBtn.Size = New Size(99, 36)
-        backBtn.TabIndex = 11
-        backBtn.Text = "Back"
-        backBtn.UseVisualStyleBackColor = True
-        ' 
         ' updateBtn
         ' 
+        updateBtn.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         updateBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        updateBtn.Location = New Point(728, 200)
+        updateBtn.Location = New Point(1291, 209)
         updateBtn.Name = "updateBtn"
         updateBtn.Size = New Size(150, 53)
         updateBtn.TabIndex = 12
@@ -132,8 +116,9 @@ Partial Class SalesLog
         ' 
         ' deleteBtn
         ' 
+        deleteBtn.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         deleteBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        deleteBtn.Location = New Point(728, 281)
+        deleteBtn.Location = New Point(1291, 290)
         deleteBtn.Name = "deleteBtn"
         deleteBtn.Size = New Size(150, 53)
         deleteBtn.TabIndex = 13
@@ -142,8 +127,9 @@ Partial Class SalesLog
         ' 
         ' readBtn
         ' 
+        readBtn.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         readBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        readBtn.Location = New Point(728, 122)
+        readBtn.Location = New Point(1291, 132)
         readBtn.Name = "readBtn"
         readBtn.Size = New Size(150, 53)
         readBtn.TabIndex = 14
@@ -153,7 +139,7 @@ Partial Class SalesLog
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Location = New Point(324, 358)
+        Label4.Location = New Point(301, 443)
         Label4.Name = "Label4"
         Label4.Size = New Size(44, 15)
         Label4.TabIndex = 15
@@ -166,7 +152,7 @@ Partial Class SalesLog
         ComboBoxVehicle.AutoCompleteSource = AutoCompleteSource.ListItems
         ComboBoxVehicle.FormattingEnabled = True
         ComboBoxVehicle.Items.AddRange(New Object() {"HatchBack", "Sedan", "Compact", "Montero", "Fortuner", "Innova", "Adventure", "Crosswind", "Everest", "Ertiga", "Veloz", "Changan", "Pick Up", "Van", "L300", "Travis", "Jeep", "Big bike", "150CC", "120CC", "100CC", "Tricycle"})
-        ComboBoxVehicle.Location = New Point(202, 376)
+        ComboBoxVehicle.Location = New Point(179, 461)
         ComboBoxVehicle.Name = "ComboBoxVehicle"
         ComboBoxVehicle.Size = New Size(121, 23)
         ComboBoxVehicle.TabIndex = 16
@@ -178,7 +164,7 @@ Partial Class SalesLog
         ComboBoxService.AutoCompleteSource = AutoCompleteSource.ListItems
         ComboBoxService.FormattingEnabled = True
         ComboBoxService.Items.AddRange(New Object() {"Armor", "Wax", "Engine Wash"})
-        ComboBoxService.Location = New Point(329, 376)
+        ComboBoxService.Location = New Point(306, 461)
         ComboBoxService.Name = "ComboBoxService"
         ComboBoxService.Size = New Size(121, 23)
         ComboBoxService.TabIndex = 17
@@ -187,15 +173,14 @@ Partial Class SalesLog
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1104, 501)
+        BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
+        ClientSize = New Size(1497, 647)
         Controls.Add(ComboBoxService)
         Controls.Add(ComboBoxVehicle)
         Controls.Add(Label4)
         Controls.Add(readBtn)
         Controls.Add(deleteBtn)
         Controls.Add(updateBtn)
-        Controls.Add(backBtn)
-        Controls.Add(Button2)
         Controls.Add(createBtn)
         Controls.Add(Label3)
         Controls.Add(Label2)
@@ -203,8 +188,11 @@ Partial Class SalesLog
         Controls.Add(TextBoxPrice)
         Controls.Add(TextBoxSales)
         Controls.Add(DataGridView1)
+        FormBorderStyle = FormBorderStyle.None
+        MaximumSize = New Size(1497, 647)
         Name = "SalesLog"
         Text = "Sales log"
+        WindowState = FormWindowState.Maximized
         CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
         PerformLayout()
@@ -217,8 +205,6 @@ Partial Class SalesLog
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents createBtn As Button
-    Friend WithEvents Button2 As Button
-    Friend WithEvents backBtn As Button
     Friend WithEvents updateBtn As Button
     Friend WithEvents deleteBtn As Button
     Friend WithEvents readBtn As Button
