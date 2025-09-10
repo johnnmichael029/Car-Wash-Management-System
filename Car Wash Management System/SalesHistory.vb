@@ -1,19 +1,12 @@
-﻿
-Imports Microsoft.Data.SqlClient
-Imports System.Data
-
-Public Class SalesLog
-    ' This class contains the logic for the main sales form.
-
+﻿Imports Microsoft.Data.SqlClient
+Public Class SalesHistory
     Dim sql As String
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Dim con As New SqlConnection
     Dim cmd As New SqlCommand
     Dim adapter As New SqlDataAdapter
     Dim salesID As String = ""
-
     Private ReadOnly newSalesLogic As CarWashSales
-
     Public Sub New()
         ' This call is required by the designer.
         InitializeComponent()
@@ -22,78 +15,16 @@ Public Class SalesLog
         ' The newSalesLogic instance will handle price updates, adding, and updating sales.
         Me.newSalesLogic = New CarWashSales(ComboBoxVehicle, ComboBoxService, TextBoxPrice, TextBoxSales, constr)
     End Sub
-
-    ' This method generates a new sales ID, either by incrementing the last ID or starting a new year.
-
-    Private Sub SalesLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        CenterToParent()
+    Private Sub SalesHistory_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.newSalesLogic.GenerateSalesID()
         DisplayTable()
     End Sub
-
-    ' This handles the create button click event. It now uses the new AddSaleToDatabase method from the CarWashSales class.
-    Private Sub createBtn_Click(sender As Object, e As EventArgs) Handles createBtn.Click
-        Me.newSalesLogic.AddSaleToDatabase()
-        ClearFields()
-        DisplayTable()
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs)
-        Application.Exit()
-    End Sub
-
-    ' Displays the sales table in the DataGridView.
-    Public Function DisplayTable() As DataTable
-        Dim dt As New DataTable()
-        Using con As New SqlConnection(constr)
-            Try
-                con.Open()
-                Dim selectQuery = "SELECT id, sales_id, vehicle, service, price, date FROM salesTable"
-                Using cmd As New SqlCommand(selectQuery, con)
-                    Using adapter As New SqlDataAdapter(cmd)
-                        adapter.Fill(dt)
-                        DataGridView1.DataSource = dt
-                        DataGridView1.Refresh()
-                    End Using
-                End Using
-            Catch ex As Exception
-                MessageBox.Show("Error viewing customers: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        End Using
-        Return dt
-    End Function
-
-
-
-    ' This handles the delete button click event.
-    Private Sub deleteBtn_Click(sender As Object, e As EventArgs) Handles deleteBtn.Click
-        DeleteSaleInDatabase()
-        ClearFields()
-        DisplayTable()
-    End Sub
-
-    ' This handles the DataGridView cell click event to populate text boxes with selected row data.
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
         TextBoxSales.Text = DataGridView1.CurrentRow.Cells("sales_id").Value
         ComboBoxVehicle.Text = DataGridView1.CurrentRow.Cells("vehicle").Value
         ComboBoxService.Text = DataGridView1.CurrentRow.Cells("service").Value
         TextBoxPrice.Text = DataGridView1.CurrentRow.Cells("Price").Value
     End Sub
-
-    ' This handles the update button click event. It now uses the new UpdateSaleInDatabase method from the CarWashSales class.
-    Private Sub updateBtn_Click(sender As Object, e As EventArgs) Handles updateBtn.Click
-        Me.newSalesLogic.UpdateSaleInDatabase()
-        ClearFields()
-        DisplayTable()
-    End Sub
-
-    ' This handles the read button click event.
-    Private Sub readBtn_Click(sender As Object, e As EventArgs) Handles readBtn.Click
-        DisplayTable()
-        ClearFields()
-    End Sub
-
     ' Displays a generic error message. The new class provides more specific messages.
     Sub errorMessageBox()
         MessageBox.Show("Please fill In all the fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -107,7 +38,6 @@ Public Class SalesLog
         Me.newSalesLogic.GenerateSalesID()
     End Sub
 
-    ' The following methods are now handled by the new CarWashSales class.
     Private Sub AddSaleToDatabase()
         Dim price As Integer
         Dim service As String = ComboBoxService.Text
@@ -239,8 +169,50 @@ Public Class SalesLog
             End Try
         End Using
     End Sub
-End Class
+    Public Function DisplayTable() As DataTable
+        Dim dt As New DataTable()
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Dim selectQuery = "SELECT id, sales_id, vehicle, service, price, date FROM salesTable"
+                Using cmd As New SqlCommand(selectQuery, con)
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                        DataGridView1.DataSource = dt
+                        DataGridView1.Refresh()
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error viewing customers: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
+        Return dt
+    End Function
 
+    Private Sub createBtn_Click(sender As Object, e As EventArgs) Handles createBtn.Click
+        Me.newSalesLogic.AddSaleToDatabase()
+        ClearFields()
+        DisplayTable()
+    End Sub
+
+    Private Sub readBtn_Click(sender As Object, e As EventArgs) Handles readBtn.Click
+        DisplayTable()
+        ClearFields()
+    End Sub
+
+    Private Sub updateBtn_Click(sender As Object, e As EventArgs) Handles updateBtn.Click
+        Me.newSalesLogic.UpdateSaleInDatabase()
+        ClearFields()
+        DisplayTable()
+    End Sub
+
+    Private Sub deleteBtn_Click(sender As Object, e As EventArgs) Handles deleteBtn.Click
+        DeleteSaleInDatabase()
+        ClearFields()
+        DisplayTable()
+    End Sub
+
+End Class
 ' This is the new, self-contained CarWashSales class.
 ' It contains the updated pricing logic, as well as new AddSaleToDatabase and UpdateSaleInDatabase methods.
 Public Class CarWashSales

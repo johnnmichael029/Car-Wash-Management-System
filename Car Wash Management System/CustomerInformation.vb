@@ -1,12 +1,8 @@
-﻿
-Imports Microsoft.Data.SqlClient
-
-Public Class CustomerManagement
-
+﻿Imports Microsoft.Data.SqlClient
+Public Class CustomerInformation
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
-    Public Property MidParent As Carwash
-
-    Private Sub CustomerManagement_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub addBtn_Click(sender As Object, e As EventArgs) Handles addBtn.Click
+        AddCustomer()
         ViewCustomer()
     End Sub
 
@@ -18,53 +14,6 @@ Public Class CustomerManagement
         TextBoxPlateNumber.Text = DataGridView1.CurrentRow.Cells("PlateNumber").Value.ToString()
         customerIDLabel.Text = DataGridView1.CurrentRow.Cells("CustomerID").Value.ToString()
     End Sub
-
-    Private Sub addBtn_Click(sender As Object, e As EventArgs) Handles addBtn.Click
-        'AddCustomer.StartPosition = FormStartPosition.Manual
-        'AddCustomer.Location = New Point(1500, 249)
-        'AddCustomer.Show(Me)
-        'UpdateCustomer.Close()
-        AddCustomer()
-        ViewCustomer()
-    End Sub
-    Public Sub ViewCustomer()
-        Dim dt As New DataTable()
-        Using con As New SqlConnection(constr)
-            Try
-                con.Open()
-                Dim selectQuery = "SELECT CustomerID, Name, PhoneNumber, Email, Address, PlateNumber FROM CustomersTable"
-                Using cmd As New SqlCommand(selectQuery, con)
-                    Using adapter As New SqlDataAdapter(cmd)
-                        adapter.Fill(dt)
-                        DataGridView1.DataSource = dt
-                        DataGridView1.Refresh()
-                    End Using
-                End Using
-            Catch ex As Exception
-                MessageBox.Show("Error viewing customers: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        End Using
-
-    End Sub
-
-    Private Sub viewBtn_Click(sender As Object, e As EventArgs) Handles viewBtn.Click
-        ViewCustomer()
-    End Sub
-
-    Private Sub updateBtn_Click(sender As Object, e As EventArgs) Handles updateBtn.Click
-        'UpdateCustomer.StartPosition = FormStartPosition.Manual
-        'UpdateCustomer.Location = New Point(1500, 249)
-        'UpdateCustomer.Show(Me)
-        'AddCustomer.Close()
-        UpdateCustomer()
-        ViewCustomer()
-    End Sub
-
-    Private Sub deleteBtn_Click(sender As Object, e As EventArgs) Handles deleteBtn.Click
-        DeleteCustomer()
-
-    End Sub
-
     Public Sub DeleteCustomer()
         If DataGridView1.SelectedRows.Count = 0 Then
             MessageBox.Show("Please select a customer in table row to delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -94,12 +43,6 @@ Public Class CustomerManagement
             End Using
 
         End If
-    End Sub
-    Sub SwitchPanel(ByVal panel As Form)
-        Panel1.Controls.Clear()
-        panel.TopLevel = False
-        Panel1.Controls.Add(panel)
-        panel.Show()
     End Sub
     Public Sub AddCustomer()
         If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Or String.IsNullOrEmpty(TextBoxAddress.Text) Or String.IsNullOrEmpty(TextBoxPlateNumber.Text) Then
@@ -147,7 +90,7 @@ Public Class CustomerManagement
                     Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
                     If rowsAffected > 0 Then
                         MessageBox.Show("Customer updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
+                        ViewCustomer()
                     End If
 
                 End Using
@@ -165,5 +108,38 @@ Public Class CustomerManagement
             End Try
         End Using
     End Sub
+    Public Sub ViewCustomer()
+        Dim dt As New DataTable()
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Dim selectQuery = "SELECT CustomerID, Name, PhoneNumber, Email, Address, PlateNumber FROM CustomersTable"
+                Using cmd As New SqlCommand(selectQuery, con)
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                        DataGridView1.DataSource = dt
+                        DataGridView1.Refresh()
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error viewing customers: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
 
+    End Sub
+
+    Private Sub viewBtn_Click(sender As Object, e As EventArgs) Handles viewBtn.Click
+        ViewCustomer()
+    End Sub
+
+    Private Sub updateBtn_Click(sender As Object, e As EventArgs) Handles updateBtn.Click
+        UpdateCustomer()
+    End Sub
+
+    Private Sub deleteBtn_Click(sender As Object, e As EventArgs) Handles deleteBtn.Click
+        DeleteCustomer()
+    End Sub
+    Private Sub CustomerInformation_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ViewCustomer()
+    End Sub
 End Class
