@@ -106,11 +106,21 @@ Public Class Carwash
 
     Private Sub SaleHistoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaleHistoryToolStripMenuItem.Click
         Panel4.Controls.Clear()
-        Dim salesHistory As New SalesHistory()
+        Dim salesHistory As New SalesForm()
         salesHistory.TopLevel = False
         salesHistory.FormBorderStyle = FormBorderStyle.None
         Panel4.Controls.Add(salesHistory)
         salesHistory.Dock = DockStyle.Fill
         salesHistory.Show()
+    End Sub
+
+    Private Sub BillingAndToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BillingAndToolStripMenuItem.Click
+        Panel4.Controls.Clear()
+        Dim billingContracts As New BillingContracts()
+        billingContracts.TopLevel = False
+        billingContracts.FormBorderStyle = FormBorderStyle.None
+        Panel4.Controls.Add(billingContracts)
+        billingContracts.Dock = DockStyle.Fill
+        billingContracts.Show()
     End Sub
 End Class

@@ -25,6 +25,7 @@ Partial Class Service
         Panel1 = New Panel()
         DataGridView1 = New DataGridView()
         Panel3 = New Panel()
+        CheckBoxAddon = New CheckBox()
         LabelServiceID = New Label()
         Label4 = New Label()
         deleteServiceBtn = New Button()
@@ -66,6 +67,7 @@ Partial Class Service
         ' Panel3
         ' 
         Panel3.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
+        Panel3.Controls.Add(CheckBoxAddon)
         Panel3.Controls.Add(LabelServiceID)
         Panel3.Controls.Add(Label4)
         Panel3.Controls.Add(deleteServiceBtn)
@@ -84,10 +86,20 @@ Partial Class Service
         Panel3.Size = New Size(305, 551)
         Panel3.TabIndex = 2
         ' 
+        ' CheckBoxAddon
+        ' 
+        CheckBoxAddon.AutoSize = True
+        CheckBoxAddon.Location = New Point(193, 169)
+        CheckBoxAddon.Name = "CheckBoxAddon"
+        CheckBoxAddon.Size = New Size(62, 19)
+        CheckBoxAddon.TabIndex = 12
+        CheckBoxAddon.Text = "Addon"
+        CheckBoxAddon.UseVisualStyleBackColor = True
+        ' 
         ' LabelServiceID
         ' 
         LabelServiceID.AutoSize = True
-        LabelServiceID.Location = New Point(72, 170)
+        LabelServiceID.Location = New Point(72, 169)
         LabelServiceID.Name = "LabelServiceID"
         LabelServiceID.Size = New Size(0, 15)
         LabelServiceID.TabIndex = 11
@@ -95,7 +107,7 @@ Partial Class Service
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Location = New Point(16, 170)
+        Label4.Location = New Point(16, 169)
         Label4.Name = "Label4"
         Label4.Size = New Size(58, 15)
         Label4.TabIndex = 10
@@ -104,7 +116,7 @@ Partial Class Service
         ' deleteServiceBtn
         ' 
         deleteServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        deleteServiceBtn.Location = New Point(16, 323)
+        deleteServiceBtn.Location = New Point(16, 329)
         deleteServiceBtn.Name = "deleteServiceBtn"
         deleteServiceBtn.Size = New Size(261, 39)
         deleteServiceBtn.TabIndex = 9
@@ -114,7 +126,7 @@ Partial Class Service
         ' updateServiceBtn
         ' 
         updateServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        updateServiceBtn.Location = New Point(16, 278)
+        updateServiceBtn.Location = New Point(16, 284)
         updateServiceBtn.Name = "updateServiceBtn"
         updateServiceBtn.Size = New Size(261, 39)
         updateServiceBtn.TabIndex = 8
@@ -124,7 +136,7 @@ Partial Class Service
         ' viewServiceBtn
         ' 
         viewServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        viewServiceBtn.Location = New Point(16, 233)
+        viewServiceBtn.Location = New Point(16, 239)
         viewServiceBtn.Name = "viewServiceBtn"
         viewServiceBtn.Size = New Size(261, 39)
         viewServiceBtn.TabIndex = 7
@@ -134,7 +146,7 @@ Partial Class Service
         ' addServiceBtn
         ' 
         addServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        addServiceBtn.Location = New Point(16, 188)
+        addServiceBtn.Location = New Point(16, 194)
         addServiceBtn.Name = "addServiceBtn"
         addServiceBtn.Size = New Size(261, 39)
         addServiceBtn.TabIndex = 6
@@ -143,7 +155,7 @@ Partial Class Service
         ' 
         ' TextBoxPrice
         ' 
-        TextBoxPrice.Location = New Point(16, 139)
+        TextBoxPrice.Location = New Point(16, 138)
         TextBoxPrice.Name = "TextBoxPrice"
         TextBoxPrice.Size = New Size(261, 23)
         TextBoxPrice.TabIndex = 5
@@ -151,7 +163,7 @@ Partial Class Service
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Location = New Point(16, 121)
+        Label3.Location = New Point(16, 120)
         Label3.Name = "Label3"
         Label3.Size = New Size(33, 15)
         Label3.TabIndex = 4
@@ -159,7 +171,7 @@ Partial Class Service
         ' 
         ' TextBoxDescription
         ' 
-        TextBoxDescription.Location = New Point(16, 83)
+        TextBoxDescription.Location = New Point(16, 82)
         TextBoxDescription.Name = "TextBoxDescription"
         TextBoxDescription.Size = New Size(261, 23)
         TextBoxDescription.TabIndex = 3
@@ -167,7 +179,7 @@ Partial Class Service
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(16, 65)
+        Label2.Location = New Point(16, 64)
         Label2.Name = "Label2"
         Label2.Size = New Size(67, 15)
         Label2.TabIndex = 2
@@ -219,4 +231,5 @@ Partial Class Service
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents CheckBoxAddon As CheckBox
 End Class

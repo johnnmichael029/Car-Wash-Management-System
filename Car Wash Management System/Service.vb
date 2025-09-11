@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.Data.SqlClient
+Imports Windows.Win32.System
 
 Public Class Service
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
@@ -18,12 +19,13 @@ Public Class Service
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                Dim AddCustomerQuery = "INSERT INTO ServicesTable (ServiceName, Description, Price) VALUES (@ServiceName, @Description, @Price)"
+                Dim AddCustomerQuery = "INSERT INTO ServicesTable (ServiceName, Description, Price, Addon) VALUES (@ServiceName, @Description, @Price, @Addon)"
                 Using cmd As New SqlCommand(AddCustomerQuery, con)
                     cmd.Parameters.AddWithValue("@ServiceName", TextBoxServiceName.Text)
                     cmd.Parameters.AddWithValue("Description", TextBoxDescription.Text)
                     cmd.Parameters.AddWithValue("Price", Convert.ToDecimal(TextBoxPrice.Text))
                     cmd.Parameters.AddWithValue("ServiceID", LabelServiceID.Text)
+                    cmd.Parameters.AddWithValue("Addon", If(CheckBoxAddon.Checked, 1, 0))
                     cmd.ExecuteNonQuery()
                 End Using
                 MessageBox.Show("Service added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -40,6 +42,7 @@ Public Class Service
         TextBoxDescription.Clear()
         TextBoxPrice.Clear()
         LabelServiceID.Text = ""
+        CheckBoxAddon.Checked = False
     End Sub
     Private Sub ViewService()
         Dim dt As New DataTable
@@ -62,7 +65,7 @@ Public Class Service
     End Sub
 
     Private Sub addServiceBtn_Click(sender As Object, e As EventArgs) Handles addServiceBtn.Click
-        AddService() '
+        AddService()
         ViewService()
     End Sub
     Private Sub Service_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -84,12 +87,13 @@ Public Class Service
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                Dim UpdateServiceQuery = "UPDATE ServicesTable SET ServiceName = @ServiceName, Description = @Description, Price = @Price WHERE ServiceID = @ServiceID"
+                Dim UpdateServiceQuery = "UPDATE ServicesTable SET ServiceName = @ServiceName, Description = @Description, Price = @Price, Addon = @Addon WHERE ServiceID = @ServiceID"
                 Using cmd As New SqlCommand(UpdateServiceQuery, con)
                     cmd.Parameters.AddWithValue("@ServiceName", TextBoxServiceName.Text)
                     cmd.Parameters.AddWithValue("Description", TextBoxDescription.Text)
                     cmd.Parameters.AddWithValue("Price", Convert.ToDecimal(TextBoxPrice.Text))
                     cmd.Parameters.AddWithValue("ServiceID", LabelServiceID.Text)
+                    cmd.Parameters.AddWithValue("Addon", If(CheckBoxAddon.Checked, 1, 0))
                     Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
                     If rowsAffected > 0 Then
                         MessageBox.Show("Service updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -135,5 +139,9 @@ Public Class Service
 
     Private Sub deleteServiceBtn_Click(sender As Object, e As EventArgs) Handles deleteServiceBtn.Click
         DeleteService()
+    End Sub
+
+    Private Sub CheckBoxAddon_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxAddon.CheckedChanged
+
     End Sub
 End Class
