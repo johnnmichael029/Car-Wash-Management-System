@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.Data.SqlClient
 
+' Class to hold both ServiceID and Price from the database
 
 
 Public Class BillingContracts
@@ -37,10 +38,6 @@ Public Class BillingContracts
             ' Determine the service name and ID based on both combo boxes.
             Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
             Dim addonServiceName As String = If(ComboBoxAddon.SelectedIndex <> -1, ComboBoxAddon.Text, String.Empty)
-            Dim fullServiceName As String = baseServiceName
-            If Not String.IsNullOrWhiteSpace(addonServiceName) Then
-                fullServiceName = fullServiceName & " + " & addonServiceName
-            End If
 
             If String.IsNullOrWhiteSpace(baseServiceName) Then
                 MessageBox.Show("Please select a base service.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -51,16 +48,20 @@ Public Class BillingContracts
                 MessageBox.Show("Please select a payment method.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
+
             ' Get the separate Service IDs for the base service and the addon.
-            Dim baseServiceDetails = billingContractsManagement.GetServiceDetails(baseServiceName)
+            Dim baseServiceDetails As ServiceDetails = billingContractsManagement.GetServiceDetails(baseServiceName)
             Dim addonServiceID As Integer? = Nothing ' Use a nullable integer for the addon service ID
             If Not String.IsNullOrWhiteSpace(addonServiceName) Then
-                addonServiceID = billingContractsManagement.GetServiceDetails(addonServiceName)
+                Dim addonServiceDetails As ServiceDetails = billingContractsManagement.GetServiceDetails(addonServiceName)
+                If addonServiceDetails IsNot Nothing Then
+                    addonServiceID = addonServiceDetails.ServiceID
+                End If
             End If
 
             billingContractsManagement.AddContract(
                 customerID,
-                baseServiceDetails,
+                baseServiceDetails.ServiceID,
                 addonServiceID,
                 DateTimePickerStartDate.Value,
                 If(DateTimePickerEndDate.Checked, CType(DateTimePickerEndDate.Value, Date?), Nothing),
@@ -68,7 +69,7 @@ Public Class BillingContracts
                 totalPrice,
                 ComboBoxContractStatus.Text
             )
-
+            MessageBox.Show("Contract added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             DataGridView1.DataSource = billingContractsManagement.ViewContracts()
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -113,6 +114,30 @@ Public Class BillingContracts
         End Try
     End Sub
 
+    Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
+        CalculateTotalPrice()
+    End Sub
+
+    Private Sub ComboBoxAddon_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxAddon.SelectedIndexChanged
+        CalculateTotalPrice()
+    End Sub
+
+    Private Sub CalculateTotalPrice()
+        Dim totalPrice As Decimal = 0.0D
+
+        If ComboBoxServices.SelectedIndex <> -1 Then
+            Dim baseServiceDetails As ServiceDetails = billingContractsManagement.GetServiceDetails(ComboBoxServices.Text)
+            totalPrice += baseServiceDetails.Price
+        End If
+
+        If ComboBoxAddon.SelectedIndex <> -1 Then
+            Dim addonServiceDetails As ServiceDetails = billingContractsManagement.GetServiceDetails(ComboBoxAddon.Text)
+            totalPrice += addonServiceDetails.Price
+        End If
+
+        TextBoxPrice.Text = totalPrice.ToString("N2") ' Format to 2 decimal places
+    End Sub
+
     Private Sub TextBoxCustomerName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCustomerName.TextChanged
         Try
             Dim customerID As Integer = billingContractsManagement.GetCustomerID(TextBoxCustomerName.Text)
@@ -133,19 +158,27 @@ Public Class BillingContracts
             Dim customerID As Integer
             Dim price As Decimal
 
-            If Not Integer.TryParse(ContractID, contractID) Or Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Or Not Decimal.TryParse(TextBoxPrice.Text, price) Then
-                MessageBox.Show("Please enter valid numeric values for Contract ID, Customer ID, and Price.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Not Integer.TryParse(LabelContractID.Text, contractID) Or Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Or Not Decimal.TryParse(TextBoxPrice.Text, price) Then
+                MessageBox.Show("Please select customer from contract Table to update!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
 
-            Dim baseServiceDetails = billingContractsManagement.GetServiceDetails(ComboBoxServices.Text)
-            Dim serviceID As Integer = baseServiceDetails
+            Dim baseServiceDetails As ServiceDetails = billingContractsManagement.GetServiceDetails(ComboBoxServices.Text)
+            Dim addonServiceID As Integer? = Nothing
+            If ComboBoxAddon.SelectedIndex <> -1 Then
+                Dim addonServiceDetails As ServiceDetails = billingContractsManagement.GetServiceDetails(ComboBoxAddon.Text)
+                If addonServiceDetails IsNot Nothing Then
+                    addonServiceID = addonServiceDetails.ServiceID
+                End If
+            End If
+
             Dim endDate As Date? = If(DateTimePickerEndDate.Checked, CType(DateTimePickerEndDate.Value, Date?), Nothing)
 
             billingContractsManagement.UpdateContract(
                 contractID,
                 customerID,
-                serviceID,
+                baseServiceDetails.ServiceID,
+                addonServiceID,
                 DateTimePickerStartDate.Value,
                 endDate,
                 ComboBoxBillingFrequency.Text,
@@ -172,11 +205,42 @@ Public Class BillingContracts
         ComboBoxBillingFrequency.SelectedIndex = -1
         TextBoxPrice.Clear()
         ComboBoxContractStatus.SelectedIndex = -1
-        ContractID.Text = String.Empty
+        LabelContractID.Text = String.Empty
     End Sub
 
     Private Sub deleteServiceBtn_Click(sender As Object, e As EventArgs) Handles deleteServiceBtn.Click
+        billingContractsManagement.DeleteContract(LabelContractID.Text)
+        DataGridView1.DataSource = billingContractsManagement.ViewContracts()
+        ClearFields()
+    End Sub
 
+    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+        LabelContractID.Text = DataGridView1.CurrentRow.Cells(0).Value.ToString()
+        TextBoxCustomerName.Text = DataGridView1.CurrentRow.Cells(1).Value.ToString()
+        ComboBoxServices.Text = DataGridView1.CurrentRow.Cells(2).Value.ToString()
+        If Not IsDBNull(DataGridView1.CurrentRow.Cells(3).Value) Then
+            ComboBoxAddon.Text = DataGridView1.CurrentRow.Cells(3).Value.ToString()
+        Else
+            ComboBoxAddon.SelectedIndex = -1 ' Handle cases where the addon is null
+        End If
+
+        DateTimePickerStartDate.Value = Convert.ToDateTime(DataGridView1.CurrentRow.Cells(4).Value)
+        If Not IsDBNull(DataGridView1.CurrentRow.Cells(5).Value) Then
+            DateTimePickerEndDate.Value = Convert.ToDateTime(DataGridView1.CurrentRow.Cells(5).Value)
+            DateTimePickerEndDate.Checked = True
+        Else
+            DateTimePickerEndDate.Checked = False
+        End If
+        ComboBoxBillingFrequency.Text = DataGridView1.CurrentRow.Cells(6).Value.ToString()
+        TextBoxPrice.Text = DataGridView1.CurrentRow.Cells(7).Value.ToString()
+        ComboBoxContractStatus.Text = DataGridView1.CurrentRow.Cells(8).Value.ToString()
+
+        ' Update the customer ID based on the selected customer name.
+        TextBoxCustomerName_TextChanged(TextBoxCustomerName, New EventArgs())
+    End Sub
+
+    Private Sub viewServiceBtn_Click(sender As Object, e As EventArgs) Handles viewServiceBtn.Click
+        DataGridView1.DataSource = billingContractsManagement.ViewContracts()
     End Sub
 End Class
 
@@ -224,7 +288,11 @@ Public Class BillingContractsManagement
         Using con As New SqlConnection(constr)
             con.Open()
             ' SQL query to select all contracts.
-            Dim selectQuery As String = "SELECT ContractID, CustomerID, ServiceID, StartDate, EndDate, BillingFrequency, Price, ContractStatus FROM BillingContracts"
+            Dim selectQuery As String = "SELECT b.ContractID, c.Name AS CustomerName, s.ServiceName AS BaseService, sa.ServiceName AS AddonService, b.StartDate, b.EndDate, b.BillingFrequency, b.Price, b.ContractStatus
+                                         FROM BillingContracts b
+                                         INNER JOIN CustomersTable c ON b.CustomerID = c.CustomerID
+                                         INNER JOIN ServicesTable s ON b.ServiceID = s.ServiceID
+                                         LEFT JOIN ServicesTable sa ON b.AddonServiceID = sa.ServiceID ORDER BY b.StartDate DESC"
             Using cmd As New SqlCommand(selectQuery, con)
                 Using adapter As New SqlDataAdapter(cmd)
                     adapter.Fill(dt)
@@ -237,11 +305,11 @@ Public Class BillingContractsManagement
     ''' <summary>
     ''' Updates an existing billing contract in the database.
     ''' </summary>
-    Public Sub UpdateContract(contractID As Integer, customerID As Integer, serviceID As Integer, startDate As Date, endDate As Date?, billingFrequency As String, price As Decimal, contractStatus As String)
+    Public Sub UpdateContract(contractID As Integer, customerID As Integer, serviceID As Integer, addonServiceID As Integer?, startDate As Date, endDate As Date?, billingFrequency As String, price As Decimal, contractStatus As String)
         Using con As New SqlConnection(constr)
             con.Open()
             ' SQL query to update a contract.
-            Dim updateQuery As String = "UPDATE BillingContracts SET CustomerID = @CustomerID, ServiceID = @ServiceID, StartDate = @StartDate, EndDate = @EndDate, BillingFrequency = @BillingFrequency, Price = @Price, ContractStatus = @ContractStatus WHERE ContractID = @ContractID"
+            Dim updateQuery As String = "UPDATE BillingContracts SET CustomerID = @CustomerID, ServiceID = @ServiceID, AddonServiceID = @AddonServiceID, StartDate = @StartDate, EndDate = @EndDate, BillingFrequency = @BillingFrequency, Price = @Price, ContractStatus = @ContractStatus WHERE ContractID = @ContractID"
             Using cmd As New SqlCommand(updateQuery, con)
                 cmd.Parameters.AddWithValue("@ContractID", contractID)
                 cmd.Parameters.AddWithValue("@CustomerID", customerID)
@@ -254,7 +322,11 @@ Public Class BillingContractsManagement
                 Else
                     cmd.Parameters.AddWithValue("@EndDate", DBNull.Value)
                 End If
-
+                If addonServiceID.HasValue Then
+                    cmd.Parameters.AddWithValue("@AddonServiceID", addonServiceID.Value)
+                Else
+                    cmd.Parameters.AddWithValue("@AddonServiceID", DBNull.Value) ' Insert NULL if no addon is selected
+                End If
                 cmd.Parameters.AddWithValue("@BillingFrequency", billingFrequency)
                 cmd.Parameters.AddWithValue("@Price", price)
                 cmd.Parameters.AddWithValue("@ContractStatus", contractStatus)
@@ -267,15 +339,26 @@ Public Class BillingContractsManagement
     ''' Deletes an existing billing contract from the database.
     ''' </summary>
     Public Sub DeleteContract(contractID As Integer)
-        Using con As New SqlConnection(constr)
-            con.Open()
-            ' SQL query to delete a contract.
-            Dim deleteQuery As String = "DELETE FROM BillingContracts WHERE ContractID = @ContractID"
-            Using cmd As New SqlCommand(deleteQuery, con)
-                cmd.Parameters.AddWithValue("@ContractID", contractID)
-                cmd.ExecuteNonQuery()
+        Dim DialogResult = MessageBox.Show("Are you sure you want to delete this contract?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+        If DialogResult = DialogResult.Yes Then
+
+            Using con As New SqlConnection(constr)
+                Try
+                    con.Open()
+                    ' SQL query to delete a contract.
+                    Dim deleteQuery As String = "DELETE FROM BillingContracts WHERE ContractID = @ContractID"
+                    Using cmd As New SqlCommand(deleteQuery, con)
+                        cmd.Parameters.AddWithValue("@ContractID", contractID)
+                        cmd.ExecuteNonQuery()
+                        MessageBox.Show("Contract deleted successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    End Using
+                Catch ex As Exception
+                    MessageBox.Show("An error occurred while deleting contract" & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Finally
+                    con.Close()
+                End Try
             End Using
-        End Using
+        End If
     End Sub
 
     ''' <summary>
@@ -317,22 +400,21 @@ Public Class BillingContractsManagement
     ''' <summary>
     ''' Gets service details (ID and Price) by service name.
     ''' </summary>
-    Public Function GetServiceDetails(serviceName As String) As Decimal
+    Public Function GetServiceDetails(serviceName As String) As ServiceDetails
         Using con As New SqlConnection(constr)
-            Dim serviceID As Integer = 0
-            Dim price As Decimal = 0.0D
+            Dim details As New ServiceDetails()
             con.Open()
             Dim selectQuery As String = "SELECT ServiceID, Price FROM ServicesTable WHERE ServiceName = @Name"
             Using cmd As New SqlCommand(selectQuery, con)
                 cmd.Parameters.AddWithValue("@Name", serviceName)
                 Using reader As SqlDataReader = cmd.ExecuteReader()
                     If reader.Read() Then
-                        serviceID = reader.GetInt32(0)
-                        price = reader.GetDecimal(1)
+                        details.ServiceID = reader.GetInt32(0)
+                        details.Price = reader.GetDecimal(1)
                     End If
                 End Using
             End Using
-            Return price
+            Return details
         End Using
     End Function
 
@@ -369,4 +451,8 @@ Public Class BillingContractsManagement
         End Using
         Return dt
     End Function
+End Class
+Public Class ServiceDetails
+    Public Property ServiceID As Integer
+    Public Property Price As Decimal
 End Class

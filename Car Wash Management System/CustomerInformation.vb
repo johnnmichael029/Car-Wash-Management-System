@@ -4,6 +4,7 @@ Public Class CustomerInformation
     Private Sub addBtn_Click(sender As Object, e As EventArgs) Handles addBtn.Click
         AddCustomer()
         ViewCustomer()
+
     End Sub
 
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
@@ -60,6 +61,7 @@ Public Class CustomerInformation
                     cmd.Parameters.AddWithValue("@Address", TextBoxAddress.Text)
                     cmd.Parameters.AddWithValue("@PlateNUmber", TextBoxPlateNumber.Text)
                     cmd.ExecuteNonQuery()
+
                 End Using
 
             Catch ex As Exception

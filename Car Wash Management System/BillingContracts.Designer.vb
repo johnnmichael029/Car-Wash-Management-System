@@ -28,7 +28,7 @@ Partial Class BillingContracts
         ComboBoxAddon = New ComboBox()
         Label10 = New Label()
         ComboBoxServices = New ComboBox()
-        ContractID = New Label()
+        LabelContractID = New Label()
         Label9 = New Label()
         Label8 = New Label()
         ComboBoxContractStatus = New ComboBox()
@@ -65,7 +65,7 @@ Partial Class BillingContracts
         Panel3.Controls.Add(ComboBoxAddon)
         Panel3.Controls.Add(Label10)
         Panel3.Controls.Add(ComboBoxServices)
-        Panel3.Controls.Add(ContractID)
+        Panel3.Controls.Add(LabelContractID)
         Panel3.Controls.Add(Label9)
         Panel3.Controls.Add(Label8)
         Panel3.Controls.Add(ComboBoxContractStatus)
@@ -138,13 +138,13 @@ Partial Class BillingContracts
         ComboBoxServices.Size = New Size(261, 23)
         ComboBoxServices.TabIndex = 24
         ' 
-        ' ContractID
+        ' LabelContractID
         ' 
-        ContractID.AutoSize = True
-        ContractID.Location = New Point(82, 457)
-        ContractID.Name = "ContractID"
-        ContractID.Size = New Size(0, 15)
-        ContractID.TabIndex = 23
+        LabelContractID.AutoSize = True
+        LabelContractID.Location = New Point(82, 457)
+        LabelContractID.Name = "LabelContractID"
+        LabelContractID.Size = New Size(0, 15)
+        LabelContractID.TabIndex = 23
         ' 
         ' Label9
         ' 
@@ -166,6 +166,9 @@ Partial Class BillingContracts
         ' 
         ' ComboBoxContractStatus
         ' 
+        ComboBoxContractStatus.AutoCompleteCustomSource.AddRange(New String() {"Active", "Expired", "Cancelled"})
+        ComboBoxContractStatus.AutoCompleteMode = AutoCompleteMode.SuggestAppend
+        ComboBoxContractStatus.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxContractStatus.FormattingEnabled = True
         ComboBoxContractStatus.Items.AddRange(New Object() {"Active", "Expired", "Cancelled"})
         ComboBoxContractStatus.Location = New Point(16, 431)
@@ -392,7 +395,7 @@ Partial Class BillingContracts
     Friend WithEvents ComboBoxContractStatus As ComboBox
     Friend WithEvents TextBoxPrice As TextBox
     Friend WithEvents ComboBoxBillingFrequency As ComboBox
-    Friend WithEvents ContractID As Label
+    Friend WithEvents LabelContractID As Label
     Friend WithEvents Label9 As Label
     Friend WithEvents ComboBoxAddon As ComboBox
     Friend WithEvents Label10 As Label

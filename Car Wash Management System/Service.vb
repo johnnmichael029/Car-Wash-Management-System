@@ -29,11 +29,12 @@ Public Class Service
                     cmd.ExecuteNonQuery()
                 End Using
                 MessageBox.Show("Service added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                ClearFields()
             Catch ex As Exception
                 MessageBox.Show("Error adding service: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally
                 con.Close()
-                ClearFields()
+
             End Try
         End Using
     End Sub
@@ -141,7 +142,5 @@ Public Class Service
         DeleteService()
     End Sub
 
-    Private Sub CheckBoxAddon_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxAddon.CheckedChanged
 
-    End Sub
 End Class

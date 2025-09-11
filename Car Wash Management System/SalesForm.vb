@@ -1,6 +1,7 @@
-﻿Imports Microsoft.Data.SqlClient
-Imports System.Data
+﻿Imports System.Data
+Imports System.Diagnostics.Eventing
 Imports System.Windows.Forms
+Imports Microsoft.Data.SqlClient
 
 Public Class SalesForm
     ' The connection string to your database.
@@ -43,10 +44,6 @@ Public Class SalesForm
             ' Determine the service name and ID based on both combo boxes.
             Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
             Dim addonServiceName As String = If(ComboBoxAddons.SelectedIndex <> -1, ComboBoxAddons.Text, String.Empty)
-            Dim fullServiceName As String = baseServiceName
-            If Not String.IsNullOrWhiteSpace(addonServiceName) Then
-                fullServiceName = fullServiceName & " + " & addonServiceName
-            End If
 
             If String.IsNullOrWhiteSpace(baseServiceName) Then
                 MessageBox.Show("Please select a base service.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -58,13 +55,23 @@ Public Class SalesForm
                 Return
             End If
             ' Get the separate Service IDs for the base service and the addon.
-            Dim baseServiceID As Integer = salesHistoryManagement.GetServiceID(baseServiceName)
+            Dim baseServiceDetails As SalesServiceDetails = salesHistoryManagement.GetServiceID(baseServiceName)
             Dim addonServiceID As Integer? = Nothing ' Use a nullable integer for the addon service ID
             If Not String.IsNullOrWhiteSpace(addonServiceName) Then
-                addonServiceID = salesHistoryManagement.GetServiceID(addonServiceName)
+                Dim addonServiceDetails As SalesServiceDetails = salesHistoryManagement.GetServiceID(addonServiceName)
+                If addonServiceDetails IsNot Nothing Then
+                    addonServiceID = addonServiceDetails.ServiceID
+                End If
             End If
 
-            salesHistoryManagement.AddSale(customerID, baseServiceID, addonServiceID, ComboBoxPaymentMethod.SelectedItem.ToString(), totalPrice)
+
+            salesHistoryManagement.AddSale(
+                customerID,
+                baseServiceDetails.ServiceID,
+                addonServiceID,
+                ComboBoxPaymentMethod.SelectedItem.ToString(),
+                totalPrice
+                )
 
             DataGridView1.DataSource = salesHistoryManagement.ViewSales()
         Catch ex As Exception
@@ -74,25 +81,26 @@ Public Class SalesForm
     End Sub
 
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
-        If ComboBoxServices.SelectedIndex <> -1 Then
-            Dim serviceName As String = ComboBoxServices.Text
-            Dim price As Decimal = salesHistoryManagement.GetServicePrice(serviceName)
-            TextBoxPrice.Text = price.ToString("N2") ' Format to 2 decimal places.
-        Else
-            TextBoxPrice.Text = "0.00"
-        End If
+        CalculateTotalPrice()
     End Sub
 
     Private Sub ComboBoxAddons_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxAddons.SelectedIndexChanged
-        If ComboBoxAddons.SelectedIndex <> -1 AndAlso ComboBoxServices.SelectedIndex <> -1 Then
-            Dim addonName As String = ComboBoxAddons.Text
-            Dim addonPrice As Decimal = salesHistoryManagement.GetServicePrice(addonName)
+        CalculateTotalPrice()
+    End Sub
+    Private Sub CalculateTotalPrice()
+        Dim totalPrice As Decimal = 0.0D
 
-            Dim currentPrice As Decimal
-            If Decimal.TryParse(TextBoxPrice.Text, currentPrice) Then
-                TextBoxPrice.Text = (currentPrice + addonPrice).ToString("N2")
-            End If
+        If ComboBoxServices.SelectedIndex <> -1 Then
+            Dim baseServiceDetails As SalesServiceDetails = salesHistoryManagement.GetServiceID(ComboBoxServices.Text)
+            totalPrice += baseServiceDetails.Price
         End If
+
+        If ComboBoxAddons.SelectedIndex <> -1 Then
+            Dim addonServiceDetails As SalesServiceDetails = salesHistoryManagement.GetServiceID(ComboBoxAddons.Text)
+            totalPrice += addonServiceDetails.Price
+        End If
+
+        TextBoxPrice.Text = totalPrice.ToString("N2") ' Format to 2 decimal places
     End Sub
 
     Private Sub TextBoxCustomerName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCustomerName.TextChanged
@@ -117,9 +125,7 @@ Public Class SalesForm
         ComboBoxPaymentMethod.SelectedIndex = -1
     End Sub
 
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
 
-    End Sub
 End Class
 
 Public Class SalesHistoryManagement
@@ -171,7 +177,10 @@ Public Class SalesHistoryManagement
             Try
                 con.Open()
                 ' Join to the ServicesTable for the addon as well to show the full service name.
-                Dim selectQuery = "SELECT s.SalesID, c.Name AS CustomerName, sv.ServiceName AS BaseServiceName, sv_addon.ServiceName AS AddonServiceName, s.SaleDate, s.PaymentMethod, s.TotalPrice FROM SalesHistoryTable s INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID INNER JOIN ServicesTable sv ON s.ServiceID = sv.ServiceID LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID ORDER BY s.SaleDate DESC"
+                Dim selectQuery = "SELECT s.SalesID, c.Name AS CustomerName, sv.ServiceName AS BaseServiceName, sv_addon.ServiceName AS AddonServiceName, s.SaleDate, s.PaymentMethod, s.TotalPrice FROM SalesHistoryTable s 
+                                  INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID 
+                                  INNER JOIN ServicesTable sv ON s.ServiceID = sv.ServiceID 
+                                  LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID ORDER BY s.SaleDate DESC"
                 Using cmd As New SqlCommand(selectQuery, con)
                     Using adapter As New SqlDataAdapter(cmd)
                         adapter.Fill(dt)
@@ -204,23 +213,21 @@ Public Class SalesHistoryManagement
         End Using
     End Function
 
-    Public Function GetServiceID(serviceName As String) As Integer
+    Public Function GetServiceID(serviceName As String) As SalesServiceDetails
         Using con As New SqlConnection(constr)
-            Dim serviceID As Integer = 0
-            Try
-                con.Open()
-                Dim selectQuery = "SELECT ServiceID FROM ServicesTable WHERE ServiceName = @Name"
-                Using cmd As New SqlCommand(selectQuery, con)
-                    cmd.Parameters.AddWithValue("@Name", serviceName)
-                    Dim result = cmd.ExecuteScalar()
-                    If Not IsDBNull(result) AndAlso result IsNot Nothing Then
-                        serviceID = CType(result, Integer)
+            Dim details As New SalesServiceDetails()
+            con.Open()
+            Dim selectQuery As String = "SELECT ServiceID, Price FROM ServicesTable WHERE ServiceName = @Name"
+            Using cmd As New SqlCommand(selectQuery, con)
+                cmd.Parameters.AddWithValue("@Name", serviceName)
+                Using reader As SqlDataReader = cmd.ExecuteReader()
+                    If reader.Read() Then
+                        details.ServiceID = reader.GetInt32(0)
+                        details.Price = reader.GetDecimal(1)
                     End If
                 End Using
-            Catch ex As Exception
-                MessageBox.Show("Error retrieving service ID: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-            Return serviceID
+            End Using
+            Return details
         End Using
     End Function
 
@@ -344,3 +351,8 @@ Public Class SalesHistoryManagement
     End Sub
 
 End Class
+Public Class SalesServiceDetails
+    Public Property ServiceID As Integer
+    Public Property Price As Decimal
+End Class
+

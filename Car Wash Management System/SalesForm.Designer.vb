@@ -116,7 +116,6 @@ Partial Class SalesForm
         ' 
         TextBoxPrice.Location = New Point(17, 307)
         TextBoxPrice.Name = "TextBoxPrice"
-        TextBoxPrice.ReadOnly = True
         TextBoxPrice.Size = New Size(261, 23)
         TextBoxPrice.TabIndex = 31
         ' 
