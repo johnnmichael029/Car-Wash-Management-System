@@ -23,6 +23,7 @@ Partial Class BillingContracts
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Panel3 = New Panel()
+        LabelSales = New Label()
         Label11 = New Label()
         ComboBoxPaymentMethod = New ComboBox()
         ComboBoxAddon = New ComboBox()
@@ -60,6 +61,7 @@ Partial Class BillingContracts
         ' Panel3
         ' 
         Panel3.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
+        Panel3.Controls.Add(LabelSales)
         Panel3.Controls.Add(Label11)
         Panel3.Controls.Add(ComboBoxPaymentMethod)
         Panel3.Controls.Add(ComboBoxAddon)
@@ -90,8 +92,17 @@ Partial Class BillingContracts
         Panel3.Dock = DockStyle.Right
         Panel3.Location = New Point(606, 0)
         Panel3.Name = "Panel3"
-        Panel3.Size = New Size(305, 551)
+        Panel3.Size = New Size(305, 611)
         Panel3.TabIndex = 2
+        ' 
+        ' LabelSales
+        ' 
+        LabelSales.AutoSize = True
+        LabelSales.ForeColor = Color.Red
+        LabelSales.Location = New Point(209, 457)
+        LabelSales.Name = "LabelSales"
+        LabelSales.Size = New Size(0, 15)
+        LabelSales.TabIndex = 29
         ' 
         ' Label11
         ' 
@@ -141,6 +152,8 @@ Partial Class BillingContracts
         ' LabelContractID
         ' 
         LabelContractID.AutoSize = True
+        LabelContractID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
+        LabelContractID.ForeColor = Color.Red
         LabelContractID.Location = New Point(82, 457)
         LabelContractID.Name = "LabelContractID"
         LabelContractID.Size = New Size(0, 15)
@@ -149,7 +162,7 @@ Partial Class BillingContracts
         ' Label9
         ' 
         Label9.AutoSize = True
-        Label9.Location = New Point(15, 457)
+        Label9.Location = New Point(16, 457)
         Label9.Name = "Label9"
         Label9.Size = New Size(67, 15)
         Label9.TabIndex = 22
@@ -256,9 +269,9 @@ Partial Class BillingContracts
         ' deleteServiceBtn
         ' 
         deleteServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        deleteServiceBtn.Location = New Point(149, 518)
+        deleteServiceBtn.Location = New Point(16, 574)
         deleteServiceBtn.Name = "deleteServiceBtn"
-        deleteServiceBtn.Size = New Size(128, 30)
+        deleteServiceBtn.Size = New Size(260, 30)
         deleteServiceBtn.TabIndex = 9
         deleteServiceBtn.Text = "Delete Service"
         deleteServiceBtn.UseVisualStyleBackColor = True
@@ -266,9 +279,9 @@ Partial Class BillingContracts
         ' updateServiceBtn
         ' 
         updateServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        updateServiceBtn.Location = New Point(149, 475)
+        updateServiceBtn.Location = New Point(16, 541)
         updateServiceBtn.Name = "updateServiceBtn"
-        updateServiceBtn.Size = New Size(128, 30)
+        updateServiceBtn.Size = New Size(260, 30)
         updateServiceBtn.TabIndex = 8
         updateServiceBtn.Text = "Update Service"
         updateServiceBtn.UseVisualStyleBackColor = True
@@ -276,9 +289,9 @@ Partial Class BillingContracts
         ' viewServiceBtn
         ' 
         viewServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        viewServiceBtn.Location = New Point(16, 518)
+        viewServiceBtn.Location = New Point(16, 508)
         viewServiceBtn.Name = "viewServiceBtn"
-        viewServiceBtn.Size = New Size(128, 30)
+        viewServiceBtn.Size = New Size(260, 30)
         viewServiceBtn.TabIndex = 7
         viewServiceBtn.Text = "View Service"
         viewServiceBtn.UseVisualStyleBackColor = True
@@ -288,7 +301,7 @@ Partial Class BillingContracts
         addServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
         addServiceBtn.Location = New Point(16, 475)
         addServiceBtn.Name = "addServiceBtn"
-        addServiceBtn.Size = New Size(128, 30)
+        addServiceBtn.Size = New Size(260, 30)
         addServiceBtn.TabIndex = 6
         addServiceBtn.Text = "Add Service"
         addServiceBtn.UseVisualStyleBackColor = True
@@ -342,7 +355,7 @@ Partial Class BillingContracts
         Panel1.Dock = DockStyle.Fill
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(911, 551)
+        Panel1.Size = New Size(911, 611)
         Panel1.TabIndex = 2
         ' 
         ' DataGridView1
@@ -353,14 +366,14 @@ Partial Class BillingContracts
         DataGridView1.Dock = DockStyle.Fill
         DataGridView1.Location = New Point(0, 0)
         DataGridView1.Name = "DataGridView1"
-        DataGridView1.Size = New Size(606, 551)
+        DataGridView1.Size = New Size(606, 611)
         DataGridView1.TabIndex = 0
         ' 
         ' BillingContracts
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(911, 551)
+        ClientSize = New Size(911, 611)
         Controls.Add(Panel1)
         FormBorderStyle = FormBorderStyle.None
         Name = "BillingContracts"
@@ -402,4 +415,5 @@ Partial Class BillingContracts
     Friend WithEvents ComboBoxServices As ComboBox
     Friend WithEvents Label11 As Label
     Friend WithEvents ComboBoxPaymentMethod As ComboBox
+    Friend WithEvents LabelSales As Label
 End Class

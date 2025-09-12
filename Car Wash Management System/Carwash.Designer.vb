@@ -46,6 +46,10 @@ Partial Class Carwash
         CustomerInformationToolStripMenuItem = New ToolStripMenuItem()
         SaleHistoryToolStripMenuItem = New ToolStripMenuItem()
         BillingAndToolStripMenuItem = New ToolStripMenuItem()
+        BookingToolStripMenuItem = New ToolStripMenuItem()
+        AppointmentScheduleToolStripMenuItem1 = New ToolStripMenuItem()
+        ListToolStripMenuItem = New ToolStripMenuItem()
+        OnTheDayScheduleToolStripMenuItem = New ToolStripMenuItem()
         Panel1.SuspendLayout()
         Panel5.SuspendLayout()
         Panel2.SuspendLayout()
@@ -241,7 +245,7 @@ Partial Class Carwash
         ' 
         ' MenuStrip1
         ' 
-        MenuStrip1.Items.AddRange(New ToolStripItem() {FIleToolStripMenuItem, ServiceTrackingToolStripMenuItem})
+        MenuStrip1.Items.AddRange(New ToolStripItem() {FIleToolStripMenuItem, ServiceTrackingToolStripMenuItem, BookingToolStripMenuItem})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
         MenuStrip1.Size = New Size(1369, 24)
@@ -265,8 +269,8 @@ Partial Class Carwash
         ' 
         ServiceTrackingToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ServiceCatalogToolStripMenuItem, CustomerInformationToolStripMenuItem, SaleHistoryToolStripMenuItem, BillingAndToolStripMenuItem})
         ServiceTrackingToolStripMenuItem.Name = "ServiceTrackingToolStripMenuItem"
-        ServiceTrackingToolStripMenuItem.Size = New Size(104, 20)
-        ServiceTrackingToolStripMenuItem.Text = "Service Tracking"
+        ServiceTrackingToolStripMenuItem.Size = New Size(61, 20)
+        ServiceTrackingToolStripMenuItem.Text = "Services"
         ' 
         ' ServiceCatalogToolStripMenuItem
         ' 
@@ -284,13 +288,38 @@ Partial Class Carwash
         ' 
         SaleHistoryToolStripMenuItem.Name = "SaleHistoryToolStripMenuItem"
         SaleHistoryToolStripMenuItem.Size = New Size(192, 22)
-        SaleHistoryToolStripMenuItem.Text = "Sale History"
+        SaleHistoryToolStripMenuItem.Text = "Sales History"
         ' 
         ' BillingAndToolStripMenuItem
         ' 
         BillingAndToolStripMenuItem.Name = "BillingAndToolStripMenuItem"
         BillingAndToolStripMenuItem.Size = New Size(192, 22)
-        BillingAndToolStripMenuItem.Text = "Billing & Contracts"
+        BillingAndToolStripMenuItem.Text = "Billing Contracts"
+        ' 
+        ' BookingToolStripMenuItem
+        ' 
+        BookingToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {AppointmentScheduleToolStripMenuItem1, ListToolStripMenuItem, OnTheDayScheduleToolStripMenuItem})
+        BookingToolStripMenuItem.Name = "BookingToolStripMenuItem"
+        BookingToolStripMenuItem.Size = New Size(68, 20)
+        BookingToolStripMenuItem.Text = "Bookings"
+        ' 
+        ' AppointmentScheduleToolStripMenuItem1
+        ' 
+        AppointmentScheduleToolStripMenuItem1.Name = "AppointmentScheduleToolStripMenuItem1"
+        AppointmentScheduleToolStripMenuItem1.Size = New Size(196, 22)
+        AppointmentScheduleToolStripMenuItem1.Text = "Appointment Schedule"
+        ' 
+        ' ListToolStripMenuItem
+        ' 
+        ListToolStripMenuItem.Name = "ListToolStripMenuItem"
+        ListToolStripMenuItem.Size = New Size(196, 22)
+        ListToolStripMenuItem.Text = "List of Reserved"
+        ' 
+        ' OnTheDayScheduleToolStripMenuItem
+        ' 
+        OnTheDayScheduleToolStripMenuItem.Name = "OnTheDayScheduleToolStripMenuItem"
+        OnTheDayScheduleToolStripMenuItem.Size = New Size(196, 22)
+        OnTheDayScheduleToolStripMenuItem.Text = "On-The-Day Schedule"
         ' 
         ' Carwash
         ' 
@@ -341,4 +370,8 @@ Partial Class Carwash
     Friend WithEvents CustomerInformationToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SaleHistoryToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents BillingAndToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BookingToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AppointmentScheduleToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents ListToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents OnTheDayScheduleToolStripMenuItem As ToolStripMenuItem
 End Class

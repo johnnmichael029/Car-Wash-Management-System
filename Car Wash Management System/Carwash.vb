@@ -65,7 +65,7 @@ Public Class Carwash
     End Sub
 
     Private Sub dashboardBtn_Click(sender As Object, e As EventArgs) Handles dashboardBtn.Click
-        SwitchPanel(Dashboard)
+
     End Sub
 
     Private Sub Label1_Click(sender As Object, e As EventArgs)
@@ -86,9 +86,10 @@ Public Class Carwash
 
     Private Sub CustomerInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomerInformationToolStripMenuItem.Click
         Panel4.Controls.Clear()
-        Dim customerInformation As New CustomerInformation()
-        customerInformation.TopLevel = False
-        customerInformation.FormBorderStyle = FormBorderStyle.None
+        Dim customerInformation As New CustomerInformation With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
         Panel4.Controls.Add(customerInformation)
         customerInformation.Dock = DockStyle.Fill
         customerInformation.Show()
@@ -96,9 +97,10 @@ Public Class Carwash
 
     Private Sub ServiceCatalogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ServiceCatalogToolStripMenuItem.Click
         Panel4.Controls.Clear()
-        Dim service As New Service()
-        service.TopLevel = False
-        service.FormBorderStyle = FormBorderStyle.None
+        Dim service As New Service With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
         Panel4.Controls.Add(service)
         service.Dock = DockStyle.Fill
         service.Show()
@@ -106,9 +108,10 @@ Public Class Carwash
 
     Private Sub SaleHistoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaleHistoryToolStripMenuItem.Click
         Panel4.Controls.Clear()
-        Dim salesHistory As New SalesForm()
-        salesHistory.TopLevel = False
-        salesHistory.FormBorderStyle = FormBorderStyle.None
+        Dim salesHistory As New SalesForm With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
         Panel4.Controls.Add(salesHistory)
         salesHistory.Dock = DockStyle.Fill
         salesHistory.Show()
@@ -116,11 +119,53 @@ Public Class Carwash
 
     Private Sub BillingAndToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BillingAndToolStripMenuItem.Click
         Panel4.Controls.Clear()
-        Dim billingContracts As New BillingContracts()
-        billingContracts.TopLevel = False
-        billingContracts.FormBorderStyle = FormBorderStyle.None
+        Dim billingContracts As New BillingContracts With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
         Panel4.Controls.Add(billingContracts)
         billingContracts.Dock = DockStyle.Fill
         billingContracts.Show()
+    End Sub
+
+    Private Sub AppointmentScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub ListOfReservedToolStripMenuItem_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub AppointmentScheduleToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles AppointmentScheduleToolStripMenuItem1.Click
+        Panel4.Controls.Clear()
+        Dim appointment As New Appointment With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(appointment)
+        appointment.Dock = DockStyle.Fill
+        appointment.Show()
+    End Sub
+
+    Private Sub ListToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ListToolStripMenuItem.Click
+        Panel4.Controls.Clear()
+        Dim reservation As New Reservation With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(reservation)
+        reservation.Dock = DockStyle.Fill
+        reservation.Show()
+    End Sub
+
+    Private Sub OnTheDayScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OnTheDayScheduleToolStripMenuItem.Click
+        Panel4.Controls.Clear()
+        Dim onTheDay As New OnTheDay With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(onTheDay)
+        onTheDay.Dock = DockStyle.Fill
+        onTheDay.Show()
     End Sub
 End Class
