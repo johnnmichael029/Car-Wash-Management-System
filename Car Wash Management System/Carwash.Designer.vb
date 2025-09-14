@@ -25,13 +25,13 @@ Partial Class Carwash
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Carwash))
         Panel1 = New Panel()
         Panel5 = New Panel()
-        logoutBtn = New Button()
-        dashboardBtn = New Button()
-        LabelWelcome = New Label()
+        LogoutBtn = New Button()
+        DashboardBtn = New Button()
         Button4 = New Button()
         Btn3 = New Button()
         Btn2 = New Button()
         Panel2 = New Panel()
+        Label1 = New Label()
         LabelCarwash = New Label()
         Button5 = New Button()
         Panel3 = New Panel()
@@ -61,10 +61,9 @@ Partial Class Carwash
         ' 
         ' Panel1
         ' 
-        Panel1.BackColor = Color.WhiteSmoke
+        Panel1.BackColor = Color.White
         Panel1.Controls.Add(Panel5)
-        Panel1.Controls.Add(dashboardBtn)
-        Panel1.Controls.Add(LabelWelcome)
+        Panel1.Controls.Add(DashboardBtn)
         Panel1.Controls.Add(Button4)
         Panel1.Controls.Add(Btn3)
         Panel1.Controls.Add(Btn2)
@@ -76,55 +75,46 @@ Partial Class Carwash
         ' 
         ' Panel5
         ' 
-        Panel5.Controls.Add(logoutBtn)
+        Panel5.Controls.Add(LogoutBtn)
         Panel5.Dock = DockStyle.Bottom
         Panel5.Location = New Point(0, 572)
         Panel5.Name = "Panel5"
         Panel5.Size = New Size(177, 153)
         Panel5.TabIndex = 7
         ' 
-        ' logoutBtn
+        ' LogoutBtn
         ' 
-        logoutBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
-        logoutBtn.FlatAppearance.BorderSize = 0
-        logoutBtn.FlatStyle = FlatStyle.Flat
-        logoutBtn.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
-        logoutBtn.Image = My.Resources.Resources.logout
-        logoutBtn.Location = New Point(0, 49)
-        logoutBtn.Name = "logoutBtn"
-        logoutBtn.Size = New Size(177, 54)
-        logoutBtn.TabIndex = 6
-        logoutBtn.Text = "Logout"
-        logoutBtn.TextAlign = ContentAlignment.MiddleRight
-        logoutBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        logoutBtn.UseVisualStyleBackColor = True
+        LogoutBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        LogoutBtn.FlatAppearance.BorderSize = 0
+        LogoutBtn.FlatStyle = FlatStyle.Flat
+        LogoutBtn.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
+        LogoutBtn.Image = My.Resources.Resources.logout
+        LogoutBtn.Location = New Point(0, 49)
+        LogoutBtn.Name = "LogoutBtn"
+        LogoutBtn.Size = New Size(177, 54)
+        LogoutBtn.TabIndex = 6
+        LogoutBtn.Text = "Logout"
+        LogoutBtn.TextAlign = ContentAlignment.MiddleRight
+        LogoutBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        LogoutBtn.UseVisualStyleBackColor = True
         ' 
-        ' dashboardBtn
+        ' DashboardBtn
         ' 
-        dashboardBtn.BackColor = Color.WhiteSmoke
-        dashboardBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
-        dashboardBtn.FlatAppearance.BorderSize = 0
-        dashboardBtn.FlatStyle = FlatStyle.Flat
-        dashboardBtn.Font = New Font("Palatino Linotype", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        dashboardBtn.Image = CType(resources.GetObject("dashboardBtn.Image"), Image)
-        dashboardBtn.ImageAlign = ContentAlignment.MiddleLeft
-        dashboardBtn.Location = New Point(0, 151)
-        dashboardBtn.Name = "dashboardBtn"
-        dashboardBtn.Size = New Size(174, 56)
-        dashboardBtn.TabIndex = 5
-        dashboardBtn.Text = "Dashboard"
-        dashboardBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        dashboardBtn.UseVisualStyleBackColor = False
-        ' 
-        ' LabelWelcome
-        ' 
-        LabelWelcome.AutoSize = True
-        LabelWelcome.Font = New Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelWelcome.Location = New Point(3, 23)
-        LabelWelcome.Name = "LabelWelcome"
-        LabelWelcome.Size = New Size(127, 37)
-        LabelWelcome.TabIndex = 4
-        LabelWelcome.Text = "Welcome"
+        DashboardBtn.BackColor = Color.White
+        DashboardBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        DashboardBtn.FlatAppearance.BorderSize = 0
+        DashboardBtn.FlatStyle = FlatStyle.Flat
+        DashboardBtn.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        DashboardBtn.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
+        DashboardBtn.Image = CType(resources.GetObject("DashboardBtn.Image"), Image)
+        DashboardBtn.ImageAlign = ContentAlignment.MiddleLeft
+        DashboardBtn.Location = New Point(0, 151)
+        DashboardBtn.Name = "DashboardBtn"
+        DashboardBtn.Size = New Size(174, 56)
+        DashboardBtn.TabIndex = 5
+        DashboardBtn.Text = "Dashboard"
+        DashboardBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        DashboardBtn.UseVisualStyleBackColor = False
         ' 
         ' Button4
         ' 
@@ -141,7 +131,7 @@ Partial Class Carwash
         ' 
         ' Btn3
         ' 
-        Btn3.BackColor = Color.WhiteSmoke
+        Btn3.BackColor = Color.White
         Btn3.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         Btn3.FlatAppearance.BorderSize = 0
         Btn3.FlatStyle = FlatStyle.Flat
@@ -172,31 +162,43 @@ Partial Class Carwash
         ' 
         ' Panel2
         ' 
-        Panel2.BackColor = Color.FromArgb(CByte(242), CByte(242), CByte(242))
+        Panel2.BackColor = Color.White
+        Panel2.Controls.Add(Label1)
         Panel2.Controls.Add(LabelCarwash)
         Panel2.Controls.Add(Button5)
         Panel2.Dock = DockStyle.Top
         Panel2.Location = New Point(0, 0)
         Panel2.Name = "Panel2"
-        Panel2.Size = New Size(1192, 114)
+        Panel2.Size = New Size(1192, 45)
         Panel2.TabIndex = 4
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Font = New Font("Century Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label1.ForeColor = Color.Gray
+        Label1.Location = New Point(3, -2)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(26, 20)
+        Label1.TabIndex = 6
+        Label1.Text = "Hi!"
         ' 
         ' LabelCarwash
         ' 
         LabelCarwash.AutoSize = True
-        LabelCarwash.Font = New Font("Segoe UI", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelCarwash.Location = New Point(403, 23)
+        LabelCarwash.Font = New Font("Century Gothic", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelCarwash.Location = New Point(0, 16)
         LabelCarwash.Name = "LabelCarwash"
         LabelCarwash.RightToLeft = RightToLeft.No
-        LabelCarwash.Size = New Size(486, 47)
+        LabelCarwash.Size = New Size(237, 25)
         LabelCarwash.TabIndex = 0
-        LabelCarwash.Text = "Carwash Management System"
+        LabelCarwash.Text = "Welcome to Sandigan"
         LabelCarwash.TextAlign = ContentAlignment.TopCenter
         ' 
         ' Button5
         ' 
         Button5.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        Button5.Location = New Point(1088, 12)
+        Button5.Location = New Point(1113, 3)
         Button5.Name = "Button5"
         Button5.Size = New Size(79, 32)
         Button5.TabIndex = 5
@@ -227,24 +229,26 @@ Partial Class Carwash
         ' 
         ' Panel7
         ' 
+        Panel7.BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         Panel7.Controls.Add(Panel4)
         Panel7.Dock = DockStyle.Fill
-        Panel7.Location = New Point(0, 114)
+        Panel7.Location = New Point(0, 45)
         Panel7.Name = "Panel7"
-        Panel7.Size = New Size(1192, 611)
+        Panel7.Size = New Size(1192, 680)
         Panel7.TabIndex = 5
         ' 
         ' Panel4
         ' 
         Panel4.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         Panel4.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
-        Panel4.Location = New Point(6, 6)
+        Panel4.Location = New Point(8, 6)
         Panel4.Name = "Panel4"
-        Panel4.Size = New Size(1192, 611)
+        Panel4.Size = New Size(1174, 674)
         Panel4.TabIndex = 0
         ' 
         ' MenuStrip1
         ' 
+        MenuStrip1.BackColor = Color.White
         MenuStrip1.Items.AddRange(New ToolStripItem() {FIleToolStripMenuItem, ServiceTrackingToolStripMenuItem, BookingToolStripMenuItem})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
@@ -255,71 +259,77 @@ Partial Class Carwash
         ' FIleToolStripMenuItem
         ' 
         FIleToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ExitToolStripMenuItem})
+        FIleToolStripMenuItem.Font = New Font("Century Gothic", 8.25F, FontStyle.Bold)
+        FIleToolStripMenuItem.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         FIleToolStripMenuItem.Name = "FIleToolStripMenuItem"
         FIleToolStripMenuItem.Size = New Size(37, 20)
-        FIleToolStripMenuItem.Text = "FIle"
+        FIleToolStripMenuItem.Text = "&FIle"
         ' 
         ' ExitToolStripMenuItem
         ' 
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
         ExitToolStripMenuItem.Size = New Size(92, 22)
-        ExitToolStripMenuItem.Text = "Exit"
+        ExitToolStripMenuItem.Text = "E&xit"
         ' 
         ' ServiceTrackingToolStripMenuItem
         ' 
         ServiceTrackingToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ServiceCatalogToolStripMenuItem, CustomerInformationToolStripMenuItem, SaleHistoryToolStripMenuItem, BillingAndToolStripMenuItem})
+        ServiceTrackingToolStripMenuItem.Font = New Font("Century Gothic", 8.25F, FontStyle.Bold)
+        ServiceTrackingToolStripMenuItem.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         ServiceTrackingToolStripMenuItem.Name = "ServiceTrackingToolStripMenuItem"
-        ServiceTrackingToolStripMenuItem.Size = New Size(61, 20)
-        ServiceTrackingToolStripMenuItem.Text = "Services"
+        ServiceTrackingToolStripMenuItem.Size = New Size(64, 20)
+        ServiceTrackingToolStripMenuItem.Text = "&Services"
         ' 
         ' ServiceCatalogToolStripMenuItem
         ' 
         ServiceCatalogToolStripMenuItem.Name = "ServiceCatalogToolStripMenuItem"
-        ServiceCatalogToolStripMenuItem.Size = New Size(192, 22)
-        ServiceCatalogToolStripMenuItem.Text = "Service Catalog"
+        ServiceCatalogToolStripMenuItem.Size = New Size(186, 22)
+        ServiceCatalogToolStripMenuItem.Text = "&Service Catalog"
         ' 
         ' CustomerInformationToolStripMenuItem
         ' 
         CustomerInformationToolStripMenuItem.Name = "CustomerInformationToolStripMenuItem"
-        CustomerInformationToolStripMenuItem.Size = New Size(192, 22)
-        CustomerInformationToolStripMenuItem.Text = "Customer Information"
+        CustomerInformationToolStripMenuItem.Size = New Size(186, 22)
+        CustomerInformationToolStripMenuItem.Text = "&Customer Information"
         ' 
         ' SaleHistoryToolStripMenuItem
         ' 
         SaleHistoryToolStripMenuItem.Name = "SaleHistoryToolStripMenuItem"
-        SaleHistoryToolStripMenuItem.Size = New Size(192, 22)
-        SaleHistoryToolStripMenuItem.Text = "Sales History"
+        SaleHistoryToolStripMenuItem.Size = New Size(186, 22)
+        SaleHistoryToolStripMenuItem.Text = "Sales &History"
         ' 
         ' BillingAndToolStripMenuItem
         ' 
         BillingAndToolStripMenuItem.Name = "BillingAndToolStripMenuItem"
-        BillingAndToolStripMenuItem.Size = New Size(192, 22)
-        BillingAndToolStripMenuItem.Text = "Billing Contracts"
+        BillingAndToolStripMenuItem.Size = New Size(186, 22)
+        BillingAndToolStripMenuItem.Text = "&Billing Contracts"
         ' 
         ' BookingToolStripMenuItem
         ' 
         BookingToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {AppointmentScheduleToolStripMenuItem1, ListToolStripMenuItem, OnTheDayScheduleToolStripMenuItem})
+        BookingToolStripMenuItem.Font = New Font("Century Gothic", 8.25F, FontStyle.Bold)
+        BookingToolStripMenuItem.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         BookingToolStripMenuItem.Name = "BookingToolStripMenuItem"
         BookingToolStripMenuItem.Size = New Size(68, 20)
-        BookingToolStripMenuItem.Text = "Bookings"
+        BookingToolStripMenuItem.Text = "&Bookings"
         ' 
         ' AppointmentScheduleToolStripMenuItem1
         ' 
         AppointmentScheduleToolStripMenuItem1.Name = "AppointmentScheduleToolStripMenuItem1"
         AppointmentScheduleToolStripMenuItem1.Size = New Size(196, 22)
-        AppointmentScheduleToolStripMenuItem1.Text = "Appointment Schedule"
+        AppointmentScheduleToolStripMenuItem1.Text = "&Appointment Schedule"
         ' 
         ' ListToolStripMenuItem
         ' 
         ListToolStripMenuItem.Name = "ListToolStripMenuItem"
         ListToolStripMenuItem.Size = New Size(196, 22)
-        ListToolStripMenuItem.Text = "List of Reserved"
+        ListToolStripMenuItem.Text = "&List of Reserved"
         ' 
         ' OnTheDayScheduleToolStripMenuItem
         ' 
         OnTheDayScheduleToolStripMenuItem.Name = "OnTheDayScheduleToolStripMenuItem"
         OnTheDayScheduleToolStripMenuItem.Size = New Size(196, 22)
-        OnTheDayScheduleToolStripMenuItem.Text = "On-The-Day Schedule"
+        OnTheDayScheduleToolStripMenuItem.Text = "&On-The-Day Schedule"
         ' 
         ' Carwash
         ' 
@@ -335,7 +345,6 @@ Partial Class Carwash
         StartPosition = FormStartPosition.CenterScreen
         Text = "Carwash Management"
         Panel1.ResumeLayout(False)
-        Panel1.PerformLayout()
         Panel5.ResumeLayout(False)
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
@@ -354,12 +363,11 @@ Partial Class Carwash
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Panel4 As Panel
-    Friend WithEvents LabelWelcome As Label
-    Friend WithEvents dashboardBtn As Button
+    Friend WithEvents DashboardBtn As Button
     Friend WithEvents LabelCarwash As Label
     Friend WithEvents Button5 As Button
     Friend WithEvents Panel5 As Panel
-    Friend WithEvents logoutBtn As Button
+    Friend WithEvents LogoutBtn As Button
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents Panel6 As Panel
     Friend WithEvents Panel7 As Panel
@@ -374,4 +382,5 @@ Partial Class Carwash
     Friend WithEvents AppointmentScheduleToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents ListToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OnTheDayScheduleToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents Label1 As Label
 End Class

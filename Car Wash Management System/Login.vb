@@ -2,8 +2,9 @@
 Imports System.Text
 Imports Microsoft.Data.SqlClient
 Public Class Login
-    ' NOTE: It's better to store the connection string in a configuration file rather than hardcoding it.
+
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim dashboardManagement As New DashboardManagement(constr)
 
     Private Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CenterToScreen()
@@ -14,10 +15,12 @@ Public Class Login
     End Sub
 
     ' Hashes a password with a randomly generated salt.
-    Public Function HashPassword(password As String) As (String, String)
+    Public Shared Function HashPassword(password As String) As (String, String)
         ' Generate a random salt
         Dim saltBytes(15) As Byte
+#Disable Warning SYSLIB0023 ' Type or member is obsolete
         Using rng As New RNGCryptoServiceProvider()
+#Enable Warning SYSLIB0023 ' Type or member is obsolete
             rng.GetBytes(saltBytes)
         End Using
         Dim salt As String = Convert.ToBase64String(saltBytes)
@@ -27,9 +30,7 @@ Public Class Login
 
         ' Hash the salted password
         Dim hashBytes As Byte()
-        Using sha256 As SHA256 = SHA256.Create()
-            hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(saltedPassword))
-        End Using
+        hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(saltedPassword))
         Dim hashedPassword As String = Convert.ToBase64String(hashBytes)
 
         ' Return the salt and hashed password
@@ -37,15 +38,13 @@ Public Class Login
     End Function
 
     ' Verifies an input password against a stored salt and hash.
-    Public Function VerifyPassword(inputPassword As String, storedSalt As String, storedHash As String) As Boolean
+    Public Shared Function VerifyPassword(inputPassword As String, storedSalt As String, storedHash As String) As Boolean
         ' Combine input password with stored salt
         Dim saltedPassword As String = inputPassword & storedSalt
 
         ' Hash the salted password
         Dim hashBytes As Byte()
-        Using sha256 As SHA256 = SHA256.Create()
-            hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(saltedPassword))
-        End Using
+        hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(saltedPassword))
         Dim hashedInput As String = Convert.ToBase64String(hashBytes)
 
         ' Compare the hashes
@@ -118,8 +117,10 @@ Public Class Login
 
     End Sub
 
-    Private Sub loginBtn_Click(sender As Object, e As EventArgs) Handles loginBtn.Click
+    Private Sub LoginBtn_Click(sender As Object, e As EventArgs) Handles LoginBtn.Click
         LoginValidation()
+        Dim username As String = TextBoxUsername.Text
+        dashboardManagement.UserLogin(username)
     End Sub
 
 End Class

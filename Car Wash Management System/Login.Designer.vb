@@ -24,7 +24,7 @@ Partial Class Login
     Private Sub InitializeComponent()
         Panel1 = New Panel()
         Label1 = New Label()
-        loginBtn = New Button()
+        LoginBtn = New Button()
         TextBoxUsername = New TextBox()
         Label2 = New Label()
         TextBoxPassword = New TextBox()
@@ -34,11 +34,12 @@ Partial Class Login
         ' Panel1
         ' 
         Panel1.Controls.Add(Label1)
-        Panel1.Controls.Add(loginBtn)
+        Panel1.Controls.Add(LoginBtn)
         Panel1.Controls.Add(TextBoxUsername)
         Panel1.Controls.Add(Label2)
         Panel1.Controls.Add(TextBoxPassword)
         Panel1.Dock = DockStyle.Fill
+        Panel1.Font = New Font("Century Gothic", 9F)
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(1369, 749)
@@ -48,37 +49,40 @@ Partial Class Login
         ' 
         Label1.Anchor = AnchorStyles.None
         Label1.AutoSize = True
+        Label1.Font = New Font("Century Gothic", 9F)
         Label1.Location = New Point(574, 301)
         Label1.Name = "Label1"
-        Label1.Size = New Size(60, 15)
+        Label1.Size = New Size(67, 17)
         Label1.TabIndex = 0
         Label1.Text = "Username"
         ' 
-        ' loginBtn
+        ' LoginBtn
         ' 
-        loginBtn.Anchor = AnchorStyles.None
-        loginBtn.Location = New Point(574, 414)
-        loginBtn.Name = "loginBtn"
-        loginBtn.Size = New Size(219, 46)
-        loginBtn.TabIndex = 4
-        loginBtn.Text = "Login"
-        loginBtn.UseVisualStyleBackColor = True
+        LoginBtn.Anchor = AnchorStyles.None
+        LoginBtn.Font = New Font("Century Gothic", 9F)
+        LoginBtn.Location = New Point(574, 414)
+        LoginBtn.Name = "LoginBtn"
+        LoginBtn.Size = New Size(219, 46)
+        LoginBtn.TabIndex = 4
+        LoginBtn.Text = "Login"
+        LoginBtn.UseVisualStyleBackColor = True
         ' 
         ' TextBoxUsername
         ' 
         TextBoxUsername.Anchor = AnchorStyles.None
         TextBoxUsername.Location = New Point(574, 319)
         TextBoxUsername.Name = "TextBoxUsername"
-        TextBoxUsername.Size = New Size(219, 23)
+        TextBoxUsername.Size = New Size(219, 22)
         TextBoxUsername.TabIndex = 1
         ' 
         ' Label2
         ' 
         Label2.Anchor = AnchorStyles.None
         Label2.AutoSize = True
+        Label2.Font = New Font("Century Gothic", 9F)
         Label2.Location = New Point(574, 356)
         Label2.Name = "Label2"
-        Label2.Size = New Size(57, 15)
+        Label2.Size = New Size(63, 17)
         Label2.TabIndex = 2
         Label2.Text = "Password"
         ' 
@@ -87,8 +91,8 @@ Partial Class Login
         TextBoxPassword.Anchor = AnchorStyles.None
         TextBoxPassword.Location = New Point(574, 374)
         TextBoxPassword.Name = "TextBoxPassword"
-        TextBoxPassword.PasswordChar = "*"c
-        TextBoxPassword.Size = New Size(219, 23)
+        TextBoxPassword.PasswordChar = "●"c
+        TextBoxPassword.Size = New Size(219, 22)
         TextBoxPassword.TabIndex = 3
         ' 
         ' Login
@@ -104,7 +108,7 @@ Partial Class Login
         ResumeLayout(False)
     End Sub
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents loginBtn As Button
+    Friend WithEvents LoginBtn As Button
     Friend WithEvents TextBoxPassword As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents TextBoxUsername As TextBox

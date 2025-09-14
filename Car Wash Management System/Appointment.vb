@@ -3,6 +3,7 @@
 Public Class Appointment
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly appointmentManagement As AppointmentManagement
+    Dim dashboardManagement As New DashboardManagement(constr)
     Public Sub New()
 
         ' This call is required by the designer.
@@ -13,8 +14,7 @@ Public Class Appointment
 
     End Sub
     Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridView1.CellFormatting
-        ' Check if this is the column we care about ("AppointmentStatus") and
-        ' if the row is not new.
+
         If e.ColumnIndex = Me.DataGridView1.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
 
             ' Get the value from the current cell.
@@ -126,14 +126,18 @@ Public Class Appointment
             )
             MessageBox.Show("Appointment added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             DataGridView1.DataSource = appointmentManagement.ViewAppointment()
-            ClearFields()
+
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+        Dim customerName As String = TextBoxCustomerName.Text
+        Dim appointmentDate As Date = DateTimePickerStartDate.Value
+        Dim appointmentStatus As String = ComboBoxAppointmentStatus.Text
+        dashboardManagement.ScheduleAppointment(customerName, appointmentDate, appointmentStatus)
+        ClearFields()
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            ' Populate UI components using the data returned from the management class
             Dim customerNames As DataTable = appointmentManagement.GetAllCustomerNames()
             Dim customerNamesCollection As New AutoCompleteStringCollection()
             For Each row As DataRow In customerNames.Rows
@@ -156,9 +160,6 @@ Public Class Appointment
             ComboBoxAddon.DropDownStyle = ComboBoxStyle.DropDownList
             ComboBoxAddon.SelectedIndex = -1 ' Set to no selection by default
 
-            ' This part is not in the management class anymore, as it's static UI logic
-
-            ' Load existing contracts into the DataGridView when the form loads.
             DataGridView1.DataSource = appointmentManagement.ViewAppointment()
             ClearFields()
         Catch ex As Exception
@@ -224,7 +225,7 @@ Public Class Appointment
             Dim appointmentID As Integer
             Dim customerID As Integer
             Dim price As Decimal
-            Dim appointmentStatus As String = ComboBoxAppointmentStatus.Text.ToLower()
+            Dim appointmentStatus As String = ComboBoxAppointmentStatus.Text
             Dim salesLabel As String = "Sales Added!"
 
             If Not Integer.TryParse(LabelAppointmentID.Text, appointmentID) Or Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Or Not Decimal.TryParse(TextBoxPrice.Text, price) Then
@@ -259,6 +260,10 @@ Public Class Appointment
         Catch ex As Exception
             MessageBox.Show("An error occurred while updating the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
+        Dim customerName As String = TextBoxCustomerName.Text
+        Dim newtStatus As String = ComboBoxAppointmentStatus.Text
+        dashboardManagement.UpdateAppointmentStatus(customerName, newtStatus)
         ClearFields()
     End Sub
 

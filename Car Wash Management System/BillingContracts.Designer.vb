@@ -42,10 +42,9 @@ Partial Class BillingContracts
         Label5 = New Label()
         LabelServiceID = New Label()
         Label4 = New Label()
-        deleteServiceBtn = New Button()
-        updateServiceBtn = New Button()
-        viewServiceBtn = New Button()
-        addServiceBtn = New Button()
+        UpdateServiceBtn = New Button()
+        ViewServiceBtn = New Button()
+        AddServiceBtn = New Button()
         Label3 = New Label()
         TextBoxCustomerID = New TextBox()
         Label2 = New Label()
@@ -60,7 +59,7 @@ Partial Class BillingContracts
         ' 
         ' Panel3
         ' 
-        Panel3.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
+        Panel3.BackColor = Color.White
         Panel3.Controls.Add(LabelSales)
         Panel3.Controls.Add(Label11)
         Panel3.Controls.Add(ComboBoxPaymentMethod)
@@ -80,10 +79,9 @@ Partial Class BillingContracts
         Panel3.Controls.Add(Label5)
         Panel3.Controls.Add(LabelServiceID)
         Panel3.Controls.Add(Label4)
-        Panel3.Controls.Add(deleteServiceBtn)
-        Panel3.Controls.Add(updateServiceBtn)
-        Panel3.Controls.Add(viewServiceBtn)
-        Panel3.Controls.Add(addServiceBtn)
+        Panel3.Controls.Add(UpdateServiceBtn)
+        Panel3.Controls.Add(ViewServiceBtn)
+        Panel3.Controls.Add(AddServiceBtn)
         Panel3.Controls.Add(Label3)
         Panel3.Controls.Add(TextBoxCustomerID)
         Panel3.Controls.Add(Label2)
@@ -107,9 +105,10 @@ Partial Class BillingContracts
         ' Label11
         ' 
         Label11.AutoSize = True
+        Label11.Font = New Font("Century Gothic", 9F)
         Label11.Location = New Point(15, 325)
         Label11.Name = "Label11"
-        Label11.Size = New Size(99, 15)
+        Label11.Size = New Size(110, 17)
         Label11.TabIndex = 28
         Label11.Text = "Payment Method"
         ' 
@@ -135,9 +134,10 @@ Partial Class BillingContracts
         ' Label10
         ' 
         Label10.AutoSize = True
+        Label10.Font = New Font("Century Gothic", 9F)
         Label10.Location = New Point(15, 141)
         Label10.Name = "Label10"
-        Label10.Size = New Size(43, 15)
+        Label10.Size = New Size(48, 17)
         Label10.TabIndex = 25
         Label10.Text = "Addon"
         ' 
@@ -162,18 +162,20 @@ Partial Class BillingContracts
         ' Label9
         ' 
         Label9.AutoSize = True
+        Label9.Font = New Font("Century Gothic", 9F)
         Label9.Location = New Point(16, 457)
         Label9.Name = "Label9"
-        Label9.Size = New Size(67, 15)
+        Label9.Size = New Size(77, 17)
         Label9.TabIndex = 22
         Label9.Text = "Contract ID"
         ' 
         ' Label8
         ' 
         Label8.AutoSize = True
+        Label8.Font = New Font("Century Gothic", 9F)
         Label8.Location = New Point(16, 413)
         Label8.Name = "Label8"
-        Label8.Size = New Size(88, 15)
+        Label8.Size = New Size(102, 17)
         Label8.TabIndex = 21
         Label8.Text = "Contract Status"
         ' 
@@ -218,9 +220,10 @@ Partial Class BillingContracts
         ' Label7
         ' 
         Label7.AutoSize = True
+        Label7.Font = New Font("Century Gothic", 9F)
         Label7.Location = New Point(16, 232)
         Label7.Name = "Label7"
-        Label7.Size = New Size(54, 15)
+        Label7.Size = New Size(62, 17)
         Label7.TabIndex = 16
         Label7.Text = "End Date"
         ' 
@@ -234,18 +237,20 @@ Partial Class BillingContracts
         ' Label6
         ' 
         Label6.AutoSize = True
+        Label6.Font = New Font("Century Gothic", 9F)
         Label6.Location = New Point(16, 188)
         Label6.Name = "Label6"
-        Label6.Size = New Size(58, 15)
+        Label6.Size = New Size(70, 17)
         Label6.TabIndex = 14
         Label6.Text = "Start Date"
         ' 
         ' Label5
         ' 
         Label5.AutoSize = True
+        Label5.Font = New Font("Century Gothic", 9F)
         Label5.Location = New Point(16, 97)
         Label5.Name = "Label5"
-        Label5.Size = New Size(49, 15)
+        Label5.Size = New Size(59, 17)
         Label5.TabIndex = 12
         Label5.Text = "Services"
         ' 
@@ -260,58 +265,50 @@ Partial Class BillingContracts
         ' Label4
         ' 
         Label4.AutoSize = True
+        Label4.Font = New Font("Century Gothic", 9F)
         Label4.Location = New Point(16, 369)
         Label4.Name = "Label4"
-        Label4.Size = New Size(33, 15)
+        Label4.Size = New Size(38, 17)
         Label4.TabIndex = 10
         Label4.Text = "Price"
         ' 
-        ' deleteServiceBtn
+        ' UpdateServiceBtn
         ' 
-        deleteServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        deleteServiceBtn.Location = New Point(16, 574)
-        deleteServiceBtn.Name = "deleteServiceBtn"
-        deleteServiceBtn.Size = New Size(260, 30)
-        deleteServiceBtn.TabIndex = 9
-        deleteServiceBtn.Text = "Delete Service"
-        deleteServiceBtn.UseVisualStyleBackColor = True
+        UpdateServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        UpdateServiceBtn.Location = New Point(16, 541)
+        UpdateServiceBtn.Name = "UpdateServiceBtn"
+        UpdateServiceBtn.Size = New Size(260, 30)
+        UpdateServiceBtn.TabIndex = 8
+        UpdateServiceBtn.Text = "Update Contract"
+        UpdateServiceBtn.UseVisualStyleBackColor = True
         ' 
-        ' updateServiceBtn
+        ' ViewServiceBtn
         ' 
-        updateServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        updateServiceBtn.Location = New Point(16, 541)
-        updateServiceBtn.Name = "updateServiceBtn"
-        updateServiceBtn.Size = New Size(260, 30)
-        updateServiceBtn.TabIndex = 8
-        updateServiceBtn.Text = "Update Service"
-        updateServiceBtn.UseVisualStyleBackColor = True
+        ViewServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        ViewServiceBtn.Location = New Point(16, 508)
+        ViewServiceBtn.Name = "ViewServiceBtn"
+        ViewServiceBtn.Size = New Size(260, 30)
+        ViewServiceBtn.TabIndex = 7
+        ViewServiceBtn.Text = "View Contract"
+        ViewServiceBtn.UseVisualStyleBackColor = True
         ' 
-        ' viewServiceBtn
+        ' AddServiceBtn
         ' 
-        viewServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        viewServiceBtn.Location = New Point(16, 508)
-        viewServiceBtn.Name = "viewServiceBtn"
-        viewServiceBtn.Size = New Size(260, 30)
-        viewServiceBtn.TabIndex = 7
-        viewServiceBtn.Text = "View Service"
-        viewServiceBtn.UseVisualStyleBackColor = True
-        ' 
-        ' addServiceBtn
-        ' 
-        addServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        addServiceBtn.Location = New Point(16, 475)
-        addServiceBtn.Name = "addServiceBtn"
-        addServiceBtn.Size = New Size(260, 30)
-        addServiceBtn.TabIndex = 6
-        addServiceBtn.Text = "Add Service"
-        addServiceBtn.UseVisualStyleBackColor = True
+        AddServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        AddServiceBtn.Location = New Point(16, 475)
+        AddServiceBtn.Name = "AddServiceBtn"
+        AddServiceBtn.Size = New Size(260, 30)
+        AddServiceBtn.TabIndex = 6
+        AddServiceBtn.Text = "Add Contract"
+        AddServiceBtn.UseVisualStyleBackColor = True
         ' 
         ' Label3
         ' 
         Label3.AutoSize = True
+        Label3.Font = New Font("Century Gothic", 9F)
         Label3.Location = New Point(16, 276)
         Label3.Name = "Label3"
-        Label3.Size = New Size(98, 15)
+        Label3.Size = New Size(107, 17)
         Label3.TabIndex = 4
         Label3.Text = "Billing Frequency"
         ' 
@@ -326,9 +323,10 @@ Partial Class BillingContracts
         ' Label2
         ' 
         Label2.AutoSize = True
+        Label2.Font = New Font("Century Gothic", 9F)
         Label2.Location = New Point(16, 53)
         Label2.Name = "Label2"
-        Label2.Size = New Size(73, 15)
+        Label2.Size = New Size(80, 17)
         Label2.TabIndex = 2
         Label2.Text = "Customer ID"
         ' 
@@ -342,9 +340,10 @@ Partial Class BillingContracts
         ' Label1
         ' 
         Label1.AutoSize = True
+        Label1.Font = New Font("Century Gothic", 9F)
         Label1.Location = New Point(16, 9)
         Label1.Name = "Label1"
-        Label1.Size = New Size(94, 15)
+        Label1.Size = New Size(104, 17)
         Label1.TabIndex = 0
         Label1.Text = "Customer Name"
         ' 
@@ -366,6 +365,7 @@ Partial Class BillingContracts
         DataGridView1.Dock = DockStyle.Fill
         DataGridView1.Location = New Point(0, 0)
         DataGridView1.Name = "DataGridView1"
+        DataGridView1.ReadOnly = True
         DataGridView1.Size = New Size(606, 611)
         DataGridView1.TabIndex = 0
         ' 
@@ -388,10 +388,9 @@ Partial Class BillingContracts
     Friend WithEvents Panel3 As Panel
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
-    Friend WithEvents deleteServiceBtn As Button
-    Friend WithEvents updateServiceBtn As Button
-    Friend WithEvents viewServiceBtn As Button
-    Friend WithEvents addServiceBtn As Button
+    Friend WithEvents UpdateServiceBtn As Button
+    Friend WithEvents ViewServiceBtn As Button
+    Friend WithEvents AddServiceBtn As Button
     Friend WithEvents Label3 As Label
     Friend WithEvents TextBoxCustomerID As TextBox
     Friend WithEvents Label2 As Label

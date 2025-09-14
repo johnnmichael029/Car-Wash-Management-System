@@ -2,6 +2,7 @@
 
 Public Class OnTheDay
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim dashboardManagement As New DashboardManagement(constr)
     Private ReadOnly onTheDayManagement As OnTheDayManagement
     Public Sub New()
 
@@ -49,16 +50,14 @@ Public Class OnTheDay
 
 
             If e.ColumnIndex = DataGridView1.Columns("actionsColumn").Index AndAlso e.RowIndex >= 0 Then
-                ' Get the row that was clicked
                 Dim row As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
                 Dim appointmentID As Integer = Convert.ToInt32(row.Cells("OnTheDayID").Value)
-                ' Get the current status from the row (assuming you have a status column named "AppointmentStatus")
                 Dim currentStatus As String = row.Cells("AppointmentStatus").Value.ToString()
 
-                ' Determine the next status based on the current one
+                Dim customerName As String = row.Cells("CustomerName").Value.ToString()
+                Dim customerNewStatus As String = row.Cells("AppointmentStatus").Value.ToString()
                 Dim nextStatus As String = ""
                 If currentStatus = "Completed" Then
-                    ' If the status is already completed, you might not do anything.
                     Exit Sub
                 End If
                 Select Case currentStatus
@@ -66,6 +65,7 @@ Public Class OnTheDay
                     Case "Queued"
                         nextStatus = "In-progress"
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
+
                     Case "In-progress"
                         nextStatus = "Completed"
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
@@ -80,6 +80,7 @@ Public Class OnTheDay
 
                         nextStatus = "Queued" ' Default status if not set
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
+
                 End Select
 
                 ' Update the AppointmentStatus cell value directly in the DataGridView
@@ -94,12 +95,20 @@ Public Class OnTheDay
         AddButtonAction()
     End Sub
     Public Sub AddButtonAction()
-        Dim updateButtonColumn As New DataGridViewButtonColumn()
-        updateButtonColumn.HeaderText = "Action"
-        updateButtonColumn.Text = "Update Status"
-        updateButtonColumn.UseColumnTextForButtonValue = True
-        updateButtonColumn.Name = "actionsColumn"
+        Dim updateButtonColumn As New DataGridViewButtonColumn With {
+            .HeaderText = "Action",
+            .Text = "Update Status",
+            .UseColumnTextForButtonValue = True,
+            .Name = "actionsColumn"
+        }
         DataGridView1.Columns.Add(updateButtonColumn)
+        dashboardManagement.UpdateAppointmentStatus(customerName, customerNewStatus)
+    End Sub
+    Private Sub actionsColumn_Click(sender As Object, e As EventArgs) Handles actionsColumn.Click
+        DataGridView1.DataSource = onTheDayManagement.ViewListOfReserved()
+    End Sub
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
     End Sub
 End Class
 Public Class OnTheDayManagement

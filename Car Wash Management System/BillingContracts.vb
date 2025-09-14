@@ -1,16 +1,13 @@
 ﻿Imports Microsoft.Data.SqlClient
 
-' Class to hold both ServiceID and Price from the database
 
 
 Public Class BillingContracts
 
-    ' NOTE: This is an example, assuming this code is part of a form.
-    ' You will need to add the actual UI components like TextBoxCustomerName,
-    ' ComboBoxServices, etc. to your form designer.
 
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly billingContractsManagement As BillingContractsManagement
+    Dim dashboardManagement As New DashboardManagement(constr)
 
     Public Sub New()
         ' This call is required by the designer.
@@ -20,7 +17,7 @@ Public Class BillingContracts
         billingContractsManagement = New BillingContractsManagement(constr)
     End Sub
 
-    Private Sub addServiceBtn_Click(sender As Object, e As EventArgs) Handles addServiceBtn.Click
+    Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
         Dim salesAdded As String = "Sales Added"
         Try
             ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
@@ -77,6 +74,8 @@ Public Class BillingContracts
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+        Dim customerName As String = TextBoxCustomerName.Text
+        DashboardManagement.AddNewContract(customerName)
         ClearFields()
     End Sub
 
@@ -155,7 +154,7 @@ Public Class BillingContracts
         End Try
     End Sub
 
-    Private Sub updateServiceBtn_Click(sender As Object, e As EventArgs) Handles updateServiceBtn.Click
+    Private Sub UpdateServiceBtn_Click(sender As Object, e As EventArgs) Handles UpdateServiceBtn.Click
         Try
             Dim contractID As Integer
             Dim customerID As Integer
@@ -194,6 +193,9 @@ Public Class BillingContracts
         Catch ex As Exception
             MessageBox.Show("An error occurred while updating the contract: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+        Dim customerName As String = TextBoxCustomerName.Text
+        Dim newStatus As String = ComboBoxContractStatus.Text
+        dashboardManagement.UpdateContractStatus(customerName, newStatus)
         ClearFields()
     End Sub
 
@@ -213,11 +215,11 @@ Public Class BillingContracts
         LabelSales.Text = String.Empty
     End Sub
 
-    Private Sub deleteServiceBtn_Click(sender As Object, e As EventArgs) Handles deleteServiceBtn.Click
-        billingContractsManagement.DeleteContract(LabelContractID.Text)
-        DataGridView1.DataSource = billingContractsManagement.ViewContracts()
-        ClearFields()
-    End Sub
+    'Private Sub DeleteContractBtn_Click(sender As Object, e As EventArgs) Handles DeleteContractBtn.Click
+    '    billingContractsManagement.DeleteContract(LabelContractID.Text)
+    '    DataGridView1.DataSource = billingContractsManagement.ViewContracts()
+    '    ClearFields()
+    'End Sub
 
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
         LabelContractID.Text = DataGridView1.CurrentRow.Cells(0).Value.ToString()
@@ -244,8 +246,44 @@ Public Class BillingContracts
         ' Update the customer ID based on the selected customer name.
         TextBoxCustomerName_TextChanged(TextBoxCustomerName, New EventArgs())
     End Sub
+    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridView1.CellFormatting
+        If e.ColumnIndex = Me.DataGridView1.Columns("PaymentMethod").Index AndAlso e.RowIndex >= 0 Then
+            ' Get the value from the current cell.
+            Dim status As String = e.Value?.ToString()
 
-    Private Sub viewServiceBtn_Click(sender As Object, e As EventArgs) Handles viewServiceBtn.Click
+            ' Check the status and apply the correct formatting to the entire row.
+            Select Case status
+                Case "Gcash"
+                    e.CellStyle.BackColor = Color.LightSkyBlue
+                    e.CellStyle.ForeColor = Color.Black
+                Case "Cheque"
+                    e.CellStyle.BackColor = Color.Gold
+                    e.CellStyle.ForeColor = Color.Black
+                Case "Cash"
+                    e.CellStyle.BackColor = Color.LightGreen
+                    e.CellStyle.ForeColor = Color.Black
+            End Select
+        End If
+        If e.ColumnIndex = Me.DataGridView1.Columns("ContractStatus").Index AndAlso e.RowIndex >= 0 Then
+            ' Get the value from the current cell.
+            Dim status As String = e.Value?.ToString()
+
+            ' Check the status and apply the correct formatting to the entire row.
+            Select Case status
+                Case "Active"
+                    e.CellStyle.BackColor = Color.LightSkyBlue
+                    e.CellStyle.ForeColor = Color.Black
+                Case "Cancelled"
+                    e.CellStyle.BackColor = Color.Salmon
+                    e.CellStyle.ForeColor = Color.Black
+                Case "Expired"
+                    e.CellStyle.BackColor = Color.YellowGreen
+                    e.CellStyle.ForeColor = Color.Black
+            End Select
+        End If
+
+    End Sub
+    Private Sub ViewServiceBtn_Click(sender As Object, e As EventArgs) Handles ViewServiceBtn.Click
         DataGridView1.DataSource = billingContractsManagement.ViewContracts()
     End Sub
 
@@ -350,32 +388,32 @@ Public Class BillingContractsManagement
     ''' <summary>
     ''' Deletes an existing billing contract from the database.
     ''' </summary>
-    Public Sub DeleteContract(contractID As String)
-        If String.IsNullOrEmpty(contractID) Then
-            MessageBox.Show("Please select contract from the table to delete", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
-        Dim DialogResult = MessageBox.Show("Are you sure you want to delete this contract?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-        If DialogResult = DialogResult.Yes Then
+    'Public Sub DeleteContract(contractID As String)
+    '    If String.IsNullOrEmpty(contractID) Then
+    '        MessageBox.Show("Please select contract from the table to delete", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '        Return
+    '    End If
+    '    Dim DialogResult = MessageBox.Show("Are you sure you want to delete this contract?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+    '    If DialogResult = DialogResult.Yes Then
 
-            Using con As New SqlConnection(constr)
-                Try
-                    con.Open()
-                    ' SQL query to delete a contract.
-                    Dim deleteQuery As String = "DELETE FROM BillingContracts WHERE ContractID = @ContractID"
-                    Using cmd As New SqlCommand(deleteQuery, con)
-                        cmd.Parameters.AddWithValue("@ContractID", contractID)
-                        cmd.ExecuteNonQuery()
-                        MessageBox.Show("Contract deleted successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    End Using
-                Catch ex As Exception
-                    MessageBox.Show("An error occurred while deleting contract" & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Finally
-                    con.Close()
-                End Try
-            End Using
-        End If
-    End Sub
+    '        Using con As New SqlConnection(constr)
+    '            Try
+    '                con.Open()
+    '                ' SQL query to delete a contract.
+    '                Dim deleteQuery As String = "DELETE FROM BillingContracts WHERE ContractID = @ContractID"
+    '                Using cmd As New SqlCommand(deleteQuery, con)
+    '                    cmd.Parameters.AddWithValue("@ContractID", contractID)
+    '                    cmd.ExecuteNonQuery()
+    '                    MessageBox.Show("Contract deleted successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    '                End Using
+    '            Catch ex As Exception
+    '                MessageBox.Show("An error occurred while deleting contract" & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '            Finally
+    '                con.Close()
+    '            End Try
+    '        End Using
+    '    End If
+    'End Sub
 
     ''' <summary>
     ''' Gets all customer names from the database.

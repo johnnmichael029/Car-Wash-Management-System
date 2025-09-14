@@ -2,6 +2,7 @@
 Public Class CustomerInformation
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly customerInformationManagement As CustomerInformationManagement
+    Dim DashboardManagement As New DashboardManagement(constr)
     Public Sub New()
 
         ' This call is required by the designer.
@@ -24,6 +25,9 @@ Public Class CustomerInformation
     Private Sub addBtn_Click(sender As Object, e As EventArgs) Handles addBtn.Click
         customerInformationManagement.AddCustomer(TextBoxName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, TextBoxPlateNumber.Text)
         DataGridView1.DataSource = customerInformationManagement.ViewCustomer()
+
+        Dim customerName As String = TextBoxName.Text
+        DashboardManagement.AddNewCustomer(customerName)
         ClearFields()
     End Sub
     Private Sub viewBtn_Click(sender As Object, e As EventArgs) Handles viewBtn.Click
@@ -94,13 +98,14 @@ Public Class CustomerInformationManagement
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                Dim insertQuery As String = "INSERT INTO CustomersTable (Name, PhoneNumber, Email, Address, PlateNumber) VALUES (@Name, @PhoneNumber, @Email, @Address, @PlateNUmber)"
+                Dim insertQuery As String = "INSERT INTO CustomersTable (Name, PhoneNumber, Email, Address, PlateNumber, RegistrationDate) VALUES (@Name, @PhoneNumber, @Email, @Address, @PlateNUmber, @RegistrationDate)"
                 Using cmd As New SqlCommand(insertQuery, con)
                     cmd.Parameters.AddWithValue("@Name", name)
                     cmd.Parameters.AddWithValue("@PhoneNumber", number)
                     cmd.Parameters.AddWithValue("@Email", email)
                     cmd.Parameters.AddWithValue("@Address", address)
                     cmd.Parameters.AddWithValue("@PlateNUmber", plateNumber)
+                    cmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now)
                     cmd.ExecuteNonQuery()
                 End Using
                 MessageBox.Show("Customer added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -148,7 +153,7 @@ Public Class CustomerInformationManagement
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                Dim selectQuery = "SELECT CustomerID, Name, PhoneNumber, Email, Address, PlateNumber FROM CustomersTable"
+                Dim selectQuery = "SELECT * FROM CustomersTable ORDER BY CustomerID DESC"
                 Using cmd As New SqlCommand(selectQuery, con)
                     Using adapter As New SqlDataAdapter(cmd)
                         adapter.Fill(dt)

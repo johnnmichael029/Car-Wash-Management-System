@@ -25,8 +25,6 @@ Partial Class Inventory
         readBtn = New Button()
         deleteBtn = New Button()
         updateBtn = New Button()
-        backBtn = New Button()
-        Button2 = New Button()
         createBtn = New Button()
         Label3 = New Label()
         Label2 = New Label()
@@ -70,24 +68,6 @@ Partial Class Inventory
         updateBtn.TabIndex = 26
         updateBtn.Text = "Update"
         updateBtn.UseVisualStyleBackColor = True
-        ' 
-        ' backBtn
-        ' 
-        backBtn.Location = New Point(798, 100)
-        backBtn.Name = "backBtn"
-        backBtn.Size = New Size(99, 36)
-        backBtn.TabIndex = 25
-        backBtn.Text = "Back"
-        backBtn.UseVisualStyleBackColor = True
-        ' 
-        ' Button2
-        ' 
-        Button2.Location = New Point(798, 39)
-        Button2.Name = "Button2"
-        Button2.Size = New Size(99, 38)
-        Button2.TabIndex = 23
-        Button2.Text = "Exit"
-        Button2.UseVisualStyleBackColor = True
         ' 
         ' createBtn
         ' 
@@ -183,8 +163,6 @@ Partial Class Inventory
         Controls.Add(readBtn)
         Controls.Add(deleteBtn)
         Controls.Add(updateBtn)
-        Controls.Add(backBtn)
-        Controls.Add(Button2)
         Controls.Add(createBtn)
         Controls.Add(Label3)
         Controls.Add(Label2)
@@ -203,8 +181,6 @@ Partial Class Inventory
     Friend WithEvents readBtn As Button
     Friend WithEvents deleteBtn As Button
     Friend WithEvents updateBtn As Button
-    Friend WithEvents backBtn As Button
-    Friend WithEvents Button2 As Button
     Friend WithEvents createBtn As Button
     Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label

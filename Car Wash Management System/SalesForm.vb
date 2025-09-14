@@ -9,6 +9,7 @@ Public Class SalesForm
 
     ' Pass the UI controls to the management class.
     Private ReadOnly salesHistoryManagement As SalesHistoryManagement
+    Dim dashboardManagement As New DashboardManagement(constr)
 
     Public Sub New()
         InitializeComponent()
@@ -26,7 +27,7 @@ Public Class SalesForm
         ClearFields()
     End Sub
 
-    Private Sub addBtn_Click(sender As Object, e As EventArgs) Handles addBtn.Click
+    Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
         Try
             ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
             Dim customerID As Integer
@@ -77,7 +78,14 @@ Public Class SalesForm
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
+
+        Dim customerName As String = TextBoxCustomerName.Text
+        Dim amount As Decimal = Decimal.Parse(TextBoxPrice.Text)
+        dashboardManagement.RecordSale(customerName, amount)
+
         ClearFields()
+
     End Sub
 
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
@@ -112,7 +120,7 @@ Public Class SalesForm
         End If
     End Sub
 
-    Private Sub clearBtn_Click(sender As Object, e As EventArgs) Handles clearBtn.Click
+    Private Sub ClearBtn_Click(sender As Object, e As EventArgs) Handles ClearBtn.Click
         ClearFields()
 
     End Sub
@@ -126,6 +134,39 @@ Public Class SalesForm
     End Sub
 
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+        TextBoxCustomerName.Text = DataGridView1.CurrentRow.Cells(1).Value.ToString()
+        ComboBoxServices.Text = DataGridView1.CurrentRow.Cells(2).Value.ToString()
+        ComboBoxAddons.Text = DataGridView1.CurrentRow.Cells(3).Value.ToString()
+        TextBoxPrice.Text = DataGridView1.CurrentRow.Cells(6).Value.ToString()
+        ComboBoxPaymentMethod.Text = DataGridView1.CurrentRow.Cells(5).Value.ToString()
+
+    End Sub
+    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridView1.CellFormatting
+        If e.ColumnIndex = Me.DataGridView1.Columns("PaymentMethod").Index AndAlso e.RowIndex >= 0 Then
+
+            ' Get the value from the current cell.
+            Dim status As String = e.Value?.ToString()
+
+            ' Check the status and apply the correct formatting to the entire row.
+            Select Case status
+                Case "Gcash"
+                    ' Blue for confirmed appointments.
+                    e.CellStyle.BackColor = Color.LightSkyBlue
+                    e.CellStyle.ForeColor = Color.Black
+                Case "Cheque"
+                    ' Gold for appointments that are pending.
+                    e.CellStyle.BackColor = Color.Gold
+                    e.CellStyle.ForeColor = Color.Black
+                Case "Billing Contract"
+                    ' Gray for appointments that were a no-show.
+                    e.CellStyle.BackColor = Color.LightGray
+                    e.CellStyle.ForeColor = Color.Black
+                Case "Cash"
+                    ' Green for completed appointments.
+                    e.CellStyle.BackColor = Color.LightGreen
+                    e.CellStyle.ForeColor = Color.Black
+            End Select
+        End If
 
     End Sub
 End Class
@@ -144,11 +185,11 @@ Public Class SalesHistoryManagement
     End Sub
 
     Public Sub AddSale(customerID As Integer, baseServiceID As Integer, addonServiceID As Integer?, paymentMethod As String, totalPrice As Decimal)
+
+
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                ' We now need to insert both ServiceIDs into the sales history.
-                ' This will require adding a new column to SalesHistoryTable.
                 Dim insertQuery = "INSERT INTO SalesHistoryTable (CustomerID, ServiceID, AddonServiceID, SaleDate, PaymentMethod, TotalPrice) VALUES (@CustomerID, @ServiceID, @AddonServiceID, @SaleDate, @PaymentMethod, @TotalPrice)"
                 Using cmd As New SqlCommand(insertQuery, con)
                     cmd.Parameters.AddWithValue("@CustomerID", customerID)
@@ -182,7 +223,7 @@ Public Class SalesHistoryManagement
                 Dim selectQuery = "SELECT s.SalesID, c.Name AS CustomerName, sv.ServiceName AS BaseServiceName, sv_addon.ServiceName AS AddonServiceName, s.SaleDate, s.PaymentMethod, s.TotalPrice FROM SalesHistoryTable s 
                                   INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID 
                                   INNER JOIN ServicesTable sv ON s.ServiceID = sv.ServiceID 
-                                  LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID ORDER BY s.SaleDate DESC"
+                                  LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID ORDER BY s.SalesID DESC"
                 Using cmd As New SqlCommand(selectQuery, con)
                     Using adapter As New SqlDataAdapter(cmd)
                         adapter.Fill(dt)

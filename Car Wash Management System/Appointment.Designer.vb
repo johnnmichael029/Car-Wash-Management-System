@@ -43,7 +43,6 @@ Partial Class Appointment
         Label5 = New Label()
         LabelServiceID = New Label()
         Label4 = New Label()
-        DeleteServiceBtn = New Button()
         UpdateServiceBtn = New Button()
         ViewServiceBtn = New Button()
         AddServiceBtn = New Button()
@@ -52,6 +51,7 @@ Partial Class Appointment
         TextBoxCustomerName = New TextBox()
         Label1 = New Label()
         Label7 = New Label()
+        DeleteServiceBtn = New Button()
         Panel1.SuspendLayout()
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
         Panel3.SuspendLayout()
@@ -62,9 +62,9 @@ Partial Class Appointment
         Panel1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         Panel1.Controls.Add(DataGridView1)
         Panel1.Controls.Add(Panel3)
-        Panel1.Location = New Point(0, 75)
+        Panel1.Location = New Point(0, 53)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(911, 612)
+        Panel1.Size = New Size(911, 635)
         Panel1.TabIndex = 3
         ' 
         ' DataGridView1
@@ -75,12 +75,13 @@ Partial Class Appointment
         DataGridView1.Dock = DockStyle.Fill
         DataGridView1.Location = New Point(0, 0)
         DataGridView1.Name = "DataGridView1"
-        DataGridView1.Size = New Size(606, 612)
+        DataGridView1.ReadOnly = True
+        DataGridView1.Size = New Size(606, 635)
         DataGridView1.TabIndex = 0
         ' 
         ' Panel3
         ' 
-        Panel3.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
+        Panel3.BackColor = Color.White
         Panel3.Controls.Add(LabelSales)
         Panel3.Controls.Add(LabelAppointmentID)
         Panel3.Controls.Add(TextBoxNotes)
@@ -110,7 +111,7 @@ Partial Class Appointment
         Panel3.Dock = DockStyle.Right
         Panel3.Location = New Point(606, 0)
         Panel3.Name = "Panel3"
-        Panel3.Size = New Size(305, 612)
+        Panel3.Size = New Size(305, 635)
         Panel3.TabIndex = 2
         ' 
         ' LabelSales
@@ -143,18 +144,20 @@ Partial Class Appointment
         ' Label3
         ' 
         Label3.AutoSize = True
+        Label3.Font = New Font("Century Gothic", 9F)
         Label3.Location = New Point(15, 364)
         Label3.Name = "Label3"
-        Label3.Size = New Size(38, 15)
+        Label3.Size = New Size(43, 17)
         Label3.TabIndex = 29
         Label3.Text = "Notes"
         ' 
         ' Label11
         ' 
         Label11.AutoSize = True
+        Label11.Font = New Font("Century Gothic", 9F)
         Label11.Location = New Point(15, 232)
         Label11.Name = "Label11"
-        Label11.Size = New Size(99, 15)
+        Label11.Size = New Size(110, 17)
         Label11.TabIndex = 28
         Label11.Text = "Payment Method"
         ' 
@@ -181,9 +184,10 @@ Partial Class Appointment
         ' Label10
         ' 
         Label10.AutoSize = True
+        Label10.Font = New Font("Century Gothic", 9F)
         Label10.Location = New Point(15, 141)
         Label10.Name = "Label10"
-        Label10.Size = New Size(43, 15)
+        Label10.Size = New Size(48, 17)
         Label10.TabIndex = 25
         Label10.Text = "Addon"
         ' 
@@ -198,18 +202,20 @@ Partial Class Appointment
         ' Label9
         ' 
         Label9.AutoSize = True
+        Label9.Font = New Font("Century Gothic", 9F)
         Label9.Location = New Point(15, 457)
         Label9.Name = "Label9"
-        Label9.Size = New Size(92, 15)
+        Label9.Size = New Size(102, 17)
         Label9.TabIndex = 22
         Label9.Text = "Appointment ID"
         ' 
         ' Label8
         ' 
         Label8.AutoSize = True
+        Label8.Font = New Font("Century Gothic", 9F)
         Label8.Location = New Point(16, 320)
         Label8.Name = "Label8"
-        Label8.Size = New Size(113, 15)
+        Label8.Size = New Size(127, 17)
         Label8.TabIndex = 21
         Label8.Text = "Appointment Status"
         ' 
@@ -245,18 +251,20 @@ Partial Class Appointment
         ' Label6
         ' 
         Label6.AutoSize = True
+        Label6.Font = New Font("Century Gothic", 9F)
         Label6.Location = New Point(16, 188)
         Label6.Name = "Label6"
-        Label6.Size = New Size(105, 15)
+        Label6.Size = New Size(120, 17)
         Label6.TabIndex = 14
         Label6.Text = "Appointment Date"
         ' 
         ' Label5
         ' 
         Label5.AutoSize = True
+        Label5.Font = New Font("Century Gothic", 9F)
         Label5.Location = New Point(16, 97)
         Label5.Name = "Label5"
-        Label5.Size = New Size(49, 15)
+        Label5.Size = New Size(59, 17)
         Label5.TabIndex = 12
         Label5.Text = "Services"
         ' 
@@ -271,25 +279,16 @@ Partial Class Appointment
         ' Label4
         ' 
         Label4.AutoSize = True
+        Label4.Font = New Font("Century Gothic", 9F)
         Label4.Location = New Point(16, 276)
         Label4.Name = "Label4"
-        Label4.Size = New Size(33, 15)
+        Label4.Size = New Size(38, 17)
         Label4.TabIndex = 10
         Label4.Text = "Price"
         ' 
-        ' DeleteServiceBtn
-        ' 
-        DeleteServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        DeleteServiceBtn.Location = New Point(16, 574)
-        DeleteServiceBtn.Name = "DeleteServiceBtn"
-        DeleteServiceBtn.Size = New Size(260, 30)
-        DeleteServiceBtn.TabIndex = 9
-        DeleteServiceBtn.Text = "Delete Service"
-        DeleteServiceBtn.UseVisualStyleBackColor = True
-        ' 
         ' UpdateServiceBtn
         ' 
-        UpdateServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        UpdateServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
         UpdateServiceBtn.Location = New Point(16, 541)
         UpdateServiceBtn.Name = "UpdateServiceBtn"
         UpdateServiceBtn.Size = New Size(260, 30)
@@ -299,7 +298,7 @@ Partial Class Appointment
         ' 
         ' ViewServiceBtn
         ' 
-        ViewServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        ViewServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
         ViewServiceBtn.Location = New Point(16, 508)
         ViewServiceBtn.Name = "ViewServiceBtn"
         ViewServiceBtn.Size = New Size(260, 30)
@@ -309,7 +308,7 @@ Partial Class Appointment
         ' 
         ' AddServiceBtn
         ' 
-        AddServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        AddServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
         AddServiceBtn.Location = New Point(16, 475)
         AddServiceBtn.Name = "AddServiceBtn"
         AddServiceBtn.Size = New Size(260, 30)
@@ -328,9 +327,10 @@ Partial Class Appointment
         ' Label2
         ' 
         Label2.AutoSize = True
+        Label2.Font = New Font("Century Gothic", 9F)
         Label2.Location = New Point(16, 53)
         Label2.Name = "Label2"
-        Label2.Size = New Size(73, 15)
+        Label2.Size = New Size(80, 17)
         Label2.TabIndex = 2
         Label2.Text = "Customer ID"
         ' 
@@ -344,27 +344,38 @@ Partial Class Appointment
         ' Label1
         ' 
         Label1.AutoSize = True
+        Label1.Font = New Font("Century Gothic", 9F)
         Label1.Location = New Point(16, 9)
         Label1.Name = "Label1"
-        Label1.Size = New Size(94, 15)
+        Label1.Size = New Size(104, 17)
         Label1.TabIndex = 0
         Label1.Text = "Customer Name"
         ' 
         ' Label7
         ' 
         Label7.AutoSize = True
-        Label7.Font = New Font("Segoe UI", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label7.Location = New Point(0, 25)
+        Label7.Font = New Font("Century Gothic", 26.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label7.Location = New Point(0, 3)
         Label7.Name = "Label7"
-        Label7.Size = New Size(262, 47)
+        Label7.Size = New Size(337, 41)
         Label7.TabIndex = 4
-        Label7.Text = "List of Reserved"
+        Label7.Text = "List of Appointment"
+        ' 
+        ' DeleteServiceBtn
+        ' 
+        DeleteServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        DeleteServiceBtn.Location = New Point(16, 574)
+        DeleteServiceBtn.Name = "DeleteServiceBtn"
+        DeleteServiceBtn.Size = New Size(260, 30)
+        DeleteServiceBtn.TabIndex = 9
+        DeleteServiceBtn.Text = "Delete Service"
+        DeleteServiceBtn.UseVisualStyleBackColor = True
         ' 
         ' Appointment
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        BackColor = SystemColors.Control
+        BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         ClientSize = New Size(911, 687)
         Controls.Add(Label7)
         Controls.Add(Panel1)
@@ -396,7 +407,6 @@ Partial Class Appointment
     Friend WithEvents Label5 As Label
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
-    Friend WithEvents DeleteServiceBtn As Button
     Friend WithEvents UpdateServiceBtn As Button
     Friend WithEvents ViewServiceBtn As Button
     Friend WithEvents AddServiceBtn As Button
@@ -409,4 +419,5 @@ Partial Class Appointment
     Friend WithEvents LabelAppointmentID As Label
     Friend WithEvents LabelSales As Label
     Friend WithEvents Label7 As Label
+    Friend WithEvents DeleteServiceBtn As Button
 End Class

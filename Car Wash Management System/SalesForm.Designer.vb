@@ -26,7 +26,7 @@ Partial Class SalesForm
         Panel2 = New Panel()
         Panel3 = New Panel()
         Panel1 = New Panel()
-        addBtn = New Button()
+        AddBtn = New Button()
         TextBoxPrice = New TextBox()
         ComboBoxPaymentMethod = New ComboBox()
         ComboBoxAddons = New ComboBox()
@@ -36,7 +36,7 @@ Partial Class SalesForm
         Label6 = New Label()
         Label5 = New Label()
         Label1 = New Label()
-        clearBtn = New Button()
+        ClearBtn = New Button()
         Label4 = New Label()
         Label2 = New Label()
         Label3 = New Label()
@@ -54,6 +54,7 @@ Partial Class SalesForm
         DataGridView1.Dock = DockStyle.Fill
         DataGridView1.Location = New Point(0, 0)
         DataGridView1.Name = "DataGridView1"
+        DataGridView1.ReadOnly = True
         DataGridView1.Size = New Size(606, 551)
         DataGridView1.TabIndex = 0
         ' 
@@ -78,8 +79,8 @@ Partial Class SalesForm
         ' 
         ' Panel1
         ' 
-        Panel1.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
-        Panel1.Controls.Add(addBtn)
+        Panel1.BackColor = Color.White
+        Panel1.Controls.Add(AddBtn)
         Panel1.Controls.Add(TextBoxPrice)
         Panel1.Controls.Add(ComboBoxPaymentMethod)
         Panel1.Controls.Add(ComboBoxAddons)
@@ -89,7 +90,7 @@ Partial Class SalesForm
         Panel1.Controls.Add(Label6)
         Panel1.Controls.Add(Label5)
         Panel1.Controls.Add(Label1)
-        Panel1.Controls.Add(clearBtn)
+        Panel1.Controls.Add(ClearBtn)
         Panel1.Controls.Add(Label4)
         Panel1.Controls.Add(Label2)
         Panel1.Controls.Add(Label3)
@@ -99,18 +100,18 @@ Partial Class SalesForm
         Panel1.Size = New Size(305, 551)
         Panel1.TabIndex = 18
         ' 
-        ' addBtn
+        ' AddBtn
         ' 
-        addBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        addBtn.Image = My.Resources.Resources.add
-        addBtn.Location = New Point(16, 367)
-        addBtn.Name = "addBtn"
-        addBtn.Size = New Size(258, 34)
-        addBtn.TabIndex = 32
-        addBtn.Text = "Add"
-        addBtn.TextAlign = ContentAlignment.MiddleRight
-        addBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        addBtn.UseVisualStyleBackColor = True
+        AddBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        AddBtn.Image = My.Resources.Resources.add
+        AddBtn.Location = New Point(16, 367)
+        AddBtn.Name = "AddBtn"
+        AddBtn.Size = New Size(258, 34)
+        AddBtn.TabIndex = 32
+        AddBtn.Text = "Add"
+        AddBtn.TextAlign = ContentAlignment.MiddleRight
+        AddBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        AddBtn.UseVisualStyleBackColor = True
         ' 
         ' TextBoxPrice
         ' 
@@ -188,19 +189,19 @@ Partial Class SalesForm
         Label1.TabIndex = 4
         Label1.Text = "Customer ID"
         ' 
-        ' clearBtn
+        ' ClearBtn
         ' 
-        clearBtn.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        clearBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        clearBtn.Image = My.Resources.Resources.book1
-        clearBtn.Location = New Point(16, 407)
-        clearBtn.Name = "clearBtn"
-        clearBtn.Size = New Size(261, 34)
-        clearBtn.TabIndex = 14
-        clearBtn.Text = "Clear Fields"
-        clearBtn.TextAlign = ContentAlignment.MiddleRight
-        clearBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        clearBtn.UseVisualStyleBackColor = True
+        ClearBtn.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        ClearBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        ClearBtn.Image = My.Resources.Resources.book1
+        ClearBtn.Location = New Point(16, 407)
+        ClearBtn.Name = "ClearBtn"
+        ClearBtn.Size = New Size(261, 34)
+        ClearBtn.TabIndex = 14
+        ClearBtn.Text = "Clear Fields"
+        ClearBtn.TextAlign = ContentAlignment.MiddleRight
+        ClearBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        ClearBtn.UseVisualStyleBackColor = True
         ' 
         ' Label4
         ' 
@@ -250,7 +251,7 @@ Partial Class SalesForm
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents addBtn As Button
+    Friend WithEvents AddBtn As Button
     Friend WithEvents TextBoxPrice As TextBox
     Friend WithEvents ComboBoxPaymentMethod As ComboBox
     Friend WithEvents ComboBoxAddons As ComboBox
@@ -260,7 +261,7 @@ Partial Class SalesForm
     Friend WithEvents Label6 As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents Label1 As Label
-    Friend WithEvents clearBtn As Button
+    Friend WithEvents ClearBtn As Button
     Friend WithEvents Label4 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label

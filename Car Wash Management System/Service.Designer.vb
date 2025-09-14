@@ -61,6 +61,7 @@ Partial Class Service
         DataGridView1.Dock = DockStyle.Fill
         DataGridView1.Location = New Point(0, 0)
         DataGridView1.Name = "DataGridView1"
+        DataGridView1.ReadOnly = True
         DataGridView1.Size = New Size(606, 551)
         DataGridView1.TabIndex = 0
         ' 

@@ -59,7 +59,7 @@ Partial Class CustomerInformation
         ' 
         ' Panel2
         ' 
-        Panel2.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
+        Panel2.BackColor = Color.White
         Panel2.Controls.Add(customerIDLabel)
         Panel2.Controls.Add(Label1)
         Panel2.Controls.Add(updateBtn)
@@ -247,6 +247,7 @@ Partial Class CustomerInformation
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridView1.Location = New Point(0, 0)
         DataGridView1.Name = "DataGridView1"
+        DataGridView1.ReadOnly = True
         DataGridView1.Size = New Size(606, 551)
         DataGridView1.TabIndex = 0
         ' 

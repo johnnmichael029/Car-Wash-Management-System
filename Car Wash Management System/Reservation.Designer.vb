@@ -31,6 +31,7 @@ Partial Class Reservation
         ' 
         ' Panel1
         ' 
+        Panel1.BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         Panel1.Controls.Add(Label1)
         Panel1.Controls.Add(DataGridView1)
         Panel1.Dock = DockStyle.Fill
@@ -42,10 +43,10 @@ Partial Class Reservation
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Font = New Font("Segoe UI", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label1.Location = New Point(3, 25)
+        Label1.Font = New Font("Century Gothic", 26.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label1.Location = New Point(3, 3)
         Label1.Name = "Label1"
-        Label1.Size = New Size(262, 47)
+        Label1.Size = New Size(273, 41)
         Label1.TabIndex = 1
         Label1.Text = "List of Reserved"
         ' 
@@ -55,9 +56,10 @@ Partial Class Reservation
         DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridView1.BackgroundColor = SystemColors.ControlLight
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Location = New Point(0, 75)
+        DataGridView1.Location = New Point(0, 53)
         DataGridView1.Name = "DataGridView1"
-        DataGridView1.Size = New Size(905, 476)
+        DataGridView1.ReadOnly = True
+        DataGridView1.Size = New Size(905, 498)
         DataGridView1.TabIndex = 0
         ' 
         ' Reservation

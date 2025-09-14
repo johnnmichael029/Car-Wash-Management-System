@@ -2,7 +2,8 @@
 Imports System.Runtime.InteropServices
 
 Public Class Carwash
-
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim dashboardManagement As New DashboardManagement(constr)
     Private Sub Dashboard1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CenterToParent()
     End Sub
@@ -35,14 +36,22 @@ Public Class Carwash
     Private PrivateFonts As New PrivateFontCollection()
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim pfc As PrivateFontCollection = New PrivateFontCollection()
-        pfc.AddFontFile("Poppins\Poppins-Regular.ttf")
-        dashboardBtn.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
-        Btn2.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
-        Btn3.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
-        LabelCarwash.Font = New Font(pfc.Families(0), 25, FontStyle.Bold)
-        LabelWelcome.Font = New Font(pfc.Families(0), 25, FontStyle.Regular)
-        logoutBtn.Font = New Font(pfc.Families(0), 12, FontStyle.Regular)
+        'Dim pfc As New PrivateFontCollection()
+        'pfc.AddFontFile("Poppins\Poppins-Regular.ttf")
+        'DashboardBtn.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
+        'Btn2.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
+        'Btn3.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
+        'LabelCarwash.Font = New Font(pfc.Families(0), 20, FontStyle.Bold)
+        'LogoutBtn.Font = New Font(pfc.Families(0), 12, FontStyle.Regular)
+
+        Panel4.Controls.Clear()
+        Dim dashboard As New Dashboard With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(dashboard)
+        dashboard.Dock = DockStyle.Fill
+        dashboard.Show()
 
     End Sub
 
@@ -50,38 +59,21 @@ Public Class Carwash
         Application.Exit()
     End Sub
 
-    Sub SwitchPanel(ByVal panel As Form)
-        Panel4.Controls.Clear()
-        panel.TopLevel = False
-        Panel4.Controls.Add(panel)
-        panel.Show()
-    End Sub
-
-    Private Sub saleBtn_Click(sender As Object, e As EventArgs) Handles Btn2.Click
-
-    End Sub
-
-    Private Sub customerBtn_Click(sender As Object, e As EventArgs) Handles Btn3.Click
-    End Sub
-
-    Private Sub dashboardBtn_Click(sender As Object, e As EventArgs) Handles dashboardBtn.Click
-
-    End Sub
-
-    Private Sub Label1_Click(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub logoutBtn_Click(sender As Object, e As EventArgs) Handles logoutBtn.Click
+    'Sub SwitchPanel(ByVal panel As Form)
+    '    Panel4.Controls.Clear()
+    '    panel.TopLevel = False
+    '    Panel4.Controls.Add(panel)
+    '    panel.Show()
+    'End Sub
+    Private Sub LogoutBtn_Click(sender As Object, e As EventArgs) Handles LogoutBtn.Click
         DialogResult = MessageBox.Show("Are you sure you want to logout?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk)
         If DialogResult = DialogResult.Yes Then
             Me.Hide()
             Login.Show()
         End If
-    End Sub
 
-    Private Sub ServiceTrackingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ServiceTrackingToolStripMenuItem.Click
-
+        Dim username As String = Login.TextBoxUsername.Text
+        dashboardManagement.UserLogout(username)
     End Sub
 
     Private Sub CustomerInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomerInformationToolStripMenuItem.Click
@@ -167,5 +159,20 @@ Public Class Carwash
         Panel4.Controls.Add(onTheDay)
         onTheDay.Dock = DockStyle.Fill
         onTheDay.Show()
+    End Sub
+
+    Private Sub DashboardBtn_Click(sender As Object, e As EventArgs) Handles DashboardBtn.Click
+        Panel4.Controls.Clear()
+        Dim dashboard As New Dashboard With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(dashboard)
+        dashboard.Dock = DockStyle.Fill
+        dashboard.Show()
+    End Sub
+
+    Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs)
+
     End Sub
 End Class

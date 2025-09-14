@@ -5,17 +5,17 @@ Public Class Inventory
     Dim con As New SqlConnection
     Dim cmd As New SqlCommand
     Dim adapter As New SqlDataAdapter
-    Private Sub backBtn_Click(sender As Object, e As EventArgs) Handles backBtn.Click
+    Private Sub BackBtn_Click(sender As Object, e As EventArgs)
         Login.Show()
-        Me.Close()
+        Close()
     End Sub
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
         Application.Exit()
 
     End Sub
     Private Sub Inventory_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CenterToParent()
-        displayTable()
+        DisplayTable()
 
     End Sub
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
@@ -25,7 +25,7 @@ Public Class Inventory
         TextBoxPrice.Text = DataGridView1.CurrentRow.Cells("price").Value
 
     End Sub
-    Sub displayTable()
+    Sub DisplayTable()
         Try
             Using con As New SqlConnection(constr)
                 con.Open()

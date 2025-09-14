@@ -4,7 +4,7 @@ Imports Windows.Win32.System
 
 Public Class Service
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
-
+    Dim dashboardManagement As New DashboardManagement(constr)
     Private ReadOnly serviceManagement As ServiceManagement
     Public Sub New()
 
@@ -33,6 +33,8 @@ Public Class Service
     Private Sub addServiceBtn_Click(sender As Object, e As EventArgs) Handles addServiceBtn.Click
         serviceManagement.AddService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
         DataGridView1.DataSource = serviceManagement.ViewService()
+        dashboardManagement.AddNewService(TextBoxServiceName.Text)
+
 
     End Sub
     Private Sub Service_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -54,7 +56,9 @@ Public Class Service
         ClearFields()
     End Sub
 
+    Private Sub Panel3_Paint(sender As Object, e As PaintEventArgs) Handles Panel3.Paint
 
+    End Sub
 End Class
 Public Class ServiceManagement
     Private ReadOnly constr As String
