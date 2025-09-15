@@ -46,7 +46,7 @@ Public Class ReservationManagement
                                          INNER JOIN ServicesTable s ON a.ServiceID = s.ServiceID
                                          LEFT JOIN ServicesTable sa ON a.AddonServiceID = sa.ServiceID 
                                          WHERE a.AppointmentStatus = 'Confirmed'
-                                         ORDER BY a.AppointmentDateTime DESC"
+                                         ORDER BY a.AppointmentID DESC"
             Using cmd As New SqlCommand(viewListQuery, con)
                 Using adapater As New SqlDataAdapter(cmd)
                     adapater.Fill(dt)

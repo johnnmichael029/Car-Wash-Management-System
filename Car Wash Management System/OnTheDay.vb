@@ -53,34 +53,32 @@ Public Class OnTheDay
                 Dim row As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
                 Dim appointmentID As Integer = Convert.ToInt32(row.Cells("OnTheDayID").Value)
                 Dim currentStatus As String = row.Cells("AppointmentStatus").Value.ToString()
-
                 Dim customerName As String = row.Cells("CustomerName").Value.ToString()
                 Dim customerNewStatus As String = row.Cells("AppointmentStatus").Value.ToString()
-                Dim nextStatus As String = ""
+                Dim nextStatus As String
                 If currentStatus = "Completed" Then
                     Exit Sub
                 End If
+
                 Select Case currentStatus
 
                     Case "Queued"
+
                         nextStatus = "In-progress"
+                        dashboardManagement.RecordActivity(customerName, nextStatus)
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
 
                     Case "In-progress"
                         nextStatus = "Completed"
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
-
+                        dashboardManagement.RecordActivity(customerName, nextStatus)
                     Case "Completed"
                         onTheDayManagement.ViewListOfReserved()
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
-
-                        ' If the status is already completed, you might not do anything.
-                        Exit Sub
                     Case Else
-
                         nextStatus = "Queued" ' Default status if not set
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
-
+                        dashboardManagement.RecordActivity(customerName, nextStatus)
                 End Select
 
                 ' Update the AppointmentStatus cell value directly in the DataGridView
@@ -102,11 +100,9 @@ Public Class OnTheDay
             .Name = "actionsColumn"
         }
         DataGridView1.Columns.Add(updateButtonColumn)
-        dashboardManagement.UpdateAppointmentStatus(customerName, customerNewStatus)
+
     End Sub
-    Private Sub actionsColumn_Click(sender As Object, e As EventArgs) Handles actionsColumn.Click
-        DataGridView1.DataSource = onTheDayManagement.ViewListOfReserved()
-    End Sub
+
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
 
     End Sub
@@ -126,7 +122,7 @@ Public Class OnTheDayManagement
                                          INNER JOIN ServicesTable s ON a.ServiceID = s.ServiceID
                                          LEFT JOIN ServicesTable sa ON a.AddonServiceID = sa.ServiceID 
                                          WHERE a.AppointmentStatus IN ('Confirmed', 'Queued', 'In-progress')
-                                         ORDER BY a.AppointmentStatus DESC"
+                                         ORDER BY a.AppointmentID DESC"
             Using cmd As New SqlCommand(viewListQuery, con)
                 Using adapater As New SqlDataAdapter(cmd)
                     adapater.Fill(dt)

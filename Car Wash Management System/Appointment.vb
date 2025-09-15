@@ -74,7 +74,12 @@ Public Class Appointment
 
     End Sub
 
-    Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
+    Private Sub AddAppointmentBtn_Click(sender As Object, e As EventArgs) Handles AddAppointmentBtn.Click
+        AddAppointmentBtnFunction()
+        AppointmentActivityLog()
+        ClearFields()
+    End Sub
+    Public Sub AddAppointmentBtnFunction()
         Try
             ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
 
@@ -130,11 +135,13 @@ Public Class Appointment
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
+    End Sub
+    Public Sub AppointmentActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim appointmentDate As Date = DateTimePickerStartDate.Value
         Dim appointmentStatus As String = ComboBoxAppointmentStatus.Text
         dashboardManagement.ScheduleAppointment(customerName, appointmentDate, appointmentStatus)
-        ClearFields()
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
         Try
@@ -220,7 +227,12 @@ Public Class Appointment
         DataGridView1.DataSource = appointmentManagement.ViewAppointment()
     End Sub
 
-    Private Sub UpdateServiceBtn_Click(sender As Object, e As EventArgs) Handles UpdateServiceBtn.Click
+    Private Sub UpdateAppointmentBtn_Click(sender As Object, e As EventArgs) Handles UpdateAppointmentBtn.Click
+        UpdateAppointmentStatusdFunction()
+        UpdateAppointmentActivityLog()
+        ClearFields()
+    End Sub
+    Public Sub UpdateAppointmentStatusdFunction()
         Try
             Dim appointmentID As Integer
             Dim customerID As Integer
@@ -261,20 +273,16 @@ Public Class Appointment
             MessageBox.Show("An error occurred while updating the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
+    End Sub
+    Public Sub UpdateAppointmentActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim newtStatus As String = ComboBoxAppointmentStatus.Text
         dashboardManagement.UpdateAppointmentStatus(customerName, newtStatus)
-        ClearFields()
     End Sub
-
     Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
         appointmentManagement.DeleteAppointment(LabelAppointmentID.Text)
         DataGridView1.DataSource = appointmentManagement.ViewAppointment()
         ClearFields()
-    End Sub
-
-    Private Sub Panel3_Paint(sender As Object, e As PaintEventArgs) Handles Panel3.Paint
-
     End Sub
 End Class
 Public Class AppointmentManagement
@@ -308,9 +316,7 @@ Public Class AppointmentManagement
         End Using
     End Sub
 
-    ''' <summary>
-    ''' Retrieves all Appointment from the database and returns them as a DataTable.
-    ''' </summary>
+
     Public Function ViewAppointment() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -320,7 +326,7 @@ Public Class AppointmentManagement
                                          FROM AppointmentsTable a
                                          INNER JOIN CustomersTable c ON a.CustomerID = c.CustomerID
                                          INNER JOIN ServicesTable s ON a.ServiceID = s.ServiceID
-                                         LEFT JOIN ServicesTable sa ON a.AddonServiceID = sa.ServiceID ORDER BY a.AppointmentStatus DESC"
+                                         LEFT JOIN ServicesTable sa ON a.AddonServiceID = sa.ServiceID ORDER BY a.AppointmentID DESC"
             Using cmd As New SqlCommand(selectQuery, con)
                 Using adapter As New SqlDataAdapter(cmd)
                     adapter.Fill(dt)
@@ -330,9 +336,6 @@ Public Class AppointmentManagement
         Return dt
     End Function
 
-    ''' <summary>
-    ''' Updates an existing appointment in the database.
-    ''' </summary>
     Public Sub UpdateAppointment(appointmentID As Integer, customerID As Integer, serviceID As Integer, addonServiceID As Integer?, appointmentDateTime As Date, paymentMethod As String, price As Decimal, appointmentStatus As String, notes As String)
         Using con As New SqlConnection(constr)
             con.Open()
@@ -375,9 +378,7 @@ Public Class AppointmentManagement
         End Using
     End Sub
 
-    ''' <summary>
-    ''' Deletes an existing billing contract from the database.
-    ''' </summary>
+
     Public Sub DeleteAppointment(appointmentID As String)
         If String.IsNullOrEmpty(appointmentID) Then
             MessageBox.Show("Please select appointment from the table to delete", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)

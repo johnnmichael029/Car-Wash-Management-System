@@ -43,15 +43,15 @@ Partial Class Appointment
         Label5 = New Label()
         LabelServiceID = New Label()
         Label4 = New Label()
-        UpdateServiceBtn = New Button()
+        DeleteServiceBtn = New Button()
+        UpdateAppointmentBtn = New Button()
         ViewServiceBtn = New Button()
-        AddServiceBtn = New Button()
+        AddAppointmentBtn = New Button()
         TextBoxCustomerID = New TextBox()
         Label2 = New Label()
         TextBoxCustomerName = New TextBox()
         Label1 = New Label()
         Label7 = New Label()
-        DeleteServiceBtn = New Button()
         Panel1.SuspendLayout()
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
         Panel3.SuspendLayout()
@@ -101,9 +101,9 @@ Partial Class Appointment
         Panel3.Controls.Add(LabelServiceID)
         Panel3.Controls.Add(Label4)
         Panel3.Controls.Add(DeleteServiceBtn)
-        Panel3.Controls.Add(UpdateServiceBtn)
+        Panel3.Controls.Add(UpdateAppointmentBtn)
         Panel3.Controls.Add(ViewServiceBtn)
-        Panel3.Controls.Add(AddServiceBtn)
+        Panel3.Controls.Add(AddAppointmentBtn)
         Panel3.Controls.Add(TextBoxCustomerID)
         Panel3.Controls.Add(Label2)
         Panel3.Controls.Add(TextBoxCustomerName)
@@ -286,15 +286,25 @@ Partial Class Appointment
         Label4.TabIndex = 10
         Label4.Text = "Price"
         ' 
-        ' UpdateServiceBtn
+        ' DeleteServiceBtn
         ' 
-        UpdateServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        UpdateServiceBtn.Location = New Point(16, 541)
-        UpdateServiceBtn.Name = "UpdateServiceBtn"
-        UpdateServiceBtn.Size = New Size(260, 30)
-        UpdateServiceBtn.TabIndex = 8
-        UpdateServiceBtn.Text = "Update Service"
-        UpdateServiceBtn.UseVisualStyleBackColor = True
+        DeleteServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        DeleteServiceBtn.Location = New Point(16, 574)
+        DeleteServiceBtn.Name = "DeleteServiceBtn"
+        DeleteServiceBtn.Size = New Size(260, 30)
+        DeleteServiceBtn.TabIndex = 9
+        DeleteServiceBtn.Text = "Delete Service"
+        DeleteServiceBtn.UseVisualStyleBackColor = True
+        ' 
+        ' UpdateAppointmentBtn
+        ' 
+        UpdateAppointmentBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        UpdateAppointmentBtn.Location = New Point(16, 541)
+        UpdateAppointmentBtn.Name = "UpdateAppointmentBtn"
+        UpdateAppointmentBtn.Size = New Size(260, 30)
+        UpdateAppointmentBtn.TabIndex = 8
+        UpdateAppointmentBtn.Text = "Update Service"
+        UpdateAppointmentBtn.UseVisualStyleBackColor = True
         ' 
         ' ViewServiceBtn
         ' 
@@ -306,15 +316,15 @@ Partial Class Appointment
         ViewServiceBtn.Text = "View Service"
         ViewServiceBtn.UseVisualStyleBackColor = True
         ' 
-        ' AddServiceBtn
+        ' AddAppointmentBtn
         ' 
-        AddServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        AddServiceBtn.Location = New Point(16, 475)
-        AddServiceBtn.Name = "AddServiceBtn"
-        AddServiceBtn.Size = New Size(260, 30)
-        AddServiceBtn.TabIndex = 6
-        AddServiceBtn.Text = "Add Service"
-        AddServiceBtn.UseVisualStyleBackColor = True
+        AddAppointmentBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        AddAppointmentBtn.Location = New Point(16, 475)
+        AddAppointmentBtn.Name = "AddAppointmentBtn"
+        AddAppointmentBtn.Size = New Size(260, 30)
+        AddAppointmentBtn.TabIndex = 6
+        AddAppointmentBtn.Text = "Add Service"
+        AddAppointmentBtn.UseVisualStyleBackColor = True
         ' 
         ' TextBoxCustomerID
         ' 
@@ -361,16 +371,6 @@ Partial Class Appointment
         Label7.TabIndex = 4
         Label7.Text = "List of Appointment"
         ' 
-        ' DeleteServiceBtn
-        ' 
-        DeleteServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        DeleteServiceBtn.Location = New Point(16, 574)
-        DeleteServiceBtn.Name = "DeleteServiceBtn"
-        DeleteServiceBtn.Size = New Size(260, 30)
-        DeleteServiceBtn.TabIndex = 9
-        DeleteServiceBtn.Text = "Delete Service"
-        DeleteServiceBtn.UseVisualStyleBackColor = True
-        ' 
         ' Appointment
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -407,9 +407,9 @@ Partial Class Appointment
     Friend WithEvents Label5 As Label
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
-    Friend WithEvents UpdateServiceBtn As Button
+    Friend WithEvents UpdateAppointmentBtn As Button
     Friend WithEvents ViewServiceBtn As Button
-    Friend WithEvents AddServiceBtn As Button
+    Friend WithEvents AddAppointmentBtn As Button
     Friend WithEvents TextBoxCustomerID As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents TextBoxCustomerName As TextBox

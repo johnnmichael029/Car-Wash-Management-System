@@ -8,7 +8,7 @@ Public Class Dashboard
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Dim dashboardManagement As New DashboardManagement(constr)
     Private isMonthlyView As Boolean = False
-
+    Private isYearlyView As Boolean = False
     Private Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadSalesData()
         LoadSalesChart()
@@ -41,8 +41,12 @@ Public Class Dashboard
         Dim chartTitle As String
         Dim xAxisTitle As String
 
-        If isMonthlyView Then
-            chartData = dashboardManagement.GetMonthlySales()
+        If isYearlyView Then
+            chartData = dashboardManagement.GetYearlySales()
+            chartTitle = "Yearly Sales"
+            xAxisTitle = "Year"
+        ElseIf isMonthlyView Then
+        chartData = dashboardManagement.GetMonthlySales()
             chartTitle = "Monthly Sales"
             xAxisTitle = "Month"
         Else
@@ -62,16 +66,16 @@ Public Class Dashboard
     End Sub
 
     Private Sub ButtonToggleChart_Click(sender As Object, e As EventArgs) Handles ButtonToggleChart.Click
-        ' Toggle the state
-        isMonthlyView = Not isMonthlyView
-        ' Change the button text
-        If isMonthlyView Then
+        'Toggle On and Off
+        isMonthlyView = Not isMonthlyView And Not isYearlyView
+        isYearlyView = Not isYearlyView And Not isMonthlyView
+        If isYearlyView Then
             ButtonToggleChart.Text = "Weekly Sales"
+        ElseIf isMonthlyView Then
+            ButtonToggleChart.Text = "Yearly Sales"
         Else
             ButtonToggleChart.Text = "Monthly Sales"
-
         End If
-        ' Reload the chart with the new data
         LoadSalesChart()
     End Sub
 
@@ -143,7 +147,11 @@ Public Class SalesChartForm
         chart1.Series("Sales").Points.Clear()
 
         For Each row As DataRow In salesData.Rows
-            If xAxisTitle = "Month" Then
+            If xAxisTitle = "Year" Then
+                Dim salesYear As Integer = row("SalesYear")
+                Dim salesTotal As Decimal = row("TotalSales")
+                chart1.Series("Sales").Points.AddXY(salesYear, salesTotal)
+            ElseIf xAxisTitle = "Month" Then
                 Dim salesYear As Integer = row("SalesYear")
                 Dim salesMonth As Integer = row("SalesMonth")
                 Dim salesTotal As Decimal = row("TotalSales")
@@ -181,6 +189,22 @@ Public Class DashboardManagement
         End Using
         Return dt
     End Function
+    Public Function GetYearlySales() As DataTable
+        Dim query As String = "SELECT YEAR(SaleDate) AS SalesYear, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable GROUP BY YEAR(SaleDate) ORDER BY SalesYear"
+        Dim dt As New DataTable()
+        Try
+            Using con As New SqlConnection(constr)
+                Using cmd As New SqlCommand(query, con)
+                    con.Open()
+                    Dim adapter As New SqlDataAdapter(cmd)
+                    adapter.Fill(dt)
+                End Using
+            End Using
+        Catch ex As Exception
+            Console.WriteLine("Error in GetYearlySales: " & ex.Message)
+        End Try
+        Return dt
+    End Function
 
     Public Function GetMonthlySales() As DataTable
         Dim query As String = "SELECT YEAR(SaleDate) AS SalesYear, MONTH(SaleDate) AS SalesMonth, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable GROUP BY YEAR(SaleDate), MONTH(SaleDate) ORDER BY SalesYear, SalesMonth"
@@ -200,7 +224,7 @@ Public Class DashboardManagement
     End Function
 
     Public Function GetWeeklySales() As DataTable
-        Dim query As String = "SELECT CAST(SaleDate AS DATE) AS SaleDate, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable WHERE SaleDate >= DATEADD(DAY, -30, CAST(GETDATE() AS DATE)) GROUP BY CAST(SaleDate AS DATE) ORDER BY SaleDate ASC"
+        Dim query As String = "SELECT CAST(SaleDate AS DATE) AS SaleDate, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable WHERE SaleDate >= DATEADD(DAY, -7, CAST(GETDATE() AS DATE)) GROUP BY CAST(SaleDate AS DATE) ORDER BY SaleDate ASC"
         Dim dt As New DataTable()
         Try
             Using con As New SqlConnection(constr)
@@ -357,6 +381,9 @@ Public Class DashboardManagement
     Public Sub UpdateAppointmentStatus(customerName As String, newStatus As String)
         LogActivity("Appointment Status Update", $"An appointment was scheduled for '{customerName}' was changed to new status '{newStatus}'")
     End Sub
+    Public Sub RecordActivity(customerName As String, newStatus As String)
+        LogActivity("Appointment Status Update", $"An appointment was scheduled for '{customerName}' was changed to new status '{newStatus}'")
+    End Sub
     Public Sub AddNewContract(customerName As String)
         LogActivity("New Contract Added", $"A new contract was created for: '{customerName}'.")
     End Sub
@@ -374,7 +401,7 @@ Public Class DashboardManagement
         Try
             Using conn As New SqlConnection(constr)
                 conn.Open()
-                Dim selectActivityLogQuery As String = "SELECT ActionType, Description, Timestamp FROM ActivityLogTable ORDER BY Timestamp DESC"
+                Dim selectActivityLogQuery As String = "SELECT ActionType, Description, Timestamp FROM ActivityLogTable ORDER BY LogID DESC"
                 Using cmd As New SqlCommand(selectActivityLogQuery, conn)
                     Using adapter As New SqlDataAdapter(cmd)
                         Dim dataTable As New DataTable()

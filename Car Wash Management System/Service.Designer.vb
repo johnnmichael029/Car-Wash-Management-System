@@ -28,10 +28,10 @@ Partial Class Service
         CheckBoxAddon = New CheckBox()
         LabelServiceID = New Label()
         Label4 = New Label()
-        deleteServiceBtn = New Button()
-        updateServiceBtn = New Button()
-        viewServiceBtn = New Button()
-        addServiceBtn = New Button()
+        DeleteServiceBtn = New Button()
+        UpdateServiceBtn = New Button()
+        ViewServiceBtn = New Button()
+        AddServiceBtn = New Button()
         TextBoxPrice = New TextBox()
         Label3 = New Label()
         TextBoxDescription = New TextBox()
@@ -71,10 +71,10 @@ Partial Class Service
         Panel3.Controls.Add(CheckBoxAddon)
         Panel3.Controls.Add(LabelServiceID)
         Panel3.Controls.Add(Label4)
-        Panel3.Controls.Add(deleteServiceBtn)
-        Panel3.Controls.Add(updateServiceBtn)
-        Panel3.Controls.Add(viewServiceBtn)
-        Panel3.Controls.Add(addServiceBtn)
+        Panel3.Controls.Add(DeleteServiceBtn)
+        Panel3.Controls.Add(UpdateServiceBtn)
+        Panel3.Controls.Add(ViewServiceBtn)
+        Panel3.Controls.Add(AddServiceBtn)
         Panel3.Controls.Add(TextBoxPrice)
         Panel3.Controls.Add(Label3)
         Panel3.Controls.Add(TextBoxDescription)
@@ -114,45 +114,45 @@ Partial Class Service
         Label4.TabIndex = 10
         Label4.Text = "Service ID"
         ' 
-        ' deleteServiceBtn
+        ' DeleteServiceBtn
         ' 
-        deleteServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        deleteServiceBtn.Location = New Point(16, 329)
-        deleteServiceBtn.Name = "deleteServiceBtn"
-        deleteServiceBtn.Size = New Size(261, 39)
-        deleteServiceBtn.TabIndex = 9
-        deleteServiceBtn.Text = "Delete Service"
-        deleteServiceBtn.UseVisualStyleBackColor = True
+        DeleteServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        DeleteServiceBtn.Location = New Point(16, 329)
+        DeleteServiceBtn.Name = "DeleteServiceBtn"
+        DeleteServiceBtn.Size = New Size(261, 39)
+        DeleteServiceBtn.TabIndex = 9
+        DeleteServiceBtn.Text = "Delete Service"
+        DeleteServiceBtn.UseVisualStyleBackColor = True
         ' 
-        ' updateServiceBtn
+        ' UpdateServiceBtn
         ' 
-        updateServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        updateServiceBtn.Location = New Point(16, 284)
-        updateServiceBtn.Name = "updateServiceBtn"
-        updateServiceBtn.Size = New Size(261, 39)
-        updateServiceBtn.TabIndex = 8
-        updateServiceBtn.Text = "Update Service"
-        updateServiceBtn.UseVisualStyleBackColor = True
+        UpdateServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        UpdateServiceBtn.Location = New Point(16, 284)
+        UpdateServiceBtn.Name = "UpdateServiceBtn"
+        UpdateServiceBtn.Size = New Size(261, 39)
+        UpdateServiceBtn.TabIndex = 8
+        UpdateServiceBtn.Text = "Update Service"
+        UpdateServiceBtn.UseVisualStyleBackColor = True
         ' 
-        ' viewServiceBtn
+        ' ViewServiceBtn
         ' 
-        viewServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        viewServiceBtn.Location = New Point(16, 239)
-        viewServiceBtn.Name = "viewServiceBtn"
-        viewServiceBtn.Size = New Size(261, 39)
-        viewServiceBtn.TabIndex = 7
-        viewServiceBtn.Text = "View Service"
-        viewServiceBtn.UseVisualStyleBackColor = True
+        ViewServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        ViewServiceBtn.Location = New Point(16, 239)
+        ViewServiceBtn.Name = "ViewServiceBtn"
+        ViewServiceBtn.Size = New Size(261, 39)
+        ViewServiceBtn.TabIndex = 7
+        ViewServiceBtn.Text = "View Service"
+        ViewServiceBtn.UseVisualStyleBackColor = True
         ' 
-        ' addServiceBtn
+        ' AddServiceBtn
         ' 
-        addServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        addServiceBtn.Location = New Point(16, 194)
-        addServiceBtn.Name = "addServiceBtn"
-        addServiceBtn.Size = New Size(261, 39)
-        addServiceBtn.TabIndex = 6
-        addServiceBtn.Text = "Add Service"
-        addServiceBtn.UseVisualStyleBackColor = True
+        AddServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        AddServiceBtn.Location = New Point(16, 194)
+        AddServiceBtn.Name = "AddServiceBtn"
+        AddServiceBtn.Size = New Size(261, 39)
+        AddServiceBtn.TabIndex = 6
+        AddServiceBtn.Text = "Add Service"
+        AddServiceBtn.UseVisualStyleBackColor = True
         ' 
         ' TextBoxPrice
         ' 
@@ -225,10 +225,10 @@ Partial Class Service
     Friend WithEvents TextBoxServiceName As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents TextBoxPrice As TextBox
-    Friend WithEvents deleteServiceBtn As Button
-    Friend WithEvents updateServiceBtn As Button
-    Friend WithEvents viewServiceBtn As Button
-    Friend WithEvents addServiceBtn As Button
+    Friend WithEvents DeleteServiceBtn As Button
+    Friend WithEvents UpdateServiceBtn As Button
+    Friend WithEvents ViewServiceBtn As Button
+    Friend WithEvents AddServiceBtn As Button
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents DataGridView1 As DataGridView

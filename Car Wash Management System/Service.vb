@@ -30,7 +30,7 @@ Public Class Service
         CheckBoxAddon.Checked = False
     End Sub
 
-    Private Sub addServiceBtn_Click(sender As Object, e As EventArgs) Handles addServiceBtn.Click
+    Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
         serviceManagement.AddService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
         DataGridView1.DataSource = serviceManagement.ViewService()
         dashboardManagement.AddNewService(TextBoxServiceName.Text)
@@ -41,18 +41,19 @@ Public Class Service
         DataGridView1.DataSource = serviceManagement.ViewService()
     End Sub
 
-    Private Sub viewServiceBtn_Click(sender As Object, e As EventArgs) Handles viewServiceBtn.Click
+    Private Sub ViewServiceBtn_Click(sender As Object, e As EventArgs) Handles ViewServiceBtn.Click
         DataGridView1.DataSource = serviceManagement.ViewService()
     End Sub
 
-    Private Sub updateServiceBtn_Click(sender As Object, e As EventArgs) Handles updateServiceBtn.Click
+    Private Sub UpdateServiceBtn_Click(sender As Object, e As EventArgs) Handles UpdateServiceBtn.Click
         serviceManagement.UpdateService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
         DataGridView1.DataSource = serviceManagement.ViewService()
         ClearFields()
     End Sub
 
-    Private Sub deleteServiceBtn_Click(sender As Object, e As EventArgs) Handles deleteServiceBtn.Click
+    Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
         serviceManagement.DeleteService(LabelServiceID.Text)
+        DataGridView1.DataSource = serviceManagement.ViewService()
         ClearFields()
     End Sub
 

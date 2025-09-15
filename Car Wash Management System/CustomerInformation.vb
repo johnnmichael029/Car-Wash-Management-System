@@ -1,4 +1,6 @@
-﻿Imports Microsoft.Data.SqlClient
+﻿Imports System.Net
+Imports System.Runtime.InteropServices.JavaScript.JSType
+Imports Microsoft.Data.SqlClient
 Public Class CustomerInformation
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly customerInformationManagement As CustomerInformationManagement
@@ -22,7 +24,12 @@ Public Class CustomerInformation
         TextBoxPlateNumber.Text = DataGridView1.CurrentRow.Cells("PlateNumber").Value.ToString()
         customerIDLabel.Text = DataGridView1.CurrentRow.Cells("CustomerID").Value.ToString()
     End Sub
-    Private Sub addBtn_Click(sender As Object, e As EventArgs) Handles addBtn.Click
+    Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
+        If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Or String.IsNullOrEmpty(TextBoxAddress.Text) Or String.IsNullOrEmpty(TextBoxPlateNumber.Text) Then
+            MessageBox.Show("Please fill in all fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+
         customerInformationManagement.AddCustomer(TextBoxName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, TextBoxPlateNumber.Text)
         DataGridView1.DataSource = customerInformationManagement.ViewCustomer()
 
@@ -30,17 +37,17 @@ Public Class CustomerInformation
         DashboardManagement.AddNewCustomer(customerName)
         ClearFields()
     End Sub
-    Private Sub viewBtn_Click(sender As Object, e As EventArgs) Handles viewBtn.Click
+    Private Sub ViewBtn_Click(sender As Object, e As EventArgs) Handles ViewBtn.Click
         DataGridView1.DataSource = customerInformationManagement.ViewCustomer()
     End Sub
 
-    Private Sub updateBtn_Click(sender As Object, e As EventArgs) Handles updateBtn.Click
+    Private Sub UpdateBtn_Click(sender As Object, e As EventArgs) Handles UpdateBtn.Click
         customerInformationManagement.UpdateCustomer(customerIDLabel.Text, TextBoxName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, TextBoxPlateNumber.Text)
         DataGridView1.DataSource = customerInformationManagement.ViewCustomer()
         ClearFields()
     End Sub
 
-    Private Sub deleteBtn_Click(sender As Object, e As EventArgs) Handles deleteBtn.Click
+    Private Sub DeleteBtn_Click(sender As Object, e As EventArgs) Handles DeleteBtn.Click
         customerInformationManagement.DeleteCustomer(DataGridView1)
         ClearFields()
     End Sub
@@ -56,7 +63,7 @@ Public Class CustomerInformation
 
 End Class
 Public Class CustomerInformationManagement
-    Dim constr As String
+    ReadOnly constr As String
     Public Sub New(connectionString As String)
         Me.constr = connectionString
     End Sub
@@ -91,10 +98,7 @@ Public Class CustomerInformationManagement
         End If
     End Sub
     Public Sub AddCustomer(name As String, number As String, email As String, address As String, plateNumber As String)
-        If String.IsNullOrEmpty(name) Or String.IsNullOrEmpty(number) Or String.IsNullOrEmpty(email) Or String.IsNullOrEmpty(address) Or String.IsNullOrEmpty(plateNumber) Then
-            MessageBox.Show("Please fill in all fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
+
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
