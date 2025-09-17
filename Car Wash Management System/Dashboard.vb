@@ -6,17 +6,25 @@ Imports Microsoft.Data.SqlClient
 
 Public Class Dashboard
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
-    Dim dashboardManagement As New DashboardManagement(constr)
+    Private ReadOnly dashboardManagement As New DashboardManagement(constr)
     Private isMonthlyView As Boolean = False
     Private isYearlyView As Boolean = False
-    Private Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Public Sub New()
+        ' This call is required by the designer.
+        InitializeComponent()
+        ' Add any initialization after the InitializeComponent() call.
+
+        dashboardManagement = New DashboardManagement(constr)
+    End Sub
+    Public Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadActivityLog()
         LoadSalesData()
         LoadSalesChart()
-        LoadActivityLog()
 
     End Sub
-    Private Sub LoadActivityLog()
-        dashboardManagement.LoadActivityLog(DataGridViewActivityLog)
+    Public Sub LoadActivityLog()
+        DataGridViewActivityLog.DataSource = dashboardManagement.LoadActivityLog()
+        DataGridViewActivityLog.Columns("ActionType").HeaderText = "Action Type"
     End Sub
 
     Private Sub LoadSalesData()
@@ -46,7 +54,7 @@ Public Class Dashboard
             chartTitle = "Yearly Sales"
             xAxisTitle = "Year"
         ElseIf isMonthlyView Then
-        chartData = dashboardManagement.GetMonthlySales()
+            chartData = dashboardManagement.GetMonthlySales()
             chartTitle = "Monthly Sales"
             xAxisTitle = "Month"
         Else
@@ -92,6 +100,7 @@ Public Class Dashboard
             DataGridView1.DataSource = salesData
         End If
     End Sub
+
 End Class
 
 Public Class SalesChartForm
@@ -397,22 +406,23 @@ Public Class DashboardManagement
     Public Sub UserLogin(username As String)
         LogActivity("User Login", $"User '{username}' logged into the system.")
     End Sub
-    Public Sub LoadActivityLog(ByVal dataGrid As DataGridView)
+    Public Function LoadActivityLog() As DataTable
+        Dim dt As New DataTable()
         Try
             Using conn As New SqlConnection(constr)
                 conn.Open()
                 Dim selectActivityLogQuery As String = "SELECT ActionType, Description, Timestamp FROM ActivityLogTable ORDER BY LogID DESC"
                 Using cmd As New SqlCommand(selectActivityLogQuery, conn)
                     Using adapter As New SqlDataAdapter(cmd)
-                        Dim dataTable As New DataTable()
-                        adapter.Fill(dataTable)
-                        dataGrid.DataSource = dataTable
+
+                        adapter.Fill(dt)
+
                     End Using
                 End Using
             End Using
         Catch ex As Exception
             MessageBox.Show("Error loading activity log: " & ex.Message)
         End Try
-    End Sub
-
+        Return dt
+    End Function
 End Class

@@ -17,7 +17,7 @@ Public Class Admin
         End If
 
         ' Hash the new password using the existing function
-        Dim passwordTuple = Login.HashPassword(newPassword)
+        Dim passwordTuple = LoginManagement.HashPassword(newPassword)
         Dim newSalt As String = passwordTuple.Item1
         Dim newHash As String = passwordTuple.Item2
 
@@ -44,8 +44,9 @@ Public Class Admin
                     cmdUpdate.Parameters.AddWithValue("@salt", newSalt)
                     cmdUpdate.ExecuteNonQuery()
                 End Using
-
                 MessageBox.Show("Password for '" & usernameToReset & "' has been reset.", "Password Reset", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Login.Show()
+                Me.Hide()
 
             Catch ex As Exception
                 MessageBox.Show("An error occurred during password reset: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)

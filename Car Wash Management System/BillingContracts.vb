@@ -18,6 +18,7 @@ Public Class BillingContracts
     End Sub
 
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
+
         Dim salesAdded As String = "Sales Added"
         Try
             ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
@@ -69,13 +70,15 @@ Public Class BillingContracts
                 ComboBoxContractStatus.Text
             )
             LabelSales.Text = salesAdded
+            Carwash.NotificationLabel.Text = "New Contract Added"
             MessageBox.Show("Contract added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
             DataGridView1.DataSource = billingContractsManagement.ViewContracts()
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
         Dim customerName As String = TextBoxCustomerName.Text
-        DashboardManagement.AddNewContract(customerName)
+        dashboardManagement.AddNewContract(customerName)
         ClearFields()
     End Sub
 

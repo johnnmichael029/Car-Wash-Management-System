@@ -8,31 +8,6 @@ Public Class Carwash
         CenterToParent()
     End Sub
 
-    'Private Sub CustomerListToolStripMenuItem_Click(sender As Object, e As EventArgs)
-    '    Dim customerManagement As New CustomerManagement
-    '    customerManagement.StartPosition = FormStartPosition.Manual
-    '    customerManagement.Location = New Point(400, 200)
-    '    For Each child In MdiChildren
-    '        child.Close()
-    '    Next
-    '    customerManagement.MdiParent = Me
-    '    UpdateCustomer.Hide()
-    '    AddCustomer.Hide()
-    '    customerManagement.Show()
-    'End Sub
-
-    'Private Sub DashboardToolStripMenuItem_Click(sender As Object, e As EventArgs)
-    'Dim dashboard As New Dashboard
-    '    For Each child In MdiChildren
-    '        child.Close()
-    '    Next
-    '    ' Open the new child form
-    '    dashboard.MdiParent = Me
-    '    UpdateCustomer.Hide()
-    '    AddCustomer.Hide()
-    '    dashboard.Show()
-    'End Sub
-
     Private PrivateFonts As New PrivateFontCollection()
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -43,7 +18,7 @@ Public Class Carwash
         'Btn3.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
         'LabelCarwash.Font = New Font(pfc.Families(0), 20, FontStyle.Bold)
         'LogoutBtn.Font = New Font(pfc.Families(0), 12, FontStyle.Regular)
-
+        NotificationLabel.ForeColor = Color.FromArgb(0, Label1.ForeColor.R, Label1.ForeColor.G, Label1.ForeColor.B)
         Panel4.Controls.Clear()
         Dim dashboard As New Dashboard With {
             .TopLevel = False,
@@ -172,7 +147,44 @@ Public Class Carwash
         dashboard.Show()
     End Sub
 
-    Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs)
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        If PanelMenuBar.Width > 55 Then
+            PanelMenuBar.Width -= 25
+        Else
+            Timer1.Enabled = False
+        End If
+
+    End Sub
+
+    Private Sub MenuBtn_Click(sender As Object, e As EventArgs) Handles MenuBtn.Click
+        If PanelMenuBar.Width = 177 Then
+            Timer1.Enabled = True
+
+        Else
+            Timer2.Enabled = True
+        End If
+    End Sub
+
+    Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
+        If PanelMenuBar.Width < 177 Then
+            PanelMenuBar.Width += 25
+        Else
+            Timer2.Enabled = False
+        End If
+    End Sub
+
+
+    Private Sub NotificationBtn_Click(sender As Object, e As EventArgs) Handles NotificationBtn.Click
+
+        NotificationTimer.Start()
+        Timer1.Start()
+    End Sub
+
+    Private Sub NotificationTimer_Tick(sender As Object, e As EventArgs) Handles NotificationTimer.Tick
+
+    End Sub
+
+    Private Sub NotificationLabel_Click(sender As Object, e As EventArgs) Handles NotificationLabel.Click
 
     End Sub
 End Class

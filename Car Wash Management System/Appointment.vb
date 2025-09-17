@@ -78,6 +78,8 @@ Public Class Appointment
         AddAppointmentBtnFunction()
         AppointmentActivityLog()
         ClearFields()
+
+
     End Sub
     Public Sub AddAppointmentBtnFunction()
         Try
@@ -129,6 +131,7 @@ Public Class Appointment
                 ComboBoxAppointmentStatus.Text,
                 TextBoxNotes.Text
             )
+            Carwash.NotificationLabel.Text = "New Schedule Added"
             MessageBox.Show("Appointment added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             DataGridView1.DataSource = appointmentManagement.ViewAppointment()
 

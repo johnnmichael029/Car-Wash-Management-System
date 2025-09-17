@@ -34,6 +34,7 @@ Public Class Service
         serviceManagement.AddService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
         DataGridView1.DataSource = serviceManagement.ViewService()
         dashboardManagement.AddNewService(TextBoxServiceName.Text)
+        Carwash.NotificationLabel.Text = "New Service Added"
 
 
     End Sub
@@ -161,8 +162,9 @@ Public Class ServiceManagement
                     End Using
                 End Using
             Catch ex As Exception
+                MessageBox.Show("Error viewing services: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally
-
+                con.Close()
             End Try
         End Using
         Return dt

@@ -9,7 +9,7 @@ Public Class SalesForm
 
     ' Pass the UI controls to the management class.
     Private ReadOnly salesHistoryManagement As SalesHistoryManagement
-    Dim dashboardManagement As New DashboardManagement(constr)
+    Private ReadOnly dashboardManagement As New DashboardManagement(constr)
 
     Public Sub New()
         InitializeComponent()
@@ -28,6 +28,13 @@ Public Class SalesForm
     End Sub
 
     Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
+        AddBtnFunction()
+        AddSalesActivityLog()
+        ClearFields()
+
+
+    End Sub
+    Private Sub AddBtnFunction()
         Try
             ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
             Dim customerID As Integer
@@ -79,13 +86,12 @@ Public Class SalesForm
             MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
+    End Sub
+    Private Sub AddSalesActivityLog()
 
         Dim customerName As String = TextBoxCustomerName.Text
         Dim amount As Decimal = Decimal.Parse(TextBoxPrice.Text)
         dashboardManagement.RecordSale(customerName, amount)
-
-        ClearFields()
-
     End Sub
 
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
@@ -204,6 +210,7 @@ Public Class SalesHistoryManagement
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
                     cmd.Parameters.AddWithValue("@TotalPrice", totalPrice)
                     cmd.ExecuteNonQuery()
+                    Carwash.NotificationLabel.Text = "New Sale Added"
                     MessageBox.Show("Sale added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 End Using
             Catch ex As Exception

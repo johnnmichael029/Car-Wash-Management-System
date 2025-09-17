@@ -4,16 +4,41 @@ Imports Microsoft.Data.SqlClient
 Public Class Login
 
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
-    Dim dashboardManagement As New DashboardManagement(constr)
+    Private ReadOnly dashboardManagement As DashboardManagement
+    Private ReadOnly loginManagement As LoginManagement
+    Public Sub New()
+        ' This call is required by the designer.
+        InitializeComponent()
+        ' Add any initialization after the InitializeComponent() call.
+        dashboardManagement = New DashboardManagement(constr)
+        loginManagement = New LoginManagement(constr)
+    End Sub
 
     Private Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CenterToScreen()
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        Application.Exit()
+    Private Sub LoginBtn_Click(sender As Object, e As EventArgs) Handles LoginBtn.Click
+        LoginValidation()
+        LoginActivityLog()
+        ClearFields()
     End Sub
-
+    Public Sub LoginValidation()
+        loginManagement.LoginValidation(TextBoxUsername.Text, TextBoxPassword.Text)
+    End Sub
+    Public Sub ClearFields()
+        TextBoxPassword.Clear()
+    End Sub
+    Public Sub LoginActivityLog()
+        Dim username As String = TextBoxUsername.Text
+        dashboardManagement.UserLogin(username)
+    End Sub
+End Class
+Public Class LoginManagement
+    Private ReadOnly constr As String
+    Public Sub New(connectionString As String)
+        constr = connectionString
+    End Sub
     ' Hashes a password with a randomly generated salt.
     Public Shared Function HashPassword(password As String) As (String, String)
         ' Generate a random salt
@@ -51,9 +76,7 @@ Public Class Login
         Return hashedInput = storedHash
     End Function
 
-    Private Sub LoginValidation()
-        Dim username As String = TextBoxUsername.Text
-        Dim password As String = TextBoxPassword.Text
+    Public Sub LoginValidation(username As String, password As String)
         ' Check for empty fields first to prevent unnecessary database calls
         If String.IsNullOrWhiteSpace(username) OrElse String.IsNullOrWhiteSpace(password) Then
             MessageBox.Show("Please enter both a username and password.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -85,11 +108,11 @@ Public Class Login
                                     ' Admin Form should be shown
                                     ' Replace AdminForm with the name of your new form
                                     Admin.Show()
-                                    Me.Hide()
+                                    Login.Hide()
                                 Else
                                     ' Regular user form should be shown
                                     Carwash.Show()
-                                    Me.Hide()
+                                    Login.Hide()
                                 End If
 
                             Else
@@ -107,21 +130,8 @@ Public Class Login
                 MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally
                 ' Ensure these actions always happen, regardless of success or failure
-                TextBoxPassword.Clear()
                 con.Close()
             End Try
         End Using ' Close and dispose the connection
     End Sub
-
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-
-    End Sub
-
-    Private Sub LoginBtn_Click(sender As Object, e As EventArgs) Handles LoginBtn.Click
-        LoginValidation()
-        Dim username As String = TextBoxUsername.Text
-        dashboardManagement.UserLogin(username)
-
-    End Sub
-
 End Class

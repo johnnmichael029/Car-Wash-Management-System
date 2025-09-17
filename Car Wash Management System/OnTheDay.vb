@@ -13,9 +13,6 @@ Public Class OnTheDay
         onTheDayManagement = New OnTheDayManagement(constr)
 
     End Sub
-    Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
-
-    End Sub
     Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridView1.CellFormatting
         ' Check if this is the column we care about ("AppointmentStatus") and
         ' if the row is not new.
@@ -103,9 +100,6 @@ Public Class OnTheDay
 
     End Sub
 
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-
-    End Sub
 End Class
 Public Class OnTheDayManagement
     Private ReadOnly constr
