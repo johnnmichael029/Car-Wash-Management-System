@@ -42,9 +42,9 @@ Partial Class BillingContracts
         Label5 = New Label()
         LabelServiceID = New Label()
         Label4 = New Label()
-        UpdateServiceBtn = New Button()
+        UpdateContractBtn = New Button()
         ViewServiceBtn = New Button()
-        AddServiceBtn = New Button()
+        AddContractBtn = New Button()
         Label3 = New Label()
         TextBoxCustomerID = New TextBox()
         Label2 = New Label()
@@ -79,9 +79,9 @@ Partial Class BillingContracts
         Panel3.Controls.Add(Label5)
         Panel3.Controls.Add(LabelServiceID)
         Panel3.Controls.Add(Label4)
-        Panel3.Controls.Add(UpdateServiceBtn)
+        Panel3.Controls.Add(UpdateContractBtn)
         Panel3.Controls.Add(ViewServiceBtn)
-        Panel3.Controls.Add(AddServiceBtn)
+        Panel3.Controls.Add(AddContractBtn)
         Panel3.Controls.Add(Label3)
         Panel3.Controls.Add(TextBoxCustomerID)
         Panel3.Controls.Add(Label2)
@@ -272,15 +272,15 @@ Partial Class BillingContracts
         Label4.TabIndex = 10
         Label4.Text = "Price"
         ' 
-        ' UpdateServiceBtn
+        ' UpdateContractBtn
         ' 
-        UpdateServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        UpdateServiceBtn.Location = New Point(16, 541)
-        UpdateServiceBtn.Name = "UpdateServiceBtn"
-        UpdateServiceBtn.Size = New Size(260, 30)
-        UpdateServiceBtn.TabIndex = 8
-        UpdateServiceBtn.Text = "Update Contract"
-        UpdateServiceBtn.UseVisualStyleBackColor = True
+        UpdateContractBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        UpdateContractBtn.Location = New Point(16, 541)
+        UpdateContractBtn.Name = "UpdateContractBtn"
+        UpdateContractBtn.Size = New Size(260, 30)
+        UpdateContractBtn.TabIndex = 8
+        UpdateContractBtn.Text = "Update Contract"
+        UpdateContractBtn.UseVisualStyleBackColor = True
         ' 
         ' ViewServiceBtn
         ' 
@@ -292,15 +292,15 @@ Partial Class BillingContracts
         ViewServiceBtn.Text = "View Contract"
         ViewServiceBtn.UseVisualStyleBackColor = True
         ' 
-        ' AddServiceBtn
+        ' AddContractBtn
         ' 
-        AddServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        AddServiceBtn.Location = New Point(16, 475)
-        AddServiceBtn.Name = "AddServiceBtn"
-        AddServiceBtn.Size = New Size(260, 30)
-        AddServiceBtn.TabIndex = 6
-        AddServiceBtn.Text = "Add Contract"
-        AddServiceBtn.UseVisualStyleBackColor = True
+        AddContractBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        AddContractBtn.Location = New Point(16, 475)
+        AddContractBtn.Name = "AddContractBtn"
+        AddContractBtn.Size = New Size(260, 30)
+        AddContractBtn.TabIndex = 6
+        AddContractBtn.Text = "Add Contract"
+        AddContractBtn.UseVisualStyleBackColor = True
         ' 
         ' Label3
         ' 
@@ -388,9 +388,9 @@ Partial Class BillingContracts
     Friend WithEvents Panel3 As Panel
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
-    Friend WithEvents UpdateServiceBtn As Button
+    Friend WithEvents UpdateContractBtn As Button
     Friend WithEvents ViewServiceBtn As Button
-    Friend WithEvents AddServiceBtn As Button
+    Friend WithEvents AddContractBtn As Button
     Friend WithEvents Label3 As Label
     Friend WithEvents TextBoxCustomerID As TextBox
     Friend WithEvents Label2 As Label

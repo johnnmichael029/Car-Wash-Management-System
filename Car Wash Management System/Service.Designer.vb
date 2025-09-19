@@ -23,7 +23,7 @@ Partial Class Service
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Panel1 = New Panel()
-        DataGridView1 = New DataGridView()
+        DataGridViewService = New DataGridView()
         Panel3 = New Panel()
         CheckBoxAddon = New CheckBox()
         LabelServiceID = New Label()
@@ -39,13 +39,13 @@ Partial Class Service
         TextBoxServiceName = New TextBox()
         Label1 = New Label()
         Panel1.SuspendLayout()
-        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(DataGridViewService, ComponentModel.ISupportInitialize).BeginInit()
         Panel3.SuspendLayout()
         SuspendLayout()
         ' 
         ' Panel1
         ' 
-        Panel1.Controls.Add(DataGridView1)
+        Panel1.Controls.Add(DataGridViewService)
         Panel1.Controls.Add(Panel3)
         Panel1.Dock = DockStyle.Fill
         Panel1.Location = New Point(0, 0)
@@ -53,17 +53,17 @@ Partial Class Service
         Panel1.Size = New Size(911, 551)
         Panel1.TabIndex = 1
         ' 
-        ' DataGridView1
+        ' DataGridViewService
         ' 
-        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridView1.BackgroundColor = SystemColors.ControlLight
-        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Dock = DockStyle.Fill
-        DataGridView1.Location = New Point(0, 0)
-        DataGridView1.Name = "DataGridView1"
-        DataGridView1.ReadOnly = True
-        DataGridView1.Size = New Size(606, 551)
-        DataGridView1.TabIndex = 0
+        DataGridViewService.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewService.BackgroundColor = SystemColors.ControlLight
+        DataGridViewService.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewService.Dock = DockStyle.Fill
+        DataGridViewService.Location = New Point(0, 0)
+        DataGridViewService.Name = "DataGridViewService"
+        DataGridViewService.ReadOnly = True
+        DataGridViewService.Size = New Size(606, 551)
+        DataGridViewService.TabIndex = 0
         ' 
         ' Panel3
         ' 
@@ -212,7 +212,7 @@ Partial Class Service
         Name = "Service"
         Text = "Service"
         Panel1.ResumeLayout(False)
-        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        CType(DataGridViewService, ComponentModel.ISupportInitialize).EndInit()
         Panel3.ResumeLayout(False)
         Panel3.PerformLayout()
         ResumeLayout(False)
@@ -231,6 +231,6 @@ Partial Class Service
     Friend WithEvents AddServiceBtn As Button
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents DataGridViewService As DataGridView
     Friend WithEvents CheckBoxAddon As CheckBox
 End Class

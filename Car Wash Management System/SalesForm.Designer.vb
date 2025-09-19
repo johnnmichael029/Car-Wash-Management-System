@@ -22,7 +22,7 @@ Partial Class SalesForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        DataGridView1 = New DataGridView()
+        DataGridViewSales = New DataGridView()
         Panel2 = New Panel()
         Panel3 = New Panel()
         Panel1 = New Panel()
@@ -40,23 +40,23 @@ Partial Class SalesForm
         Label4 = New Label()
         Label2 = New Label()
         Label3 = New Label()
-        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(DataGridViewSales, ComponentModel.ISupportInitialize).BeginInit()
         Panel2.SuspendLayout()
         Panel3.SuspendLayout()
         Panel1.SuspendLayout()
         SuspendLayout()
         ' 
-        ' DataGridView1
+        ' DataGridViewSales
         ' 
-        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridView1.BackgroundColor = SystemColors.ControlLight
-        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Dock = DockStyle.Fill
-        DataGridView1.Location = New Point(0, 0)
-        DataGridView1.Name = "DataGridView1"
-        DataGridView1.ReadOnly = True
-        DataGridView1.Size = New Size(606, 551)
-        DataGridView1.TabIndex = 0
+        DataGridViewSales.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewSales.BackgroundColor = SystemColors.ControlLight
+        DataGridViewSales.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewSales.Dock = DockStyle.Fill
+        DataGridViewSales.Location = New Point(0, 0)
+        DataGridViewSales.Name = "DataGridViewSales"
+        DataGridViewSales.ReadOnly = True
+        DataGridViewSales.Size = New Size(606, 551)
+        DataGridViewSales.TabIndex = 0
         ' 
         ' Panel2
         ' 
@@ -70,7 +70,7 @@ Partial Class SalesForm
         ' 
         ' Panel3
         ' 
-        Panel3.Controls.Add(DataGridView1)
+        Panel3.Controls.Add(DataGridViewSales)
         Panel3.Dock = DockStyle.Fill
         Panel3.Location = New Point(0, 0)
         Panel3.Name = "Panel3"
@@ -239,7 +239,7 @@ Partial Class SalesForm
         FormBorderStyle = FormBorderStyle.None
         Name = "SalesForm"
         Text = "SalesHistory"
-        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        CType(DataGridViewSales, ComponentModel.ISupportInitialize).EndInit()
         Panel2.ResumeLayout(False)
         Panel3.ResumeLayout(False)
         Panel1.ResumeLayout(False)
@@ -247,7 +247,7 @@ Partial Class SalesForm
         ResumeLayout(False)
     End Sub
 
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents DataGridViewSales As DataGridView
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Panel1 As Panel

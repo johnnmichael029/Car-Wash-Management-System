@@ -23,9 +23,9 @@ Partial Class OnTheDay
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Label1 = New Label()
-        DataGridView1 = New DataGridView()
+        DataGridViewOnTheDay = New DataGridView()
         Panel1 = New Panel()
-        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(DataGridViewOnTheDay, ComponentModel.ISupportInitialize).BeginInit()
         Panel1.SuspendLayout()
         SuspendLayout()
         ' 
@@ -39,23 +39,23 @@ Partial Class OnTheDay
         Label1.TabIndex = 1
         Label1.Text = "On-The-Day Schedule"
         ' 
-        ' DataGridView1
+        ' DataGridViewOnTheDay
         ' 
-        DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridView1.BackgroundColor = SystemColors.ControlLight
-        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Location = New Point(0, 53)
-        DataGridView1.Name = "DataGridView1"
-        DataGridView1.ReadOnly = True
-        DataGridView1.Size = New Size(905, 498)
-        DataGridView1.TabIndex = 0
+        DataGridViewOnTheDay.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridViewOnTheDay.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewOnTheDay.BackgroundColor = SystemColors.ControlLight
+        DataGridViewOnTheDay.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewOnTheDay.Location = New Point(0, 53)
+        DataGridViewOnTheDay.Name = "DataGridViewOnTheDay"
+        DataGridViewOnTheDay.ReadOnly = True
+        DataGridViewOnTheDay.Size = New Size(905, 498)
+        DataGridViewOnTheDay.TabIndex = 0
         ' 
         ' Panel1
         ' 
         Panel1.BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         Panel1.Controls.Add(Label1)
-        Panel1.Controls.Add(DataGridView1)
+        Panel1.Controls.Add(DataGridViewOnTheDay)
         Panel1.Dock = DockStyle.Fill
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
@@ -71,13 +71,13 @@ Partial Class OnTheDay
         FormBorderStyle = FormBorderStyle.None
         Name = "OnTheDay"
         Text = "OnTheDay"
-        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        CType(DataGridViewOnTheDay, ComponentModel.ISupportInitialize).EndInit()
         Panel1.ResumeLayout(False)
         Panel1.PerformLayout()
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents Label1 As Label
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents DataGridViewOnTheDay As DataGridView
     Friend WithEvents Panel1 As Panel
 End Class

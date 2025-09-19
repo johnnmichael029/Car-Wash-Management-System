@@ -55,7 +55,7 @@ Partial Class Dashboard
         TextBoxSearchBar = New TextBox()
         Label9 = New Label()
         Panel13 = New Panel()
-        DataGridView1 = New DataGridView()
+        DataGridViewLatestTransaction = New DataGridView()
         Panel1.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         Panel2.SuspendLayout()
@@ -71,7 +71,7 @@ Partial Class Dashboard
         CType(DataGridViewActivityLog, ComponentModel.ISupportInitialize).BeginInit()
         Panel12.SuspendLayout()
         Panel13.SuspendLayout()
-        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(DataGridViewLatestTransaction, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' Panel6
@@ -414,22 +414,22 @@ Partial Class Dashboard
         ' Panel13
         ' 
         Panel13.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        Panel13.Controls.Add(DataGridView1)
+        Panel13.Controls.Add(DataGridViewLatestTransaction)
         Panel13.Location = New Point(0, 34)
         Panel13.Name = "Panel13"
         Panel13.Size = New Size(1192, 79)
         Panel13.TabIndex = 0
         ' 
-        ' DataGridView1
+        ' DataGridViewLatestTransaction
         ' 
-        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridView1.BackgroundColor = Color.White
-        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Dock = DockStyle.Fill
-        DataGridView1.Location = New Point(0, 0)
-        DataGridView1.Name = "DataGridView1"
-        DataGridView1.Size = New Size(1192, 79)
-        DataGridView1.TabIndex = 0
+        DataGridViewLatestTransaction.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewLatestTransaction.BackgroundColor = Color.White
+        DataGridViewLatestTransaction.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewLatestTransaction.Dock = DockStyle.Fill
+        DataGridViewLatestTransaction.Location = New Point(0, 0)
+        DataGridViewLatestTransaction.Name = "DataGridViewLatestTransaction"
+        DataGridViewLatestTransaction.Size = New Size(1192, 79)
+        DataGridViewLatestTransaction.TabIndex = 0
         ' 
         ' Dashboard
         ' 
@@ -465,7 +465,7 @@ Partial Class Dashboard
         Panel12.ResumeLayout(False)
         Panel12.PerformLayout()
         Panel13.ResumeLayout(False)
-        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        CType(DataGridViewLatestTransaction, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
     End Sub
 
@@ -497,7 +497,7 @@ Partial Class Dashboard
     Friend WithEvents Panel13 As Panel
     Friend WithEvents Label10 As Label
     Friend WithEvents Label11 As Label
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents DataGridViewLatestTransaction As DataGridView
     Friend WithEvents TextBoxSearchBar As TextBox
     Friend WithEvents ButtonToggleChart As Button
     Friend WithEvents PanelMontlySales As Panel

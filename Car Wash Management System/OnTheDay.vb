@@ -13,10 +13,10 @@ Public Class OnTheDay
         onTheDayManagement = New OnTheDayManagement(constr)
 
     End Sub
-    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridView1.CellFormatting
+    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewOnTheDay.CellFormatting
         ' Check if this is the column we care about ("AppointmentStatus") and
         ' if the row is not new.
-        If e.ColumnIndex = Me.DataGridView1.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
+        If e.ColumnIndex = Me.DataGridViewOnTheDay.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
 
             ' Get the value from the current cell.
             Dim status As String = e.Value?.ToString()
@@ -42,12 +42,12 @@ Public Class OnTheDay
             End Select
         End If
     End Sub
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+    Private Sub DataGridViewOnTheDay_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewOnTheDay.CellContentClick
         Try
 
 
-            If e.ColumnIndex = DataGridView1.Columns("actionsColumn").Index AndAlso e.RowIndex >= 0 Then
-                Dim row As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
+            If e.ColumnIndex = DataGridViewOnTheDay.Columns("actionsColumn").Index AndAlso e.RowIndex >= 0 Then
+                Dim row As DataGridViewRow = DataGridViewOnTheDay.Rows(e.RowIndex)
                 Dim appointmentID As Integer = Convert.ToInt32(row.Cells("OnTheDayID").Value)
                 Dim currentStatus As String = row.Cells("AppointmentStatus").Value.ToString()
                 Dim customerName As String = row.Cells("CustomerName").Value.ToString()
@@ -60,15 +60,18 @@ Public Class OnTheDay
                 Select Case currentStatus
 
                     Case "Queued"
-
                         nextStatus = "In-progress"
                         dashboardManagement.RecordActivity(customerName, nextStatus)
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
+                        Carwash.NotificationLabel.Text = "Appointment In-progress"
+                        Carwash.ShowNotification()
 
                     Case "In-progress"
                         nextStatus = "Completed"
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
                         dashboardManagement.RecordActivity(customerName, nextStatus)
+                        Carwash.NotificationLabel.Text = "Appointment Completed"
+                        Carwash.ShowNotification()
                     Case "Completed"
                         onTheDayManagement.ViewListOfReserved()
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
@@ -76,8 +79,9 @@ Public Class OnTheDay
                         nextStatus = "Queued" ' Default status if not set
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
                         dashboardManagement.RecordActivity(customerName, nextStatus)
+                        Carwash.NotificationLabel.Text = "Appointment Queued"
+                        Carwash.ShowNotification()
                 End Select
-
                 ' Update the AppointmentStatus cell value directly in the DataGridView
                 row.Cells("AppointmentStatus").Value = nextStatus
             End If
@@ -86,8 +90,13 @@ Public Class OnTheDay
         End Try
     End Sub
     Private Sub OnTheDay_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        DataGridView1.DataSource = onTheDayManagement.ViewListOfReserved()
+        DataGridViewOnTheDay.DataSource = onTheDayManagement.ViewListOfReserved()
         AddButtonAction()
+        DataGridViewOnTheDayFontStyle()
+    End Sub
+    Private Sub DataGridViewOnTheDayFontStyle()
+        DataGridViewOnTheDay.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewOnTheDay.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
     Public Sub AddButtonAction()
         Dim updateButtonColumn As New DataGridViewButtonColumn With {
@@ -96,10 +105,13 @@ Public Class OnTheDay
             .UseColumnTextForButtonValue = True,
             .Name = "actionsColumn"
         }
-        DataGridView1.Columns.Add(updateButtonColumn)
+        DataGridViewOnTheDay.Columns.Add(updateButtonColumn)
 
     End Sub
 
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
+    End Sub
 End Class
 Public Class OnTheDayManagement
     Private ReadOnly constr

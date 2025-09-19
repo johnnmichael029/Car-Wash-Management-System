@@ -11,14 +11,14 @@ Public Class Carwash
     Private PrivateFonts As New PrivateFontCollection()
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Dim pfc As New PrivateFontCollection()
-        'pfc.AddFontFile("Poppins\Poppins-Regular.ttf")
-        'DashboardBtn.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
-        'Btn2.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
-        'Btn3.Font = New Font(pfc.Families(0), 15, FontStyle.Regular)
-        'LabelCarwash.Font = New Font(pfc.Families(0), 20, FontStyle.Bold)
-        'LogoutBtn.Font = New Font(pfc.Families(0), 12, FontStyle.Regular)
-        NotificationLabel.ForeColor = Color.FromArgb(0, Label1.ForeColor.R, Label1.ForeColor.G, Label1.ForeColor.B)
+        DashboardFormLoad()
+        NotificationLoad()
+    End Sub
+    Private Sub NotificationLoad()
+        NotificationTimer.Interval = 3000
+        NotificationTimer.Enabled = False
+    End Sub
+    Private Sub DashboardFormLoad()
         Panel4.Controls.Clear()
         Dim dashboard As New Dashboard With {
             .TopLevel = False,
@@ -27,28 +27,21 @@ Public Class Carwash
         Panel4.Controls.Add(dashboard)
         dashboard.Dock = DockStyle.Fill
         dashboard.Show()
-
     End Sub
-
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         Application.Exit()
     End Sub
 
-    'Sub SwitchPanel(ByVal panel As Form)
-    '    Panel4.Controls.Clear()
-    '    panel.TopLevel = False
-    '    Panel4.Controls.Add(panel)
-    '    panel.Show()
-    'End Sub
     Private Sub LogoutBtn_Click(sender As Object, e As EventArgs) Handles LogoutBtn.Click
         DialogResult = MessageBox.Show("Are you sure you want to logout?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk)
         If DialogResult = DialogResult.Yes Then
             Me.Hide()
             Login.Show()
+            Dim username As String = Login.TextBoxUsername.Text
+            dashboardManagement.UserLogout(username)
         End If
 
-        Dim username As String = Login.TextBoxUsername.Text
-        dashboardManagement.UserLogout(username)
+
     End Sub
 
     Private Sub CustomerInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomerInformationToolStripMenuItem.Click
@@ -175,16 +168,33 @@ Public Class Carwash
 
 
     Private Sub NotificationBtn_Click(sender As Object, e As EventArgs) Handles NotificationBtn.Click
+        Dim notification As New Notification()
 
-        NotificationTimer.Start()
-        Timer1.Start()
+        ' Get the screen coordinates of the top-left corner of the button.
+        ' This converts the button's location on Form1 to its location on the user's screen.
+        Dim btnScreenLocation As Point = NotificationBtn.PointToScreen(New Point(149, 0))
+
+        ' Set the new form's position.
+        ' We want the notification form to appear just below the button.
+        ' So, we set its Left position to the button's Left screen coordinate,
+        ' and its Top position to the button's Top screen coordinate plus the button's height.
+        notification.Top = btnScreenLocation.Y + NotificationBtn.Height
+        notification.Left = btnScreenLocation.X
+
+        ' Show the notification form.
+        notification.Show()
+
     End Sub
 
     Private Sub NotificationTimer_Tick(sender As Object, e As EventArgs) Handles NotificationTimer.Tick
+        NotificationTimer.Stop()
 
+        ' Then, hide the label.
+        NotificationLabel.Visible = False
     End Sub
-
-    Private Sub NotificationLabel_Click(sender As Object, e As EventArgs) Handles NotificationLabel.Click
-
+    Public Sub ShowNotification()
+        NotificationTimer.Enabled = False
+        NotificationTimer.Enabled = True
+        NotificationLabel.Visible = True
     End Sub
 End Class

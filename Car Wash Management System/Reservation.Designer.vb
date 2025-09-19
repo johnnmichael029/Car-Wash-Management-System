@@ -24,16 +24,16 @@ Partial Class Reservation
     Private Sub InitializeComponent()
         Panel1 = New Panel()
         Label1 = New Label()
-        DataGridView1 = New DataGridView()
+        DataGridViewListOfReserved = New DataGridView()
         Panel1.SuspendLayout()
-        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(DataGridViewListOfReserved, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' Panel1
         ' 
         Panel1.BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         Panel1.Controls.Add(Label1)
-        Panel1.Controls.Add(DataGridView1)
+        Panel1.Controls.Add(DataGridViewListOfReserved)
         Panel1.Dock = DockStyle.Fill
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
@@ -50,17 +50,17 @@ Partial Class Reservation
         Label1.TabIndex = 1
         Label1.Text = "List of Reserved"
         ' 
-        ' DataGridView1
+        ' DataGridViewListOfReserved
         ' 
-        DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridView1.BackgroundColor = SystemColors.ControlLight
-        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Location = New Point(0, 53)
-        DataGridView1.Name = "DataGridView1"
-        DataGridView1.ReadOnly = True
-        DataGridView1.Size = New Size(905, 498)
-        DataGridView1.TabIndex = 0
+        DataGridViewListOfReserved.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridViewListOfReserved.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewListOfReserved.BackgroundColor = SystemColors.ControlLight
+        DataGridViewListOfReserved.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewListOfReserved.Location = New Point(0, 53)
+        DataGridViewListOfReserved.Name = "DataGridViewListOfReserved"
+        DataGridViewListOfReserved.ReadOnly = True
+        DataGridViewListOfReserved.Size = New Size(905, 498)
+        DataGridViewListOfReserved.TabIndex = 0
         ' 
         ' Reservation
         ' 
@@ -73,11 +73,11 @@ Partial Class Reservation
         Text = "Reservation"
         Panel1.ResumeLayout(False)
         Panel1.PerformLayout()
-        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        CType(DataGridViewListOfReserved, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Label1 As Label
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents DataGridViewListOfReserved As DataGridView
 End Class

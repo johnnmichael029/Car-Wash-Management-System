@@ -14,42 +14,63 @@ Public Class CustomerInformation
         customerInformationManagement = New CustomerInformationManagement(constr)
     End Sub
     Private Sub CustomerInformation_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        DataGridView1.DataSource = customerInformationManagement.ViewCustomer()
+        DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
+        DataGridViewCustomerInformationFontStyle()
     End Sub
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-        TextBoxName.Text = DataGridView1.CurrentRow.Cells("Name").Value.ToString()
-        TextBoxNumber.Text = DataGridView1.CurrentRow.Cells("PhoneNumber").Value.ToString()
-        TextBoxEmail.Text = DataGridView1.CurrentRow.Cells("Email").Value.ToString()
-        TextBoxAddress.Text = DataGridView1.CurrentRow.Cells("Address").Value.ToString()
-        TextBoxPlateNumber.Text = DataGridView1.CurrentRow.Cells("PlateNumber").Value.ToString()
-        customerIDLabel.Text = DataGridView1.CurrentRow.Cells("CustomerID").Value.ToString()
+    Private Sub DataGridViewCustomerInformationFontStyle()
+        DataGridViewCustomerInformation.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewCustomerInformation.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+
+    End Sub
+
+    Private Sub DataGridViewCustomerInformation_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCustomerInformation.CellContentClick
+        TextBoxName.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Name").Value.ToString()
+        TextBoxNumber.Text = DataGridViewCustomerInformation.CurrentRow.Cells("PhoneNumber").Value.ToString()
+        TextBoxEmail.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Email").Value.ToString()
+        TextBoxAddress.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Address").Value.ToString()
+        TextBoxPlateNumber.Text = DataGridViewCustomerInformation.CurrentRow.Cells("PlateNumber").Value.ToString()
+        customerIDLabel.Text = DataGridViewCustomerInformation.CurrentRow.Cells("CustomerID").Value.ToString()
     End Sub
     Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
+        AddCustomerInformation()
+        NewCustomerActivityLog()
+        ClearFields()
+    End Sub
+    Private Sub NewCustomerActivityLog()
+        Dim customerName As String = TextBoxName.Text
+        DashboardManagement.AddNewCustomer(customerName)
+    End Sub
+    Public Sub AddCustomerInformation()
         If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Or String.IsNullOrEmpty(TextBoxAddress.Text) Or String.IsNullOrEmpty(TextBoxPlateNumber.Text) Then
             MessageBox.Show("Please fill in all fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
 
         customerInformationManagement.AddCustomer(TextBoxName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, TextBoxPlateNumber.Text)
-        DataGridView1.DataSource = customerInformationManagement.ViewCustomer()
-
-        Dim customerName As String = TextBoxName.Text
-        DashboardManagement.AddNewCustomer(customerName)
-        ClearFields()
+        DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
     End Sub
     Private Sub ViewBtn_Click(sender As Object, e As EventArgs) Handles ViewBtn.Click
-        DataGridView1.DataSource = customerInformationManagement.ViewCustomer()
+        ViewCustomerInformation()
+    End Sub
+    Private Sub ViewCustomerInformation()
+        DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
     End Sub
 
     Private Sub UpdateBtn_Click(sender As Object, e As EventArgs) Handles UpdateBtn.Click
-        customerInformationManagement.UpdateCustomer(customerIDLabel.Text, TextBoxName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, TextBoxPlateNumber.Text)
-        DataGridView1.DataSource = customerInformationManagement.ViewCustomer()
+        UpdateCustomerInformation()
         ClearFields()
     End Sub
-
+    Private Sub UpdateCustomerInformation()
+        customerInformationManagement.UpdateCustomer(customerIDLabel.Text, TextBoxName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, TextBoxPlateNumber.Text)
+        DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
+    End Sub
     Private Sub DeleteBtn_Click(sender As Object, e As EventArgs) Handles DeleteBtn.Click
-        customerInformationManagement.DeleteCustomer(DataGridView1)
+        DeleteCustomerInformation()
         ClearFields()
+    End Sub
+    Private Sub DeleteCustomerInformation()
+        customerInformationManagement.DeleteCustomer(DataGridViewCustomerInformation)
+        DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
     End Sub
     Public Sub ClearFields()
         TextBoxName.Clear()
@@ -84,6 +105,8 @@ Public Class CustomerInformationManagement
                         cmd.Parameters.AddWithValue("@CustomerID", customerID)
                         Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
                         If rowsAffected > 0 Then
+                            Carwash.NotificationLabel.Text = "Customer Information Deleted!"
+                            Carwash.ShowNotification()
                             MessageBox.Show("Customer deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             ViewCustomer()
                         End If
@@ -112,6 +135,8 @@ Public Class CustomerInformationManagement
                     cmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now)
                     cmd.ExecuteNonQuery()
                 End Using
+                Carwash.NotificationLabel.Text = "New Customer Information"
+                Carwash.ShowNotification()
                 MessageBox.Show("Customer added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Catch ex As Exception
                 MessageBox.Show("Error adding customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -141,8 +166,9 @@ Public Class CustomerInformationManagement
                     cmd.Parameters.AddWithValue("@CustomerID", customerID)
                     Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
                     If rowsAffected > 0 Then
+                        Carwash.NotificationLabel.Text = "Customer Information Updated"
+                        Carwash.ShowNotification()
                         MessageBox.Show("Customer updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
                     End If
                 End Using
             Catch ex As Exception

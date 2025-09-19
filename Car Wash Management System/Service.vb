@@ -14,14 +14,17 @@ Public Class Service
         ' Add any initialization after the InitializeComponent() call.
         serviceManagement = New ServiceManagement(constr)
     End Sub
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-        TextBoxServiceName.Text = DataGridView1.CurrentRow.Cells("ServiceName").Value.ToString()
-        TextBoxDescription.Text = DataGridView1.CurrentRow.Cells("Description").Value.ToString()
-        TextBoxPrice.Text = DataGridView1.CurrentRow.Cells("Price").Value.ToString()
-        LabelServiceID.Text = DataGridView1.CurrentRow.Cells("ServiceID").Value.ToString()
+    Private Sub DataGridViewService_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewService.CellContentClick
+        TextBoxServiceName.Text = DataGridViewService.CurrentRow.Cells("ServiceName").Value.ToString()
+        TextBoxDescription.Text = DataGridViewService.CurrentRow.Cells("Description").Value.ToString()
+        TextBoxPrice.Text = DataGridViewService.CurrentRow.Cells("Price").Value.ToString()
+        LabelServiceID.Text = DataGridViewService.CurrentRow.Cells("ServiceID").Value.ToString()
     End Sub
 
-
+    Private Sub DataGridViewServiceFontStyle()
+        DataGridViewService.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewService.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+    End Sub
     Public Sub ClearFields()
         TextBoxServiceName.Clear()
         TextBoxDescription.Clear()
@@ -32,30 +35,31 @@ Public Class Service
 
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
         serviceManagement.AddService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
-        DataGridView1.DataSource = serviceManagement.ViewService()
+        DataGridViewService.DataSource = serviceManagement.ViewService()
         dashboardManagement.AddNewService(TextBoxServiceName.Text)
-        Carwash.NotificationLabel.Text = "New Service Added"
-
 
     End Sub
     Private Sub Service_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        DataGridView1.DataSource = serviceManagement.ViewService()
+        DataGridViewService.DataSource = serviceManagement.ViewService()
+        DataGridViewServiceFontStyle()
     End Sub
 
     Private Sub ViewServiceBtn_Click(sender As Object, e As EventArgs) Handles ViewServiceBtn.Click
-        DataGridView1.DataSource = serviceManagement.ViewService()
+        DataGridViewService.DataSource = serviceManagement.ViewService()
     End Sub
 
     Private Sub UpdateServiceBtn_Click(sender As Object, e As EventArgs) Handles UpdateServiceBtn.Click
         serviceManagement.UpdateService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
-        DataGridView1.DataSource = serviceManagement.ViewService()
+        DataGridViewService.DataSource = serviceManagement.ViewService()
         ClearFields()
+
     End Sub
 
     Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
         serviceManagement.DeleteService(LabelServiceID.Text)
-        DataGridView1.DataSource = serviceManagement.ViewService()
+        DataGridViewService.DataSource = serviceManagement.ViewService()
         ClearFields()
+
     End Sub
 
     Private Sub Panel3_Paint(sender As Object, e As PaintEventArgs) Handles Panel3.Paint
@@ -85,6 +89,8 @@ Public Class ServiceManagement
                     cmd.Parameters.AddWithValue("Addon", If(Addon, 1, 0))
                     cmd.ExecuteNonQuery()
                 End Using
+                Carwash.NotificationLabel.Text = "New Service Added"
+                Carwash.ShowNotification()
                 MessageBox.Show("Service added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Service.ClearFields()
             Catch ex As Exception
@@ -112,6 +118,8 @@ Public Class ServiceManagement
                     cmd.Parameters.AddWithValue("Addon", If(Addon, 1, 0))
                     Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
                     If rowsAffected > 0 Then
+                        Carwash.NotificationLabel.Text = "Service updated"
+                        Carwash.ShowNotification()
                         MessageBox.Show("Service updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
                     End If
@@ -139,6 +147,8 @@ Public Class ServiceManagement
                         cmd.Parameters.AddWithValue("@ServiceID", serviceID)
                         Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
                         If rowsAffected > 0 Then
+                            Carwash.NotificationLabel.Text = "Service deleted"
+                            Carwash.ShowNotification()
                             MessageBox.Show("Service deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         End If
                     End Using

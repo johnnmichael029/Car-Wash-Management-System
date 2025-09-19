@@ -28,7 +28,7 @@ Partial Class Notification
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(201, 129)
+        Label1.Location = New Point(62, 56)
         Label1.Name = "Label1"
         Label1.Size = New Size(41, 15)
         Label1.TabIndex = 0

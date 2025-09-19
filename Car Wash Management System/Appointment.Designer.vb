@@ -323,7 +323,7 @@ Partial Class Appointment
         AddAppointmentBtn.Name = "AddAppointmentBtn"
         AddAppointmentBtn.Size = New Size(260, 30)
         AddAppointmentBtn.TabIndex = 6
-        AddAppointmentBtn.Text = "Add Service"
+        AddAppointmentBtn.Text = "Add Appointment"
         AddAppointmentBtn.UseVisualStyleBackColor = True
         ' 
         ' TextBoxCustomerID

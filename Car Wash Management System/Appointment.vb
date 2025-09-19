@@ -78,8 +78,6 @@ Public Class Appointment
         AddAppointmentBtnFunction()
         AppointmentActivityLog()
         ClearFields()
-
-
     End Sub
     Public Sub AddAppointmentBtnFunction()
         Try
@@ -131,7 +129,8 @@ Public Class Appointment
                 ComboBoxAppointmentStatus.Text,
                 TextBoxNotes.Text
             )
-            Carwash.NotificationLabel.Text = "New Schedule Added"
+            Carwash.NotificationLabel.Text = "Appointment Added"
+            Carwash.ShowNotification()
             MessageBox.Show("Appointment added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             DataGridView1.DataSource = appointmentManagement.ViewAppointment()
 
@@ -147,6 +146,10 @@ Public Class Appointment
         dashboardManagement.ScheduleAppointment(customerName, appointmentDate, appointmentStatus)
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
+        PopulateUIForAppointment()
+        DataGridViewFontStyle()
+    End Sub
+    Public Sub PopulateUIForAppointment()
         Try
             Dim customerNames As DataTable = appointmentManagement.GetAllCustomerNames()
             Dim customerNamesCollection As New AutoCompleteStringCollection()
@@ -175,6 +178,11 @@ Public Class Appointment
         Catch ex As Exception
             MessageBox.Show("An error occurred during form loading: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
+    End Sub
+    Private Sub DataGridViewFontStyle()
+        DataGridView1.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridView1.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
     Public Sub ClearFields()
         TextBoxCustomerID.Clear()

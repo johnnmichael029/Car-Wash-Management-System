@@ -17,8 +17,16 @@ Public Class BillingContracts
         billingContractsManagement = New BillingContractsManagement(constr)
     End Sub
 
-    Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
-
+    Private Sub AddContractBtn_Click(sender As Object, e As EventArgs) Handles AddContractBtn.Click
+        AddBillingContracts()
+        AddContractActivityLog()
+        ClearFields()
+    End Sub
+    Private Sub AddContractActivityLog()
+        Dim customerName As String = TextBoxCustomerName.Text
+        dashboardManagement.AddNewContract(customerName)
+    End Sub
+    Private Sub AddBillingContracts()
         Dim salesAdded As String = "Sales Added"
         Try
             ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
@@ -71,18 +79,23 @@ Public Class BillingContracts
             )
             LabelSales.Text = salesAdded
             Carwash.NotificationLabel.Text = "New Contract Added"
+            Carwash.ShowNotification()
             MessageBox.Show("Contract added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             DataGridView1.DataSource = billingContractsManagement.ViewContracts()
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-        Dim customerName As String = TextBoxCustomerName.Text
-        dashboardManagement.AddNewContract(customerName)
-        ClearFields()
     End Sub
-
     Private Sub BillingContracts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        PopulateUIForContract()
+        DataGridViewFontStyle()
+    End Sub
+    Private Sub DataGridViewFontStyle()
+        DataGridView1.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridView1.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+    End Sub
+    Private Sub PopulateUIForContract()
         Try
             ' Populate UI components using the data returned from the management class
             Dim customerNames As DataTable = billingContractsManagement.GetAllCustomerNames()
@@ -117,8 +130,8 @@ Public Class BillingContracts
         Catch ex As Exception
             MessageBox.Show("An error occurred during form loading: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
 
+    End Sub
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
         CalculateTotalPrice()
     End Sub
@@ -157,7 +170,12 @@ Public Class BillingContracts
         End Try
     End Sub
 
-    Private Sub UpdateServiceBtn_Click(sender As Object, e As EventArgs) Handles UpdateServiceBtn.Click
+    Private Sub UpdateContractBtn_Click(sender As Object, e As EventArgs) Handles UpdateContractBtn.Click
+        UpdateContractActivityLog()
+        ContractUpdated()
+        ClearFields()
+    End Sub
+    Private Sub ContractUpdated()
         Try
             Dim contractID As Integer
             Dim customerID As Integer
@@ -191,17 +209,19 @@ Public Class BillingContracts
                 price,
                 ComboBoxContractStatus.Text
             )
+            Carwash.NotificationLabel.Text = "Contract Updated"
+            Carwash.ShowNotification()
             MessageBox.Show("Contract updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             DataGridView1.DataSource = billingContractsManagement.ViewContracts()
         Catch ex As Exception
             MessageBox.Show("An error occurred while updating the contract: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+    Private Sub UpdateContractActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim newStatus As String = ComboBoxContractStatus.Text
         dashboardManagement.UpdateContractStatus(customerName, newStatus)
-        ClearFields()
     End Sub
-
     Public Sub ClearFields()
         ' Clear all input fields
         TextBoxCustomerID.Clear()

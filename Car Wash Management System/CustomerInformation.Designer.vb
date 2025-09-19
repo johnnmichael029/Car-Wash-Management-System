@@ -41,16 +41,16 @@ Partial Class CustomerInformation
         AddBtn = New Button()
         Label5 = New Label()
         TextBoxName = New TextBox()
-        DataGridView1 = New DataGridView()
+        DataGridViewCustomerInformation = New DataGridView()
         Panel1.SuspendLayout()
         Panel2.SuspendLayout()
-        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(DataGridViewCustomerInformation, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' Panel1
         ' 
         Panel1.Controls.Add(Panel2)
-        Panel1.Controls.Add(DataGridView1)
+        Panel1.Controls.Add(DataGridViewCustomerInformation)
         Panel1.Dock = DockStyle.Fill
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
@@ -239,17 +239,17 @@ Partial Class CustomerInformation
         TextBoxName.Size = New Size(261, 23)
         TextBoxName.TabIndex = 47
         ' 
-        ' DataGridView1
+        ' DataGridViewCustomerInformation
         ' 
-        DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridView1.BackgroundColor = SystemColors.ControlLight
-        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Location = New Point(0, 0)
-        DataGridView1.Name = "DataGridView1"
-        DataGridView1.ReadOnly = True
-        DataGridView1.Size = New Size(606, 551)
-        DataGridView1.TabIndex = 0
+        DataGridViewCustomerInformation.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridViewCustomerInformation.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewCustomerInformation.BackgroundColor = SystemColors.ControlLight
+        DataGridViewCustomerInformation.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewCustomerInformation.Location = New Point(0, 0)
+        DataGridViewCustomerInformation.Name = "DataGridViewCustomerInformation"
+        DataGridViewCustomerInformation.ReadOnly = True
+        DataGridViewCustomerInformation.Size = New Size(606, 551)
+        DataGridViewCustomerInformation.TabIndex = 0
         ' 
         ' CustomerInformation
         ' 
@@ -263,12 +263,12 @@ Partial Class CustomerInformation
         Panel1.ResumeLayout(False)
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
-        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        CType(DataGridViewCustomerInformation, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents DataGridViewCustomerInformation As DataGridView
     Friend WithEvents Panel2 As Panel
     Friend WithEvents customerIDLabel As Label
     Friend WithEvents Label1 As Label

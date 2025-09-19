@@ -24,15 +24,8 @@ Partial Class Carwash
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Carwash))
-        PanelMenuBar = New Panel()
-        MenuBtn = New Button()
-        Panel5 = New Panel()
-        LogoutBtn = New Button()
-        DashboardBtn = New Button()
-        Button4 = New Button()
-        Btn3 = New Button()
-        Btn2 = New Button()
         Panel2 = New Panel()
+        MenuBtn = New Button()
         Panel1 = New Panel()
         Panel8 = New Panel()
         NotificationLabel = New Label()
@@ -40,9 +33,15 @@ Partial Class Carwash
         Label1 = New Label()
         LabelCarwash = New Label()
         Button5 = New Button()
-        Panel3 = New Panel()
         Panel6 = New Panel()
-        Panel7 = New Panel()
+        PanelMenuBar = New Panel()
+        Panel5 = New Panel()
+        LogoutBtn = New Button()
+        DashboardBtn = New Button()
+        Button4 = New Button()
+        Btn3 = New Button()
+        Btn2 = New Button()
+        Panel3 = New Panel()
         Panel4 = New Panel()
         MenuStrip1 = New MenuStrip()
         FIleToolStripMenuItem = New ToolStripMenuItem()
@@ -59,31 +58,29 @@ Partial Class Carwash
         Timer1 = New Timer(components)
         Timer2 = New Timer(components)
         NotificationTimer = New Timer(components)
-        PanelMenuBar.SuspendLayout()
-        Panel5.SuspendLayout()
         Panel2.SuspendLayout()
         Panel1.SuspendLayout()
         Panel8.SuspendLayout()
-        Panel3.SuspendLayout()
         Panel6.SuspendLayout()
-        Panel7.SuspendLayout()
+        PanelMenuBar.SuspendLayout()
+        Panel5.SuspendLayout()
+        Panel3.SuspendLayout()
         MenuStrip1.SuspendLayout()
         SuspendLayout()
         ' 
-        ' PanelMenuBar
+        ' Panel2
         ' 
-        PanelMenuBar.BackColor = Color.White
-        PanelMenuBar.Controls.Add(MenuBtn)
-        PanelMenuBar.Controls.Add(Panel5)
-        PanelMenuBar.Controls.Add(DashboardBtn)
-        PanelMenuBar.Controls.Add(Button4)
-        PanelMenuBar.Controls.Add(Btn3)
-        PanelMenuBar.Controls.Add(Btn2)
-        PanelMenuBar.Dock = DockStyle.Left
-        PanelMenuBar.Location = New Point(0, 24)
-        PanelMenuBar.Name = "PanelMenuBar"
-        PanelMenuBar.Size = New Size(177, 725)
-        PanelMenuBar.TabIndex = 2
+        Panel2.BackColor = Color.White
+        Panel2.Controls.Add(MenuBtn)
+        Panel2.Controls.Add(Panel1)
+        Panel2.Controls.Add(Label1)
+        Panel2.Controls.Add(LabelCarwash)
+        Panel2.Controls.Add(Button5)
+        Panel2.Dock = DockStyle.Top
+        Panel2.Location = New Point(0, 0)
+        Panel2.Name = "Panel2"
+        Panel2.Size = New Size(1369, 45)
+        Panel2.TabIndex = 4
         ' 
         ' MenuBtn
         ' 
@@ -91,17 +88,118 @@ Partial Class Carwash
         MenuBtn.FlatStyle = FlatStyle.Flat
         MenuBtn.ForeColor = SystemColors.ActiveCaption
         MenuBtn.Image = My.Resources.Resources.menu
-        MenuBtn.Location = New Point(3, 3)
+        MenuBtn.Location = New Point(0, 0)
         MenuBtn.Name = "MenuBtn"
         MenuBtn.Size = New Size(47, 46)
         MenuBtn.TabIndex = 8
         MenuBtn.UseVisualStyleBackColor = True
         ' 
+        ' Panel1
+        ' 
+        Panel1.Controls.Add(Panel8)
+        Panel1.Controls.Add(NotificationBtn)
+        Panel1.Dock = DockStyle.Right
+        Panel1.Location = New Point(1169, 0)
+        Panel1.Name = "Panel1"
+        Panel1.Size = New Size(200, 45)
+        Panel1.TabIndex = 9
+        ' 
+        ' Panel8
+        ' 
+        Panel8.Controls.Add(NotificationLabel)
+        Panel8.Dock = DockStyle.Fill
+        Panel8.Location = New Point(0, 0)
+        Panel8.Name = "Panel8"
+        Panel8.Size = New Size(149, 45)
+        Panel8.TabIndex = 10
+        ' 
+        ' NotificationLabel
+        ' 
+        NotificationLabel.Dock = DockStyle.Right
+        NotificationLabel.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        NotificationLabel.ForeColor = SystemColors.ControlText
+        NotificationLabel.Location = New Point(0, 0)
+        NotificationLabel.Name = "NotificationLabel"
+        NotificationLabel.Size = New Size(149, 45)
+        NotificationLabel.TabIndex = 7
+        NotificationLabel.TextAlign = ContentAlignment.MiddleRight
+        ' 
+        ' NotificationBtn
+        ' 
+        NotificationBtn.Dock = DockStyle.Right
+        NotificationBtn.FlatAppearance.BorderSize = 0
+        NotificationBtn.FlatStyle = FlatStyle.Flat
+        NotificationBtn.Image = My.Resources.Resources.bell1
+        NotificationBtn.Location = New Point(149, 0)
+        NotificationBtn.Name = "NotificationBtn"
+        NotificationBtn.Size = New Size(51, 45)
+        NotificationBtn.TabIndex = 8
+        NotificationBtn.Text = CStr(ChrW(127))
+        NotificationBtn.UseVisualStyleBackColor = True
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Font = New Font("Century Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label1.ForeColor = Color.Gray
+        Label1.Location = New Point(183, 2)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(26, 20)
+        Label1.TabIndex = 6
+        Label1.Text = "Hi!"
+        ' 
+        ' LabelCarwash
+        ' 
+        LabelCarwash.AutoSize = True
+        LabelCarwash.Font = New Font("Century Gothic", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelCarwash.Location = New Point(180, 20)
+        LabelCarwash.Name = "LabelCarwash"
+        LabelCarwash.RightToLeft = RightToLeft.No
+        LabelCarwash.Size = New Size(237, 25)
+        LabelCarwash.TabIndex = 0
+        LabelCarwash.Text = "Welcome to Sandigan"
+        LabelCarwash.TextAlign = ContentAlignment.TopCenter
+        ' 
+        ' Button5
+        ' 
+        Button5.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        Button5.Location = New Point(813, 3)
+        Button5.Name = "Button5"
+        Button5.Size = New Size(79, 32)
+        Button5.TabIndex = 5
+        Button5.Text = "Exit"
+        Button5.UseVisualStyleBackColor = True
+        ' 
+        ' Panel6
+        ' 
+        Panel6.Controls.Add(PanelMenuBar)
+        Panel6.Controls.Add(Panel3)
+        Panel6.Controls.Add(Panel2)
+        Panel6.Dock = DockStyle.Fill
+        Panel6.Location = New Point(0, 24)
+        Panel6.Name = "Panel6"
+        Panel6.Size = New Size(1369, 725)
+        Panel6.TabIndex = 3
+        ' 
+        ' PanelMenuBar
+        ' 
+        PanelMenuBar.BackColor = Color.White
+        PanelMenuBar.Controls.Add(Panel5)
+        PanelMenuBar.Controls.Add(DashboardBtn)
+        PanelMenuBar.Controls.Add(Button4)
+        PanelMenuBar.Controls.Add(Btn3)
+        PanelMenuBar.Controls.Add(Btn2)
+        PanelMenuBar.Dock = DockStyle.Left
+        PanelMenuBar.Location = New Point(0, 45)
+        PanelMenuBar.Name = "PanelMenuBar"
+        PanelMenuBar.Size = New Size(177, 680)
+        PanelMenuBar.TabIndex = 2
+        ' 
         ' Panel5
         ' 
+        Panel5.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         Panel5.Controls.Add(LogoutBtn)
-        Panel5.Dock = DockStyle.Bottom
-        Panel5.Location = New Point(0, 572)
+        Panel5.Location = New Point(0, 527)
         Panel5.Name = "Panel5"
         Panel5.Size = New Size(177, 153)
         Panel5.TabIndex = 7
@@ -185,133 +283,22 @@ Partial Class Carwash
         Btn2.TextImageRelation = TextImageRelation.ImageBeforeText
         Btn2.UseVisualStyleBackColor = True
         ' 
-        ' Panel2
-        ' 
-        Panel2.BackColor = Color.White
-        Panel2.Controls.Add(Panel1)
-        Panel2.Controls.Add(Label1)
-        Panel2.Controls.Add(LabelCarwash)
-        Panel2.Controls.Add(Button5)
-        Panel2.Dock = DockStyle.Top
-        Panel2.Location = New Point(0, 0)
-        Panel2.Name = "Panel2"
-        Panel2.Size = New Size(1192, 45)
-        Panel2.TabIndex = 4
-        ' 
-        ' Panel1
-        ' 
-        Panel1.Controls.Add(Panel8)
-        Panel1.Controls.Add(NotificationBtn)
-        Panel1.Dock = DockStyle.Right
-        Panel1.Location = New Point(992, 0)
-        Panel1.Name = "Panel1"
-        Panel1.Size = New Size(200, 45)
-        Panel1.TabIndex = 9
-        ' 
-        ' Panel8
-        ' 
-        Panel8.Controls.Add(NotificationLabel)
-        Panel8.Dock = DockStyle.Fill
-        Panel8.Location = New Point(0, 0)
-        Panel8.Name = "Panel8"
-        Panel8.Size = New Size(149, 45)
-        Panel8.TabIndex = 10
-        ' 
-        ' NotificationLabel
-        ' 
-        NotificationLabel.Dock = DockStyle.Right
-        NotificationLabel.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        NotificationLabel.Location = New Point(0, 0)
-        NotificationLabel.Name = "NotificationLabel"
-        NotificationLabel.Size = New Size(149, 45)
-        NotificationLabel.TabIndex = 7
-        NotificationLabel.TextAlign = ContentAlignment.MiddleRight
-        ' 
-        ' NotificationBtn
-        ' 
-        NotificationBtn.Dock = DockStyle.Right
-        NotificationBtn.FlatAppearance.BorderSize = 0
-        NotificationBtn.FlatStyle = FlatStyle.Flat
-        NotificationBtn.Image = My.Resources.Resources.bell1
-        NotificationBtn.Location = New Point(149, 0)
-        NotificationBtn.Name = "NotificationBtn"
-        NotificationBtn.Size = New Size(51, 45)
-        NotificationBtn.TabIndex = 8
-        NotificationBtn.Text = CStr(ChrW(127))
-        NotificationBtn.UseVisualStyleBackColor = True
-        ' 
-        ' Label1
-        ' 
-        Label1.AutoSize = True
-        Label1.Font = New Font("Century Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label1.ForeColor = Color.Gray
-        Label1.Location = New Point(3, -2)
-        Label1.Name = "Label1"
-        Label1.Size = New Size(26, 20)
-        Label1.TabIndex = 6
-        Label1.Text = "Hi!"
-        ' 
-        ' LabelCarwash
-        ' 
-        LabelCarwash.AutoSize = True
-        LabelCarwash.Font = New Font("Century Gothic", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LabelCarwash.Location = New Point(0, 16)
-        LabelCarwash.Name = "LabelCarwash"
-        LabelCarwash.RightToLeft = RightToLeft.No
-        LabelCarwash.Size = New Size(237, 25)
-        LabelCarwash.TabIndex = 0
-        LabelCarwash.Text = "Welcome to Sandigan"
-        LabelCarwash.TextAlign = ContentAlignment.TopCenter
-        ' 
-        ' Button5
-        ' 
-        Button5.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        Button5.Location = New Point(662, 5)
-        Button5.Name = "Button5"
-        Button5.Size = New Size(79, 32)
-        Button5.TabIndex = 5
-        Button5.Text = "Exit"
-        Button5.UseVisualStyleBackColor = True
-        ' 
         ' Panel3
         ' 
-        Panel3.BackColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
-        Panel3.Controls.Add(Panel6)
-        Panel3.Controls.Add(PanelMenuBar)
-        Panel3.Controls.Add(MenuStrip1)
-        Panel3.Dock = DockStyle.Fill
-        Panel3.Location = New Point(0, 0)
+        Panel3.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        Panel3.Controls.Add(Panel4)
+        Panel3.Location = New Point(180, 48)
         Panel3.Name = "Panel3"
-        Panel3.Size = New Size(1369, 749)
+        Panel3.Size = New Size(1186, 677)
         Panel3.TabIndex = 6
-        ' 
-        ' Panel6
-        ' 
-        Panel6.Controls.Add(Panel7)
-        Panel6.Controls.Add(Panel2)
-        Panel6.Dock = DockStyle.Fill
-        Panel6.Location = New Point(177, 24)
-        Panel6.Name = "Panel6"
-        Panel6.Size = New Size(1192, 725)
-        Panel6.TabIndex = 3
-        ' 
-        ' Panel7
-        ' 
-        Panel7.BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
-        Panel7.Controls.Add(Panel4)
-        Panel7.Dock = DockStyle.Fill
-        Panel7.Location = New Point(0, 45)
-        Panel7.Name = "Panel7"
-        Panel7.Size = New Size(1192, 680)
-        Panel7.TabIndex = 5
         ' 
         ' Panel4
         ' 
-        Panel4.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         Panel4.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
-        Panel4.Location = New Point(8, 6)
+        Panel4.Dock = DockStyle.Fill
+        Panel4.Location = New Point(0, 0)
         Panel4.Name = "Panel4"
-        Panel4.Size = New Size(1174, 674)
+        Panel4.Size = New Size(1186, 677)
         Panel4.TabIndex = 0
         ' 
         ' MenuStrip1
@@ -414,43 +401,34 @@ Partial Class Carwash
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
+        BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         ClientSize = New Size(1369, 749)
-        Controls.Add(Panel3)
+        Controls.Add(Panel6)
+        Controls.Add(MenuStrip1)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MainMenuStrip = MenuStrip1
         MinimizeBox = False
         MinimumSize = New Size(1385, 788)
         Name = "Carwash"
         StartPosition = FormStartPosition.CenterScreen
         Text = "Carwash Management"
-        PanelMenuBar.ResumeLayout(False)
-        Panel5.ResumeLayout(False)
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
         Panel1.ResumeLayout(False)
         Panel8.ResumeLayout(False)
-        Panel3.ResumeLayout(False)
-        Panel3.PerformLayout()
         Panel6.ResumeLayout(False)
-        Panel7.ResumeLayout(False)
+        PanelMenuBar.ResumeLayout(False)
+        Panel5.ResumeLayout(False)
+        Panel3.ResumeLayout(False)
         MenuStrip1.ResumeLayout(False)
         MenuStrip1.PerformLayout()
         ResumeLayout(False)
+        PerformLayout()
     End Sub
-    Friend WithEvents PanelMenuBar As Panel
-    Friend WithEvents Button4 As Button
-    Friend WithEvents Btn3 As Button
-    Friend WithEvents Btn2 As Button
     Friend WithEvents Panel2 As Panel
-    Friend WithEvents Panel3 As Panel
-    Friend WithEvents Panel4 As Panel
-    Friend WithEvents DashboardBtn As Button
     Friend WithEvents LabelCarwash As Label
-    Friend WithEvents Panel5 As Panel
-    Friend WithEvents LogoutBtn As Button
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents Panel6 As Panel
-    Friend WithEvents Panel7 As Panel
     Friend WithEvents FIleToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ServiceTrackingToolStripMenuItem As ToolStripMenuItem
@@ -465,11 +443,20 @@ Partial Class Carwash
     Friend WithEvents Label1 As Label
     Friend WithEvents Timer1 As Timer
     Friend WithEvents Timer2 As Timer
-    Friend WithEvents MenuBtn As Button
     Friend WithEvents Button5 As Button
     Friend WithEvents NotificationLabel As Label
     Friend WithEvents NotificationBtn As Button
     Friend WithEvents NotificationTimer As Timer
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Panel8 As Panel
+    Friend WithEvents PanelMenuBar As Panel
+    Friend WithEvents MenuBtn As Button
+    Friend WithEvents Panel5 As Panel
+    Friend WithEvents LogoutBtn As Button
+    Friend WithEvents DashboardBtn As Button
+    Friend WithEvents Button4 As Button
+    Friend WithEvents Btn3 As Button
+    Friend WithEvents Btn2 As Button
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents Panel4 As Panel
 End Class

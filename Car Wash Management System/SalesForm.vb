@@ -19,14 +19,17 @@ Public Class SalesForm
     End Sub
 
     Private Sub SalesForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadAllPopulateUI()
+        ClearFields()
+        DataGridViewSalesFontStyle()
+    End Sub
+    Private Sub LoadAllPopulateUI()
         salesHistoryManagement.PopulateCustomerNames()
         salesHistoryManagement.PopulatePaymentMethod()
         salesHistoryManagement.PopulateBaseServicesForUI(ComboBoxServices)
         salesHistoryManagement.PopulateAddonServicesForUI(ComboBoxAddons)
-        DataGridView1.DataSource = salesHistoryManagement.ViewSales()
-        ClearFields()
+        DataGridViewSales.DataSource = salesHistoryManagement.ViewSales()
     End Sub
-
     Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
         AddBtnFunction()
         AddSalesActivityLog()
@@ -81,7 +84,7 @@ Public Class SalesForm
                 totalPrice
                 )
 
-            DataGridView1.DataSource = salesHistoryManagement.ViewSales()
+            DataGridViewSales.DataSource = salesHistoryManagement.ViewSales()
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -138,17 +141,21 @@ Public Class SalesForm
         ComboBoxAddons.SelectedIndex = -1
         ComboBoxPaymentMethod.SelectedIndex = -1
     End Sub
+    Private Sub DataGridViewSalesFontStyle()
+        DataGridViewSales.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewSales.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+    End Sub
 
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-        TextBoxCustomerName.Text = DataGridView1.CurrentRow.Cells(1).Value.ToString()
-        ComboBoxServices.Text = DataGridView1.CurrentRow.Cells(2).Value.ToString()
-        ComboBoxAddons.Text = DataGridView1.CurrentRow.Cells(3).Value.ToString()
-        TextBoxPrice.Text = DataGridView1.CurrentRow.Cells(6).Value.ToString()
-        ComboBoxPaymentMethod.Text = DataGridView1.CurrentRow.Cells(5).Value.ToString()
+    Private Sub DataGridViewSales_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewSales.CellContentClick
+        TextBoxCustomerName.Text = DataGridViewSales.CurrentRow.Cells(1).Value.ToString()
+        ComboBoxServices.Text = DataGridViewSales.CurrentRow.Cells(2).Value.ToString()
+        ComboBoxAddons.Text = DataGridViewSales.CurrentRow.Cells(3).Value.ToString()
+        TextBoxPrice.Text = DataGridViewSales.CurrentRow.Cells(6).Value.ToString()
+        ComboBoxPaymentMethod.Text = DataGridViewSales.CurrentRow.Cells(5).Value.ToString()
 
     End Sub
-    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridView1.CellFormatting
-        If e.ColumnIndex = Me.DataGridView1.Columns("PaymentMethod").Index AndAlso e.RowIndex >= 0 Then
+    Private Sub DataGridViewSales_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewSales.CellFormatting
+        If e.ColumnIndex = Me.DataGridViewSales.Columns("PaymentMethod").Index AndAlso e.RowIndex >= 0 Then
 
             ' Get the value from the current cell.
             Dim status As String = e.Value?.ToString()
@@ -211,6 +218,7 @@ Public Class SalesHistoryManagement
                     cmd.Parameters.AddWithValue("@TotalPrice", totalPrice)
                     cmd.ExecuteNonQuery()
                     Carwash.NotificationLabel.Text = "New Sale Added"
+                    Carwash.ShowNotification()
                     MessageBox.Show("Sale added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 End Using
             Catch ex As Exception

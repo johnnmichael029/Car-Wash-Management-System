@@ -20,7 +20,8 @@ Public Class Dashboard
         LoadActivityLog()
         LoadSalesData()
         LoadSalesChart()
-
+        DataGridViewActivityLogFontStyle()
+        DataGridViewLatestTransactionFontStyle()
     End Sub
     Public Sub LoadActivityLog()
         DataGridViewActivityLog.DataSource = dashboardManagement.LoadActivityLog()
@@ -29,7 +30,7 @@ Public Class Dashboard
 
     Private Sub LoadSalesData()
         Dim salesData As DataTable = dashboardManagement.ViewSalesData()
-        DataGridView1.DataSource = salesData
+        DataGridViewLatestTransaction.DataSource = salesData
 
         Dim totalSales As Decimal = dashboardManagement.GetTodayTotalSales()
         LabelTotalSalesToday.Text = "₱" & totalSales.ToString("N2")
@@ -94,11 +95,23 @@ Public Class Dashboard
     Private Sub TextBoxSearchBar_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearchBar.TextChanged
         If String.IsNullOrWhiteSpace(TextBoxSearchBar.Text) Then
             Dim salesData As DataTable = dashboardManagement.ViewSalesData()
-            DataGridView1.DataSource = salesData
+            DataGridViewLatestTransaction.DataSource = salesData
         Else
             Dim salesData As DataTable = dashboardManagement.GetListInSearchBar(Trim(TextBoxSearchBar.Text))
-            DataGridView1.DataSource = salesData
+            DataGridViewLatestTransaction.DataSource = salesData
         End If
+    End Sub
+
+    Private Sub DataGridViewActivityLog_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewActivityLog.CellContentClick
+
+    End Sub
+    Private Sub DataGridViewActivityLogFontStyle()
+        DataGridViewActivityLog.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewActivityLog.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+    End Sub
+    Private Sub DataGridViewLatestTransactionFontStyle()
+        DataGridViewLatestTransaction.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewLatestTransaction.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
 
 End Class

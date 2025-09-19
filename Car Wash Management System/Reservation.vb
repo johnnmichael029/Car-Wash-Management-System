@@ -11,15 +11,18 @@ Public Class Reservation
         reservationManagement = New ReservationManagement(constr)
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
-        DataGridView1.DataSource = reservationManagement.ViewListOfReserved()
+        DataGridViewListOfReserved.DataSource = reservationManagement.ViewListOfReserved()
+        DataGridViewListOfReservedFontStyle()
     End Sub
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+    Private Sub DataGridViewListOfReservedFontStyle()
+        DataGridViewListOfReserved.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewListOfReserved.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+    End Sub
 
-    End Sub
-    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridView1.CellFormatting
+    Private Sub DataGridViewListOfReserved_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewListOfReserved.CellFormatting
         ' Check if this is the column we care about ("AppointmentStatus") and
         ' if the row is not new.
-        If e.ColumnIndex = Me.DataGridView1.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
+        If e.ColumnIndex = Me.DataGridViewListOfReserved.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
 
             ' Get the value from the current cell.
             Dim status As String = e.Value?.ToString()
