@@ -1,8 +1,8 @@
 ﻿Imports Microsoft.Data.SqlClient
+Imports System.Drawing.Printing
 
 
-
-Public Class BillingContracts
+Public Class Contracts
 
 
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
@@ -20,39 +20,60 @@ Public Class BillingContracts
     Private Sub AddContractBtn_Click(sender As Object, e As EventArgs) Handles AddContractBtn.Click
         AddBillingContracts()
         AddContractActivityLog()
-        ClearFields()
+
     End Sub
+
     Private Sub AddContractActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         dashboardManagement.AddNewContract(customerName)
     End Sub
     Private Sub AddBillingContracts()
         Dim salesAdded As String = "Sales Added"
+        Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
+        Dim addonServiceName As String = If(ComboBoxAddon.SelectedIndex <> -1, ComboBoxAddon.Text, String.Empty)
+
         Try
-            ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
+            ' The CustomerID is now retrieved directly from the textbox
             Dim customerID As Integer
             If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Then
                 MessageBox.Show("Customer not found. Please select a valid customer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
 
-            Dim totalPrice As Decimal
-            If Not Decimal.TryParse(TextBoxPrice.Text, totalPrice) Then
-                MessageBox.Show("Please enter a valid price.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Return
-            End If
-
-            ' Determine the service name and ID based on both combo boxes.
-            Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
-            Dim addonServiceName As String = If(ComboBoxAddon.SelectedIndex <> -1, ComboBoxAddon.Text, String.Empty)
-
+            'Validate if the base service is selected
             If String.IsNullOrWhiteSpace(baseServiceName) Then
                 MessageBox.Show("Please select a base service.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
 
+            ' Validate if the end date is not equal to today
+            If Me.DateTimePickerEndDate.Value.Date = DateTime.Now.Date Then
+                MessageBox.Show("Date end must not equal to DateTime today", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
+            ' Validate if billing frequency is selected
+            If String.IsNullOrWhiteSpace(ComboBoxBillingFrequency.Text) Then
+                MessageBox.Show("Please select a billing frequency.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
+            'Validate if payment method is selected
             If ComboBoxPaymentMethod.SelectedIndex = -1 Then
                 MessageBox.Show("Please select a payment method.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
+            ' Validate if contract status is selected
+            If String.IsNullOrWhiteSpace(ComboBoxContractStatus.Text) Then
+                MessageBox.Show("Please select a contract status.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
+            'Validate if the price is decimal
+            Dim totalPrice As Decimal
+            If Not Decimal.TryParse(TextBoxPrice.Text, totalPrice) Then
+                MessageBox.Show("Please enter a valid price.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
 
@@ -70,24 +91,25 @@ Public Class BillingContracts
                 customerID,
                 baseServiceDetails.ServiceID,
                 addonServiceID,
-                DateTimePickerStartDate.Value,
                 If(DateTimePickerEndDate.Checked, CType(DateTimePickerEndDate.Value, Date?), Nothing),
                 ComboBoxBillingFrequency.Text,
                 ComboBoxPaymentMethod.Text,
                 totalPrice,
                 ComboBoxContractStatus.Text
             )
+
             LabelSales.Text = salesAdded
             Carwash.NotificationLabel.Text = "New Contract Added"
             Carwash.ShowNotification()
             MessageBox.Show("Contract added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
             DataGridView1.DataSource = billingContractsManagement.ViewContracts()
+            ShowPrintPreview()
+            ClearFields()
         Catch ex As Exception
-            MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Private Sub BillingContracts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub Contracts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         PopulateUIForContract()
         DataGridViewFontStyle()
     End Sub
@@ -232,6 +254,7 @@ Public Class BillingContracts
         DateTimePickerEndDate.Value = DateTime.Now
         DateTimePickerEndDate.Checked = False
         ComboBoxBillingFrequency.SelectedIndex = -1
+
         TextBoxPrice.Clear()
         ComboBoxContractStatus.SelectedIndex = -1
         LabelContractID.Text = String.Empty
@@ -306,31 +329,66 @@ Public Class BillingContracts
         End If
 
     End Sub
-    Private Sub ViewServiceBtn_Click(sender As Object, e As EventArgs) Handles ViewServiceBtn.Click
-        DataGridView1.DataSource = billingContractsManagement.ViewContracts()
+    Private Sub ClearFieldsBtn_Click(sender As Object, e As EventArgs) Handles ClearFieldsBtn.Click
+        ClearFields()
     End Sub
 
     Private Sub Panel3_Paint(sender As Object, e As PaintEventArgs) Handles Panel3.Paint
 
     End Sub
+
+    Private Sub PrintBillBtn_Click(sender As Object, e As EventArgs) Handles PrintBillBtn.Click
+        ValidatePrint()
+    End Sub
+    Private Sub ValidatePrint()
+        If String.IsNullOrEmpty(LabelContractID.Text) Then
+            MessageBox.Show("Please select contract from the table or add a new contract to print", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Else
+            ShowPrintPreview()
+        End If
+    End Sub
+    Public Sub ShowPrintPreview()
+        BillingContractsManagement.ShowPrintPreview(PrintDocumentBill)
+        Dim printPreviewDialog As New PrintPreviewDialog With {
+            .Document = PrintDocumentBill
+        }
+        printPreviewDialog.ShowDialog()
+    End Sub
+    Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
+        billingContractsManagement.PrintBillInContracts(e, New PrintDataInContracts With {
+           .ContractID = If(DataGridView1.CurrentRow IsNot Nothing, Convert.ToInt32(DataGridView1.CurrentRow.Cells(0).Value), 0),
+           .CustomerName = TextBoxCustomerName.Text,
+           .BaseService = ComboBoxServices.Text,
+           .baseServicePrice = If(ComboBoxServices.SelectedIndex <> -1, billingContractsManagement.GetServiceDetails(ComboBoxServices.Text).Price, 0D),
+           .AddonService = ComboBoxAddon.Text,
+           .addonServicePrice = If(ComboBoxAddon.SelectedIndex <> -1, billingContractsManagement.GetServiceDetails(ComboBoxAddon.Text).Price, 0D),
+           .BillingFrequency = ComboBoxBillingFrequency.Text,
+           .TotalPrice = Decimal.Parse(TextBoxPrice.Text),
+           .PaymentMethod = ComboBoxPaymentMethod.Text,
+           .SaleDate = DataGridView1.CurrentRow.Cells(4).Value,
+           .StartDate = DateTimePickerStartDate.Value,
+           .EndDate = If(DateTimePickerEndDate.Checked, CType(DateTimePickerEndDate.Value, Date?), Nothing),
+           .ContractStatus = ComboBoxContractStatus.Text
+       })
+    End Sub
 End Class
 
 Public Class BillingContractsManagement
     Private ReadOnly constr As String
-
+    Private ReadOnly printData As PrintDataInContracts
     Public Sub New(connectionString As String)
         Me.constr = connectionString
     End Sub
 
-    Public Sub AddContract(customerID As Integer, serviceID As Integer, addonServiceID As Integer?, startDate As Date, endDate As Date?, billingFrequency As String, paymentMethod As String, price As Decimal, contractStatus As String)
+    Public Sub AddContract(customerID As Integer, serviceID As Integer, addonServiceID As Integer?, endDate As Date?, billingFrequency As String, paymentMethod As String, price As Decimal, contractStatus As String)
         Using con As New SqlConnection(constr)
             con.Open()
             ' SQL query to insert a new contract. Using parameters to prevent SQL injection.
-            Dim insertQuery As String = "INSERT INTO BillingContracts (CustomerID, ServiceID, AddonServiceID, StartDate, EndDate, BillingFrequency, PaymentMethod, Price, ContractStatus) VALUES (@CustomerID, @ServiceID, @AddonServiceID, @StartDate, @EndDate, @BillingFrequency, @PaymentMethod, @Price, @ContractStatus)"
+            Dim insertQuery As String = "INSERT INTO ContractsTable (CustomerID, ServiceID, AddonServiceID, StartDate, EndDate, BillingFrequency, PaymentMethod, Price, ContractStatus) VALUES (@CustomerID, @ServiceID, @AddonServiceID, @StartDate, @EndDate, @BillingFrequency, @PaymentMethod, @Price, @ContractStatus)"
             Using cmd As New SqlCommand(insertQuery, con)
                 cmd.Parameters.AddWithValue("@CustomerID", customerID)
                 cmd.Parameters.AddWithValue("@ServiceID", serviceID)
-                cmd.Parameters.AddWithValue("@StartDate", startDate)
+                cmd.Parameters.AddWithValue("@StartDate", DateTime.Now)
 
                 ' Handle the nullable EndDate parameter
                 If endDate.HasValue Then
@@ -361,7 +419,7 @@ Public Class BillingContractsManagement
             con.Open()
             ' SQL query to select all contracts.
             Dim selectQuery As String = "SELECT b.ContractID, c.Name AS CustomerName, s.ServiceName AS BaseService, sa.ServiceName AS AddonService, b.StartDate, b.EndDate, b.BillingFrequency, b.PaymentMethod, b.Price, b.ContractStatus
-                                         FROM BillingContracts b
+                                         FROM ContractsTable b
                                          INNER JOIN CustomersTable c ON b.CustomerID = c.CustomerID
                                          INNER JOIN ServicesTable s ON b.ServiceID = s.ServiceID
                                          LEFT JOIN ServicesTable sa ON b.AddonServiceID = sa.ServiceID ORDER BY b.ContractID DESC"
@@ -381,7 +439,7 @@ Public Class BillingContractsManagement
         Using con As New SqlConnection(constr)
             con.Open()
             ' SQL query to update a contract.
-            Dim updateQuery As String = "UPDATE BillingContracts SET CustomerID = @CustomerID, ServiceID = @ServiceID, AddonServiceID = @AddonServiceID, StartDate = @StartDate, EndDate = @EndDate, BillingFrequency = @BillingFrequency, PaymentMethod = @PaymentMethod, Price = @Price, ContractStatus = @ContractStatus WHERE ContractID = @ContractID"
+            Dim updateQuery As String = "UPDATE ContractsTable SET CustomerID = @CustomerID, ServiceID = @ServiceID, AddonServiceID = @AddonServiceID, StartDate = @StartDate, EndDate = @EndDate, BillingFrequency = @BillingFrequency, PaymentMethod = @PaymentMethod, Price = @Price, ContractStatus = @ContractStatus WHERE ContractID = @ContractID"
             Using cmd As New SqlCommand(updateQuery, con)
                 cmd.Parameters.AddWithValue("@ContractID", contractID)
                 cmd.Parameters.AddWithValue("@CustomerID", customerID)
@@ -423,7 +481,7 @@ Public Class BillingContractsManagement
     '            Try
     '                con.Open()
     '                ' SQL query to delete a contract.
-    '                Dim deleteQuery As String = "DELETE FROM BillingContracts WHERE ContractID = @ContractID"
+    '                Dim deleteQuery As String = "DELETE FROM ContractsTable WHERE ContractID = @ContractID"
     '                Using cmd As New SqlCommand(deleteQuery, con)
     '                    cmd.Parameters.AddWithValue("@ContractID", contractID)
     '                    cmd.ExecuteNonQuery()
@@ -528,8 +586,141 @@ Public Class BillingContractsManagement
         End Using
         Return dt
     End Function
+    ''' <summary>
+    ''' Show Print Preview
+    ''' </summary>
+    Public Shared Sub ShowPrintPreview(doc As PrintDocument)
+        doc.PrinterSettings = New PrinterSettings()
+        doc.DefaultPageSettings.Margins = New Margins(10, 10, 0, 0)
+        doc.DefaultPageSettings.PaperSize = New PaperSize("Custom", 300, 500)
+    End Sub
+    ''' <summary>
+    ''' Print Bill
+    ''' </summary>
+    Public Shared Sub PrintBillInContracts(e As PrintPageEventArgs, printData As PrintDataInContracts)
+        If printData Is Nothing Then
+            ' Handle case where no data is set
+            Return
+        End If
+
+        Dim f8 As New Font("Calibri", 8, FontStyle.Regular)
+        Dim f10 As New Font("Calibri", 10, FontStyle.Regular)
+        Dim f10b As New Font("Calibri", 10, FontStyle.Bold)
+        Dim f14b As New Font("Calibri", 14, FontStyle.Bold)
+
+        Dim leftMargin As Integer = e.PageSettings.Margins.Left
+        Dim centerMargin As Integer = e.PageSettings.PaperSize.Width / 2
+        Dim rightMargin As Integer = e.PageSettings.PaperSize.Width - e.PageSettings.Margins.Right
+
+        'Font alignment
+        Dim rightAlign As New StringFormat()
+        Dim centerAlign As New StringFormat()
+        rightAlign.Alignment = StringAlignment.Far
+        centerAlign.Alignment = StringAlignment.Center
+
+        Dim line As String = "------------------------------------------------------------------"
+        Dim centerLine As String = "------------"
+        Dim yPos As Integer = 20
+        Dim offset As Integer = 12
+
+
+        e.Graphics.DrawString("Sandigan Carwash", f14b, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += 20
+        e.Graphics.DrawString("Calzada Tipas, Taguig City", f8, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += 10
+        e.Graphics.DrawString("Contact No: 09553516404", f8, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += offset
+
+        ' Add bill details from the class-level printData object
+
+        yPos += offset
+        e.Graphics.DrawString(printData.SaleDate.ToString("MM/dd/yyy HH:mm tt, ddd"), f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += offset
+        e.Graphics.DrawString("InvoiceID: " & printData.ContractID, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += offset
+        yPos += offset
+        e.Graphics.DrawString("Customer Name: " & printData.CustomerName, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString("Qty", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString("Description", f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString("Amount", f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString("1", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.BaseService, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString(printData.BaseServicePrice, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        If Not String.IsNullOrWhiteSpace(printData.AddonService) Then
+            yPos += offset
+            e.Graphics.DrawString("1", f10, Brushes.Black, leftMargin, yPos)
+            e.Graphics.DrawString("Add-on: " & printData.AddonService, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+            e.Graphics.DrawString(printData.AddonServicePrice, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+            yPos += offset
+        End If
+
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString("Total:", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        yPos += offset
+        ' Additional contract details
+        e.Graphics.DrawString("Start Date: ", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.StartDate, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        e.Graphics.DrawString("End Date: ", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.EndDate, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        e.Graphics.DrawString("Billing Frequency: ", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.BillingFrequency, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        e.Graphics.DrawString("Contract Status: ", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.ContractStatus, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        yPos += offset
+
+        ' Payment Details
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
+        yPos += offset
+        e.Graphics.DrawString("Payment", f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString("Amount", f10, Brushes.Black, 160, yPos)
+        yPos += offset
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
+        yPos += offset
+        e.Graphics.DrawString(printData.PaymentMethod, f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10, Brushes.Black, 160, yPos)
+        yPos += 10
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
+        yPos += 10
+        e.Graphics.DrawString("Total:", f10b, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10b, Brushes.Black, 160, yPos)
+        yPos += 50
+
+        e.Graphics.DrawString("Thank You!!", f10b, Brushes.Black, centerMargin, yPos, centerAlign)
+    End Sub
 End Class
 Public Class ServiceDetails
     Public Property ServiceID As Integer
     Public Property Price As Decimal
+End Class
+Public Class PrintDataInContracts
+    Public Property ContractID As Integer
+    Public Property CustomerName As String
+    Public Property CustomerID As Integer
+    Public Property BaseService As String
+    Public Property AddonService As String
+    Public Property TotalPrice As Decimal
+    Public Property PaymentMethod As String
+    Public Property SaleDate As DateTime
+    Public Property BaseServicePrice As Decimal
+    Public Property AddonServicePrice As Decimal
+    Public Property BillingFrequency As String
+    Public Property StartDate As DateTime
+    Public Property EndDate As DateTime?
+    Public Property ContractStatus As String
 End Class

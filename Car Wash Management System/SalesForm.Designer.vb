@@ -22,10 +22,14 @@ Partial Class SalesForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SalesForm))
         DataGridViewSales = New DataGridView()
         Panel2 = New Panel()
         Panel3 = New Panel()
         Panel1 = New Panel()
+        LabelSalesID = New Label()
+        PrintBillBtn = New Button()
+        Label9 = New Label()
         AddBtn = New Button()
         TextBoxPrice = New TextBox()
         ComboBoxPaymentMethod = New ComboBox()
@@ -40,6 +44,7 @@ Partial Class SalesForm
         Label4 = New Label()
         Label2 = New Label()
         Label3 = New Label()
+        PrintDocumentBill = New Printing.PrintDocument()
         CType(DataGridViewSales, ComponentModel.ISupportInitialize).BeginInit()
         Panel2.SuspendLayout()
         Panel3.SuspendLayout()
@@ -80,6 +85,9 @@ Partial Class SalesForm
         ' Panel1
         ' 
         Panel1.BackColor = Color.White
+        Panel1.Controls.Add(LabelSalesID)
+        Panel1.Controls.Add(PrintBillBtn)
+        Panel1.Controls.Add(Label9)
         Panel1.Controls.Add(AddBtn)
         Panel1.Controls.Add(TextBoxPrice)
         Panel1.Controls.Add(ComboBoxPaymentMethod)
@@ -100,6 +108,36 @@ Partial Class SalesForm
         Panel1.Size = New Size(305, 551)
         Panel1.TabIndex = 18
         ' 
+        ' LabelSalesID
+        ' 
+        LabelSalesID.AutoSize = True
+        LabelSalesID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
+        LabelSalesID.ForeColor = Color.Red
+        LabelSalesID.Location = New Point(69, 347)
+        LabelSalesID.Name = "LabelSalesID"
+        LabelSalesID.Size = New Size(0, 15)
+        LabelSalesID.TabIndex = 33
+        ' 
+        ' PrintBillBtn
+        ' 
+        PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        PrintBillBtn.Location = New Point(17, 447)
+        PrintBillBtn.Name = "PrintBillBtn"
+        PrintBillBtn.Size = New Size(75, 23)
+        PrintBillBtn.TabIndex = 33
+        PrintBillBtn.Text = "Prin Bill"
+        PrintBillBtn.UseVisualStyleBackColor = True
+        ' 
+        ' Label9
+        ' 
+        Label9.AutoSize = True
+        Label9.Font = New Font("Century Gothic", 9F)
+        Label9.Location = New Point(17, 347)
+        Label9.Name = "Label9"
+        Label9.Size = New Size(54, 17)
+        Label9.TabIndex = 32
+        Label9.Text = "Sales ID"
+        ' 
         ' AddBtn
         ' 
         AddBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
@@ -117,6 +155,7 @@ Partial Class SalesForm
         ' 
         TextBoxPrice.Location = New Point(17, 307)
         TextBoxPrice.Name = "TextBoxPrice"
+        TextBoxPrice.ReadOnly = True
         TextBoxPrice.Size = New Size(261, 23)
         TextBoxPrice.TabIndex = 31
         ' 
@@ -193,7 +232,7 @@ Partial Class SalesForm
         ' 
         ClearBtn.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
         ClearBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        ClearBtn.Image = My.Resources.Resources.book1
+        ClearBtn.Image = CType(resources.GetObject("ClearBtn.Image"), Image)
         ClearBtn.Location = New Point(16, 407)
         ClearBtn.Name = "ClearBtn"
         ClearBtn.Size = New Size(261, 34)
@@ -230,6 +269,9 @@ Partial Class SalesForm
         Label3.TabIndex = 6
         Label3.Text = "Price"
         ' 
+        ' PrintDocumentBill
+        ' 
+        ' 
         ' SalesForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -265,4 +307,8 @@ Partial Class SalesForm
     Friend WithEvents Label4 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
+    Friend WithEvents PrintBillBtn As Button
+    Friend WithEvents PrintDocumentBill As Printing.PrintDocument
+    Friend WithEvents LabelSalesID As Label
+    Friend WithEvents Label9 As Label
 End Class

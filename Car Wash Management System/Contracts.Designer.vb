@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class BillingContracts
+Partial Class Contracts
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,6 +23,7 @@ Partial Class BillingContracts
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Panel3 = New Panel()
+        PrintBillBtn = New Button()
         LabelSales = New Label()
         Label11 = New Label()
         ComboBoxPaymentMethod = New ComboBox()
@@ -43,7 +44,7 @@ Partial Class BillingContracts
         LabelServiceID = New Label()
         Label4 = New Label()
         UpdateContractBtn = New Button()
-        ViewServiceBtn = New Button()
+        ClearFieldsBtn = New Button()
         AddContractBtn = New Button()
         Label3 = New Label()
         TextBoxCustomerID = New TextBox()
@@ -52,6 +53,7 @@ Partial Class BillingContracts
         Label1 = New Label()
         Panel1 = New Panel()
         DataGridView1 = New DataGridView()
+        PrintDocumentBill = New Printing.PrintDocument()
         Panel3.SuspendLayout()
         Panel1.SuspendLayout()
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
@@ -60,6 +62,7 @@ Partial Class BillingContracts
         ' Panel3
         ' 
         Panel3.BackColor = Color.White
+        Panel3.Controls.Add(PrintBillBtn)
         Panel3.Controls.Add(LabelSales)
         Panel3.Controls.Add(Label11)
         Panel3.Controls.Add(ComboBoxPaymentMethod)
@@ -80,7 +83,7 @@ Partial Class BillingContracts
         Panel3.Controls.Add(LabelServiceID)
         Panel3.Controls.Add(Label4)
         Panel3.Controls.Add(UpdateContractBtn)
-        Panel3.Controls.Add(ViewServiceBtn)
+        Panel3.Controls.Add(ClearFieldsBtn)
         Panel3.Controls.Add(AddContractBtn)
         Panel3.Controls.Add(Label3)
         Panel3.Controls.Add(TextBoxCustomerID)
@@ -92,6 +95,16 @@ Partial Class BillingContracts
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(305, 611)
         Panel3.TabIndex = 2
+        ' 
+        ' PrintBillBtn
+        ' 
+        PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        PrintBillBtn.Location = New Point(16, 577)
+        PrintBillBtn.Name = "PrintBillBtn"
+        PrintBillBtn.Size = New Size(75, 23)
+        PrintBillBtn.TabIndex = 34
+        PrintBillBtn.Text = "Prin Bill"
+        PrintBillBtn.UseVisualStyleBackColor = True
         ' 
         ' LabelSales
         ' 
@@ -212,6 +225,8 @@ Partial Class BillingContracts
         ' 
         ' DateTimePickerEndDate
         ' 
+        DateTimePickerEndDate.CustomFormat = "MM/dd/yyyy hh:mm tt"
+        DateTimePickerEndDate.Format = DateTimePickerFormat.Custom
         DateTimePickerEndDate.Location = New Point(16, 250)
         DateTimePickerEndDate.Name = "DateTimePickerEndDate"
         DateTimePickerEndDate.Size = New Size(261, 23)
@@ -229,6 +244,8 @@ Partial Class BillingContracts
         ' 
         ' DateTimePickerStartDate
         ' 
+        DateTimePickerStartDate.CustomFormat = "MM/dd/yyyy hh:mm tt"
+        DateTimePickerStartDate.Format = DateTimePickerFormat.Custom
         DateTimePickerStartDate.Location = New Point(16, 206)
         DateTimePickerStartDate.Name = "DateTimePickerStartDate"
         DateTimePickerStartDate.Size = New Size(261, 23)
@@ -282,15 +299,15 @@ Partial Class BillingContracts
         UpdateContractBtn.Text = "Update Contract"
         UpdateContractBtn.UseVisualStyleBackColor = True
         ' 
-        ' ViewServiceBtn
+        ' ClearFieldsBtn
         ' 
-        ViewServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        ViewServiceBtn.Location = New Point(16, 508)
-        ViewServiceBtn.Name = "ViewServiceBtn"
-        ViewServiceBtn.Size = New Size(260, 30)
-        ViewServiceBtn.TabIndex = 7
-        ViewServiceBtn.Text = "View Contract"
-        ViewServiceBtn.UseVisualStyleBackColor = True
+        ClearFieldsBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        ClearFieldsBtn.Location = New Point(16, 508)
+        ClearFieldsBtn.Name = "ClearFieldsBtn"
+        ClearFieldsBtn.Size = New Size(260, 30)
+        ClearFieldsBtn.TabIndex = 7
+        ClearFieldsBtn.Text = "Clear Fields"
+        ClearFieldsBtn.UseVisualStyleBackColor = True
         ' 
         ' AddContractBtn
         ' 
@@ -369,14 +386,17 @@ Partial Class BillingContracts
         DataGridView1.Size = New Size(606, 611)
         DataGridView1.TabIndex = 0
         ' 
-        ' BillingContracts
+        ' PrintDocumentBill
+        ' 
+        ' 
+        ' Contracts
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(911, 611)
         Controls.Add(Panel1)
         FormBorderStyle = FormBorderStyle.None
-        Name = "BillingContracts"
+        Name = "Contracts"
         Text = "BillingContracts"
         Panel3.ResumeLayout(False)
         Panel3.PerformLayout()
@@ -389,7 +409,7 @@ Partial Class BillingContracts
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents UpdateContractBtn As Button
-    Friend WithEvents ViewServiceBtn As Button
+    Friend WithEvents ClearFieldsBtn As Button
     Friend WithEvents AddContractBtn As Button
     Friend WithEvents Label3 As Label
     Friend WithEvents TextBoxCustomerID As TextBox
@@ -415,4 +435,6 @@ Partial Class BillingContracts
     Friend WithEvents Label11 As Label
     Friend WithEvents ComboBoxPaymentMethod As ComboBox
     Friend WithEvents LabelSales As Label
+    Friend WithEvents PrintBillBtn As Button
+    Friend WithEvents PrintDocumentBill As Printing.PrintDocument
 End Class

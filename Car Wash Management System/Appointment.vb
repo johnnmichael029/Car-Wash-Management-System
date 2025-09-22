@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Data.SqlClient
+﻿Imports System.Drawing.Printing
+Imports Microsoft.Data.SqlClient
 
 Public Class Appointment
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
@@ -77,7 +78,7 @@ Public Class Appointment
     Private Sub AddAppointmentBtn_Click(sender As Object, e As EventArgs) Handles AddAppointmentBtn.Click
         AddAppointmentBtnFunction()
         AppointmentActivityLog()
-        ClearFields()
+
     End Sub
     Public Sub AddAppointmentBtnFunction()
         Try
@@ -133,9 +134,10 @@ Public Class Appointment
             Carwash.ShowNotification()
             MessageBox.Show("Appointment added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             DataGridView1.DataSource = appointmentManagement.ViewAppointment()
-
+            ShowPrintPreview()
+            ClearFields()
         Catch ex As Exception
-            MessageBox.Show("An error occurred while adding the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        MessageBox.Show("An error occurred while adding the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
     End Sub
@@ -191,7 +193,7 @@ Public Class Appointment
         ComboBoxServices.SelectedIndex = -1
         ComboBoxAddon.SelectedIndex = -1
         ComboBoxPaymentMethod.SelectedIndex = 0
-        ComboBoxAppointmentStatus.SelectedIndex = 0
+        ComboBoxAppointmentStatus.SelectedIndex = -1
         TextBoxNotes.Clear()
         DateTimePickerStartDate.Value = DateTime.Now
         LabelAppointmentID.Text = String.Empty
@@ -234,16 +236,16 @@ Public Class Appointment
         End Try
     End Sub
 
-    Private Sub ViewServiceBtn_Click(sender As Object, e As EventArgs) Handles ViewServiceBtn.Click
-        DataGridView1.DataSource = appointmentManagement.ViewAppointment()
+    Private Sub ClearFieldsBtn_Click(sender As Object, e As EventArgs) Handles ClearFieldsBtn.Click
+        ClearFields()
     End Sub
 
     Private Sub UpdateAppointmentBtn_Click(sender As Object, e As EventArgs) Handles UpdateAppointmentBtn.Click
-        UpdateAppointmentStatusdFunction()
+        UpdateAppointmentStatusFunction()
         UpdateAppointmentActivityLog()
         ClearFields()
     End Sub
-    Public Sub UpdateAppointmentStatusdFunction()
+    Public Sub UpdateAppointmentStatusFunction()
         Try
             Dim appointmentID As Integer
             Dim customerID As Integer
@@ -290,10 +292,38 @@ Public Class Appointment
         Dim newtStatus As String = ComboBoxAppointmentStatus.Text
         dashboardManagement.UpdateAppointmentStatus(customerName, newtStatus)
     End Sub
-    Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
-        appointmentManagement.DeleteAppointment(LabelAppointmentID.Text)
-        DataGridView1.DataSource = appointmentManagement.ViewAppointment()
-        ClearFields()
+
+    Private Sub PrintBillBtn_Click(sender As Object, e As EventArgs) Handles PrintBillBtn.Click
+        ValidatePrint()
+    End Sub
+    Private Sub ValidatePrint()
+        If String.IsNullOrEmpty(LabelAppointmentID.Text) Then
+            MessageBox.Show("Please select contract from the table or add new appointment to print", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Else
+            ShowPrintPreview()
+        End If
+    End Sub
+    Public Sub ShowPrintPreview()
+        appointmentManagement.ShowPrintPreview(PrintDocumentBill)
+        Dim printPreviewDialog As New PrintPreviewDialog With {
+            .Document = PrintDocumentBill
+        }
+        printPreviewDialog.ShowDialog()
+    End Sub
+    Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
+        AppointmentManagement.PrintBillInAppointment(e, New PrintDataInAppointment With {
+           .ContractID = If(DataGridView1.CurrentRow IsNot Nothing, Convert.ToInt32(DataGridView1.CurrentRow.Cells(0).Value), 0),
+           .CustomerName = TextBoxCustomerName.Text,
+           .BaseService = ComboBoxServices.Text,
+           .BaseServicePrice = If(ComboBoxServices.SelectedIndex <> -1, appointmentManagement.GetServiceDetails(ComboBoxServices.Text).Price, 0D),
+           .AddonService = ComboBoxAddon.Text,
+           .AddonServicePrice = If(ComboBoxAddon.SelectedIndex <> -1, appointmentManagement.GetServiceDetails(ComboBoxAddon.Text).Price, 0D),
+           .TotalPrice = Decimal.Parse(TextBoxPrice.Text),
+           .PaymentMethod = ComboBoxPaymentMethod.Text,
+           .SaleDate = DataGridView1.CurrentRow.Cells(4).Value,
+           .StartDate = DateTimePickerStartDate.Value,
+           .AppointmentStatus = ComboBoxAppointmentStatus.Text
+       })
     End Sub
 End Class
 Public Class AppointmentManagement
@@ -390,32 +420,32 @@ Public Class AppointmentManagement
     End Sub
 
 
-    Public Sub DeleteAppointment(appointmentID As String)
-        If String.IsNullOrEmpty(appointmentID) Then
-            MessageBox.Show("Please select appointment from the table to delete", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
-        Dim DialogResult = MessageBox.Show("Are you sure you want to delete this appointment?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-        If DialogResult = DialogResult.Yes Then
+    'Public Sub DeleteAppointment(appointmentID As String)
+    '    If String.IsNullOrEmpty(appointmentID) Then
+    '        MessageBox.Show("Please select appointment from the table to delete", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '        Return
+    '    End If
+    '    Dim DialogResult = MessageBox.Show("Are you sure you want to delete this appointment?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+    '    If DialogResult = DialogResult.Yes Then
 
-            Using con As New SqlConnection(constr)
-                Try
-                    con.Open()
-                    ' SQL query to delete a contract.
-                    Dim deleteQuery As String = "DELETE FROM AppointmentsTable WHERE AppointmentID = @AppointmentID"
-                    Using cmd As New SqlCommand(deleteQuery, con)
-                        cmd.Parameters.AddWithValue("@AppointmentID", appointmentID)
-                        cmd.ExecuteNonQuery()
-                        MessageBox.Show("Contract deleted successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    End Using
-                Catch ex As Exception
-                    MessageBox.Show("An error occurred while deleting contract" & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Finally
-                    con.Close()
-                End Try
-            End Using
-        End If
-    End Sub
+    '        Using con As New SqlConnection(constr)
+    '            Try
+    '                con.Open()
+    '                ' SQL query to delete a contract.
+    '                Dim deleteQuery As String = "DELETE FROM AppointmentsTable WHERE AppointmentID = @AppointmentID"
+    '                Using cmd As New SqlCommand(deleteQuery, con)
+    '                    cmd.Parameters.AddWithValue("@AppointmentID", appointmentID)
+    '                    cmd.ExecuteNonQuery()
+    '                    MessageBox.Show("Contract deleted successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    '                End Using
+    '            Catch ex As Exception
+    '                MessageBox.Show("An error occurred while deleting contract" & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '            Finally
+    '                con.Close()
+    '            End Try
+    '        End Using
+    '    End If
+    'End Sub
 
     ''' <summary>
     ''' Gets all customer names from the database.
@@ -508,8 +538,134 @@ Public Class AppointmentManagement
         End Using
         Return dt
     End Function
+
+    ''' <summary>
+    ''' Show Print Preview
+    ''' </summary>
+    Public Shared Sub ShowPrintPreview(doc As PrintDocument)
+        doc.PrinterSettings = New PrinterSettings()
+        doc.DefaultPageSettings.Margins = New Margins(10, 10, 0, 0)
+        doc.DefaultPageSettings.PaperSize = New PaperSize("Custom", 300, 500)
+    End Sub
+    ''' <summary>
+    ''' Print Bill
+    ''' </summary>
+    Public Shared Sub PrintBillInAppointment(e As PrintPageEventArgs, printData As PrintDataInAppointment)
+        If printData Is Nothing Then
+            ' Handle case where no data is set
+            Return
+        End If
+
+        Dim f8 As New Font("Calibri", 8, FontStyle.Regular)
+        Dim f10 As New Font("Calibri", 10, FontStyle.Regular)
+        Dim f10b As New Font("Calibri", 10, FontStyle.Bold)
+        Dim f14b As New Font("Calibri", 14, FontStyle.Bold)
+
+        Dim leftMargin As Integer = e.PageSettings.Margins.Left
+        Dim centerMargin As Integer = e.PageSettings.PaperSize.Width / 2
+        Dim rightMargin As Integer = e.PageSettings.PaperSize.Width - e.PageSettings.Margins.Right
+
+        'Font alignment
+        Dim rightAlign As New StringFormat()
+        Dim centerAlign As New StringFormat()
+        rightAlign.Alignment = StringAlignment.Far
+        centerAlign.Alignment = StringAlignment.Center
+
+        Dim line As String = "------------------------------------------------------------------"
+        Dim centerLine As String = "------------"
+        Dim yPos As Integer = 20
+        Dim offset As Integer = 12
+
+
+        e.Graphics.DrawString("Sandigan Carwash", f14b, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += 20
+        e.Graphics.DrawString("Calzada Tipas, Taguig City", f8, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += 10
+        e.Graphics.DrawString("Contact No: 09553516404", f8, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += offset
+
+        ' Add bill details from the class-level printData object
+
+        yPos += offset
+        e.Graphics.DrawString(printData.SaleDate.ToString("MM/dd/yyy HH:mm tt, ddd"), f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += offset
+        e.Graphics.DrawString("InvoiceID: " & printData.ContractID, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += offset
+        yPos += offset
+        e.Graphics.DrawString("Customer Name: " & printData.CustomerName, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString("Qty", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString("Description", f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString("Amount", f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString("1", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.BaseService, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString(printData.BaseServicePrice, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        If Not String.IsNullOrWhiteSpace(printData.AddonService) Then
+            yPos += offset
+            e.Graphics.DrawString("1", f10, Brushes.Black, leftMargin, yPos)
+            e.Graphics.DrawString("Add-on: " & printData.AddonService, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+            e.Graphics.DrawString(printData.AddonServicePrice, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+            yPos += offset
+        End If
+
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString("Total:", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        yPos += offset
+        ' Additional contract details
+        e.Graphics.DrawString("Start Date: ", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.StartDate, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        e.Graphics.DrawString("Appointment Status: ", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.AppointmentStatus, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        yPos += offset
+
+        ' Payment Details
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
+        yPos += offset
+        e.Graphics.DrawString("Payment", f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString("Amount", f10, Brushes.Black, 160, yPos)
+        yPos += offset
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
+        yPos += offset
+        e.Graphics.DrawString(printData.PaymentMethod, f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10, Brushes.Black, 160, yPos)
+        yPos += 10
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
+        yPos += 10
+        e.Graphics.DrawString("Total:", f10b, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10b, Brushes.Black, 160, yPos)
+        yPos += 50
+
+        e.Graphics.DrawString("Thank You!!", f10b, Brushes.Black, centerMargin, yPos, centerAlign)
+    End Sub
 End Class
 Public Class AppointmentServiceDetails
     Public Property ServiceID As Integer
     Public Property Price As Decimal
+End Class
+Public Class PrintDataInAppointment
+    Public Property ContractID As Integer
+    Public Property CustomerName As String
+    Public Property CustomerID As Integer
+    Public Property BaseService As String
+    Public Property AddonService As String
+    Public Property TotalPrice As Decimal
+    Public Property PaymentMethod As String
+    Public Property SaleDate As DateTime
+    Public Property BaseServicePrice As Decimal
+    Public Property AddonServicePrice As Decimal
+    Public Property StartDate As DateTime
+    Public Property AppointmentStatus As String
 End Class

@@ -25,6 +25,7 @@ Partial Class Carwash
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Carwash))
         Panel2 = New Panel()
+        PictureBox1 = New PictureBox()
         MenuBtn = New Button()
         Panel1 = New Panel()
         Panel8 = New Panel()
@@ -59,6 +60,7 @@ Partial Class Carwash
         Timer2 = New Timer(components)
         NotificationTimer = New Timer(components)
         Panel2.SuspendLayout()
+        CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         Panel1.SuspendLayout()
         Panel8.SuspendLayout()
         Panel6.SuspendLayout()
@@ -71,6 +73,7 @@ Partial Class Carwash
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
+        Panel2.Controls.Add(PictureBox1)
         Panel2.Controls.Add(MenuBtn)
         Panel2.Controls.Add(Panel1)
         Panel2.Controls.Add(Label1)
@@ -81,6 +84,15 @@ Partial Class Carwash
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(1369, 45)
         Panel2.TabIndex = 4
+        ' 
+        ' PictureBox1
+        ' 
+        PictureBox1.BackgroundImage = CType(resources.GetObject("PictureBox1.BackgroundImage"), Image)
+        PictureBox1.Location = New Point(349, 14)
+        PictureBox1.Name = "PictureBox1"
+        PictureBox1.Size = New Size(237, 33)
+        PictureBox1.TabIndex = 10
+        PictureBox1.TabStop = False
         ' 
         ' MenuBtn
         ' 
@@ -142,7 +154,7 @@ Partial Class Carwash
         Label1.AutoSize = True
         Label1.Font = New Font("Century Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label1.ForeColor = Color.Gray
-        Label1.Location = New Point(183, 2)
+        Label1.Location = New Point(183, 0)
         Label1.Name = "Label1"
         Label1.Size = New Size(26, 20)
         Label1.TabIndex = 6
@@ -151,13 +163,13 @@ Partial Class Carwash
         ' LabelCarwash
         ' 
         LabelCarwash.AutoSize = True
-        LabelCarwash.Font = New Font("Century Gothic", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LabelCarwash.Location = New Point(180, 20)
+        LabelCarwash.Font = New Font("Century Gothic", 20F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelCarwash.Location = New Point(183, 14)
         LabelCarwash.Name = "LabelCarwash"
         LabelCarwash.RightToLeft = RightToLeft.No
-        LabelCarwash.Size = New Size(237, 25)
+        LabelCarwash.Size = New Size(170, 32)
         LabelCarwash.TabIndex = 0
-        LabelCarwash.Text = "Welcome to Sandigan"
+        LabelCarwash.Text = "Welcome to"
         LabelCarwash.TextAlign = ContentAlignment.TopCenter
         ' 
         ' Button5
@@ -345,7 +357,7 @@ Partial Class Carwash
         ' 
         CustomerInformationToolStripMenuItem.Name = "CustomerInformationToolStripMenuItem"
         CustomerInformationToolStripMenuItem.Size = New Size(186, 22)
-        CustomerInformationToolStripMenuItem.Text = "&Customer Information"
+        CustomerInformationToolStripMenuItem.Text = "Customer &Information"
         ' 
         ' SaleHistoryToolStripMenuItem
         ' 
@@ -357,7 +369,7 @@ Partial Class Carwash
         ' 
         BillingAndToolStripMenuItem.Name = "BillingAndToolStripMenuItem"
         BillingAndToolStripMenuItem.Size = New Size(186, 22)
-        BillingAndToolStripMenuItem.Text = "&Billing Contracts"
+        BillingAndToolStripMenuItem.Text = "&Contracts"
         ' 
         ' BookingToolStripMenuItem
         ' 
@@ -414,6 +426,7 @@ Partial Class Carwash
         Text = "Carwash Management"
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
+        CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
         Panel1.ResumeLayout(False)
         Panel8.ResumeLayout(False)
         Panel6.ResumeLayout(False)
@@ -459,4 +472,5 @@ Partial Class Carwash
     Friend WithEvents Btn2 As Button
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Panel4 As Panel
+    Friend WithEvents PictureBox1 As PictureBox
 End Class

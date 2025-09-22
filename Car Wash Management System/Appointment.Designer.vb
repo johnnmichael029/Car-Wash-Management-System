@@ -25,6 +25,7 @@ Partial Class Appointment
         Panel1 = New Panel()
         DataGridView1 = New DataGridView()
         Panel3 = New Panel()
+        PrintBillBtn = New Button()
         LabelSales = New Label()
         LabelAppointmentID = New Label()
         TextBoxNotes = New TextBox()
@@ -43,15 +44,15 @@ Partial Class Appointment
         Label5 = New Label()
         LabelServiceID = New Label()
         Label4 = New Label()
-        DeleteServiceBtn = New Button()
         UpdateAppointmentBtn = New Button()
-        ViewServiceBtn = New Button()
+        ClearFieldsBtn = New Button()
         AddAppointmentBtn = New Button()
         TextBoxCustomerID = New TextBox()
         Label2 = New Label()
         TextBoxCustomerName = New TextBox()
         Label1 = New Label()
         Label7 = New Label()
+        PrintDocumentBill = New Printing.PrintDocument()
         Panel1.SuspendLayout()
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
         Panel3.SuspendLayout()
@@ -82,6 +83,7 @@ Partial Class Appointment
         ' Panel3
         ' 
         Panel3.BackColor = Color.White
+        Panel3.Controls.Add(PrintBillBtn)
         Panel3.Controls.Add(LabelSales)
         Panel3.Controls.Add(LabelAppointmentID)
         Panel3.Controls.Add(TextBoxNotes)
@@ -100,9 +102,8 @@ Partial Class Appointment
         Panel3.Controls.Add(Label5)
         Panel3.Controls.Add(LabelServiceID)
         Panel3.Controls.Add(Label4)
-        Panel3.Controls.Add(DeleteServiceBtn)
         Panel3.Controls.Add(UpdateAppointmentBtn)
-        Panel3.Controls.Add(ViewServiceBtn)
+        Panel3.Controls.Add(ClearFieldsBtn)
         Panel3.Controls.Add(AddAppointmentBtn)
         Panel3.Controls.Add(TextBoxCustomerID)
         Panel3.Controls.Add(Label2)
@@ -113,6 +114,16 @@ Partial Class Appointment
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(305, 635)
         Panel3.TabIndex = 2
+        ' 
+        ' PrintBillBtn
+        ' 
+        PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        PrintBillBtn.Location = New Point(15, 577)
+        PrintBillBtn.Name = "PrintBillBtn"
+        PrintBillBtn.Size = New Size(75, 23)
+        PrintBillBtn.TabIndex = 35
+        PrintBillBtn.Text = "Prin Bill"
+        PrintBillBtn.UseVisualStyleBackColor = True
         ' 
         ' LabelSales
         ' 
@@ -235,6 +246,7 @@ Partial Class Appointment
         ' 
         TextBoxPrice.Location = New Point(16, 294)
         TextBoxPrice.Name = "TextBoxPrice"
+        TextBoxPrice.ReadOnly = True
         TextBoxPrice.Size = New Size(261, 23)
         TextBoxPrice.TabIndex = 19
         ' 
@@ -286,16 +298,6 @@ Partial Class Appointment
         Label4.TabIndex = 10
         Label4.Text = "Price"
         ' 
-        ' DeleteServiceBtn
-        ' 
-        DeleteServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        DeleteServiceBtn.Location = New Point(16, 574)
-        DeleteServiceBtn.Name = "DeleteServiceBtn"
-        DeleteServiceBtn.Size = New Size(260, 30)
-        DeleteServiceBtn.TabIndex = 9
-        DeleteServiceBtn.Text = "Delete Service"
-        DeleteServiceBtn.UseVisualStyleBackColor = True
-        ' 
         ' UpdateAppointmentBtn
         ' 
         UpdateAppointmentBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
@@ -306,15 +308,18 @@ Partial Class Appointment
         UpdateAppointmentBtn.Text = "Update Service"
         UpdateAppointmentBtn.UseVisualStyleBackColor = True
         ' 
-        ' ViewServiceBtn
+        ' ClearFieldsBtn
         ' 
-        ViewServiceBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        ViewServiceBtn.Location = New Point(16, 508)
-        ViewServiceBtn.Name = "ViewServiceBtn"
-        ViewServiceBtn.Size = New Size(260, 30)
-        ViewServiceBtn.TabIndex = 7
-        ViewServiceBtn.Text = "View Service"
-        ViewServiceBtn.UseVisualStyleBackColor = True
+        ClearFieldsBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        ClearFieldsBtn.Image = My.Resources.Resources.clean
+        ClearFieldsBtn.Location = New Point(16, 508)
+        ClearFieldsBtn.Name = "ClearFieldsBtn"
+        ClearFieldsBtn.Size = New Size(260, 30)
+        ClearFieldsBtn.TabIndex = 7
+        ClearFieldsBtn.Text = "Clear Fields"
+        ClearFieldsBtn.TextAlign = ContentAlignment.MiddleRight
+        ClearFieldsBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        ClearFieldsBtn.UseVisualStyleBackColor = True
         ' 
         ' AddAppointmentBtn
         ' 
@@ -371,6 +376,9 @@ Partial Class Appointment
         Label7.TabIndex = 4
         Label7.Text = "List of Appointment"
         ' 
+        ' PrintDocumentBill
+        ' 
+        ' 
         ' Appointment
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -408,7 +416,7 @@ Partial Class Appointment
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents UpdateAppointmentBtn As Button
-    Friend WithEvents ViewServiceBtn As Button
+    Friend WithEvents ClearFieldsBtn As Button
     Friend WithEvents AddAppointmentBtn As Button
     Friend WithEvents TextBoxCustomerID As TextBox
     Friend WithEvents Label2 As Label
@@ -419,5 +427,6 @@ Partial Class Appointment
     Friend WithEvents LabelAppointmentID As Label
     Friend WithEvents LabelSales As Label
     Friend WithEvents Label7 As Label
-    Friend WithEvents DeleteServiceBtn As Button
+    Friend WithEvents PrintBillBtn As Button
+    Friend WithEvents PrintDocumentBill As Printing.PrintDocument
 End Class

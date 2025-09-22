@@ -41,12 +41,12 @@ Public Class CustomerInformation
         DashboardManagement.AddNewCustomer(customerName)
     End Sub
     Public Sub AddCustomerInformation()
-        If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Or String.IsNullOrEmpty(TextBoxAddress.Text) Or String.IsNullOrEmpty(TextBoxPlateNumber.Text) Then
+        If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Or String.IsNullOrEmpty(TextBoxPlateNumber.Text) Then
             MessageBox.Show("Please fill in all fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
 
-        customerInformationManagement.AddCustomer(TextBoxName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, TextBoxPlateNumber.Text)
+        customerInformationManagement.AddCustomer(TextBoxName.Text.Trim(), TextBoxNumber.Text, TextBoxEmail.Text.Trim(), TextBoxAddress.Text.Trim(), TextBoxPlateNumber.Text.Trim())
         DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
     End Sub
     Private Sub ViewBtn_Click(sender As Object, e As EventArgs) Handles ViewBtn.Click
@@ -130,7 +130,11 @@ Public Class CustomerInformationManagement
                     cmd.Parameters.AddWithValue("@Name", name)
                     cmd.Parameters.AddWithValue("@PhoneNumber", number)
                     cmd.Parameters.AddWithValue("@Email", email)
-                    cmd.Parameters.AddWithValue("@Address", address)
+                    If String.IsNullOrEmpty(address) Then
+                        cmd.Parameters.AddWithValue("@Address", DBNull.Value)
+                    Else
+                        cmd.Parameters.AddWithValue("@Address", address)
+                    End If
                     cmd.Parameters.AddWithValue("@PlateNUmber", plateNumber)
                     cmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now)
                     cmd.ExecuteNonQuery()

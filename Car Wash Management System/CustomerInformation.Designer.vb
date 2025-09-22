@@ -186,7 +186,7 @@ Partial Class CustomerInformation
         ' Label67
         ' 
         Label67.AutoSize = True
-        Label67.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
+        Label67.Font = New Font("Segoe UI", 9F)
         Label67.Location = New Point(16, 314)
         Label67.Name = "Label67"
         Label67.Size = New Size(73, 15)

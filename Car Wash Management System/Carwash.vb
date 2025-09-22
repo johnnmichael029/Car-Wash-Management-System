@@ -79,7 +79,7 @@ Public Class Carwash
 
     Private Sub BillingAndToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BillingAndToolStripMenuItem.Click
         Panel4.Controls.Clear()
-        Dim billingContracts As New BillingContracts With {
+        Dim billingContracts As New Contracts With {
             .TopLevel = False,
             .FormBorderStyle = FormBorderStyle.None
         }
@@ -196,5 +196,9 @@ Public Class Carwash
         NotificationTimer.Enabled = False
         NotificationTimer.Enabled = True
         NotificationLabel.Visible = True
+    End Sub
+
+    Private Sub Panel4_Paint(sender As Object, e As PaintEventArgs) Handles Panel4.Paint
+
     End Sub
 End Class

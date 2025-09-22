@@ -1,6 +1,5 @@
-﻿Imports System.Data
-Imports System.Diagnostics.Eventing
-Imports System.Windows.Forms
+﻿
+Imports System.Drawing.Printing
 Imports Microsoft.Data.SqlClient
 
 Public Class SalesForm
@@ -33,38 +32,32 @@ Public Class SalesForm
     Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
         AddBtnFunction()
         AddSalesActivityLog()
-        ClearFields()
-
 
     End Sub
     Private Sub AddBtnFunction()
+        Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
+        Dim addonServiceName As String = If(ComboBoxAddons.SelectedIndex <> -1, ComboBoxAddons.Text, String.Empty)
+        Dim totalPrice As Decimal = TextBoxPrice.Text
         Try
-            ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
+            'The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
             Dim customerID As Integer
             If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Then
                 MessageBox.Show("Customer not found. Please select a valid customer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
 
-            Dim totalPrice As Decimal
-            If Not Decimal.TryParse(TextBoxPrice.Text, totalPrice) Then
-                MessageBox.Show("Please enter a valid price.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Return
-            End If
-
-            ' Determine the service name and ID based on both combo boxes.
-            Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
-            Dim addonServiceName As String = If(ComboBoxAddons.SelectedIndex <> -1, ComboBoxAddons.Text, String.Empty)
-
+            'Validate that a base service is selected.
             If String.IsNullOrWhiteSpace(baseServiceName) Then
                 MessageBox.Show("Please select a base service.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
 
+            'Validate that a payment method is selected.
             If ComboBoxPaymentMethod.SelectedIndex = -1 Then
                 MessageBox.Show("Please select a payment method.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
+
             ' Get the separate Service IDs for the base service and the addon.
             Dim baseServiceDetails As SalesServiceDetails = salesHistoryManagement.GetServiceID(baseServiceName)
             Dim addonServiceID As Integer? = Nothing ' Use a nullable integer for the addon service ID
@@ -85,6 +78,8 @@ Public Class SalesForm
                 )
 
             DataGridViewSales.DataSource = salesHistoryManagement.ViewSales()
+            ShowPrintPreview()
+            ClearFields()
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -125,7 +120,7 @@ Public Class SalesForm
         If customerID > 0 Then
             TextBoxCustomerID.Text = customerID.ToString()
         Else
-            TextBoxCustomerID.Text = String.Empty ' Clear the ID if no match is found.
+            TextBoxCustomerID.Text = String.Empty
         End If
     End Sub
 
@@ -147,6 +142,7 @@ Public Class SalesForm
     End Sub
 
     Private Sub DataGridViewSales_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewSales.CellContentClick
+        LabelSalesID.Text = DataGridViewSales.CurrentRow.Cells(0).Value.ToString()
         TextBoxCustomerName.Text = DataGridViewSales.CurrentRow.Cells(1).Value.ToString()
         ComboBoxServices.Text = DataGridViewSales.CurrentRow.Cells(2).Value.ToString()
         ComboBoxAddons.Text = DataGridViewSales.CurrentRow.Cells(3).Value.ToString()
@@ -182,6 +178,38 @@ Public Class SalesForm
         End If
 
     End Sub
+
+    Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
+        salesHistoryManagement.PrintBillInSales(e, New PrintData With {
+             .SalesID = If(DataGridViewSales.CurrentRow IsNot Nothing, Convert.ToInt32(DataGridViewSales.CurrentRow.Cells(0).Value), 0),
+             .CustomerName = TextBoxCustomerName.Text,
+             .BaseService = ComboBoxServices.Text,
+             .baseServicePrice = If(ComboBoxServices.SelectedIndex <> -1, salesHistoryManagement.GetServiceID(ComboBoxServices.Text).Price, 0D),
+             .AddonService = ComboBoxAddons.Text,
+             .addonServicePrice = If(ComboBoxAddons.SelectedIndex <> -1, salesHistoryManagement.GetServiceID(ComboBoxAddons.Text).Price, 0D),
+             .TotalPrice = Decimal.Parse(TextBoxPrice.Text),
+             .PaymentMethod = ComboBoxPaymentMethod.Text,
+             .SaleDate = DataGridViewSales.CurrentRow.Cells(4).Value
+         })
+    End Sub
+
+    Private Sub ValidatePrint()
+        If String.IsNullOrEmpty(LabelSalesID.Text) Then
+            MessageBox.Show("Please select sales from the table or add new sales to print", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Else
+            ShowPrintPreview()
+        End If
+    End Sub
+    Private Sub PrintBillBtn_Click(sender As Object, e As EventArgs) Handles PrintBillBtn.Click
+        ValidatePrint()
+    End Sub
+    Public Sub ShowPrintPreview()
+        salesHistoryManagement.ShowPrintPreview(PrintDocumentBill)
+        Dim printPreviewDialog As New PrintPreviewDialog With {
+            .Document = PrintDocumentBill
+        }
+        printPreviewDialog.ShowDialog()
+    End Sub
 End Class
 
 Public Class SalesHistoryManagement
@@ -190,6 +218,7 @@ Public Class SalesHistoryManagement
     Private ReadOnly textBoxCustomerName As TextBox
     Private ReadOnly textBoxCustomerID As TextBox
 
+    Private ReadOnly printData As PrintData
     Public Sub New(connectionString As String, paymentMethodComboBox As ComboBox, customerNameTextBox As TextBox, customerIDTextBox As TextBox)
         Me.constr = connectionString
         Me.comboBoxPaymentMethod = paymentMethodComboBox
@@ -289,25 +318,25 @@ Public Class SalesHistoryManagement
         End Using
     End Function
 
-    Public Function GetServicePrice(serviceName As String) As Decimal
-        Using con As New SqlConnection(constr)
-            Dim price As Decimal = 0.0D
-            Try
-                con.Open()
-                Dim selectQuery = "SELECT Price FROM ServicesTable WHERE ServiceName = @Name"
-                Using cmd As New SqlCommand(selectQuery, con)
-                    cmd.Parameters.AddWithValue("@Name", serviceName)
-                    Dim result = cmd.ExecuteScalar()
-                    If Not IsDBNull(result) AndAlso result IsNot Nothing Then
-                        price = CType(result, Decimal)
-                    End If
-                End Using
-            Catch ex As Exception
-                MessageBox.Show("Error retrieving service price: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-            Return price
-        End Using
-    End Function
+    'Public Function GetServicePrice(serviceName As String) As Decimal
+    '    Using con As New SqlConnection(constr)
+    '        Dim price As Decimal = 0.0D
+    '        Try
+    '            con.Open()
+    '            Dim selectQuery = "SELECT Price FROM ServicesTable WHERE ServiceName = @Name"
+    '            Using cmd As New SqlCommand(selectQuery, con)
+    '                cmd.Parameters.AddWithValue("@Name", serviceName)
+    '                Dim result = cmd.ExecuteScalar()
+    '                If Not IsDBNull(result) AndAlso result IsNot Nothing Then
+    '                    price = CType(result, Decimal)
+    '                End If
+    '            End Using
+    '        Catch ex As Exception
+    '            MessageBox.Show("Error retrieving service price: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '        End Try
+    '        Return price
+    '    End Using
+    'End Function
 
     Public Sub PopulateBaseServicesForUI(targetComboBox As ComboBox)
         Dim dt As New DataTable()
@@ -408,9 +437,117 @@ Public Class SalesHistoryManagement
         Me.comboBoxPaymentMethod.SelectedIndex = 0
     End Sub
 
+    Public Shared Sub ShowPrintPreview(doc As PrintDocument)
+        doc.PrinterSettings = New PrinterSettings()
+        doc.DefaultPageSettings.Margins = New Margins(10, 10, 0, 0)
+        doc.DefaultPageSettings.PaperSize = New PaperSize("Custom", 300, 500)
+    End Sub
+    Public Shared Sub PrintBillInSales(e As PrintPageEventArgs, printData As PrintData)
+        If printData Is Nothing Then
+            ' Handle case where no data is set
+            Return
+        End If
+
+        Dim f8 As New Font("Calibri", 8, FontStyle.Regular)
+        Dim f10 As New Font("Calibri", 10, FontStyle.Regular)
+        Dim f10b As New Font("Calibri", 10, FontStyle.Bold)
+        Dim f14b As New Font("Calibri", 14, FontStyle.Bold)
+
+        Dim leftMargin As Integer = e.PageSettings.Margins.Left
+        Dim centerMargin As Integer = e.PageSettings.PaperSize.Width / 2
+        Dim rightMargin As Integer = e.PageSettings.PaperSize.Width - e.PageSettings.Margins.Right
+
+        'Font alignment
+        Dim rightAlign As New StringFormat()
+        Dim centerAlign As New StringFormat()
+        rightAlign.Alignment = StringAlignment.Far
+        centerAlign.Alignment = StringAlignment.Center
+
+        Dim line As String = "------------------------------------------------------------------"
+        Dim centerLine As String = "------------"
+        Dim yPos As Integer = 20
+        Dim offset As Integer = 12
+
+
+        e.Graphics.DrawString("Sandigan Carwash", f14b, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += 20
+        e.Graphics.DrawString("Calzada Tipas, Taguig City", f8, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += 10
+        e.Graphics.DrawString("Contact No: 09553516404", f8, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += offset
+
+        ' Add bill details from the class-level printData object
+
+        yPos += offset
+        e.Graphics.DrawString(printData.SaleDate.ToString("MM/dd/yyy HH:mm tt, ddd"), f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += offset
+        e.Graphics.DrawString("InvoiceID: " & printData.SalesID, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        yPos += offset
+        yPos += offset
+        e.Graphics.DrawString("Customer Name: " & printData.CustomerName, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString("Qty", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString("Description", f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString("Amount", f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString("1", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.BaseService, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString(printData.BaseServicePrice, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        If Not String.IsNullOrWhiteSpace(printData.AddonService) Then
+            yPos += offset
+            e.Graphics.DrawString("1", f10, Brushes.Black, leftMargin, yPos)
+            e.Graphics.DrawString("Add-on: " & printData.AddonService, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+            e.Graphics.DrawString(printData.AddonServicePrice, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+            yPos += offset
+        End If
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+        e.Graphics.DrawString("Total:", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+        yPos += offset
+
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
+        yPos += offset
+        e.Graphics.DrawString("Payment", f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString("Amount", f10, Brushes.Black, 160, yPos)
+        yPos += offset
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
+        yPos += offset
+
+        e.Graphics.DrawString(printData.PaymentMethod, f10, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10, Brushes.Black, 160, yPos)
+        yPos += 10
+        e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
+        yPos += 10
+        e.Graphics.DrawString("Total:", f10b, Brushes.Black, 90, yPos)
+        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10b, Brushes.Black, 160, yPos)
+        yPos += 50
+
+        e.Graphics.DrawString("Thank You!!", f10b, Brushes.Black, centerMargin, yPos, centerAlign)
+    End Sub
 End Class
 Public Class SalesServiceDetails
     Public Property ServiceID As Integer
     Public Property Price As Decimal
 End Class
+Public Class PrintData
+    Public Property SalesID As Integer
+    Public Property CustomerName As String
+    Public Property BaseService As String
+    Public Property AddonService As String
+    Public Property TotalPrice As Decimal
+    Public Property PaymentMethod As String
+    Public Property SaleDate As DateTime
+    Public Property BaseServicePrice As Decimal
+    Public Property AddonServicePrice As Decimal
+End Class
+
 
