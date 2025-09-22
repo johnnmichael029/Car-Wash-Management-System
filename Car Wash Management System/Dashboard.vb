@@ -114,6 +114,7 @@ Public Class Dashboard
         DataGridViewLatestTransaction.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
 
+
 End Class
 
 Public Class SalesChartForm
@@ -319,7 +320,7 @@ Public Class DashboardManagement
     Public Function GetTotalContracts() As Integer
         Dim totalContracts As Integer = 0
         Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT COUNT(*) FROM BillingContracts WHERE CAST(StartDate AS DATE) = CAST(GETDATE() AS DATE)"
+            Dim query As String = "SELECT COUNT(*) FROM ContractsTable WHERE CAST(StartDate AS DATE) = CAST(GETDATE() AS DATE)"
             Using cmd As New SqlCommand(query, con)
                 Try
                     con.Open()
