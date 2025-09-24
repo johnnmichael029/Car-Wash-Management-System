@@ -14,8 +14,21 @@ Public Class CustomerInformation
         customerInformationManagement = New CustomerInformationManagement(constr)
     End Sub
     Private Sub CustomerInformation_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
+        LoadListOfCustomerInformation()
+        ChangeHeaderOfDataGridViewCustomerInformation()
         DataGridViewCustomerInformationFontStyle()
+    End Sub
+    Private Sub ChangeHeaderOfDataGridViewCustomerInformation()
+        DataGridViewCustomerInformation.Columns(0).HeaderText = "Customer ID"
+        DataGridViewCustomerInformation.Columns(1).HeaderText = "Name"
+        DataGridViewCustomerInformation.Columns(2).HeaderText = "Phone Number"
+        DataGridViewCustomerInformation.Columns(3).HeaderText = "Email"
+        DataGridViewCustomerInformation.Columns(4).HeaderText = "Address"
+        DataGridViewCustomerInformation.Columns(5).HeaderText = "Plate Number"
+        DataGridViewCustomerInformation.Columns(6).HeaderText = "Registration Date"
+    End Sub
+    Private Sub LoadListOfCustomerInformation()
+        DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
     End Sub
     Private Sub DataGridViewCustomerInformationFontStyle()
         DataGridViewCustomerInformation.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
@@ -33,8 +46,6 @@ Public Class CustomerInformation
     End Sub
     Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
         AddCustomerInformation()
-        NewCustomerActivityLog()
-        ClearFields()
     End Sub
     Private Sub NewCustomerActivityLog()
         Dim customerName As String = TextBoxName.Text
@@ -45,8 +56,14 @@ Public Class CustomerInformation
             MessageBox.Show("Please fill in all fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
-
         customerInformationManagement.AddCustomer(TextBoxName.Text.Trim(), TextBoxNumber.Text, TextBoxEmail.Text.Trim(), TextBoxAddress.Text.Trim(), TextBoxPlateNumber.Text.Trim())
+        Carwash.PopulateAllTotal()
+        LoadDataGridViewCustomerInformation()
+        MessageBox.Show("Customer added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        NewCustomerActivityLog()
+        ClearFields()
+    End Sub
+    Public Sub LoadDataGridViewCustomerInformation()
         DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
     End Sub
     Private Sub ViewBtn_Click(sender As Object, e As EventArgs) Handles ViewBtn.Click
@@ -121,7 +138,7 @@ Public Class CustomerInformationManagement
         End If
     End Sub
     Public Sub AddCustomer(name As String, number As String, email As String, address As String, plateNumber As String)
-
+        Dim customerInformationManagement As New CustomerInformationManagement(constr)
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
@@ -141,7 +158,7 @@ Public Class CustomerInformationManagement
                 End Using
                 Carwash.NotificationLabel.Text = "New Customer Information"
                 Carwash.ShowNotification()
-                MessageBox.Show("Customer added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
             Catch ex As Exception
                 MessageBox.Show("Error adding customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally

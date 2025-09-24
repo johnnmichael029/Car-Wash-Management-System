@@ -7,6 +7,7 @@ Imports Microsoft.Data.SqlClient
 Public Class Dashboard
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly dashboardManagement As New DashboardManagement(constr)
+    Private ReadOnly carwash As New Carwash
     Private isMonthlyView As Boolean = False
     Private isYearlyView As Boolean = False
     Public Sub New()
@@ -17,33 +18,12 @@ Public Class Dashboard
         dashboardManagement = New DashboardManagement(constr)
     End Sub
     Public Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        LoadActivityLog()
-        LoadSalesData()
         LoadSalesChart()
-        DataGridViewActivityLogFontStyle()
+        LoadLatestTransaction()
         DataGridViewLatestTransactionFontStyle()
-    End Sub
-    Public Sub LoadActivityLog()
-        DataGridViewActivityLog.DataSource = dashboardManagement.LoadActivityLog()
-        DataGridViewActivityLog.Columns("ActionType").HeaderText = "Action Type"
+        ChangeHeaderOfDataGridViewLatestTransaction()
     End Sub
 
-    Private Sub LoadSalesData()
-        Dim salesData As DataTable = dashboardManagement.ViewSalesData()
-        DataGridViewLatestTransaction.DataSource = salesData
-
-        Dim totalSales As Decimal = dashboardManagement.GetTodayTotalSales()
-        LabelTotalSalesToday.Text = "₱" & totalSales.ToString("N2")
-
-        Dim totalNewCustomers As Integer = dashboardManagement.GetTotalNewCustomers()
-        LabelTotalCustomerToday.Text = totalNewCustomers.ToString()
-
-        Dim totalAppointments As Integer = dashboardManagement.GetTotalAppointments()
-        LabelTotalNewScheduleToday.Text = totalAppointments.ToString()
-
-        Dim totalContracts As Integer = dashboardManagement.GetTotalContracts()
-        LabelTotalNewContractToday.Text = totalContracts.ToString()
-    End Sub
 
     Private Sub LoadSalesChart()
         Dim chartData As DataTable
@@ -87,12 +67,13 @@ Public Class Dashboard
         End If
         LoadSalesChart()
     End Sub
-
     Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
         TextBoxSearchBar.Text = ""
     End Sub
-
     Private Sub TextBoxSearchBar_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearchBar.TextChanged
+        SearchBarFunction()
+    End Sub
+    Private Sub SearchBarFunction()
         If String.IsNullOrWhiteSpace(TextBoxSearchBar.Text) Then
             Dim salesData As DataTable = dashboardManagement.ViewSalesData()
             DataGridViewLatestTransaction.DataSource = salesData
@@ -101,20 +82,23 @@ Public Class Dashboard
             DataGridViewLatestTransaction.DataSource = salesData
         End If
     End Sub
-
-    Private Sub DataGridViewActivityLog_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewActivityLog.CellContentClick
-
-    End Sub
-    Private Sub DataGridViewActivityLogFontStyle()
-        DataGridViewActivityLog.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridViewActivityLog.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+    Private Sub ChangeHeaderOfDataGridViewLatestTransaction()
+        DataGridViewLatestTransaction.Columns("SalesID").HeaderText = "Sales ID"
+        DataGridViewLatestTransaction.Columns("CustomerName").HeaderText = "Customer Name"
+        DataGridViewLatestTransaction.Columns("BaseServiceName").HeaderText = "Base Service"
+        DataGridViewLatestTransaction.Columns("AddonServiceName").HeaderText = "Addon Service"
+        DataGridViewLatestTransaction.Columns("SaleDate").HeaderText = "Sale Date"
+        DataGridViewLatestTransaction.Columns("PaymentMethod").HeaderText = "Payment Method"
+        DataGridViewLatestTransaction.Columns("TotalPrice").HeaderText = "Total Price (₱)"
     End Sub
     Private Sub DataGridViewLatestTransactionFontStyle()
         DataGridViewLatestTransaction.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
         DataGridViewLatestTransaction.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
-
-
+    Private Sub LoadLatestTransaction()
+        Dim salesData As DataTable = dashboardManagement.ViewSalesData()
+        DataGridViewLatestTransaction.DataSource = salesData
+    End Sub
 End Class
 
 Public Class SalesChartForm
@@ -196,6 +180,9 @@ Public Class DashboardManagement
         constr = connectionString
     End Sub
 
+    ''' <summary>
+    ''' View Sales Data from the SalesHistoryTable along with Customer and Service details.
+    ''' </summary>
     Public Function ViewSalesData() As DataTable
         Dim dt As New DataTable()
         Using conn As New SqlConnection(constr)
@@ -212,6 +199,9 @@ Public Class DashboardManagement
         End Using
         Return dt
     End Function
+    ''' <summary>
+    ''' Gets the total sales grouped by year from the SalesHistoryTable.
+    ''' </summary>
     Public Function GetYearlySales() As DataTable
         Dim query As String = "SELECT YEAR(SaleDate) AS SalesYear, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable GROUP BY YEAR(SaleDate) ORDER BY SalesYear"
         Dim dt As New DataTable()
@@ -228,7 +218,9 @@ Public Class DashboardManagement
         End Try
         Return dt
     End Function
-
+    ''' <summary>
+    ''' Gets the total sales grouped by month and year from the SalesHistoryTable.
+    ''' </summary>
     Public Function GetMonthlySales() As DataTable
         Dim query As String = "SELECT YEAR(SaleDate) AS SalesYear, MONTH(SaleDate) AS SalesMonth, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable GROUP BY YEAR(SaleDate), MONTH(SaleDate) ORDER BY SalesYear, SalesMonth"
         Dim dt As New DataTable()
@@ -245,7 +237,9 @@ Public Class DashboardManagement
         End Try
         Return dt
     End Function
-
+    ''' <summary>
+    ''' Gets the total sales for the past 7 days from the SalesHistoryTable.
+    ''' </summary>
     Public Function GetWeeklySales() As DataTable
         Dim query As String = "SELECT CAST(SaleDate AS DATE) AS SaleDate, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable WHERE SaleDate >= DATEADD(DAY, -7, CAST(GETDATE() AS DATE)) GROUP BY CAST(SaleDate AS DATE) ORDER BY SaleDate ASC"
         Dim dt As New DataTable()
@@ -262,77 +256,6 @@ Public Class DashboardManagement
         End Try
         Return dt
     End Function
-
-    Public Function GetTodayTotalSales() As Decimal
-        Dim totalSales As Decimal = 0
-        Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT SUM(TotalPrice) FROM SalesHistoryTable WHERE CAST(SaleDate AS DATE) = CAST(GETDATE() AS DATE)"
-            Using cmd As New SqlCommand(query, con)
-                Try
-                    con.Open()
-                    Dim result As Object = cmd.ExecuteScalar()
-                    If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
-                        totalSales = Convert.ToDecimal(result)
-                    End If
-                Catch ex As Exception
-                    Console.WriteLine("Error in GetTodayTotalSales: " & ex.Message)
-                End Try
-            End Using
-        End Using
-        Return totalSales
-    End Function
-
-    Public Function GetTotalNewCustomers() As Integer
-        Dim totalNewCustomers As Integer = 0
-        Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT COUNT(*) FROM CustomersTable WHERE CAST(RegistrationDate AS DATE) = CAST(GETDATE() AS DATE)"
-            Using cmd As New SqlCommand(query, con)
-                Try
-                    con.Open()
-                    totalNewCustomers = Convert.ToInt32(cmd.ExecuteScalar())
-                Catch ex As Exception
-                    Console.WriteLine("Error in GetTotalNewCustomers: " & ex.Message)
-                End Try
-            End Using
-        End Using
-        Return totalNewCustomers
-    End Function
-
-    Public Function GetTotalAppointments() As Integer
-        Dim totalAppointments As Integer = 0
-        Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT COUNT(*) FROM AppointmentsTable
-                                 WHERE CAST(AppointmentDateTime AS DATE) = CAST(GETDATE() AS DATE)
-                                 AND AppointmentStatus = 'Confirmed'"
-
-            Using cmd As New SqlCommand(query, con)
-                Try
-                    con.Open()
-                    totalAppointments = Convert.ToInt32(cmd.ExecuteScalar())
-                Catch ex As Exception
-                    Console.WriteLine("Error in GetTotalAppointments: " & ex.Message)
-                End Try
-            End Using
-        End Using
-        Return totalAppointments
-    End Function
-
-    Public Function GetTotalContracts() As Integer
-        Dim totalContracts As Integer = 0
-        Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT COUNT(*) FROM ContractsTable WHERE CAST(StartDate AS DATE) = CAST(GETDATE() AS DATE)"
-            Using cmd As New SqlCommand(query, con)
-                Try
-                    con.Open()
-                    totalContracts = Convert.ToInt32(cmd.ExecuteScalar())
-                Catch ex As Exception
-                    Console.WriteLine("Error in GetTotalContracts: " & ex.Message)
-                End Try
-            End Using
-        End Using
-        Return totalContracts
-    End Function
-
     Public Function GetListInSearchBar(searchInBar As String) As DataTable
         Dim dt As New DataTable()
 
@@ -371,7 +294,9 @@ Public Class DashboardManagement
         End Using
         Return dt
     End Function
-
+    ''' <summary>
+    ''' Gets the activity log from the ActivityLogTable.
+    ''' </summary>
     Public Sub LogActivity(action As String, description As String)
         Try
             Using conn As New SqlConnection(constr)
@@ -389,6 +314,10 @@ Public Class DashboardManagement
             MessageBox.Show("Error logging activity: " & ex.Message)
         End Try
     End Sub
+    ''' <summary>
+    ''' Gets the activity log from the ActivityLogTable.
+    ''' </summary>
+
     Public Sub AddNewCustomer(customerName As String)
         LogActivity("New Customer Added", $"A new customer '{customerName}' was added to the system.")
     End Sub
@@ -420,23 +349,4 @@ Public Class DashboardManagement
     Public Sub UserLogin(username As String)
         LogActivity("User Login", $"User '{username}' logged into the system.")
     End Sub
-    Public Function LoadActivityLog() As DataTable
-        Dim dt As New DataTable()
-        Try
-            Using conn As New SqlConnection(constr)
-                conn.Open()
-                Dim selectActivityLogQuery As String = "SELECT ActionType, Description, Timestamp FROM ActivityLogTable ORDER BY LogID DESC"
-                Using cmd As New SqlCommand(selectActivityLogQuery, conn)
-                    Using adapter As New SqlDataAdapter(cmd)
-
-                        adapter.Fill(dt)
-
-                    End Using
-                End Using
-            End Using
-        Catch ex As Exception
-            MessageBox.Show("Error loading activity log: " & ex.Message)
-        End Try
-        Return dt
-    End Function
 End Class

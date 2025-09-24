@@ -13,6 +13,12 @@ Public Class OnTheDay
         onTheDayManagement = New OnTheDayManagement(constr)
 
     End Sub
+    Private Sub OnTheDay_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadListOfOnTheDay()
+        AddButtonAction()
+        DataGridViewOnTheDayFontStyle()
+        ChangeHeaderOFDataGridVewOnTheDay()
+    End Sub
     Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewOnTheDay.CellFormatting
         ' Check if this is the column we care about ("AppointmentStatus") and
         ' if the row is not new.
@@ -44,8 +50,6 @@ Public Class OnTheDay
     End Sub
     Private Sub DataGridViewOnTheDay_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewOnTheDay.CellContentClick
         Try
-
-
             If e.ColumnIndex = DataGridViewOnTheDay.Columns("actionsColumn").Index AndAlso e.RowIndex >= 0 Then
                 Dim row As DataGridViewRow = DataGridViewOnTheDay.Rows(e.RowIndex)
                 Dim appointmentID As Integer = Convert.ToInt32(row.Cells("OnTheDayID").Value)
@@ -72,9 +76,11 @@ Public Class OnTheDay
                         dashboardManagement.RecordActivity(customerName, nextStatus)
                         Carwash.NotificationLabel.Text = "Appointment Completed"
                         Carwash.ShowNotification()
+                        Carwash.PopulateAllTotal()
                     Case "Completed"
                         onTheDayManagement.ViewListOfReserved()
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
+
                     Case Else
                         nextStatus = "Queued" ' Default status if not set
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
@@ -89,10 +95,18 @@ Public Class OnTheDay
             MessageBox.Show("An error occurred: Cannot update the status without data. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Private Sub OnTheDay_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub ChangeHeaderOFDataGridVewOnTheDay()
+        DataGridViewOnTheDay.Columns(0).HeaderText = "OTD ID"
+        DataGridViewOnTheDay.Columns(1).HeaderText = "Customer Name"
+        DataGridViewOnTheDay.Columns(2).HeaderText = "Base Service"
+        DataGridViewOnTheDay.Columns(3).HeaderText = "Addon Service"
+        DataGridViewOnTheDay.Columns(4).HeaderText = "Date & Time"
+        DataGridViewOnTheDay.Columns(5).HeaderText = "Appointment Status"
+
+    End Sub
+
+    Private Sub LoadListOfOnTheDay()
         DataGridViewOnTheDay.DataSource = onTheDayManagement.ViewListOfReserved()
-        AddButtonAction()
-        DataGridViewOnTheDayFontStyle()
     End Sub
     Private Sub DataGridViewOnTheDayFontStyle()
         DataGridViewOnTheDay.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)

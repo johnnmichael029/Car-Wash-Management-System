@@ -11,18 +11,21 @@ Public Class Reservation
         reservationManagement = New ReservationManagement(constr)
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
-        DataGridViewListOfReserved.DataSource = reservationManagement.ViewListOfReserved()
+        LoadListOfReserved()
         DataGridViewListOfReservedFontStyle()
+        ChangeHeaderOfDataGridViewListOfReserved()
     End Sub
     Private Sub DataGridViewListOfReservedFontStyle()
-        DataGridViewListOfReserved.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridViewListOfReserved.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+        DataGridViewListOfReservation.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewListOfReservation.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
-
-    Private Sub DataGridViewListOfReserved_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewListOfReserved.CellFormatting
+    Private Sub LoadListOfReserved()
+        DataGridViewListOfReservation.DataSource = reservationManagement.ViewListOfReserved()
+    End Sub
+    Private Sub DataGridViewListOfReserved_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewListOfReservation.CellFormatting
         ' Check if this is the column we care about ("AppointmentStatus") and
         ' if the row is not new.
-        If e.ColumnIndex = Me.DataGridViewListOfReserved.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
+        If e.ColumnIndex = Me.DataGridViewListOfReservation.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
 
             ' Get the value from the current cell.
             Dim status As String = e.Value?.ToString()
@@ -32,6 +35,15 @@ Public Class Reservation
             End If
         End If
     End Sub
+    Private Sub ChangeHeaderOfDataGridViewListOfReserved()
+        DataGridViewListOfReservation.Columns(0).HeaderText = "Reservation ID"
+        DataGridViewListOfReservation.Columns(1).HeaderText = "Customer Name"
+        DataGridViewListOfReservation.Columns(2).HeaderText = "Base Service"
+        DataGridViewListOfReservation.Columns(3).HeaderText = "Addon Service"
+        DataGridViewListOfReservation.Columns(4).HeaderText = "Date & Time"
+        DataGridViewListOfReservation.Columns(5).HeaderText = "Appointment Status"
+    End Sub
+
 
 End Class
 Public Class ReservationManagement

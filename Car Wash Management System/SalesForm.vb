@@ -21,6 +21,16 @@ Public Class SalesForm
         LoadAllPopulateUI()
         ClearFields()
         DataGridViewSalesFontStyle()
+        ChangeHeaderOfDataGridViewSales()
+    End Sub
+    Private Sub ChangeHeaderOfDataGridViewSales()
+        DataGridViewSales.Columns(0).HeaderText = "Sales ID"
+        DataGridViewSales.Columns(1).HeaderText = "Customer Name"
+        DataGridViewSales.Columns(2).HeaderText = "Base Service"
+        DataGridViewSales.Columns(3).HeaderText = "Addon Service"
+        DataGridViewSales.Columns(4).HeaderText = "Sale Date"
+        DataGridViewSales.Columns(5).HeaderText = "Payment Method"
+        DataGridViewSales.Columns(6).HeaderText = "Total Price"
     End Sub
     Private Sub LoadAllPopulateUI()
         salesHistoryManagement.PopulateCustomerNames()
@@ -31,8 +41,6 @@ Public Class SalesForm
     End Sub
     Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
         AddBtnFunction()
-        AddSalesActivityLog()
-
     End Sub
     Private Sub AddBtnFunction()
         Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
@@ -76,8 +84,10 @@ Public Class SalesForm
                 ComboBoxPaymentMethod.SelectedItem.ToString(),
                 totalPrice
                 )
-
+            Carwash.PopulateAllTotal()
             DataGridViewSales.DataSource = salesHistoryManagement.ViewSales()
+            MessageBox.Show("Sale added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            AddSalesActivityLog()
             ShowPrintPreview()
             ClearFields()
         Catch ex As Exception
@@ -86,10 +96,10 @@ Public Class SalesForm
 
     End Sub
     Private Sub AddSalesActivityLog()
-
         Dim customerName As String = TextBoxCustomerName.Text
         Dim amount As Decimal = Decimal.Parse(TextBoxPrice.Text)
         dashboardManagement.RecordSale(customerName, amount)
+
     End Sub
 
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
@@ -248,7 +258,7 @@ Public Class SalesHistoryManagement
                     cmd.ExecuteNonQuery()
                     Carwash.NotificationLabel.Text = "New Sale Added"
                     Carwash.ShowNotification()
-                    MessageBox.Show("Sale added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
                 End Using
             Catch ex As Exception
                 MessageBox.Show("Error adding sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)

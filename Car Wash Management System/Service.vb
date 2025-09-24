@@ -14,6 +14,21 @@ Public Class Service
         ' Add any initialization after the InitializeComponent() call.
         serviceManagement = New ServiceManagement(constr)
     End Sub
+    Private Sub Service_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadListOfService()
+        DataGridViewServiceFontStyle()
+        ChangeHeaderOfDataGridViewService()
+    End Sub
+    Private Sub ChangeHeaderOfDataGridViewService()
+        DataGridViewService.Columns(0).HeaderText = "Service ID"
+        DataGridViewService.Columns(1).HeaderText = "Service Name"
+        DataGridViewService.Columns(2).HeaderText = "Description"
+        DataGridViewService.Columns(3).HeaderText = "Price"
+        DataGridViewService.Columns(4).HeaderText = "Addon"
+    End Sub
+    Private Sub LoadListOfService()
+        DataGridViewService.DataSource = serviceManagement.ViewService()
+    End Sub
     Private Sub DataGridViewService_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewService.CellContentClick
         TextBoxServiceName.Text = DataGridViewService.CurrentRow.Cells("ServiceName").Value.ToString()
         TextBoxDescription.Text = DataGridViewService.CurrentRow.Cells("Description").Value.ToString()
@@ -34,16 +49,20 @@ Public Class Service
     End Sub
 
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
+        AddService()
+        LoadListOfServiceFromDataGridViewService()
+
+
+    End Sub
+    Private Sub AddService()
         serviceManagement.AddService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
+    End Sub
+    Private Sub LoadListOfServiceFromDataGridViewService()
         DataGridViewService.DataSource = serviceManagement.ViewService()
+    End Sub
+    Public Sub AddNewServiceFromActivityLog()
         dashboardManagement.AddNewService(TextBoxServiceName.Text)
-
     End Sub
-    Private Sub Service_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        DataGridViewService.DataSource = serviceManagement.ViewService()
-        DataGridViewServiceFontStyle()
-    End Sub
-
     Private Sub ViewServiceBtn_Click(sender As Object, e As EventArgs) Handles ViewServiceBtn.Click
         DataGridViewService.DataSource = serviceManagement.ViewService()
     End Sub
@@ -91,6 +110,7 @@ Public Class ServiceManagement
                 End Using
                 Carwash.NotificationLabel.Text = "New Service Added"
                 Carwash.ShowNotification()
+                Service.AddNewServiceFromActivityLog()
                 MessageBox.Show("Service added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Service.ClearFields()
             Catch ex As Exception

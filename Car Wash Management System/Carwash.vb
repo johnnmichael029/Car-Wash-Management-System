@@ -1,19 +1,29 @@
 ﻿Imports System.Drawing.Text
+Imports System.IO
 Imports System.Runtime.InteropServices
+Imports Microsoft.Data.SqlClient
 
 Public Class Carwash
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Dim dashboardManagement As New DashboardManagement(constr)
-    Private Sub Dashboard1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        CenterToParent()
+    Private ReadOnly carwashManagement As CarwashManagement
+    'Private isFullScreen As Boolean = False
+    'Private originalIcon As Icon
+    Public Sub New()
+        ' This call is required by the designer.
+        InitializeComponent()
+        ' Add any initialization after the InitializeComponent() call.
+        carwashManagement = New CarwashManagement(constr)
     End Sub
+
 
     Private PrivateFonts As New PrivateFontCollection()
-
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub Carwash_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         DashboardFormLoad()
         NotificationLoad()
+        PopulateAllTotal()
     End Sub
+
     Private Sub NotificationLoad()
         NotificationTimer.Interval = 3000
         NotificationTimer.Enabled = False
@@ -28,7 +38,7 @@ Public Class Carwash
         dashboard.Dock = DockStyle.Fill
         dashboard.Show()
     End Sub
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+    Private Sub Button5_Click(sender As Object, e As EventArgs)
         Application.Exit()
     End Sub
 
@@ -41,18 +51,10 @@ Public Class Carwash
             dashboardManagement.UserLogout(username)
         End If
 
-
     End Sub
 
     Private Sub CustomerInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomerInformationToolStripMenuItem.Click
-        Panel4.Controls.Clear()
-        Dim customerInformation As New CustomerInformation With {
-            .TopLevel = False,
-            .FormBorderStyle = FormBorderStyle.None
-        }
-        Panel4.Controls.Add(customerInformation)
-        customerInformation.Dock = DockStyle.Fill
-        customerInformation.Show()
+        ShowNewCustomersFormFunction()
     End Sub
 
     Private Sub ServiceCatalogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ServiceCatalogToolStripMenuItem.Click
@@ -65,8 +67,7 @@ Public Class Carwash
         service.Dock = DockStyle.Fill
         service.Show()
     End Sub
-
-    Private Sub SaleHistoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaleHistoryToolStripMenuItem.Click
+    Private Sub ShowSalesFormFunction()
         Panel4.Controls.Clear()
         Dim salesHistory As New SalesForm With {
             .TopLevel = False,
@@ -76,8 +77,7 @@ Public Class Carwash
         salesHistory.Dock = DockStyle.Fill
         salesHistory.Show()
     End Sub
-
-    Private Sub BillingAndToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BillingAndToolStripMenuItem.Click
+    Private Sub ShowNewContractsTodayFormFunction()
         Panel4.Controls.Clear()
         Dim billingContracts As New Contracts With {
             .TopLevel = False,
@@ -87,16 +87,18 @@ Public Class Carwash
         billingContracts.Dock = DockStyle.Fill
         billingContracts.Show()
     End Sub
-
-    Private Sub AppointmentScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs)
+    Private Sub ShowNewCustomersFormFunction()
+        Panel4.Controls.Clear()
+        Dim customerInformation As New CustomerInformation With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(customerInformation)
+        customerInformation.Dock = DockStyle.Fill
+        customerInformation.Show()
 
     End Sub
-
-    Private Sub ListOfReservedToolStripMenuItem_Click(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub AppointmentScheduleToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles AppointmentScheduleToolStripMenuItem1.Click
+    Private Sub ShowNewAppointmentsTodayFormFunction()
         Panel4.Controls.Clear()
         Dim appointment As New Appointment With {
             .TopLevel = False,
@@ -105,6 +107,13 @@ Public Class Carwash
         Panel4.Controls.Add(appointment)
         appointment.Dock = DockStyle.Fill
         appointment.Show()
+    End Sub
+    Private Sub SaleHistoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaleHistoryToolStripMenuItem.Click
+        ShowSalesFormFunction()
+    End Sub
+
+    Private Sub AppointmentScheduleToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles AppointmentScheduleToolStripMenuItem1.Click
+        ShowNewAppointmentsTodayFormFunction()
     End Sub
 
     Private Sub ListToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ListToolStripMenuItem.Click
@@ -138,6 +147,16 @@ Public Class Carwash
         Panel4.Controls.Add(dashboard)
         dashboard.Dock = DockStyle.Fill
         dashboard.Show()
+    End Sub
+    Private Sub ActivityLogBtn_Click(sender As Object, e As EventArgs) Handles ActivityLogBtn.Click
+        Panel4.Controls.Clear()
+        Dim activityLog As New ActivityLog With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(activityLog)
+        activityLog.Dock = DockStyle.Fill
+        activityLog.Show()
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
@@ -201,4 +220,145 @@ Public Class Carwash
     Private Sub Panel4_Paint(sender As Object, e As PaintEventArgs) Handles Panel4.Paint
 
     End Sub
+
+    Private Sub ExitToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem1.Click
+        Application.Exit()
+    End Sub
+    'Private Sub FullToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FullToolStripMenuItem.Click
+    '    If Not isFullScreen Then
+    '        Me.WindowState = FormWindowState.Maximized
+    '        Dim newIconPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "minus.png")
+    '        If File.Exists(newIconPath) Then
+    '            Me.Icon = New Icon(newIconPath)
+    '        End If
+    '        isFullScreen = True
+    '    Else
+    '        Me.WindowState = FormWindowState.Normal
+    '        Me.Icon = originalIcon
+    '        isFullScreen = False
+    '        isFullScreen = False
+
+    '    End If
+    'End Sub
+
+    Public Sub PopulateAllTotal()
+        Dim totalSales As Decimal = carwashManagement.GetTodayTotalSales()
+        LabelTotalSalesToday.Text = "₱" & totalSales.ToString("N2")
+
+        Dim totalNewCustomers As Integer = carwashManagement.GetTotalNewCustomers()
+        LabelNewCustomer.Text = totalNewCustomers.ToString()
+
+        Dim totalAppointments As Integer = carwashManagement.GetTotalAppointments()
+        LabelTotalNewScheduleToday.Text = totalAppointments.ToString()
+
+        Dim totalContracts As Integer = carwashManagement.GetTotalContracts()
+        LabelTotalNewContractToday.Text = totalContracts.ToString()
+    End Sub
+
+    Private Sub PictureBoxSales_Click(sender As Object, e As EventArgs) Handles PictureBoxSales.Click
+        ShowSalesFormFunction()
+    End Sub
+
+    Private Sub ContractsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ContractsToolStripMenuItem.Click
+        ShowNewContractsTodayFormFunction()
+    End Sub
+
+    Private Sub PictureBoxCustomer_Click(sender As Object, e As EventArgs) Handles PictureBoxCustomer.Click
+        ShowNewCustomersFormFunction()
+    End Sub
+
+    Private Sub ictureBoxContracts_Click(sender As Object, e As EventArgs) Handles PictureBoxContracts.Click
+        ShowNewContractsTodayFormFunction()
+    End Sub
+
+    Private Sub PictureBoxSchedule_Click(sender As Object, e As EventArgs) Handles PictureBoxSchedule.Click
+        ShowNewAppointmentsTodayFormFunction()
+    End Sub
+
+End Class
+Public Class CarwashManagement
+    Private ReadOnly constr
+    Public Sub New(connectionString As String)
+        Me.constr = connectionString
+    End Sub
+    ''' <summary>
+    ''' Gets the total sales for today from the SalesHistoryTable.
+    ''' </summary>
+    Public Function GetTodayTotalSales() As Decimal
+        Dim totalSales As Decimal = 0
+        Using con As New SqlConnection(constr)
+            Dim query As String = "SELECT SUM(TotalPrice) FROM SalesHistoryTable WHERE CAST(SaleDate AS DATE) = CAST(GETDATE() AS DATE)"
+            Using cmd As New SqlCommand(query, con)
+                Try
+                    con.Open()
+                    Dim result As Object = cmd.ExecuteScalar()
+                    If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
+                        totalSales = Convert.ToDecimal(result)
+                    End If
+                Catch ex As Exception
+                    Console.WriteLine("Error in GetTodayTotalSales: " & ex.Message)
+                End Try
+            End Using
+        End Using
+        Return totalSales
+    End Function
+    ''' <summary>
+    ''' Gets the total number of new customers registered today from the CustomersTable.
+    ''' </summary>
+    Public Function GetTotalNewCustomers() As Integer
+        Dim totalNewCustomers As Integer = 0
+        Using con As New SqlConnection(constr)
+            Dim query As String = "SELECT COUNT(*) FROM CustomersTable WHERE CAST(RegistrationDate AS DATE) = CAST(GETDATE() AS DATE)"
+            Using cmd As New SqlCommand(query, con)
+                Try
+                    con.Open()
+                    totalNewCustomers = Convert.ToInt32(cmd.ExecuteScalar())
+                Catch ex As Exception
+                    Console.WriteLine("Error in GetTotalNewCustomers: " & ex.Message)
+                End Try
+            End Using
+        End Using
+        Return totalNewCustomers
+    End Function
+    ''' <summary>
+    ''' Gets the total number of confirmed appointments scheduled for today from the AppointmentsTable.
+    ''' </summary>
+    Public Function GetTotalAppointments() As Integer
+        Dim totalAppointments As Integer = 0
+        Using con As New SqlConnection(constr)
+            Dim query As String = "SELECT COUNT(*) FROM AppointmentsTable
+                                 WHERE CAST(AppointmentDateTime AS DATE) = CAST(GETDATE() AS DATE)
+                                 AND AppointmentStatus = 'Confirmed'"
+            Using cmd As New SqlCommand(query, con)
+                Try
+                    con.Open()
+                    totalAppointments = Convert.ToInt32(cmd.ExecuteScalar())
+                Catch ex As Exception
+                    Console.WriteLine("Error in GetTotalAppointments: " & ex.Message)
+                End Try
+            End Using
+        End Using
+        Return totalAppointments
+    End Function
+    ''' <summary>
+    ''' Gets the total number of new contracts created today from the ContractsTable.
+    ''' </summary>
+    Public Function GetTotalContracts() As Integer
+        Dim totalContracts As Integer = 0
+        Using con As New SqlConnection(constr)
+            Dim query As String = "SELECT COUNT(*) FROM ContractsTable WHERE CAST(StartDate AS DATE) = CAST(GETDATE() AS DATE)"
+            Using cmd As New SqlCommand(query, con)
+                Try
+                    con.Open()
+                    totalContracts = Convert.ToInt32(cmd.ExecuteScalar())
+                Catch ex As Exception
+                    Console.WriteLine("Error in GetTotalContracts: " & ex.Message)
+                End Try
+            End Using
+        End Using
+        Return totalContracts
+    End Function
+    ''' <summary>
+    ''' Gets the list of sales records matching the search string from the SalesHistoryTable along with Customer and Service details.
+    ''' </summary>
 End Class

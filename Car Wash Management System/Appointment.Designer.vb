@@ -23,7 +23,7 @@ Partial Class Appointment
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Panel1 = New Panel()
-        DataGridView1 = New DataGridView()
+        DataGridViewAppointment = New DataGridView()
         Panel3 = New Panel()
         PrintBillBtn = New Button()
         LabelSales = New Label()
@@ -54,31 +54,31 @@ Partial Class Appointment
         Label7 = New Label()
         PrintDocumentBill = New Printing.PrintDocument()
         Panel1.SuspendLayout()
-        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(DataGridViewAppointment, ComponentModel.ISupportInitialize).BeginInit()
         Panel3.SuspendLayout()
         SuspendLayout()
         ' 
         ' Panel1
         ' 
         Panel1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        Panel1.Controls.Add(DataGridView1)
+        Panel1.Controls.Add(DataGridViewAppointment)
         Panel1.Controls.Add(Panel3)
         Panel1.Location = New Point(0, 53)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(911, 635)
         Panel1.TabIndex = 3
         ' 
-        ' DataGridView1
+        ' DataGridViewAppointment
         ' 
-        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridView1.BackgroundColor = SystemColors.ControlLight
-        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Dock = DockStyle.Fill
-        DataGridView1.Location = New Point(0, 0)
-        DataGridView1.Name = "DataGridView1"
-        DataGridView1.ReadOnly = True
-        DataGridView1.Size = New Size(606, 635)
-        DataGridView1.TabIndex = 0
+        DataGridViewAppointment.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewAppointment.BackgroundColor = SystemColors.ControlLight
+        DataGridViewAppointment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewAppointment.Dock = DockStyle.Fill
+        DataGridViewAppointment.Location = New Point(0, 0)
+        DataGridViewAppointment.Name = "DataGridViewAppointment"
+        DataGridViewAppointment.ReadOnly = True
+        DataGridViewAppointment.Size = New Size(606, 635)
+        DataGridViewAppointment.TabIndex = 0
         ' 
         ' Panel3
         ' 
@@ -391,7 +391,7 @@ Partial Class Appointment
         Name = "Appointment"
         Text = "Appointment"
         Panel1.ResumeLayout(False)
-        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        CType(DataGridViewAppointment, ComponentModel.ISupportInitialize).EndInit()
         Panel3.ResumeLayout(False)
         Panel3.PerformLayout()
         ResumeLayout(False)
@@ -399,7 +399,7 @@ Partial Class Appointment
     End Sub
 
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents DataGridViewAppointment As DataGridView
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Label11 As Label
     Friend WithEvents ComboBoxPaymentMethod As ComboBox

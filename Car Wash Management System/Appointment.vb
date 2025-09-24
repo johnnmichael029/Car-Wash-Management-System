@@ -14,9 +14,14 @@ Public Class Appointment
         appointmentManagement = New AppointmentManagement(constr)
 
     End Sub
-    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridView1.CellFormatting
+    Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
+        PopulateUIForAppointment()
+        DataGridViewFontStyle()
+        ChangeHeaderOfDataGridViewAppointment()
+    End Sub
+    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewAppointment.CellFormatting
 
-        If e.ColumnIndex = Me.DataGridView1.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
+        If e.ColumnIndex = Me.DataGridViewAppointment.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
 
             ' Get the value from the current cell.
             Dim status As String = e.Value?.ToString()
@@ -54,21 +59,21 @@ Public Class Appointment
             End Select
         End If
     End Sub
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-        LabelAppointmentID.Text = DataGridView1.CurrentRow.Cells(0).Value.ToString()
-        TextBoxCustomerName.Text = DataGridView1.CurrentRow.Cells(1).Value.ToString()
-        ComboBoxServices.Text = DataGridView1.CurrentRow.Cells(2).Value.ToString()
-        If Not IsDBNull(DataGridView1.CurrentRow.Cells(3).Value) Then
-            ComboBoxAddon.Text = DataGridView1.CurrentRow.Cells(3).Value.ToString()
+    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewAppointment.CellContentClick
+        LabelAppointmentID.Text = DataGridViewAppointment.CurrentRow.Cells(0).Value.ToString()
+        TextBoxCustomerName.Text = DataGridViewAppointment.CurrentRow.Cells(1).Value.ToString()
+        ComboBoxServices.Text = DataGridViewAppointment.CurrentRow.Cells(2).Value.ToString()
+        If Not IsDBNull(DataGridViewAppointment.CurrentRow.Cells(3).Value) Then
+            ComboBoxAddon.Text = DataGridViewAppointment.CurrentRow.Cells(3).Value.ToString()
         Else
             ComboBoxAddon.SelectedIndex = -1 ' Handle cases where the addon is null
         End If
 
-        DateTimePickerStartDate.Value = Convert.ToDateTime(DataGridView1.CurrentRow.Cells(4).Value)
-        ComboBoxPaymentMethod.Text = DataGridView1.CurrentRow.Cells(5).Value.ToString()
-        TextBoxPrice.Text = DataGridView1.CurrentRow.Cells(6).Value.ToString()
-        ComboBoxAppointmentStatus.Text = DataGridView1.CurrentRow.Cells(7).Value.ToString()
-        TextBoxNotes.Text = DataGridView1.CurrentRow.Cells(8).Value.ToString()
+        DateTimePickerStartDate.Value = Convert.ToDateTime(DataGridViewAppointment.CurrentRow.Cells(4).Value)
+        ComboBoxPaymentMethod.Text = DataGridViewAppointment.CurrentRow.Cells(5).Value.ToString()
+        TextBoxPrice.Text = DataGridViewAppointment.CurrentRow.Cells(6).Value.ToString()
+        ComboBoxAppointmentStatus.Text = DataGridViewAppointment.CurrentRow.Cells(7).Value.ToString()
+        TextBoxNotes.Text = DataGridViewAppointment.CurrentRow.Cells(8).Value.ToString()
 
         ' Update the customer ID based on the selected customer name.
         TextBoxCustomerName_TextChanged(TextBoxCustomerName, New EventArgs())
@@ -77,7 +82,6 @@ Public Class Appointment
 
     Private Sub AddAppointmentBtn_Click(sender As Object, e As EventArgs) Handles AddAppointmentBtn.Click
         AddAppointmentBtnFunction()
-        AppointmentActivityLog()
 
     End Sub
     Public Sub AddAppointmentBtnFunction()
@@ -130,16 +134,17 @@ Public Class Appointment
                 ComboBoxAppointmentStatus.Text,
                 TextBoxNotes.Text
             )
+            Carwash.PopulateAllTotal()
             Carwash.NotificationLabel.Text = "Appointment Added"
             Carwash.ShowNotification()
+            DataGridViewAppointment.DataSource = appointmentManagement.ViewAppointment()
             MessageBox.Show("Appointment added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            DataGridView1.DataSource = appointmentManagement.ViewAppointment()
+            AppointmentActivityLog()
             ShowPrintPreview()
             ClearFields()
         Catch ex As Exception
-        MessageBox.Show("An error occurred while adding the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("An error occurred while adding the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-
     End Sub
     Public Sub AppointmentActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
@@ -147,10 +152,7 @@ Public Class Appointment
         Dim appointmentStatus As String = ComboBoxAppointmentStatus.Text
         dashboardManagement.ScheduleAppointment(customerName, appointmentDate, appointmentStatus)
     End Sub
-    Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
-        PopulateUIForAppointment()
-        DataGridViewFontStyle()
-    End Sub
+
     Public Sub PopulateUIForAppointment()
         Try
             Dim customerNames As DataTable = appointmentManagement.GetAllCustomerNames()
@@ -175,7 +177,7 @@ Public Class Appointment
             ComboBoxAddon.DropDownStyle = ComboBoxStyle.DropDownList
             ComboBoxAddon.SelectedIndex = -1 ' Set to no selection by default
 
-            DataGridView1.DataSource = appointmentManagement.ViewAppointment()
+            DataGridViewAppointment.DataSource = appointmentManagement.ViewAppointment()
             ClearFields()
         Catch ex As Exception
             MessageBox.Show("An error occurred during form loading: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -183,8 +185,8 @@ Public Class Appointment
 
     End Sub
     Private Sub DataGridViewFontStyle()
-        DataGridView1.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridView1.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+        DataGridViewAppointment.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewAppointment.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
     Public Sub ClearFields()
         TextBoxCustomerID.Clear()
@@ -281,7 +283,7 @@ Public Class Appointment
                 TextBoxNotes.Text
                 )
             MessageBox.Show("Appointment updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            DataGridView1.DataSource = appointmentManagement.ViewAppointment()
+            DataGridViewAppointment.DataSource = appointmentManagement.ViewAppointment()
         Catch ex As Exception
             MessageBox.Show("An error occurred while updating the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -292,7 +294,17 @@ Public Class Appointment
         Dim newtStatus As String = ComboBoxAppointmentStatus.Text
         dashboardManagement.UpdateAppointmentStatus(customerName, newtStatus)
     End Sub
-
+    Private Sub ChangeHeaderOfDataGridViewAppointment()
+        DataGridViewAppointment.Columns(0).HeaderText = "Appointment ID"
+        DataGridViewAppointment.Columns(1).HeaderText = "Customer Name"
+        DataGridViewAppointment.Columns(2).HeaderText = "Base Service"
+        DataGridViewAppointment.Columns(3).HeaderText = "Addon Service"
+        DataGridViewAppointment.Columns(4).HeaderText = "Date & Time"
+        DataGridViewAppointment.Columns(5).HeaderText = "Payment Method"
+        DataGridViewAppointment.Columns(6).HeaderText = "Price"
+        DataGridViewAppointment.Columns(7).HeaderText = "Appointment Status"
+        DataGridViewAppointment.Columns(8).HeaderText = "Notes"
+    End Sub
     Private Sub PrintBillBtn_Click(sender As Object, e As EventArgs) Handles PrintBillBtn.Click
         ValidatePrint()
     End Sub
@@ -304,7 +316,7 @@ Public Class Appointment
         End If
     End Sub
     Public Sub ShowPrintPreview()
-        appointmentManagement.ShowPrintPreview(PrintDocumentBill)
+        AppointmentManagement.ShowPrintPreview(PrintDocumentBill)
         Dim printPreviewDialog As New PrintPreviewDialog With {
             .Document = PrintDocumentBill
         }
@@ -312,7 +324,7 @@ Public Class Appointment
     End Sub
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
         AppointmentManagement.PrintBillInAppointment(e, New PrintDataInAppointment With {
-           .ContractID = If(DataGridView1.CurrentRow IsNot Nothing, Convert.ToInt32(DataGridView1.CurrentRow.Cells(0).Value), 0),
+           .ContractID = If(DataGridViewAppointment.CurrentRow IsNot Nothing, Convert.ToInt32(DataGridViewAppointment.CurrentRow.Cells(0).Value), 0),
            .CustomerName = TextBoxCustomerName.Text,
            .BaseService = ComboBoxServices.Text,
            .BaseServicePrice = If(ComboBoxServices.SelectedIndex <> -1, appointmentManagement.GetServiceDetails(ComboBoxServices.Text).Price, 0D),
@@ -320,7 +332,7 @@ Public Class Appointment
            .AddonServicePrice = If(ComboBoxAddon.SelectedIndex <> -1, appointmentManagement.GetServiceDetails(ComboBoxAddon.Text).Price, 0D),
            .TotalPrice = Decimal.Parse(TextBoxPrice.Text),
            .PaymentMethod = ComboBoxPaymentMethod.Text,
-           .SaleDate = DataGridView1.CurrentRow.Cells(4).Value,
+           .SaleDate = DataGridViewAppointment.CurrentRow.Cells(4).Value,
            .StartDate = DateTimePickerStartDate.Value,
            .AppointmentStatus = ComboBoxAppointmentStatus.Text
        })

@@ -16,13 +16,27 @@ Public Class Contracts
         ' Initialize the data access layer
         billingContractsManagement = New BillingContractsManagement(constr)
     End Sub
-
-    Private Sub AddContractBtn_Click(sender As Object, e As EventArgs) Handles AddContractBtn.Click
-        AddBillingContracts()
-        AddContractActivityLog()
-
+    Private Sub Contracts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        PopulateUIForContract()
+        DataGridViewFontStyle()
+        ChangeHeaderOfDataGridViewContracts()
     End Sub
+    Private Sub AddContractBtn_Click(sender As Object, e As EventArgs) Handles AddContractBtn.Click
 
+        AddBillingContracts()
+    End Sub
+    Private Sub ChangeHeaderOfDataGridViewContracts()
+        DataGridView1.Columns(0).HeaderText = "Contract ID"
+        DataGridView1.Columns(1).HeaderText = "Customer Name"
+        DataGridView1.Columns(2).HeaderText = "Base Service"
+        DataGridView1.Columns(3).HeaderText = "Addon Service"
+        DataGridView1.Columns(4).HeaderText = "Start Date"
+        DataGridView1.Columns(5).HeaderText = "End Date"
+        DataGridView1.Columns(6).HeaderText = "Billing Frequency"
+        DataGridView1.Columns(7).HeaderText = "Payment Method"
+        DataGridView1.Columns(8).HeaderText = "Price"
+        DataGridView1.Columns(9).HeaderText = "Contract Status"
+    End Sub
     Private Sub AddContractActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         dashboardManagement.AddNewContract(customerName)
@@ -97,22 +111,20 @@ Public Class Contracts
                 totalPrice,
                 ComboBoxContractStatus.Text
             )
-
+            Carwash.PopulateAllTotal()
             LabelSales.Text = salesAdded
             Carwash.NotificationLabel.Text = "New Contract Added"
             Carwash.ShowNotification()
-            MessageBox.Show("Contract added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             DataGridView1.DataSource = billingContractsManagement.ViewContracts()
+            MessageBox.Show("Contract added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            AddContractActivityLog()
             ShowPrintPreview()
             ClearFields()
         Catch ex As Exception
         MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Private Sub Contracts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        PopulateUIForContract()
-        DataGridViewFontStyle()
-    End Sub
+
     Private Sub DataGridViewFontStyle()
         DataGridView1.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
         DataGridView1.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
