@@ -4,7 +4,7 @@ Imports Microsoft.Data.SqlClient
 Public Class CustomerInformation
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly customerInformationManagement As CustomerInformationManagement
-    Dim DashboardManagement As New DashboardManagement(constr)
+    Dim listOfActivityLog As New ListOfActivityLog(constr)
     Public Sub New()
 
         ' This call is required by the designer.
@@ -49,7 +49,7 @@ Public Class CustomerInformation
     End Sub
     Private Sub NewCustomerActivityLog()
         Dim customerName As String = TextBoxName.Text
-        DashboardManagement.AddNewCustomer(customerName)
+        listOfActivityLog.AddNewCustomer(customerName)
     End Sub
     Public Sub AddCustomerInformation()
         If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Or String.IsNullOrEmpty(TextBoxPlateNumber.Text) Then

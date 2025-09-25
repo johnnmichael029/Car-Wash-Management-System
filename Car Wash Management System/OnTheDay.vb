@@ -2,7 +2,7 @@
 
 Public Class OnTheDay
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
-    Dim dashboardManagement As New DashboardManagement(constr)
+    Dim listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly onTheDayManagement As OnTheDayManagement
     Public Sub New()
 
@@ -65,7 +65,7 @@ Public Class OnTheDay
 
                     Case "Queued"
                         nextStatus = "In-progress"
-                        dashboardManagement.RecordActivity(customerName, nextStatus)
+                        listOfActivityLog.RecordActivity(customerName, nextStatus)
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
                         Carwash.NotificationLabel.Text = "Appointment In-progress"
                         Carwash.ShowNotification()
@@ -73,7 +73,7 @@ Public Class OnTheDay
                     Case "In-progress"
                         nextStatus = "Completed"
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
-                        dashboardManagement.RecordActivity(customerName, nextStatus)
+                        listOfActivityLog.RecordActivity(customerName, nextStatus)
                         Carwash.NotificationLabel.Text = "Appointment Completed"
                         Carwash.ShowNotification()
                         Carwash.PopulateAllTotal()
@@ -84,7 +84,7 @@ Public Class OnTheDay
                     Case Else
                         nextStatus = "Queued" ' Default status if not set
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
-                        dashboardManagement.RecordActivity(customerName, nextStatus)
+                        listOfActivityLog.RecordActivity(customerName, nextStatus)
                         Carwash.NotificationLabel.Text = "Appointment Queued"
                         Carwash.ShowNotification()
                 End Select

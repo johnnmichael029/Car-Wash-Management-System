@@ -4,7 +4,7 @@ Imports Microsoft.Data.SqlClient
 Public Class Appointment
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly appointmentManagement As AppointmentManagement
-    Dim dashboardManagement As New DashboardManagement(constr)
+    Private ReadOnly listOfActivityLog As New ListOfActivityLog(constr)
     Public Sub New()
 
         ' This call is required by the designer.
@@ -12,7 +12,6 @@ Public Class Appointment
 
         ' Add any initialization after the InitializeComponent() call.
         appointmentManagement = New AppointmentManagement(constr)
-
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
         PopulateUIForAppointment()
@@ -150,7 +149,7 @@ Public Class Appointment
         Dim customerName As String = TextBoxCustomerName.Text
         Dim appointmentDate As Date = DateTimePickerStartDate.Value
         Dim appointmentStatus As String = ComboBoxAppointmentStatus.Text
-        dashboardManagement.ScheduleAppointment(customerName, appointmentDate, appointmentStatus)
+        listOfActivityLog.ScheduleAppointment(customerName, appointmentDate, appointmentStatus)
     End Sub
 
     Public Sub PopulateUIForAppointment()
@@ -292,7 +291,7 @@ Public Class Appointment
     Public Sub UpdateAppointmentActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim newtStatus As String = ComboBoxAppointmentStatus.Text
-        dashboardManagement.UpdateAppointmentStatus(customerName, newtStatus)
+        listOfActivityLog.UpdateAppointmentStatus(customerName, newtStatus)
     End Sub
     Private Sub ChangeHeaderOfDataGridViewAppointment()
         DataGridViewAppointment.Columns(0).HeaderText = "Appointment ID"

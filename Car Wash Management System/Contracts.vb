@@ -7,7 +7,7 @@ Public Class Contracts
 
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly billingContractsManagement As BillingContractsManagement
-    Dim dashboardManagement As New DashboardManagement(constr)
+    Dim listOfActivityLog As New ListOfActivityLog(constr)
 
     Public Sub New()
         ' This call is required by the designer.
@@ -39,7 +39,7 @@ Public Class Contracts
     End Sub
     Private Sub AddContractActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
-        dashboardManagement.AddNewContract(customerName)
+        listOfActivityLog.AddNewContract(customerName)
     End Sub
     Private Sub AddBillingContracts()
         Dim salesAdded As String = "Sales Added"
@@ -254,7 +254,7 @@ Public Class Contracts
     Private Sub UpdateContractActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim newStatus As String = ComboBoxContractStatus.Text
-        dashboardManagement.UpdateContractStatus(customerName, newStatus)
+        listOfActivityLog.UpdateContractStatus(customerName, newStatus)
     End Sub
     Public Sub ClearFields()
         ' Clear all input fields

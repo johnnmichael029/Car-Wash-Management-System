@@ -5,7 +5,7 @@ Imports Microsoft.Data.SqlClient
 
 Public Class Carwash
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
-    Dim dashboardManagement As New DashboardManagement(constr)
+    Dim listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly carwashManagement As CarwashManagement
     'Private isFullScreen As Boolean = False
     'Private originalIcon As Icon
@@ -48,9 +48,8 @@ Public Class Carwash
             Me.Hide()
             Login.Show()
             Dim username As String = Login.TextBoxUsername.Text
-            dashboardManagement.UserLogout(username)
+            listOfActivityLog.UserLogout(username)
         End If
-
     End Sub
 
     Private Sub CustomerInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomerInformationToolStripMenuItem.Click
@@ -217,10 +216,6 @@ Public Class Carwash
         NotificationLabel.Visible = True
     End Sub
 
-    Private Sub Panel4_Paint(sender As Object, e As PaintEventArgs) Handles Panel4.Paint
-
-    End Sub
-
     Private Sub ExitToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem1.Click
         Application.Exit()
     End Sub
@@ -267,7 +262,7 @@ Public Class Carwash
         ShowNewCustomersFormFunction()
     End Sub
 
-    Private Sub ictureBoxContracts_Click(sender As Object, e As EventArgs) Handles PictureBoxContracts.Click
+    Private Sub PictureBoxContracts_Click(sender As Object, e As EventArgs) Handles PictureBoxContracts.Click
         ShowNewContractsTodayFormFunction()
     End Sub
 

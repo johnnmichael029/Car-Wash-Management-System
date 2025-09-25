@@ -4,13 +4,13 @@ Imports Microsoft.Data.SqlClient
 Public Class Login
 
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
-    Private ReadOnly dashboardManagement As DashboardManagement
+    Private ReadOnly listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly loginManagement As LoginManagement
     Public Sub New()
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
-        dashboardManagement = New DashboardManagement(constr)
+
         loginManagement = New LoginManagement(constr)
     End Sub
 
@@ -31,7 +31,7 @@ Public Class Login
     End Sub
     Public Sub LoginActivityLog()
         Dim username As String = TextBoxUsername.Text
-        dashboardManagement.UserLogin(username)
+        listOfActivityLog.UserLogin(username)
     End Sub
 End Class
 Public Class LoginManagement

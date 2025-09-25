@@ -26,7 +26,6 @@ Partial Class Carwash
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Carwash))
         Panel2 = New Panel()
         PictureBox1 = New PictureBox()
-        PictureBoxSchedule = New PictureBox()
         Panel7 = New Panel()
         LabelTotalSalesToday = New Label()
         Label2 = New Label()
@@ -43,6 +42,7 @@ Partial Class Carwash
         Label1 = New Label()
         Panel9 = New Panel()
         LabelTotalNewScheduleToday = New Label()
+        PictureBoxSchedule = New PictureBox()
         Label8 = New Label()
         Panel10 = New Panel()
         PictureBoxContracts = New PictureBox()
@@ -77,7 +77,6 @@ Partial Class Carwash
         NotificationTimer = New Timer(components)
         Panel2.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
-        CType(PictureBoxSchedule, ComponentModel.ISupportInitialize).BeginInit()
         Panel7.SuspendLayout()
         CType(PictureBoxSales, ComponentModel.ISupportInitialize).BeginInit()
         Panel1.SuspendLayout()
@@ -85,6 +84,7 @@ Partial Class Carwash
         Panel11.SuspendLayout()
         CType(PictureBoxCustomer, ComponentModel.ISupportInitialize).BeginInit()
         Panel9.SuspendLayout()
+        CType(PictureBoxSchedule, ComponentModel.ISupportInitialize).BeginInit()
         Panel10.SuspendLayout()
         CType(PictureBoxContracts, ComponentModel.ISupportInitialize).BeginInit()
         Panel6.SuspendLayout()
@@ -120,16 +120,6 @@ Partial Class Carwash
         PictureBox1.Size = New Size(132, 20)
         PictureBox1.TabIndex = 10
         PictureBox1.TabStop = False
-        ' 
-        ' PictureBoxSchedule
-        ' 
-        PictureBoxSchedule.Anchor = AnchorStyles.None
-        PictureBoxSchedule.BackgroundImage = CType(resources.GetObject("PictureBoxSchedule.BackgroundImage"), Image)
-        PictureBoxSchedule.Location = New Point(3, 6)
-        PictureBoxSchedule.Name = "PictureBoxSchedule"
-        PictureBoxSchedule.Size = New Size(31, 33)
-        PictureBoxSchedule.TabIndex = 1
-        PictureBoxSchedule.TabStop = False
         ' 
         ' Panel7
         ' 
@@ -309,6 +299,16 @@ Partial Class Carwash
         LabelTotalNewScheduleToday.Name = "LabelTotalNewScheduleToday"
         LabelTotalNewScheduleToday.Size = New Size(0, 23)
         LabelTotalNewScheduleToday.TabIndex = 2
+        ' 
+        ' PictureBoxSchedule
+        ' 
+        PictureBoxSchedule.Anchor = AnchorStyles.None
+        PictureBoxSchedule.BackgroundImage = CType(resources.GetObject("PictureBoxSchedule.BackgroundImage"), Image)
+        PictureBoxSchedule.Location = New Point(3, 6)
+        PictureBoxSchedule.Name = "PictureBoxSchedule"
+        PictureBoxSchedule.Size = New Size(31, 33)
+        PictureBoxSchedule.TabIndex = 1
+        PictureBoxSchedule.TabStop = False
         ' 
         ' Label8
         ' 
@@ -636,7 +636,6 @@ Partial Class Carwash
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
-        CType(PictureBoxSchedule, ComponentModel.ISupportInitialize).EndInit()
         Panel7.ResumeLayout(False)
         Panel7.PerformLayout()
         CType(PictureBoxSales, ComponentModel.ISupportInitialize).EndInit()
@@ -647,6 +646,7 @@ Partial Class Carwash
         CType(PictureBoxCustomer, ComponentModel.ISupportInitialize).EndInit()
         Panel9.ResumeLayout(False)
         Panel9.PerformLayout()
+        CType(PictureBoxSchedule, ComponentModel.ISupportInitialize).EndInit()
         Panel10.ResumeLayout(False)
         Panel10.PerformLayout()
         CType(PictureBoxContracts, ComponentModel.ISupportInitialize).EndInit()

@@ -36,7 +36,7 @@ Partial Class Dashboard
         Panel2 = New Panel()
         LabelSalesID = New Label()
         Label1 = New Label()
-        AddBtn = New Button()
+        AddSalesBtn = New Button()
         TextBoxPrice = New TextBox()
         ComboBoxPaymentMethod = New ComboBox()
         ComboBoxAddons = New ComboBox()
@@ -51,24 +51,23 @@ Partial Class Dashboard
         Label3 = New Label()
         Label7 = New Label()
         Panel3 = New Panel()
-        Panel4 = New Panel()
         Panel1 = New Panel()
         customerIDLabel = New Label()
         Label8 = New Label()
-        UpdateBtn = New Button()
         Label11 = New Label()
-        DeleteBtn = New Button()
         TextBoxPlateNumber = New TextBox()
-        ViewBtn = New Button()
+        ClearFieldsBtn = New Button()
         Label12 = New Label()
         TextBoxAddress = New TextBox()
         TextBoxEmail = New TextBox()
         Label67 = New Label()
         Label13 = New Label()
         TextBoxNumber = New TextBox()
-        Button1 = New Button()
+        AddCustomerBtn = New Button()
         Label14 = New Label()
         TextBoxName = New TextBox()
+        Panel4 = New Panel()
+        PrintDocumentBill = New Printing.PrintDocument()
         Panel9.SuspendLayout()
         PanelMontlySales1.SuspendLayout()
         Panel12.SuspendLayout()
@@ -76,8 +75,8 @@ Partial Class Dashboard
         CType(DataGridViewLatestTransaction, ComponentModel.ISupportInitialize).BeginInit()
         Panel2.SuspendLayout()
         Panel3.SuspendLayout()
-        Panel4.SuspendLayout()
         Panel1.SuspendLayout()
+        Panel4.SuspendLayout()
         SuspendLayout()
         ' 
         ' Panel9
@@ -191,7 +190,7 @@ Partial Class Dashboard
         Panel2.BackColor = Color.White
         Panel2.Controls.Add(LabelSalesID)
         Panel2.Controls.Add(Label1)
-        Panel2.Controls.Add(AddBtn)
+        Panel2.Controls.Add(AddSalesBtn)
         Panel2.Controls.Add(TextBoxPrice)
         Panel2.Controls.Add(ComboBoxPaymentMethod)
         Panel2.Controls.Add(ComboBoxAddons)
@@ -206,9 +205,9 @@ Partial Class Dashboard
         Panel2.Controls.Add(Label3)
         Panel2.Controls.Add(Label7)
         Panel2.Dock = DockStyle.Right
-        Panel2.Location = New Point(299, 0)
+        Panel2.Location = New Point(298, 0)
         Panel2.Name = "Panel2"
-        Panel2.Size = New Size(291, 680)
+        Panel2.Size = New Size(292, 680)
         Panel2.TabIndex = 19
         ' 
         ' LabelSalesID
@@ -231,18 +230,18 @@ Partial Class Dashboard
         Label1.TabIndex = 32
         Label1.Text = "Sales ID"
         ' 
-        ' AddBtn
+        ' AddSalesBtn
         ' 
-        AddBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        AddBtn.Image = My.Resources.Resources.add
-        AddBtn.Location = New Point(16, 367)
-        AddBtn.Name = "AddBtn"
-        AddBtn.Size = New Size(262, 34)
-        AddBtn.TabIndex = 32
-        AddBtn.Text = "Add"
-        AddBtn.TextAlign = ContentAlignment.MiddleRight
-        AddBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        AddBtn.UseVisualStyleBackColor = True
+        AddSalesBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        AddSalesBtn.Image = My.Resources.Resources.add
+        AddSalesBtn.Location = New Point(16, 367)
+        AddSalesBtn.Name = "AddSalesBtn"
+        AddSalesBtn.Size = New Size(261, 34)
+        AddSalesBtn.TabIndex = 32
+        AddSalesBtn.Text = "Add Sales"
+        AddSalesBtn.TextAlign = ContentAlignment.MiddleRight
+        AddSalesBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        AddSalesBtn.UseVisualStyleBackColor = True
         ' 
         ' TextBoxPrice
         ' 
@@ -258,6 +257,7 @@ Partial Class Dashboard
         ComboBoxPaymentMethod.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxPaymentMethod.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxPaymentMethod.FormattingEnabled = True
+        ComboBoxPaymentMethod.Items.AddRange(New Object() {"Cash", "Gcash", "Cheque"})
         ComboBoxPaymentMethod.Location = New Point(16, 254)
         ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod"
         ComboBoxPaymentMethod.Size = New Size(261, 23)
@@ -328,7 +328,7 @@ Partial Class Dashboard
         ClearBtn.Image = CType(resources.GetObject("ClearBtn.Image"), Image)
         ClearBtn.Location = New Point(16, 407)
         ClearBtn.Name = "ClearBtn"
-        ClearBtn.Size = New Size(248, 34)
+        ClearBtn.Size = New Size(262, 34)
         ClearBtn.TabIndex = 14
         ClearBtn.Text = "Clear Fields"
         ClearBtn.TextAlign = ContentAlignment.MiddleRight
@@ -371,39 +371,27 @@ Partial Class Dashboard
         Panel3.Size = New Size(290, 680)
         Panel3.TabIndex = 20
         ' 
-        ' Panel4
-        ' 
-        Panel4.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom
-        Panel4.Controls.Add(Panel2)
-        Panel4.Controls.Add(Panel3)
-        Panel4.Location = New Point(602, 0)
-        Panel4.Name = "Panel4"
-        Panel4.Size = New Size(590, 680)
-        Panel4.TabIndex = 7
-        ' 
         ' Panel1
         ' 
         Panel1.BackColor = Color.White
         Panel1.Controls.Add(customerIDLabel)
         Panel1.Controls.Add(Label8)
-        Panel1.Controls.Add(UpdateBtn)
         Panel1.Controls.Add(Label11)
-        Panel1.Controls.Add(DeleteBtn)
         Panel1.Controls.Add(TextBoxPlateNumber)
-        Panel1.Controls.Add(ViewBtn)
+        Panel1.Controls.Add(ClearFieldsBtn)
         Panel1.Controls.Add(Label12)
         Panel1.Controls.Add(TextBoxAddress)
         Panel1.Controls.Add(TextBoxEmail)
         Panel1.Controls.Add(Label67)
         Panel1.Controls.Add(Label13)
         Panel1.Controls.Add(TextBoxNumber)
-        Panel1.Controls.Add(Button1)
+        Panel1.Controls.Add(AddCustomerBtn)
         Panel1.Controls.Add(Label14)
         Panel1.Controls.Add(TextBoxName)
         Panel1.Dock = DockStyle.Left
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(291, 680)
+        Panel1.Size = New Size(292, 680)
         Panel1.TabIndex = 2
         ' 
         ' customerIDLabel
@@ -425,20 +413,6 @@ Partial Class Dashboard
         Label8.TabIndex = 46
         Label8.Text = "Name"
         ' 
-        ' UpdateBtn
-        ' 
-        UpdateBtn.Anchor = AnchorStyles.Top
-        UpdateBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        UpdateBtn.Image = My.Resources.Resources.refresh
-        UpdateBtn.Location = New Point(17, 434)
-        UpdateBtn.Name = "UpdateBtn"
-        UpdateBtn.Size = New Size(262, 34)
-        UpdateBtn.TabIndex = 43
-        UpdateBtn.Text = "Update Customer"
-        UpdateBtn.TextAlign = ContentAlignment.MiddleRight
-        UpdateBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        UpdateBtn.UseVisualStyleBackColor = True
-        ' 
         ' Label11
         ' 
         Label11.AutoSize = True
@@ -448,20 +422,6 @@ Partial Class Dashboard
         Label11.TabIndex = 52
         Label11.Text = "Phone Number"
         ' 
-        ' DeleteBtn
-        ' 
-        DeleteBtn.Anchor = AnchorStyles.Top
-        DeleteBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        DeleteBtn.Image = My.Resources.Resources.delete_user
-        DeleteBtn.Location = New Point(17, 474)
-        DeleteBtn.Name = "DeleteBtn"
-        DeleteBtn.Size = New Size(262, 34)
-        DeleteBtn.TabIndex = 44
-        DeleteBtn.Text = "Delete Customer"
-        DeleteBtn.TextAlign = ContentAlignment.MiddleRight
-        DeleteBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        DeleteBtn.UseVisualStyleBackColor = True
-        ' 
         ' TextBoxPlateNumber
         ' 
         TextBoxPlateNumber.Location = New Point(16, 285)
@@ -469,19 +429,19 @@ Partial Class Dashboard
         TextBoxPlateNumber.Size = New Size(120, 23)
         TextBoxPlateNumber.TabIndex = 51
         ' 
-        ' ViewBtn
+        ' ClearFieldsBtn
         ' 
-        ViewBtn.Anchor = AnchorStyles.Top
-        ViewBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        ViewBtn.Image = My.Resources.Resources.view_user
-        ViewBtn.Location = New Point(16, 394)
-        ViewBtn.Name = "ViewBtn"
-        ViewBtn.Size = New Size(262, 34)
-        ViewBtn.TabIndex = 45
-        ViewBtn.Text = "View Customer"
-        ViewBtn.TextAlign = ContentAlignment.MiddleRight
-        ViewBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        ViewBtn.UseVisualStyleBackColor = True
+        ClearFieldsBtn.Anchor = AnchorStyles.Top
+        ClearFieldsBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        ClearFieldsBtn.Image = CType(resources.GetObject("ClearFieldsBtn.Image"), Image)
+        ClearFieldsBtn.Location = New Point(16, 407)
+        ClearFieldsBtn.Name = "ClearFieldsBtn"
+        ClearFieldsBtn.Size = New Size(262, 34)
+        ClearFieldsBtn.TabIndex = 45
+        ClearFieldsBtn.Text = "Clear Fields"
+        ClearFieldsBtn.TextAlign = ContentAlignment.MiddleRight
+        ClearFieldsBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        ClearFieldsBtn.UseVisualStyleBackColor = True
         ' 
         ' Label12
         ' 
@@ -511,7 +471,7 @@ Partial Class Dashboard
         ' 
         Label67.AutoSize = True
         Label67.Font = New Font("Segoe UI", 9F)
-        Label67.Location = New Point(16, 314)
+        Label67.Location = New Point(15, 347)
         Label67.Name = "Label67"
         Label67.Size = New Size(73, 15)
         Label67.TabIndex = 56
@@ -533,19 +493,19 @@ Partial Class Dashboard
         TextBoxNumber.Size = New Size(120, 23)
         TextBoxNumber.TabIndex = 48
         ' 
-        ' Button1
+        ' AddCustomerBtn
         ' 
-        Button1.Anchor = AnchorStyles.Top
-        Button1.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        Button1.Image = CType(resources.GetObject("Button1.Image"), Image)
-        Button1.Location = New Point(16, 354)
-        Button1.Name = "Button1"
-        Button1.Size = New Size(262, 34)
-        Button1.TabIndex = 42
-        Button1.Text = "Add Customer"
-        Button1.TextAlign = ContentAlignment.MiddleRight
-        Button1.TextImageRelation = TextImageRelation.ImageBeforeText
-        Button1.UseVisualStyleBackColor = True
+        AddCustomerBtn.Anchor = AnchorStyles.Top
+        AddCustomerBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        AddCustomerBtn.Image = CType(resources.GetObject("AddCustomerBtn.Image"), Image)
+        AddCustomerBtn.Location = New Point(16, 367)
+        AddCustomerBtn.Name = "AddCustomerBtn"
+        AddCustomerBtn.Size = New Size(262, 34)
+        AddCustomerBtn.TabIndex = 42
+        AddCustomerBtn.Text = "Add Customer"
+        AddCustomerBtn.TextAlign = ContentAlignment.MiddleRight
+        AddCustomerBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        AddCustomerBtn.UseVisualStyleBackColor = True
         ' 
         ' Label14
         ' 
@@ -562,6 +522,19 @@ Partial Class Dashboard
         TextBoxName.Name = "TextBoxName"
         TextBoxName.Size = New Size(261, 23)
         TextBoxName.TabIndex = 47
+        ' 
+        ' Panel4
+        ' 
+        Panel4.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom
+        Panel4.Controls.Add(Panel2)
+        Panel4.Controls.Add(Panel3)
+        Panel4.Location = New Point(602, 0)
+        Panel4.Name = "Panel4"
+        Panel4.Size = New Size(590, 680)
+        Panel4.TabIndex = 7
+        ' 
+        ' PrintDocumentBill
+        ' 
         ' 
         ' Dashboard
         ' 
@@ -584,9 +557,9 @@ Partial Class Dashboard
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
         Panel3.ResumeLayout(False)
-        Panel4.ResumeLayout(False)
         Panel1.ResumeLayout(False)
         Panel1.PerformLayout()
+        Panel4.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
     Friend WithEvents Panel9 As Panel
@@ -602,7 +575,7 @@ Partial Class Dashboard
     Friend WithEvents Panel2 As Panel
     Friend WithEvents LabelSalesID As Label
     Friend WithEvents Label1 As Label
-    Friend WithEvents AddBtn As Button
+    Friend WithEvents AddSalesBtn As Button
     Friend WithEvents TextBoxPrice As TextBox
     Friend WithEvents ComboBoxPaymentMethod As ComboBox
     Friend WithEvents ComboBoxAddons As ComboBox
@@ -621,18 +594,17 @@ Partial Class Dashboard
     Friend WithEvents Panel1 As Panel
     Friend WithEvents customerIDLabel As Label
     Friend WithEvents Label8 As Label
-    Friend WithEvents UpdateBtn As Button
     Friend WithEvents Label11 As Label
-    Friend WithEvents DeleteBtn As Button
     Friend WithEvents TextBoxPlateNumber As TextBox
-    Friend WithEvents ViewBtn As Button
+    Friend WithEvents ClearFieldsBtn As Button
     Friend WithEvents Label12 As Label
     Friend WithEvents TextBoxAddress As TextBox
     Friend WithEvents TextBoxEmail As TextBox
     Friend WithEvents Label67 As Label
     Friend WithEvents Label13 As Label
     Friend WithEvents TextBoxNumber As TextBox
-    Friend WithEvents Button1 As Button
+    Friend WithEvents AddCustomerBtn As Button
     Friend WithEvents Label14 As Label
     Friend WithEvents TextBoxName As TextBox
+    Friend WithEvents PrintDocumentBill As Printing.PrintDocument
 End Class

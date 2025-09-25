@@ -131,7 +131,20 @@
         SUVORK5CYII=
 </value>
   </data>
-  <data name="Button1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="ClearFieldsBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
+        qAAAAKgBefSzxgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFlSURBVEhL7ZS/
+        K4VhFMc/rvxIUoqbMBosDIjJoiuzhYGUPwCLTdmUwWZiNpksJhEGohgMZFPKSImF/OjUeevpe5978d47
+        6X7qDO/58T3nPc/zvlABOoFd4BpY1GA5OAS+AhvWhFIYE3GzKU1KSxVwLuIvQKsmpmU8Mv2KJsWwyWaA
+        Dg0E1ANXIv4ENGtijC4vWNUAkAMuIpObLWlyMUaBFvHZSt4jwmb3QKPk5zECzKszwOKXEXGzB6BGC5Rt
+        4BWoFb9du31vYOczAdxEmvRLXR4NQHvw3OtNQ5E9YAioBmaBuyDWE9QWpA5YBs6Az8iUZubfcUF72zng
+        1Jv+iK1DBQvZB7Dlt+7XZIFbEbJzUfHQ3iI3rijW5AQ48gO14mRdNrXdmLDBgQr8hQHfbyK2APRJA/tm
+        UjMJPLrQJpDxf38ifqwFaWgDpl18PRC3dQ1qcik0ARvAszdY04RyYf+cbnX+X74B5KSDh7yr8jUAAAAA
+        SUVORK5CYII=
+</value>
+  </data>
+  <data name="AddCustomerBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
         qAAAAKgBefSzxgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEMSURBVEhL1ZW9
@@ -142,4 +155,7 @@
         T2PpBp20ybFv8k5jqius5Ve1BwTXxwvnhsDHAAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="PrintDocumentBill.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

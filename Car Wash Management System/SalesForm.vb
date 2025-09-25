@@ -8,7 +8,7 @@ Public Class SalesForm
 
     ' Pass the UI controls to the management class.
     Private ReadOnly salesHistoryManagement As SalesHistoryManagement
-    Private ReadOnly dashboardManagement As New DashboardManagement(constr)
+    Private ReadOnly listOfActivityLog As New ListOfActivityLog(constr)
 
     Public Sub New()
         InitializeComponent()
@@ -98,8 +98,7 @@ Public Class SalesForm
     Private Sub AddSalesActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim amount As Decimal = Decimal.Parse(TextBoxPrice.Text)
-        dashboardManagement.RecordSale(customerName, amount)
-
+        listOfActivityLog.RecordSale(customerName, amount)
     End Sub
 
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
@@ -214,7 +213,7 @@ Public Class SalesForm
         ValidatePrint()
     End Sub
     Public Sub ShowPrintPreview()
-        salesHistoryManagement.ShowPrintPreview(PrintDocumentBill)
+        SalesHistoryManagement.ShowPrintPreview(PrintDocumentBill)
         Dim printPreviewDialog As New PrintPreviewDialog With {
             .Document = PrintDocumentBill
         }
@@ -237,8 +236,6 @@ Public Class SalesHistoryManagement
     End Sub
 
     Public Sub AddSale(customerID As Integer, baseServiceID As Integer, addonServiceID As Integer?, paymentMethod As String, totalPrice As Decimal)
-
-
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
@@ -258,7 +255,6 @@ Public Class SalesHistoryManagement
                     cmd.ExecuteNonQuery()
                     Carwash.NotificationLabel.Text = "New Sale Added"
                     Carwash.ShowNotification()
-
                 End Using
             Catch ex As Exception
                 MessageBox.Show("Error adding sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -393,7 +389,6 @@ Public Class SalesHistoryManagement
 
     Public Sub PopulateCustomerNames()
         Dim customerNames As New AutoCompleteStringCollection()
-
         Using con As New SqlConnection(constr)
             Dim sql As String = "SELECT Name FROM CustomersTable"
             Using cmd As New SqlCommand(sql, con)
