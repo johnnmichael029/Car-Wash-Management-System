@@ -6,18 +6,25 @@ Public Class Login
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly loginManagement As LoginManagement
+    Private ReadOnly accountManagement As AccountManagement
     Public Sub New()
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
-
         loginManagement = New LoginManagement(constr)
+        accountManagement = New AccountManagement(constr)
     End Sub
 
     Private Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CenterToScreen()
+        DoesHaveAnyAccount()
     End Sub
-
+    Private Sub DoesHaveAnyAccount()
+        If Not accountManagement.DoesAnyAccountExist() Then
+            Dim setupForm As New Admin()
+            setupForm.ShowDialog()
+        End If
+    End Sub
     Private Sub LoginBtn_Click(sender As Object, e As EventArgs) Handles LoginBtn.Click
         LoginValidation()
         LoginActivityLog()
@@ -88,10 +95,19 @@ Public Class LoginManagement
                 con.Open()
                 ' Use a parameterized query to prevent SQL injection.
                 ' Use CASE to handle potential NULL values in the is_admin column.
-                Dim selectQuery = "SELECT password, salt, CASE WHEN is_admin IS NULL THEN 0 ELSE is_admin END AS is_admin FROM userTable WHERE username = @username"
+                Dim selectQuery = "SELECT 
+                                        password, 
+                                        salt, 
+                                        CASE 
+                                            WHEN is_admin IS NULL THEN 0 
+                                            ELSE is_admin 
+                                        END AS is_admin 
+                                    FROM 
+                                        userTable 
+                                    WHERE 
+                                        username = @username"
                 Using cmd As New SqlCommand(selectQuery, con)
                     cmd.Parameters.AddWithValue("@username", username)
-
                     Using reader As SqlDataReader = cmd.ExecuteReader()
                         If reader.Read() Then
                             ' Get the stored hash, salt, and admin status from the database
@@ -103,14 +119,11 @@ Public Class LoginManagement
                             ' Verify the entered password against the stored hash and salt
                             If VerifyPassword(password, storedSalt, storedHash) Then
 
-                                ' Check if the user is an admin and show the appropriate form
                                 If isAdmin Then
-                                    ' Admin Form should be shown
-                                    ' Replace AdminForm with the name of your new form
                                     Admin.Show()
                                     Login.Hide()
                                 Else
-                                    ' Regular user form should be shown
+
                                     Carwash.Show()
                                     Login.Hide()
                                 End If
@@ -134,4 +147,31 @@ Public Class LoginManagement
             End Try
         End Using ' Close and dispose the connection
     End Sub
+End Class
+Public Class AccountManagement
+    Private ReadOnly constr As String
+    Public Sub New(connectionString As String)
+        constr = connectionString
+    End Sub
+    Public Function DoesAnyAccountExist() As Boolean
+        Dim count As Integer = 5
+        Using con As New SqlConnection(constr)
+            Dim query As String = "SELECT COUNT(*) FROM UserTable"
+            Using cmd As New SqlCommand(query, con)
+                Try
+                    con.Open()
+                    Dim result As Object = cmd.ExecuteScalar()
+                    If result IsNot Nothing AndAlso Not DBNull.Value.Equals(result) Then
+                        count = Convert.ToInt32(result)
+                        Console.WriteLine()
+                    End If
+                Catch ex As Exception
+                    MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Return False
+                End Try
+            End Using
+        End Using
+
+        Return count >= 2
+    End Function
 End Class

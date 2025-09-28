@@ -69,7 +69,6 @@ Public Class OnTheDay
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
                         Carwash.NotificationLabel.Text = "Appointment In-progress"
                         Carwash.ShowNotification()
-
                     Case "In-progress"
                         nextStatus = "Completed"
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
@@ -78,9 +77,7 @@ Public Class OnTheDay
                         Carwash.ShowNotification()
                         Carwash.PopulateAllTotal()
                     Case "Completed"
-                        onTheDayManagement.ViewListOfReserved()
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
-
                     Case Else
                         nextStatus = "Queued" ' Default status if not set
                         onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
@@ -120,10 +117,6 @@ Public Class OnTheDay
             .Name = "actionsColumn"
         }
         DataGridViewOnTheDay.Columns.Add(updateButtonColumn)
-
-    End Sub
-
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
 
     End Sub
 End Class

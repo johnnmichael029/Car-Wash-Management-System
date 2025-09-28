@@ -2,12 +2,35 @@
 
 Public Class Admin
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        AdminResetPassword(TextBoxUsername.Text, TextBoxNewPassword.Text)
+    Private ReadOnly adminManagement As AdminManagement
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        adminManagement = New AdminManagement(constr)
+    End Sub
+    Private Sub AddUserBtn_Click(sender As Object, e As EventArgs) Handles AddUserBtn.Click
+
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Application.Exit()
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
+        Application.Exit
+    End Sub
+
+    Private Sub Admin_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        CenterToParent()
+    End Sub
+
+    Private Sub ChangePasswordBtn_Click(sender As Object, e As EventArgs) Handles ChangePasswordBtn.Click
+        adminManagement.AdminResetPassword(TextBoxUsername.Text, TextBoxNewPassword.Text)
+    End Sub
+End Class
+Public Class AdminManagement
+    Private ReadOnly constr As String
+    Public Sub New(connectionString As String)
+        constr = connectionString
     End Sub
     Public Sub AdminResetPassword(usernameToReset As String, newPassword As String)
         ' Check if the username is empty
@@ -46,19 +69,14 @@ Public Class Admin
                 End Using
                 MessageBox.Show("Password for '" & usernameToReset & "' has been reset.", "Password Reset", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Login.Show()
-                Me.Hide()
+                Admin.Hide()
 
             Catch ex As Exception
                 MessageBox.Show("An error occurred during password reset: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally
-                TextBoxUsername.Clear()
-                TextBoxNewPassword.Clear()
                 con.Close()
             End Try
         End Using
     End Sub
 
-    Private Sub Admin_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        CenterToParent()
-    End Sub
 End Class

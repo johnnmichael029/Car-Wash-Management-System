@@ -22,98 +22,132 @@ Partial Class Admin
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Button1 = New Button()
         TextBoxUsername = New TextBox()
         Label1 = New Label()
         Label2 = New Label()
-        Button2 = New Button()
         TextBoxNewPassword = New TextBox()
         Label3 = New Label()
+        Panel1 = New Panel()
+        ChangePasswordBtn = New Button()
+        AddUserBtn = New Button()
+        Panel1.SuspendLayout()
         SuspendLayout()
-        ' 
-        ' Button1
-        ' 
-        Button1.Location = New Point(88, 232)
-        Button1.Name = "Button1"
-        Button1.Size = New Size(176, 23)
-        Button1.TabIndex = 0
-        Button1.Text = "Change"
-        Button1.UseVisualStyleBackColor = True
         ' 
         ' TextBoxUsername
         ' 
-        TextBoxUsername.Location = New Point(88, 135)
+        TextBoxUsername.Anchor = AnchorStyles.None
+        TextBoxUsername.Location = New Point(102, 130)
         TextBoxUsername.Name = "TextBoxUsername"
-        TextBoxUsername.Size = New Size(176, 23)
+        TextBoxUsername.Size = New Size(219, 23)
         TextBoxUsername.TabIndex = 1
         ' 
         ' Label1
         ' 
+        Label1.Anchor = AnchorStyles.None
         Label1.AutoSize = True
-        Label1.Location = New Point(88, 117)
+        Label1.Font = New Font("Century Gothic", 9F)
+        Label1.Location = New Point(102, 112)
         Label1.Name = "Label1"
-        Label1.Size = New Size(60, 15)
+        Label1.Size = New Size(67, 17)
         Label1.TabIndex = 2
         Label1.Text = "Username"
         ' 
         ' Label2
         ' 
+        Label2.Anchor = AnchorStyles.None
         Label2.AutoSize = True
         Label2.Font = New Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label2.Location = New Point(88, 46)
+        Label2.Location = New Point(102, 41)
         Label2.Name = "Label2"
         Label2.Size = New Size(187, 37)
         Label2.TabIndex = 3
         Label2.Text = "Administator"
         ' 
-        ' Button2
-        ' 
-        Button2.Location = New Point(292, 12)
-        Button2.Name = "Button2"
-        Button2.Size = New Size(75, 23)
-        Button2.TabIndex = 4
-        Button2.Text = "Exit"
-        Button2.UseVisualStyleBackColor = True
-        ' 
         ' TextBoxNewPassword
         ' 
-        TextBoxNewPassword.Location = New Point(88, 192)
+        TextBoxNewPassword.Anchor = AnchorStyles.None
+        TextBoxNewPassword.Location = New Point(102, 187)
         TextBoxNewPassword.Name = "TextBoxNewPassword"
-        TextBoxNewPassword.Size = New Size(176, 23)
+        TextBoxNewPassword.Size = New Size(219, 23)
         TextBoxNewPassword.TabIndex = 5
         ' 
         ' Label3
         ' 
+        Label3.Anchor = AnchorStyles.None
         Label3.AutoSize = True
-        Label3.Location = New Point(88, 174)
+        Label3.Font = New Font("Century Gothic", 9F)
+        Label3.Location = New Point(102, 169)
         Label3.Name = "Label3"
-        Label3.Size = New Size(57, 15)
+        Label3.Size = New Size(63, 17)
         Label3.TabIndex = 6
         Label3.Text = "Password"
+        ' 
+        ' Panel1
+        ' 
+        Panel1.Anchor = AnchorStyles.None
+        Panel1.Controls.Add(ChangePasswordBtn)
+        Panel1.Controls.Add(AddUserBtn)
+        Panel1.Controls.Add(Label2)
+        Panel1.Controls.Add(Label3)
+        Panel1.Controls.Add(TextBoxNewPassword)
+        Panel1.Controls.Add(TextBoxUsername)
+        Panel1.Controls.Add(Label1)
+        Panel1.Location = New Point(525, 216)
+        Panel1.Name = "Panel1"
+        Panel1.Size = New Size(414, 401)
+        Panel1.TabIndex = 7
+        ' 
+        ' ChangePasswordBtn
+        ' 
+        ChangePasswordBtn.Anchor = AnchorStyles.None
+        ChangePasswordBtn.BackColor = Color.FromArgb(CByte(198), CByte(47), CByte(48))
+        ChangePasswordBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
+        ChangePasswordBtn.FlatAppearance.BorderSize = 0
+        ChangePasswordBtn.FlatStyle = FlatStyle.Flat
+        ChangePasswordBtn.Font = New Font("Century Gothic", 9F)
+        ChangePasswordBtn.ForeColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
+        ChangePasswordBtn.Location = New Point(102, 297)
+        ChangePasswordBtn.Name = "ChangePasswordBtn"
+        ChangePasswordBtn.Size = New Size(219, 46)
+        ChangePasswordBtn.TabIndex = 9
+        ChangePasswordBtn.Text = "Change Password"
+        ChangePasswordBtn.UseVisualStyleBackColor = False
+        ' 
+        ' AddUserBtn
+        ' 
+        AddUserBtn.Anchor = AnchorStyles.None
+        AddUserBtn.BackColor = Color.FromArgb(CByte(103), CByte(103), CByte(231))
+        AddUserBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
+        AddUserBtn.FlatAppearance.BorderSize = 0
+        AddUserBtn.FlatStyle = FlatStyle.Flat
+        AddUserBtn.Font = New Font("Century Gothic", 9F)
+        AddUserBtn.ForeColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
+        AddUserBtn.Location = New Point(102, 235)
+        AddUserBtn.Name = "AddUserBtn"
+        AddUserBtn.Size = New Size(219, 46)
+        AddUserBtn.TabIndex = 8
+        AddUserBtn.Text = "Register"
+        AddUserBtn.UseVisualStyleBackColor = False
         ' 
         ' Admin
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(379, 308)
-        Controls.Add(Label3)
-        Controls.Add(TextBoxNewPassword)
-        Controls.Add(Button2)
-        Controls.Add(Label2)
-        Controls.Add(Label1)
-        Controls.Add(TextBoxUsername)
-        Controls.Add(Button1)
+        BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
+        ClientSize = New Size(1369, 749)
+        Controls.Add(Panel1)
         Name = "Admin"
         Text = "Admin"
+        Panel1.ResumeLayout(False)
+        Panel1.PerformLayout()
         ResumeLayout(False)
-        PerformLayout()
     End Sub
-
-    Friend WithEvents Button1 As Button
     Friend WithEvents TextBoxUsername As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
-    Friend WithEvents Button2 As Button
     Friend WithEvents TextBoxNewPassword As TextBox
     Friend WithEvents Label3 As Label
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents AddUserBtn As Button
+    Friend WithEvents ChangePasswordBtn As Button
 End Class

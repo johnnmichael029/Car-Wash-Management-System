@@ -270,6 +270,19 @@ Public Class Carwash
         ShowNewAppointmentsTodayFormFunction()
     End Sub
 
+    Private Sub PickUpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PickUpToolStripMenuItem.Click
+        PickUp()
+    End Sub
+    Private Sub PickUp()
+        Panel4.Controls.Clear()
+        Dim pickUp As New PickUp With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(pickUp)
+        pickUp.Dock = DockStyle.Fill
+        pickUp.Show()
+    End Sub
 End Class
 Public Class CarwashManagement
     Private ReadOnly constr

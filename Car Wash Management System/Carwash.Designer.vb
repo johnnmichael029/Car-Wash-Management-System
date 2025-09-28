@@ -62,6 +62,11 @@ Partial Class Carwash
         MenuStrip1 = New MenuStrip()
         FIleToolStripMenuItem = New ToolStripMenuItem()
         ExitToolStripMenuItem = New ToolStripMenuItem()
+        SettingsToolStripMenuItem = New ToolStripMenuItem()
+        ChangePasswordToolStripMenuItem = New ToolStripMenuItem()
+        AdminToolStripMenuItem = New ToolStripMenuItem()
+        AddUserToolStripMenuItem = New ToolStripMenuItem()
+        AddServiceToolStripMenuItem = New ToolStripMenuItem()
         ServiceTrackingToolStripMenuItem = New ToolStripMenuItem()
         ServiceCatalogToolStripMenuItem = New ToolStripMenuItem()
         CustomerInformationToolStripMenuItem = New ToolStripMenuItem()
@@ -75,6 +80,7 @@ Partial Class Carwash
         Timer1 = New Timer(components)
         Timer2 = New Timer(components)
         NotificationTimer = New Timer(components)
+        PickUpToolStripMenuItem = New ToolStripMenuItem()
         Panel2.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         Panel7.SuspendLayout()
@@ -525,7 +531,7 @@ Partial Class Carwash
         ' 
         ' FIleToolStripMenuItem
         ' 
-        FIleToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ExitToolStripMenuItem})
+        FIleToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ExitToolStripMenuItem, SettingsToolStripMenuItem, AdminToolStripMenuItem})
         FIleToolStripMenuItem.Font = New Font("Century Gothic", 8.25F, FontStyle.Bold)
         FIleToolStripMenuItem.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         FIleToolStripMenuItem.Name = "FIleToolStripMenuItem"
@@ -535,12 +541,44 @@ Partial Class Carwash
         ' ExitToolStripMenuItem
         ' 
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        ExitToolStripMenuItem.Size = New Size(92, 22)
+        ExitToolStripMenuItem.Size = New Size(115, 22)
         ExitToolStripMenuItem.Text = "E&xit"
+        ' 
+        ' SettingsToolStripMenuItem
+        ' 
+        SettingsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ChangePasswordToolStripMenuItem})
+        SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
+        SettingsToolStripMenuItem.Size = New Size(115, 22)
+        SettingsToolStripMenuItem.Text = "Settings"
+        ' 
+        ' ChangePasswordToolStripMenuItem
+        ' 
+        ChangePasswordToolStripMenuItem.Name = "ChangePasswordToolStripMenuItem"
+        ChangePasswordToolStripMenuItem.Size = New Size(171, 22)
+        ChangePasswordToolStripMenuItem.Text = "Change Password"
+        ' 
+        ' AdminToolStripMenuItem
+        ' 
+        AdminToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {AddUserToolStripMenuItem, AddServiceToolStripMenuItem})
+        AdminToolStripMenuItem.Name = "AdminToolStripMenuItem"
+        AdminToolStripMenuItem.Size = New Size(115, 22)
+        AdminToolStripMenuItem.Text = "Admin"
+        ' 
+        ' AddUserToolStripMenuItem
+        ' 
+        AddUserToolStripMenuItem.Name = "AddUserToolStripMenuItem"
+        AddUserToolStripMenuItem.Size = New Size(139, 22)
+        AddUserToolStripMenuItem.Text = "Add User"
+        ' 
+        ' AddServiceToolStripMenuItem
+        ' 
+        AddServiceToolStripMenuItem.Name = "AddServiceToolStripMenuItem"
+        AddServiceToolStripMenuItem.Size = New Size(139, 22)
+        AddServiceToolStripMenuItem.Text = "Add Service"
         ' 
         ' ServiceTrackingToolStripMenuItem
         ' 
-        ServiceTrackingToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ServiceCatalogToolStripMenuItem, CustomerInformationToolStripMenuItem, SaleHistoryToolStripMenuItem, ContractsToolStripMenuItem})
+        ServiceTrackingToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ServiceCatalogToolStripMenuItem, CustomerInformationToolStripMenuItem, SaleHistoryToolStripMenuItem, ContractsToolStripMenuItem, PickUpToolStripMenuItem})
         ServiceTrackingToolStripMenuItem.Font = New Font("Century Gothic", 8.25F, FontStyle.Bold)
         ServiceTrackingToolStripMenuItem.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         ServiceTrackingToolStripMenuItem.Name = "ServiceTrackingToolStripMenuItem"
@@ -617,6 +655,12 @@ Partial Class Carwash
         ' 
         ' NotificationTimer
         ' 
+        ' 
+        ' PickUpToolStripMenuItem
+        ' 
+        PickUpToolStripMenuItem.Name = "PickUpToolStripMenuItem"
+        PickUpToolStripMenuItem.Size = New Size(186, 22)
+        PickUpToolStripMenuItem.Text = "Pick Up"
         ' 
         ' Carwash
         ' 
@@ -710,4 +754,10 @@ Partial Class Carwash
     Friend WithEvents PictureBoxContracts As PictureBox
     Friend WithEvents PictureBoxCustomer As PictureBox
     Friend WithEvents LabelNewCustomer As Label
+    Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ChangePasswordToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AdminToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AddUserToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AddServiceToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents PickUpToolStripMenuItem As ToolStripMenuItem
 End Class

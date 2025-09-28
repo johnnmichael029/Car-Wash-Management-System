@@ -88,6 +88,12 @@ Public Class ServiceManagement
     Public Sub New(connectionString As String)
         Me.constr = connectionString
     End Sub
+    Public Sub CheckIfAdmin()
+        Using con As New SqlConnection(constr)
+            Dim checkAdminQuery = "SELECT COUNT(*) FROM userTable WHERE is_admin = '1'"
+
+        End Using
+    End Sub
     Public Sub AddService(serviceName As String, description As String, price As String, serviceID As String, Addon As String)
         If String.IsNullOrEmpty(serviceName) Or String.IsNullOrEmpty(description) Or String.IsNullOrEmpty(price) Then
             MessageBox.Show("Please fill in all fields.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
