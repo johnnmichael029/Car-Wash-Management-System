@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing.Text
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel
 Imports Microsoft.Data.SqlClient
 Imports Windows.Win32.System
 
@@ -18,7 +19,9 @@ Public Class Service
         LoadListOfService()
         DataGridViewServiceFontStyle()
         ChangeHeaderOfDataGridViewService()
+        CheckIfAdmin()
     End Sub
+
     Private Sub ChangeHeaderOfDataGridViewService()
         DataGridViewService.Columns(0).HeaderText = "Service ID"
         DataGridViewService.Columns(1).HeaderText = "Service Name"
@@ -61,15 +64,10 @@ Public Class Service
     Public Sub AddNewServiceFromActivityLog()
         listOfActivityLog.AddNewService(TextBoxServiceName.Text)
     End Sub
-    Private Sub ViewServiceBtn_Click(sender As Object, e As EventArgs) Handles ViewServiceBtn.Click
-        DataGridViewService.DataSource = serviceManagement.ViewService()
-    End Sub
-
     Private Sub UpdateServiceBtn_Click(sender As Object, e As EventArgs) Handles UpdateServiceBtn.Click
         serviceManagement.UpdateService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
         DataGridViewService.DataSource = serviceManagement.ViewService()
         ClearFields()
-
     End Sub
 
     Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
@@ -82,18 +80,51 @@ Public Class Service
     Private Sub Panel3_Paint(sender As Object, e As PaintEventArgs) Handles Panel3.Paint
 
     End Sub
+    Private Sub CheckIfAdmin()
+        Dim username As String = Login.LabelWelcomeUsers(Carwash.Label3.Text)
+        If Not serviceManagement.CheckIfAdmin(username) Then
+            LabelIsAdmin.Text = "Only Admin can add, update, and delete services."
+            AddServiceBtn.Enabled = False
+            UpdateServiceBtn.Enabled = False
+            DeleteServiceBtn.Enabled = False
+        Else
+            LabelIsAdmin.Text = ""
+            AddServiceBtn.Enabled = True
+            UpdateServiceBtn.Enabled = True
+            DeleteServiceBtn.Enabled = True
+        End If
+    End Sub
 End Class
 Public Class ServiceManagement
     Private ReadOnly constr As String
     Public Sub New(connectionString As String)
         Me.constr = connectionString
     End Sub
-    Public Sub CheckIfAdmin()
+    Public Function CheckIfAdmin(username As String) As Boolean
+        Dim isAdmin As Boolean = False
         Using con As New SqlConnection(constr)
-            Dim checkAdminQuery = "SELECT COUNT(*) FROM userTable WHERE is_admin = '1'"
-
+            Dim selectQuery = "SELECT CASE WHEN is_admin IS NULL THEN 0 ELSE is_admin END AS is_admin FROM userTable WHERE username = @username"
+            Using cmd As New SqlCommand(selectQuery, con)
+                cmd.Parameters.AddWithValue("@username", username)
+                Try
+                    con.Open()
+                    Dim result As Object = cmd.ExecuteScalar()
+                    If result IsNot Nothing AndAlso Not DBNull.Value.Equals(result) Then
+                        isAdmin = Convert.ToBoolean(result)
+                    Else
+                        isAdmin = False
+                    End If
+                Catch ex As Exception
+                    MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    isAdmin = False
+                Finally
+                    con.Close()
+                End Try
+            End Using
         End Using
-    End Sub
+
+        Return isAdmin
+    End Function
     Public Sub AddService(serviceName As String, description As String, price As String, serviceID As String, Addon As String)
         If String.IsNullOrEmpty(serviceName) Or String.IsNullOrEmpty(description) Or String.IsNullOrEmpty(price) Then
             MessageBox.Show("Please fill in all fields.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)

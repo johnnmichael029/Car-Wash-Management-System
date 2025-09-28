@@ -4,6 +4,7 @@ Imports System.Runtime.InteropServices
 Imports Microsoft.Data.SqlClient
 
 Public Class Carwash
+
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Dim listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly carwashManagement As CarwashManagement
@@ -15,7 +16,6 @@ Public Class Carwash
         ' Add any initialization after the InitializeComponent() call.
         carwashManagement = New CarwashManagement(constr)
     End Sub
-
 
     Private PrivateFonts As New PrivateFontCollection()
     Private Sub Carwash_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -183,31 +183,16 @@ Public Class Carwash
             Timer2.Enabled = False
         End If
     End Sub
-
-
     Private Sub NotificationBtn_Click(sender As Object, e As EventArgs) Handles NotificationBtn.Click
         Dim notification As New Notification()
-
-        ' Get the screen coordinates of the top-left corner of the button.
-        ' This converts the button's location on Form1 to its location on the user's screen.
         Dim btnScreenLocation As Point = NotificationBtn.PointToScreen(New Point(149, 0))
-
-        ' Set the new form's position.
-        ' We want the notification form to appear just below the button.
-        ' So, we set its Left position to the button's Left screen coordinate,
-        ' and its Top position to the button's Top screen coordinate plus the button's height.
         notification.Top = btnScreenLocation.Y + NotificationBtn.Height
         notification.Left = btnScreenLocation.X
-
-        ' Show the notification form.
         notification.Show()
-
     End Sub
 
     Private Sub NotificationTimer_Tick(sender As Object, e As EventArgs) Handles NotificationTimer.Tick
         NotificationTimer.Stop()
-
-        ' Then, hide the label.
         NotificationLabel.Visible = False
     End Sub
     Public Sub ShowNotification()
@@ -219,23 +204,6 @@ Public Class Carwash
     Private Sub ExitToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem1.Click
         Application.Exit()
     End Sub
-    'Private Sub FullToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FullToolStripMenuItem.Click
-    '    If Not isFullScreen Then
-    '        Me.WindowState = FormWindowState.Maximized
-    '        Dim newIconPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "minus.png")
-    '        If File.Exists(newIconPath) Then
-    '            Me.Icon = New Icon(newIconPath)
-    '        End If
-    '        isFullScreen = True
-    '    Else
-    '        Me.WindowState = FormWindowState.Normal
-    '        Me.Icon = originalIcon
-    '        isFullScreen = False
-    '        isFullScreen = False
-
-    '    End If
-    'End Sub
-
     Public Sub PopulateAllTotal()
         Dim totalSales As Decimal = carwashManagement.GetTodayTotalSales()
         LabelTotalSalesToday.Text = "₱" & totalSales.ToString("N2")
@@ -283,6 +251,22 @@ Public Class Carwash
         pickUp.Dock = DockStyle.Fill
         pickUp.Show()
     End Sub
+
+    Private Sub AdminToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdminToolStripMenuItem.Click
+        AdminShowForm()
+    End Sub
+    Private Sub AdminShowForm()
+        Panel4.Controls.Clear()
+        Dim admmin As New Admin With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(admmin)
+        admmin.Dock = DockStyle.Fill
+        admmin.Show()
+    End Sub
+
+
 End Class
 Public Class CarwashManagement
     Private ReadOnly constr

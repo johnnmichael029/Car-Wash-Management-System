@@ -57,7 +57,7 @@ Partial Class Admin
         Label2.Anchor = AnchorStyles.None
         Label2.AutoSize = True
         Label2.Font = New Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label2.Location = New Point(102, 41)
+        Label2.Location = New Point(102, 38)
         Label2.Name = "Label2"
         Label2.Size = New Size(187, 37)
         Label2.TabIndex = 3
@@ -92,7 +92,7 @@ Partial Class Admin
         Panel1.Controls.Add(TextBoxNewPassword)
         Panel1.Controls.Add(TextBoxUsername)
         Panel1.Controls.Add(Label1)
-        Panel1.Location = New Point(525, 216)
+        Panel1.Location = New Point(460, 153)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(414, 401)
         Panel1.TabIndex = 7

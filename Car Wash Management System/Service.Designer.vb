@@ -25,12 +25,12 @@ Partial Class Service
         Panel1 = New Panel()
         DataGridViewService = New DataGridView()
         Panel3 = New Panel()
+        LabelIsAdmin = New Label()
         CheckBoxAddon = New CheckBox()
         LabelServiceID = New Label()
         Label4 = New Label()
         DeleteServiceBtn = New Button()
         UpdateServiceBtn = New Button()
-        ViewServiceBtn = New Button()
         AddServiceBtn = New Button()
         TextBoxPrice = New TextBox()
         Label3 = New Label()
@@ -68,12 +68,12 @@ Partial Class Service
         ' Panel3
         ' 
         Panel3.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
+        Panel3.Controls.Add(LabelIsAdmin)
         Panel3.Controls.Add(CheckBoxAddon)
         Panel3.Controls.Add(LabelServiceID)
         Panel3.Controls.Add(Label4)
         Panel3.Controls.Add(DeleteServiceBtn)
         Panel3.Controls.Add(UpdateServiceBtn)
-        Panel3.Controls.Add(ViewServiceBtn)
         Panel3.Controls.Add(AddServiceBtn)
         Panel3.Controls.Add(TextBoxPrice)
         Panel3.Controls.Add(Label3)
@@ -86,6 +86,17 @@ Partial Class Service
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(305, 551)
         Panel3.TabIndex = 2
+        ' 
+        ' LabelIsAdmin
+        ' 
+        LabelIsAdmin.AutoSize = True
+        LabelIsAdmin.BackColor = Color.White
+        LabelIsAdmin.Font = New Font("Century Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        LabelIsAdmin.ForeColor = Color.Red
+        LabelIsAdmin.Location = New Point(16, 341)
+        LabelIsAdmin.Name = "LabelIsAdmin"
+        LabelIsAdmin.Size = New Size(0, 16)
+        LabelIsAdmin.TabIndex = 13
         ' 
         ' CheckBoxAddon
         ' 
@@ -117,7 +128,7 @@ Partial Class Service
         ' DeleteServiceBtn
         ' 
         DeleteServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        DeleteServiceBtn.Location = New Point(16, 329)
+        DeleteServiceBtn.Location = New Point(16, 284)
         DeleteServiceBtn.Name = "DeleteServiceBtn"
         DeleteServiceBtn.Size = New Size(261, 39)
         DeleteServiceBtn.TabIndex = 9
@@ -127,22 +138,12 @@ Partial Class Service
         ' UpdateServiceBtn
         ' 
         UpdateServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        UpdateServiceBtn.Location = New Point(16, 284)
+        UpdateServiceBtn.Location = New Point(16, 239)
         UpdateServiceBtn.Name = "UpdateServiceBtn"
         UpdateServiceBtn.Size = New Size(261, 39)
         UpdateServiceBtn.TabIndex = 8
         UpdateServiceBtn.Text = "Update Service"
         UpdateServiceBtn.UseVisualStyleBackColor = True
-        ' 
-        ' ViewServiceBtn
-        ' 
-        ViewServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        ViewServiceBtn.Location = New Point(16, 239)
-        ViewServiceBtn.Name = "ViewServiceBtn"
-        ViewServiceBtn.Size = New Size(261, 39)
-        ViewServiceBtn.TabIndex = 7
-        ViewServiceBtn.Text = "View Service"
-        ViewServiceBtn.UseVisualStyleBackColor = True
         ' 
         ' AddServiceBtn
         ' 
@@ -227,10 +228,10 @@ Partial Class Service
     Friend WithEvents TextBoxPrice As TextBox
     Friend WithEvents DeleteServiceBtn As Button
     Friend WithEvents UpdateServiceBtn As Button
-    Friend WithEvents ViewServiceBtn As Button
     Friend WithEvents AddServiceBtn As Button
     Friend WithEvents LabelServiceID As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents DataGridViewService As DataGridView
     Friend WithEvents CheckBoxAddon As CheckBox
+    Friend WithEvents LabelIsAdmin As Label
 End Class

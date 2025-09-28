@@ -25,6 +25,7 @@ Partial Class Carwash
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Carwash))
         Panel2 = New Panel()
+        LabelWelcome = New Label()
         PictureBox1 = New PictureBox()
         Panel7 = New Panel()
         LabelTotalSalesToday = New Label()
@@ -39,7 +40,6 @@ Partial Class Carwash
         LabelNewCustomer = New Label()
         PictureBoxCustomer = New PictureBox()
         Label4 = New Label()
-        Label1 = New Label()
         Panel9 = New Panel()
         LabelTotalNewScheduleToday = New Label()
         PictureBoxSchedule = New PictureBox()
@@ -48,7 +48,7 @@ Partial Class Carwash
         PictureBoxContracts = New PictureBox()
         LabelTotalNewContractToday = New Label()
         Label6 = New Label()
-        LabelCarwash = New Label()
+        Label3 = New Label()
         Panel6 = New Panel()
         PanelMenuBar = New Panel()
         Panel5 = New Panel()
@@ -65,13 +65,12 @@ Partial Class Carwash
         SettingsToolStripMenuItem = New ToolStripMenuItem()
         ChangePasswordToolStripMenuItem = New ToolStripMenuItem()
         AdminToolStripMenuItem = New ToolStripMenuItem()
-        AddUserToolStripMenuItem = New ToolStripMenuItem()
-        AddServiceToolStripMenuItem = New ToolStripMenuItem()
         ServiceTrackingToolStripMenuItem = New ToolStripMenuItem()
         ServiceCatalogToolStripMenuItem = New ToolStripMenuItem()
         CustomerInformationToolStripMenuItem = New ToolStripMenuItem()
         SaleHistoryToolStripMenuItem = New ToolStripMenuItem()
         ContractsToolStripMenuItem = New ToolStripMenuItem()
+        PickUpToolStripMenuItem = New ToolStripMenuItem()
         BookingToolStripMenuItem = New ToolStripMenuItem()
         AppointmentScheduleToolStripMenuItem1 = New ToolStripMenuItem()
         ListToolStripMenuItem = New ToolStripMenuItem()
@@ -80,7 +79,6 @@ Partial Class Carwash
         Timer1 = New Timer(components)
         Timer2 = New Timer(components)
         NotificationTimer = New Timer(components)
-        PickUpToolStripMenuItem = New ToolStripMenuItem()
         Panel2.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         Panel7.SuspendLayout()
@@ -103,20 +101,31 @@ Partial Class Carwash
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
+        Panel2.Controls.Add(LabelWelcome)
         Panel2.Controls.Add(PictureBox1)
         Panel2.Controls.Add(Panel7)
         Panel2.Controls.Add(Panel1)
         Panel2.Controls.Add(MenuBtn)
         Panel2.Controls.Add(Panel11)
-        Panel2.Controls.Add(Label1)
         Panel2.Controls.Add(Panel9)
         Panel2.Controls.Add(Panel10)
-        Panel2.Controls.Add(LabelCarwash)
+        Panel2.Controls.Add(Label3)
         Panel2.Dock = DockStyle.Top
         Panel2.Location = New Point(0, 0)
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(1385, 45)
         Panel2.TabIndex = 4
+        ' 
+        ' LabelWelcome
+        ' 
+        LabelWelcome.AutoSize = True
+        LabelWelcome.Font = New Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelWelcome.Location = New Point(131, 0)
+        LabelWelcome.Name = "LabelWelcome"
+        LabelWelcome.RightToLeft = RightToLeft.No
+        LabelWelcome.Size = New Size(0, 19)
+        LabelWelcome.TabIndex = 1
+        LabelWelcome.TextAlign = ContentAlignment.TopCenter
         ' 
         ' PictureBox1
         ' 
@@ -134,7 +143,7 @@ Partial Class Carwash
         Panel7.Controls.Add(LabelTotalSalesToday)
         Panel7.Controls.Add(Label2)
         Panel7.Controls.Add(PictureBoxSales)
-        Panel7.Location = New Point(205, 0)
+        Panel7.Location = New Point(271, 0)
         Panel7.Name = "Panel7"
         Panel7.Size = New Size(173, 44)
         Panel7.TabIndex = 10
@@ -234,7 +243,7 @@ Partial Class Carwash
         Panel11.Controls.Add(LabelNewCustomer)
         Panel11.Controls.Add(PictureBoxCustomer)
         Panel11.Controls.Add(Label4)
-        Panel11.Location = New Point(413, 0)
+        Panel11.Location = New Point(479, 0)
         Panel11.Name = "Panel11"
         Panel11.Size = New Size(173, 44)
         Panel11.TabIndex = 5
@@ -272,17 +281,6 @@ Partial Class Carwash
         Label4.TabIndex = 1
         Label4.Text = "New Customers"
         ' 
-        ' Label1
-        ' 
-        Label1.AutoSize = True
-        Label1.Font = New Font("Century Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label1.ForeColor = Color.Gray
-        Label1.Location = New Point(52, 0)
-        Label1.Name = "Label1"
-        Label1.Size = New Size(26, 20)
-        Label1.TabIndex = 6
-        Label1.Text = "Hi!"
-        ' 
         ' Panel9
         ' 
         Panel9.Anchor = AnchorStyles.Top
@@ -290,7 +288,7 @@ Partial Class Carwash
         Panel9.Controls.Add(LabelTotalNewScheduleToday)
         Panel9.Controls.Add(PictureBoxSchedule)
         Panel9.Controls.Add(Label8)
-        Panel9.Location = New Point(838, 0)
+        Panel9.Location = New Point(904, 0)
         Panel9.Name = "Panel9"
         Panel9.Size = New Size(173, 44)
         Panel9.TabIndex = 7
@@ -335,7 +333,7 @@ Partial Class Carwash
         Panel10.Controls.Add(PictureBoxContracts)
         Panel10.Controls.Add(LabelTotalNewContractToday)
         Panel10.Controls.Add(Label6)
-        Panel10.Location = New Point(625, 0)
+        Panel10.Location = New Point(691, 0)
         Panel10.Name = "Panel10"
         Panel10.Size = New Size(173, 44)
         Panel10.TabIndex = 6
@@ -373,17 +371,17 @@ Partial Class Carwash
         Label6.TabIndex = 1
         Label6.Text = "New Contracts"
         ' 
-        ' LabelCarwash
+        ' Label3
         ' 
-        LabelCarwash.AutoSize = True
-        LabelCarwash.Font = New Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LabelCarwash.Location = New Point(75, 1)
-        LabelCarwash.Name = "LabelCarwash"
-        LabelCarwash.RightToLeft = RightToLeft.No
-        LabelCarwash.Size = New Size(101, 19)
-        LabelCarwash.TabIndex = 0
-        LabelCarwash.Text = "Welcome to"
-        LabelCarwash.TextAlign = ContentAlignment.TopCenter
+        Label3.AutoSize = True
+        Label3.Font = New Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label3.Location = New Point(49, 1)
+        Label3.Name = "Label3"
+        Label3.RightToLeft = RightToLeft.No
+        Label3.Size = New Size(87, 19)
+        Label3.TabIndex = 0
+        Label3.Text = "Welcome,"
+        Label3.TextAlign = ContentAlignment.TopCenter
         ' 
         ' Panel6
         ' 
@@ -559,22 +557,9 @@ Partial Class Carwash
         ' 
         ' AdminToolStripMenuItem
         ' 
-        AdminToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {AddUserToolStripMenuItem, AddServiceToolStripMenuItem})
         AdminToolStripMenuItem.Name = "AdminToolStripMenuItem"
         AdminToolStripMenuItem.Size = New Size(115, 22)
         AdminToolStripMenuItem.Text = "Admin"
-        ' 
-        ' AddUserToolStripMenuItem
-        ' 
-        AddUserToolStripMenuItem.Name = "AddUserToolStripMenuItem"
-        AddUserToolStripMenuItem.Size = New Size(139, 22)
-        AddUserToolStripMenuItem.Text = "Add User"
-        ' 
-        ' AddServiceToolStripMenuItem
-        ' 
-        AddServiceToolStripMenuItem.Name = "AddServiceToolStripMenuItem"
-        AddServiceToolStripMenuItem.Size = New Size(139, 22)
-        AddServiceToolStripMenuItem.Text = "Add Service"
         ' 
         ' ServiceTrackingToolStripMenuItem
         ' 
@@ -608,6 +593,12 @@ Partial Class Carwash
         ContractsToolStripMenuItem.Name = "ContractsToolStripMenuItem"
         ContractsToolStripMenuItem.Size = New Size(186, 22)
         ContractsToolStripMenuItem.Text = "&Contracts"
+        ' 
+        ' PickUpToolStripMenuItem
+        ' 
+        PickUpToolStripMenuItem.Name = "PickUpToolStripMenuItem"
+        PickUpToolStripMenuItem.Size = New Size(186, 22)
+        PickUpToolStripMenuItem.Text = "Pick Up"
         ' 
         ' BookingToolStripMenuItem
         ' 
@@ -656,12 +647,6 @@ Partial Class Carwash
         ' NotificationTimer
         ' 
         ' 
-        ' PickUpToolStripMenuItem
-        ' 
-        PickUpToolStripMenuItem.Name = "PickUpToolStripMenuItem"
-        PickUpToolStripMenuItem.Size = New Size(186, 22)
-        PickUpToolStripMenuItem.Text = "Pick Up"
-        ' 
         ' Carwash
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -704,7 +689,7 @@ Partial Class Carwash
         PerformLayout()
     End Sub
     Friend WithEvents Panel2 As Panel
-    Friend WithEvents LabelCarwash As Label
+    Friend WithEvents Label3 As Label
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents Panel6 As Panel
     Friend WithEvents FIleToolStripMenuItem As ToolStripMenuItem
@@ -718,7 +703,6 @@ Partial Class Carwash
     Friend WithEvents AppointmentScheduleToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents ListToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OnTheDayScheduleToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents Label1 As Label
     Friend WithEvents Timer1 As Timer
     Friend WithEvents Timer2 As Timer
     Friend WithEvents NotificationLabel As Label
@@ -757,7 +741,6 @@ Partial Class Carwash
     Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ChangePasswordToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AdminToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents AddUserToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents AddServiceToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents PickUpToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LabelWelcome As Label
 End Class

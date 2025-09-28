@@ -2,7 +2,7 @@
 Imports System.Text
 Imports Microsoft.Data.SqlClient
 Public Class Login
-
+   
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly loginManagement As LoginManagement
@@ -18,6 +18,7 @@ Public Class Login
     Private Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CenterToScreen()
         DoesHaveAnyAccount()
+
     End Sub
     Private Sub DoesHaveAnyAccount()
         If Not accountManagement.DoesAnyAccountExist() Then
@@ -28,7 +29,21 @@ Public Class Login
     Private Sub LoginBtn_Click(sender As Object, e As EventArgs) Handles LoginBtn.Click
         LoginValidation()
         LoginActivityLog()
-        ClearFields()
+        LabelWelcomeUsers(TextBoxUsername.Text)
+    End Sub
+
+    Public Function LabelWelcomeUsers(welcomeUsers As String)
+        welcomeUsers = TextBoxUsername.Text
+        Carwash.LabelWelcome.Text = welcomeUsers
+        CheckIfUserHaveRights(welcomeUsers)
+        Return welcomeUsers
+    End Function
+    Private Sub CheckIfUserHaveRights(welcomeUsers As String)
+        If welcomeUsers <> "admin" Then
+            Carwash.AdminToolStripMenuItem.Enabled = False
+        Else
+            Carwash.AdminToolStripMenuItem.Enabled = True
+        End If
     End Sub
     Public Sub LoginValidation()
         loginManagement.LoginValidation(TextBoxUsername.Text, TextBoxPassword.Text)
@@ -115,37 +130,23 @@ Public Class LoginManagement
                             Dim storedSalt As String = reader("salt").ToString()
                             ' Safely read the is_admin column, which is now guaranteed to be 0 or 1.
                             Dim isAdmin As Boolean = reader("is_admin")
-
                             ' Verify the entered password against the stored hash and salt
                             If VerifyPassword(password, storedSalt, storedHash) Then
-
-                                If isAdmin Then
-                                    Admin.Show()
-                                    Login.Hide()
-                                Else
-
-                                    Carwash.Show()
-                                    Login.Hide()
-                                End If
-
+                                Carwash.Show()
+                                Login.Hide()
                             Else
-                                ' Passwords do not match
                                 MessageBox.Show("Invalid Username or Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             End If
-                        Else
-                            ' No rows found, so the username doesn't exist.
-                            MessageBox.Show("Invalid Username or Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         End If
-                    End Using ' Close the reader
-                End Using ' Dispose the command
+                        Login.ClearFields()
+                    End Using
+                End Using
             Catch ex As Exception
-
                 MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally
-                ' Ensure these actions always happen, regardless of success or failure
                 con.Close()
             End Try
-        End Using ' Close and dispose the connection
+        End Using
     End Sub
 End Class
 Public Class AccountManagement

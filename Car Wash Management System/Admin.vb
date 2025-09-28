@@ -25,6 +25,11 @@ Public Class Admin
 
     Private Sub ChangePasswordBtn_Click(sender As Object, e As EventArgs) Handles ChangePasswordBtn.Click
         adminManagement.AdminResetPassword(TextBoxUsername.Text, TextBoxNewPassword.Text)
+        ClearFields
+    End Sub
+    Public Sub ClearFields()
+        TextBoxUsername.Clear()
+        TextBoxNewPassword.Clear()
     End Sub
 End Class
 Public Class AdminManagement
@@ -34,7 +39,7 @@ Public Class AdminManagement
     End Sub
     Public Sub AdminResetPassword(usernameToReset As String, newPassword As String)
         ' Check if the username is empty
-        If String.IsNullOrWhiteSpace(usernameToReset) Then
+        If String.IsNullOrWhiteSpace(usernameToReset) Or String.IsNullOrWhiteSpace(newPassword) Then
             MessageBox.Show("Please enter a username to reset.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
@@ -52,7 +57,6 @@ Public Class AdminManagement
                 Using cmdCheck As New SqlCommand(checkUserQuery, con)
                     cmdCheck.Parameters.AddWithValue("@username", usernameToReset)
                     Dim userCount As Integer = CInt(cmdCheck.ExecuteScalar())
-
                     If userCount = 0 Then
                         MessageBox.Show("Username not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         Return
@@ -66,10 +70,9 @@ Public Class AdminManagement
                     cmdUpdate.Parameters.AddWithValue("@password", newHash)
                     cmdUpdate.Parameters.AddWithValue("@salt", newSalt)
                     cmdUpdate.ExecuteNonQuery()
+                    MessageBox.Show("Password for '" & usernameToReset & "' has been reset.", "Password Reset", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
                 End Using
-                MessageBox.Show("Password for '" & usernameToReset & "' has been reset.", "Password Reset", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Login.Show()
-                Admin.Hide()
 
             Catch ex As Exception
                 MessageBox.Show("An error occurred during password reset: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
