@@ -54,7 +54,7 @@ Partial Class CustomerInformation
         Panel1.Dock = DockStyle.Fill
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(911, 551)
+        Panel1.Size = New Size(911, 758)
         Panel1.TabIndex = 0
         ' 
         ' Panel2
@@ -79,7 +79,7 @@ Partial Class CustomerInformation
         Panel2.Dock = DockStyle.Right
         Panel2.Location = New Point(606, 0)
         Panel2.Name = "Panel2"
-        Panel2.Size = New Size(305, 551)
+        Panel2.Size = New Size(305, 758)
         Panel2.TabIndex = 1
         ' 
         ' customerIDLabel
@@ -104,16 +104,18 @@ Partial Class CustomerInformation
         ' UpdateBtn
         ' 
         UpdateBtn.Anchor = AnchorStyles.Top
-        UpdateBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        UpdateBtn.Image = My.Resources.Resources.refresh
-        UpdateBtn.Location = New Point(16, 435)
+        UpdateBtn.BackColor = Color.FromArgb(CByte(84), CByte(98), CByte(161))
+        UpdateBtn.FlatAppearance.BorderSize = 0
+        UpdateBtn.FlatStyle = FlatStyle.Flat
+        UpdateBtn.Font = New Font("Century Gothic", 11.25F)
+        UpdateBtn.ForeColor = Color.White
+        UpdateBtn.Location = New Point(16, 436)
         UpdateBtn.Name = "UpdateBtn"
-        UpdateBtn.Size = New Size(261, 50)
+        UpdateBtn.Size = New Size(260, 46)
         UpdateBtn.TabIndex = 43
         UpdateBtn.Text = "Update Customer"
-        UpdateBtn.TextAlign = ContentAlignment.MiddleRight
         UpdateBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        UpdateBtn.UseVisualStyleBackColor = True
+        UpdateBtn.UseVisualStyleBackColor = False
         ' 
         ' Label2
         ' 
@@ -127,16 +129,18 @@ Partial Class CustomerInformation
         ' DeleteBtn
         ' 
         DeleteBtn.Anchor = AnchorStyles.Top
-        DeleteBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        DeleteBtn.Image = My.Resources.Resources.delete_user
-        DeleteBtn.Location = New Point(16, 492)
+        DeleteBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
+        DeleteBtn.FlatAppearance.BorderSize = 0
+        DeleteBtn.FlatStyle = FlatStyle.Flat
+        DeleteBtn.Font = New Font("Century Gothic", 11.25F)
+        DeleteBtn.ForeColor = Color.White
+        DeleteBtn.Location = New Point(16, 488)
         DeleteBtn.Name = "DeleteBtn"
-        DeleteBtn.Size = New Size(261, 49)
+        DeleteBtn.Size = New Size(260, 46)
         DeleteBtn.TabIndex = 44
         DeleteBtn.Text = "Delete Customer"
-        DeleteBtn.TextAlign = ContentAlignment.MiddleRight
         DeleteBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        DeleteBtn.UseVisualStyleBackColor = True
+        DeleteBtn.UseVisualStyleBackColor = False
         ' 
         ' TextBoxPlateNumber
         ' 
@@ -148,16 +152,20 @@ Partial Class CustomerInformation
         ' ViewBtn
         ' 
         ViewBtn.Anchor = AnchorStyles.Top
-        ViewBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        ViewBtn.Image = My.Resources.Resources.view_user
-        ViewBtn.Location = New Point(16, 383)
+        ViewBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
+        ViewBtn.FlatAppearance.BorderSize = 0
+        ViewBtn.FlatStyle = FlatStyle.Flat
+        ViewBtn.Font = New Font("Century Gothic", 11.25F)
+        ViewBtn.ForeColor = Color.White
+        ViewBtn.Image = CType(resources.GetObject("ViewBtn.Image"), Image)
+        ViewBtn.Location = New Point(16, 384)
         ViewBtn.Name = "ViewBtn"
-        ViewBtn.Size = New Size(261, 46)
+        ViewBtn.Size = New Size(260, 46)
         ViewBtn.TabIndex = 45
-        ViewBtn.Text = "View Customer"
+        ViewBtn.Text = "Clear Fields"
         ViewBtn.TextAlign = ContentAlignment.MiddleRight
         ViewBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        ViewBtn.UseVisualStyleBackColor = True
+        ViewBtn.UseVisualStyleBackColor = False
         ' 
         ' Label3
         ' 
@@ -212,16 +220,20 @@ Partial Class CustomerInformation
         ' AddBtn
         ' 
         AddBtn.Anchor = AnchorStyles.Top
-        AddBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        AddBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddBtn.FlatAppearance.BorderSize = 0
+        AddBtn.FlatStyle = FlatStyle.Flat
+        AddBtn.Font = New Font("Century Gothic", 11.25F)
+        AddBtn.ForeColor = Color.White
         AddBtn.Image = CType(resources.GetObject("AddBtn.Image"), Image)
         AddBtn.Location = New Point(16, 332)
         AddBtn.Name = "AddBtn"
-        AddBtn.Size = New Size(261, 45)
+        AddBtn.Size = New Size(260, 46)
         AddBtn.TabIndex = 42
         AddBtn.Text = "Add Customer"
         AddBtn.TextAlign = ContentAlignment.MiddleRight
         AddBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        AddBtn.UseVisualStyleBackColor = True
+        AddBtn.UseVisualStyleBackColor = False
         ' 
         ' Label5
         ' 
@@ -248,14 +260,14 @@ Partial Class CustomerInformation
         DataGridViewCustomerInformation.Location = New Point(0, 0)
         DataGridViewCustomerInformation.Name = "DataGridViewCustomerInformation"
         DataGridViewCustomerInformation.ReadOnly = True
-        DataGridViewCustomerInformation.Size = New Size(606, 551)
+        DataGridViewCustomerInformation.Size = New Size(606, 758)
         DataGridViewCustomerInformation.TabIndex = 0
         ' 
         ' CustomerInformation
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(911, 551)
+        ClientSize = New Size(911, 758)
         Controls.Add(Panel1)
         FormBorderStyle = FormBorderStyle.None
         Name = "CustomerInformation"

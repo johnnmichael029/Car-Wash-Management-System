@@ -22,6 +22,7 @@ Partial Class Appointment
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Appointment))
         Panel1 = New Panel()
         DataGridViewAppointment = New DataGridView()
         Panel3 = New Panel()
@@ -51,7 +52,6 @@ Partial Class Appointment
         Label2 = New Label()
         TextBoxCustomerName = New TextBox()
         Label1 = New Label()
-        Label7 = New Label()
         PrintDocumentBill = New Printing.PrintDocument()
         Panel1.SuspendLayout()
         CType(DataGridViewAppointment, ComponentModel.ISupportInitialize).BeginInit()
@@ -60,12 +60,12 @@ Partial Class Appointment
         ' 
         ' Panel1
         ' 
-        Panel1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         Panel1.Controls.Add(DataGridViewAppointment)
         Panel1.Controls.Add(Panel3)
-        Panel1.Location = New Point(0, 53)
+        Panel1.Dock = DockStyle.Fill
+        Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(911, 635)
+        Panel1.Size = New Size(911, 758)
         Panel1.TabIndex = 3
         ' 
         ' DataGridViewAppointment
@@ -77,7 +77,7 @@ Partial Class Appointment
         DataGridViewAppointment.Location = New Point(0, 0)
         DataGridViewAppointment.Name = "DataGridViewAppointment"
         DataGridViewAppointment.ReadOnly = True
-        DataGridViewAppointment.Size = New Size(606, 635)
+        DataGridViewAppointment.Size = New Size(606, 758)
         DataGridViewAppointment.TabIndex = 0
         ' 
         ' Panel3
@@ -112,18 +112,22 @@ Partial Class Appointment
         Panel3.Dock = DockStyle.Right
         Panel3.Location = New Point(606, 0)
         Panel3.Name = "Panel3"
-        Panel3.Size = New Size(305, 635)
+        Panel3.Size = New Size(305, 758)
         Panel3.TabIndex = 2
         ' 
         ' PrintBillBtn
         ' 
-        PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        PrintBillBtn.Location = New Point(15, 577)
+        PrintBillBtn.BackColor = Color.FromArgb(CByte(92), CByte(81), CByte(224))
+        PrintBillBtn.FlatAppearance.BorderSize = 0
+        PrintBillBtn.FlatStyle = FlatStyle.Flat
+        PrintBillBtn.Font = New Font("Century Gothic", 11.25F)
+        PrintBillBtn.ForeColor = Color.White
+        PrintBillBtn.Location = New Point(16, 631)
         PrintBillBtn.Name = "PrintBillBtn"
-        PrintBillBtn.Size = New Size(75, 23)
+        PrintBillBtn.Size = New Size(260, 46)
         PrintBillBtn.TabIndex = 35
         PrintBillBtn.Text = "Prin Bill"
-        PrintBillBtn.UseVisualStyleBackColor = True
+        PrintBillBtn.UseVisualStyleBackColor = False
         ' 
         ' LabelSales
         ' 
@@ -300,36 +304,48 @@ Partial Class Appointment
         ' 
         ' UpdateAppointmentBtn
         ' 
-        UpdateAppointmentBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        UpdateAppointmentBtn.Location = New Point(16, 541)
+        UpdateAppointmentBtn.BackColor = Color.FromArgb(CByte(84), CByte(98), CByte(161))
+        UpdateAppointmentBtn.FlatAppearance.BorderSize = 0
+        UpdateAppointmentBtn.FlatStyle = FlatStyle.Flat
+        UpdateAppointmentBtn.Font = New Font("Century Gothic", 11.25F)
+        UpdateAppointmentBtn.ForeColor = Color.White
+        UpdateAppointmentBtn.Location = New Point(15, 579)
         UpdateAppointmentBtn.Name = "UpdateAppointmentBtn"
-        UpdateAppointmentBtn.Size = New Size(260, 30)
+        UpdateAppointmentBtn.Size = New Size(260, 46)
         UpdateAppointmentBtn.TabIndex = 8
         UpdateAppointmentBtn.Text = "Update Service"
-        UpdateAppointmentBtn.UseVisualStyleBackColor = True
+        UpdateAppointmentBtn.UseVisualStyleBackColor = False
         ' 
         ' ClearFieldsBtn
         ' 
-        ClearFieldsBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        ClearFieldsBtn.Image = My.Resources.Resources.clean
-        ClearFieldsBtn.Location = New Point(16, 508)
+        ClearFieldsBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
+        ClearFieldsBtn.FlatAppearance.BorderSize = 0
+        ClearFieldsBtn.FlatStyle = FlatStyle.Flat
+        ClearFieldsBtn.Font = New Font("Century Gothic", 11.25F)
+        ClearFieldsBtn.ForeColor = Color.White
+        ClearFieldsBtn.Image = CType(resources.GetObject("ClearFieldsBtn.Image"), Image)
+        ClearFieldsBtn.Location = New Point(15, 527)
         ClearFieldsBtn.Name = "ClearFieldsBtn"
-        ClearFieldsBtn.Size = New Size(260, 30)
+        ClearFieldsBtn.Size = New Size(260, 46)
         ClearFieldsBtn.TabIndex = 7
         ClearFieldsBtn.Text = "Clear Fields"
         ClearFieldsBtn.TextAlign = ContentAlignment.MiddleRight
         ClearFieldsBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        ClearFieldsBtn.UseVisualStyleBackColor = True
+        ClearFieldsBtn.UseVisualStyleBackColor = False
         ' 
         ' AddAppointmentBtn
         ' 
-        AddAppointmentBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        AddAppointmentBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddAppointmentBtn.FlatAppearance.BorderSize = 0
+        AddAppointmentBtn.FlatStyle = FlatStyle.Flat
+        AddAppointmentBtn.Font = New Font("Century Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddAppointmentBtn.ForeColor = Color.White
         AddAppointmentBtn.Location = New Point(16, 475)
         AddAppointmentBtn.Name = "AddAppointmentBtn"
-        AddAppointmentBtn.Size = New Size(260, 30)
+        AddAppointmentBtn.Size = New Size(260, 46)
         AddAppointmentBtn.TabIndex = 6
         AddAppointmentBtn.Text = "Add Appointment"
-        AddAppointmentBtn.UseVisualStyleBackColor = True
+        AddAppointmentBtn.UseVisualStyleBackColor = False
         ' 
         ' TextBoxCustomerID
         ' 
@@ -366,16 +382,6 @@ Partial Class Appointment
         Label1.TabIndex = 0
         Label1.Text = "Customer Name"
         ' 
-        ' Label7
-        ' 
-        Label7.AutoSize = True
-        Label7.Font = New Font("Century Gothic", 26.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label7.Location = New Point(0, 3)
-        Label7.Name = "Label7"
-        Label7.Size = New Size(337, 41)
-        Label7.TabIndex = 4
-        Label7.Text = "List of Appointment"
-        ' 
         ' PrintDocumentBill
         ' 
         ' 
@@ -384,8 +390,7 @@ Partial Class Appointment
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
-        ClientSize = New Size(911, 687)
-        Controls.Add(Label7)
+        ClientSize = New Size(911, 758)
         Controls.Add(Panel1)
         FormBorderStyle = FormBorderStyle.None
         Name = "Appointment"
@@ -395,7 +400,6 @@ Partial Class Appointment
         Panel3.ResumeLayout(False)
         Panel3.PerformLayout()
         ResumeLayout(False)
-        PerformLayout()
     End Sub
 
     Friend WithEvents Panel1 As Panel
@@ -426,7 +430,6 @@ Partial Class Appointment
     Friend WithEvents Label3 As Label
     Friend WithEvents LabelAppointmentID As Label
     Friend WithEvents LabelSales As Label
-    Friend WithEvents Label7 As Label
     Friend WithEvents PrintBillBtn As Button
     Friend WithEvents PrintDocumentBill As Printing.PrintDocument
 End Class

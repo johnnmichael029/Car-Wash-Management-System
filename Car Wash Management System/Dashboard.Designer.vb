@@ -104,13 +104,17 @@ Partial Class Dashboard
         ' 
         ' ButtonToggleChart
         ' 
-        ButtonToggleChart.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ButtonToggleChart.Location = New Point(395, 4)
+        ButtonToggleChart.BackColor = Color.FromArgb(CByte(92), CByte(81), CByte(224))
+        ButtonToggleChart.FlatAppearance.BorderSize = 0
+        ButtonToggleChart.FlatStyle = FlatStyle.Flat
+        ButtonToggleChart.Font = New Font("Century Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ButtonToggleChart.ForeColor = Color.White
+        ButtonToggleChart.Location = New Point(453, 3)
         ButtonToggleChart.Name = "ButtonToggleChart"
         ButtonToggleChart.Size = New Size(140, 27)
         ButtonToggleChart.TabIndex = 9
         ButtonToggleChart.Text = "Monthly Sales"
-        ButtonToggleChart.UseVisualStyleBackColor = True
+        ButtonToggleChart.UseVisualStyleBackColor = False
         ' 
         ' PanelMontlySales
         ' 
@@ -148,9 +152,9 @@ Partial Class Dashboard
         ' 
         TextBoxSearchBar.Font = New Font("Century Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         TextBoxSearchBar.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
-        TextBoxSearchBar.Location = New Point(407, 8)
+        TextBoxSearchBar.Location = New Point(453, 8)
         TextBoxSearchBar.Name = "TextBoxSearchBar"
-        TextBoxSearchBar.Size = New Size(172, 23)
+        TextBoxSearchBar.Size = New Size(140, 23)
         TextBoxSearchBar.TabIndex = 4
         TextBoxSearchBar.Text = "Search"
         ' 
@@ -232,16 +236,18 @@ Partial Class Dashboard
         ' 
         ' AddSalesBtn
         ' 
-        AddSalesBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        AddSalesBtn.Image = My.Resources.Resources.add
+        AddSalesBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddSalesBtn.FlatAppearance.BorderSize = 0
+        AddSalesBtn.FlatStyle = FlatStyle.Flat
+        AddSalesBtn.Font = New Font("Century Gothic", 11.25F)
+        AddSalesBtn.ForeColor = Color.White
         AddSalesBtn.Location = New Point(16, 367)
         AddSalesBtn.Name = "AddSalesBtn"
-        AddSalesBtn.Size = New Size(261, 34)
+        AddSalesBtn.Size = New Size(260, 46)
         AddSalesBtn.TabIndex = 32
         AddSalesBtn.Text = "Add Sales"
-        AddSalesBtn.TextAlign = ContentAlignment.MiddleRight
         AddSalesBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        AddSalesBtn.UseVisualStyleBackColor = True
+        AddSalesBtn.UseVisualStyleBackColor = False
         ' 
         ' TextBoxPrice
         ' 
@@ -324,16 +330,20 @@ Partial Class Dashboard
         ' ClearBtn
         ' 
         ClearBtn.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        ClearBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        ClearBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
+        ClearBtn.FlatAppearance.BorderSize = 0
+        ClearBtn.FlatStyle = FlatStyle.Flat
+        ClearBtn.Font = New Font("Century Gothic", 11.25F)
+        ClearBtn.ForeColor = Color.White
         ClearBtn.Image = CType(resources.GetObject("ClearBtn.Image"), Image)
-        ClearBtn.Location = New Point(16, 407)
+        ClearBtn.Location = New Point(16, 419)
         ClearBtn.Name = "ClearBtn"
-        ClearBtn.Size = New Size(262, 34)
+        ClearBtn.Size = New Size(260, 46)
         ClearBtn.TabIndex = 14
         ClearBtn.Text = "Clear Fields"
         ClearBtn.TextAlign = ContentAlignment.MiddleRight
         ClearBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        ClearBtn.UseVisualStyleBackColor = True
+        ClearBtn.UseVisualStyleBackColor = False
         ' 
         ' Label4
         ' 
@@ -432,16 +442,20 @@ Partial Class Dashboard
         ' ClearFieldsBtn
         ' 
         ClearFieldsBtn.Anchor = AnchorStyles.Top
-        ClearFieldsBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        ClearFieldsBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
+        ClearFieldsBtn.FlatAppearance.BorderSize = 0
+        ClearFieldsBtn.FlatStyle = FlatStyle.Flat
+        ClearFieldsBtn.Font = New Font("Century Gothic", 11.25F)
+        ClearFieldsBtn.ForeColor = Color.White
         ClearFieldsBtn.Image = CType(resources.GetObject("ClearFieldsBtn.Image"), Image)
-        ClearFieldsBtn.Location = New Point(16, 407)
+        ClearFieldsBtn.Location = New Point(15, 419)
         ClearFieldsBtn.Name = "ClearFieldsBtn"
-        ClearFieldsBtn.Size = New Size(262, 34)
+        ClearFieldsBtn.Size = New Size(260, 46)
         ClearFieldsBtn.TabIndex = 45
         ClearFieldsBtn.Text = "Clear Fields"
         ClearFieldsBtn.TextAlign = ContentAlignment.MiddleRight
         ClearFieldsBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        ClearFieldsBtn.UseVisualStyleBackColor = True
+        ClearFieldsBtn.UseVisualStyleBackColor = False
         ' 
         ' Label12
         ' 
@@ -496,16 +510,20 @@ Partial Class Dashboard
         ' AddCustomerBtn
         ' 
         AddCustomerBtn.Anchor = AnchorStyles.Top
-        AddCustomerBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        AddCustomerBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddCustomerBtn.FlatAppearance.BorderSize = 0
+        AddCustomerBtn.FlatStyle = FlatStyle.Flat
+        AddCustomerBtn.Font = New Font("Century Gothic", 11.25F)
+        AddCustomerBtn.ForeColor = Color.White
         AddCustomerBtn.Image = CType(resources.GetObject("AddCustomerBtn.Image"), Image)
         AddCustomerBtn.Location = New Point(16, 367)
         AddCustomerBtn.Name = "AddCustomerBtn"
-        AddCustomerBtn.Size = New Size(262, 34)
+        AddCustomerBtn.Size = New Size(260, 46)
         AddCustomerBtn.TabIndex = 42
         AddCustomerBtn.Text = "Add Customer"
         AddCustomerBtn.TextAlign = ContentAlignment.MiddleRight
         AddCustomerBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        AddCustomerBtn.UseVisualStyleBackColor = True
+        AddCustomerBtn.UseVisualStyleBackColor = False
         ' 
         ' Label14
         ' 

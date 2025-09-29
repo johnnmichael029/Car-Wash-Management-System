@@ -127,33 +127,45 @@ Partial Class Service
         ' 
         ' DeleteServiceBtn
         ' 
-        DeleteServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        DeleteServiceBtn.Location = New Point(16, 284)
+        DeleteServiceBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
+        DeleteServiceBtn.FlatAppearance.BorderSize = 0
+        DeleteServiceBtn.FlatStyle = FlatStyle.Flat
+        DeleteServiceBtn.Font = New Font("Century Gothic", 11.25F)
+        DeleteServiceBtn.ForeColor = Color.White
+        DeleteServiceBtn.Location = New Point(16, 299)
         DeleteServiceBtn.Name = "DeleteServiceBtn"
-        DeleteServiceBtn.Size = New Size(261, 39)
+        DeleteServiceBtn.Size = New Size(260, 46)
         DeleteServiceBtn.TabIndex = 9
         DeleteServiceBtn.Text = "Delete Service"
-        DeleteServiceBtn.UseVisualStyleBackColor = True
+        DeleteServiceBtn.UseVisualStyleBackColor = False
         ' 
         ' UpdateServiceBtn
         ' 
-        UpdateServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        UpdateServiceBtn.Location = New Point(16, 239)
+        UpdateServiceBtn.BackColor = Color.FromArgb(CByte(84), CByte(98), CByte(161))
+        UpdateServiceBtn.FlatAppearance.BorderSize = 0
+        UpdateServiceBtn.FlatStyle = FlatStyle.Flat
+        UpdateServiceBtn.Font = New Font("Century Gothic", 11.25F)
+        UpdateServiceBtn.ForeColor = Color.White
+        UpdateServiceBtn.Location = New Point(16, 247)
         UpdateServiceBtn.Name = "UpdateServiceBtn"
-        UpdateServiceBtn.Size = New Size(261, 39)
+        UpdateServiceBtn.Size = New Size(260, 46)
         UpdateServiceBtn.TabIndex = 8
         UpdateServiceBtn.Text = "Update Service"
-        UpdateServiceBtn.UseVisualStyleBackColor = True
+        UpdateServiceBtn.UseVisualStyleBackColor = False
         ' 
         ' AddServiceBtn
         ' 
-        AddServiceBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        AddServiceBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddServiceBtn.FlatAppearance.BorderSize = 0
+        AddServiceBtn.FlatStyle = FlatStyle.Flat
+        AddServiceBtn.Font = New Font("Century Gothic", 11.25F)
+        AddServiceBtn.ForeColor = Color.White
         AddServiceBtn.Location = New Point(16, 194)
         AddServiceBtn.Name = "AddServiceBtn"
-        AddServiceBtn.Size = New Size(261, 39)
+        AddServiceBtn.Size = New Size(260, 46)
         AddServiceBtn.TabIndex = 6
         AddServiceBtn.Text = "Add Service"
-        AddServiceBtn.UseVisualStyleBackColor = True
+        AddServiceBtn.UseVisualStyleBackColor = False
         ' 
         ' TextBoxPrice
         ' 

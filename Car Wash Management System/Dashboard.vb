@@ -401,7 +401,7 @@ Public Class DashboardManagement
     ''' Gets the total sales for the past 7 days from the SalesHistoryTable.
     ''' </summary>
     Public Function GetWeeklySales() As DataTable
-        Dim query As String = "SELECT CAST(SaleDate AS DATE) AS SaleDate, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable WHERE SaleDate >= DATEADD(DAY, -7, CAST(GETDATE() AS DATE)) GROUP BY CAST(SaleDate AS DATE) ORDER BY SaleDate ASC"
+        Dim query As String = "SELECT CAST(SaleDate AS DATE) AS SaleDate, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable WHERE SaleDate >= DATEADD(DAY, -6, CAST(GETDATE() AS DATE)) GROUP BY CAST(SaleDate AS DATE) ORDER BY SaleDate ASC"
         Dim dt As New DataTable()
         Try
             Using con As New SqlConnection(constr)

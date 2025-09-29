@@ -67,12 +67,8 @@ Public Class CustomerInformation
         DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
     End Sub
     Private Sub ViewBtn_Click(sender As Object, e As EventArgs) Handles ViewBtn.Click
-        ViewCustomerInformation()
+        ClearFields()
     End Sub
-    Private Sub ViewCustomerInformation()
-        DataGridViewCustomerInformation.DataSource = customerInformationManagement.ViewCustomer()
-    End Sub
-
     Private Sub UpdateBtn_Click(sender As Object, e As EventArgs) Handles UpdateBtn.Click
         UpdateCustomerInformation()
         ClearFields()

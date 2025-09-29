@@ -28,7 +28,7 @@ Public Class Carwash
         NotificationTimer.Interval = 3000
         NotificationTimer.Enabled = False
     End Sub
-    Private Sub DashboardFormLoad()
+    Public Sub DashboardFormLoad()
         Panel4.Controls.Clear()
         Dim dashboard As New Dashboard With {
             .TopLevel = False,

@@ -97,7 +97,6 @@ Public Class LoginManagement
         ' Compare the hashes
         Return hashedInput = storedHash
     End Function
-
     Public Sub LoginValidation(username As String, password As String)
         ' Check for empty fields first to prevent unnecessary database calls
         If String.IsNullOrWhiteSpace(username) OrElse String.IsNullOrWhiteSpace(password) Then
@@ -108,8 +107,6 @@ Public Class LoginManagement
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                ' Use a parameterized query to prevent SQL injection.
-                ' Use CASE to handle potential NULL values in the is_admin column.
                 Dim selectQuery = "SELECT 
                                         password, 
                                         salt, 
