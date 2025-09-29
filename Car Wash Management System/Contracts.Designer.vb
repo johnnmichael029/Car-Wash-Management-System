@@ -93,18 +93,25 @@ Partial Class Contracts
         Panel3.Dock = DockStyle.Right
         Panel3.Location = New Point(606, 0)
         Panel3.Name = "Panel3"
-        Panel3.Size = New Size(305, 611)
+        Panel3.Size = New Size(305, 758)
         Panel3.TabIndex = 2
         ' 
         ' PrintBillBtn
         ' 
-        PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        PrintBillBtn.Location = New Point(16, 577)
+        PrintBillBtn.BackColor = Color.FromArgb(CByte(92), CByte(81), CByte(224))
+        PrintBillBtn.FlatAppearance.BorderSize = 0
+        PrintBillBtn.FlatStyle = FlatStyle.Flat
+        PrintBillBtn.Font = New Font("Century Gothic", 11.25F)
+        PrintBillBtn.ForeColor = Color.White
+        PrintBillBtn.Image = My.Resources.Resources.printer
+        PrintBillBtn.Location = New Point(15, 631)
         PrintBillBtn.Name = "PrintBillBtn"
-        PrintBillBtn.Size = New Size(75, 23)
+        PrintBillBtn.Size = New Size(260, 46)
         PrintBillBtn.TabIndex = 34
         PrintBillBtn.Text = "Prin Bill"
-        PrintBillBtn.UseVisualStyleBackColor = True
+        PrintBillBtn.TextAlign = ContentAlignment.MiddleRight
+        PrintBillBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        PrintBillBtn.UseVisualStyleBackColor = False
         ' 
         ' LabelSales
         ' 
@@ -291,33 +298,48 @@ Partial Class Contracts
         ' 
         ' UpdateContractBtn
         ' 
-        UpdateContractBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        UpdateContractBtn.Location = New Point(16, 541)
+        UpdateContractBtn.BackColor = Color.FromArgb(CByte(84), CByte(98), CByte(161))
+        UpdateContractBtn.FlatAppearance.BorderSize = 0
+        UpdateContractBtn.FlatStyle = FlatStyle.Flat
+        UpdateContractBtn.Font = New Font("Century Gothic", 11.25F)
+        UpdateContractBtn.ForeColor = Color.White
+        UpdateContractBtn.Location = New Point(15, 579)
         UpdateContractBtn.Name = "UpdateContractBtn"
-        UpdateContractBtn.Size = New Size(260, 30)
+        UpdateContractBtn.Size = New Size(260, 46)
         UpdateContractBtn.TabIndex = 8
         UpdateContractBtn.Text = "Update Contract"
-        UpdateContractBtn.UseVisualStyleBackColor = True
+        UpdateContractBtn.UseVisualStyleBackColor = False
         ' 
         ' ClearFieldsBtn
         ' 
-        ClearFieldsBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
-        ClearFieldsBtn.Location = New Point(16, 508)
+        ClearFieldsBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
+        ClearFieldsBtn.FlatAppearance.BorderSize = 0
+        ClearFieldsBtn.FlatStyle = FlatStyle.Flat
+        ClearFieldsBtn.Font = New Font("Century Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ClearFieldsBtn.ForeColor = Color.White
+        ClearFieldsBtn.Image = My.Resources.Resources.clean1
+        ClearFieldsBtn.Location = New Point(15, 527)
         ClearFieldsBtn.Name = "ClearFieldsBtn"
-        ClearFieldsBtn.Size = New Size(260, 30)
+        ClearFieldsBtn.Size = New Size(260, 46)
         ClearFieldsBtn.TabIndex = 7
         ClearFieldsBtn.Text = "Clear Fields"
-        ClearFieldsBtn.UseVisualStyleBackColor = True
+        ClearFieldsBtn.TextAlign = ContentAlignment.MiddleRight
+        ClearFieldsBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        ClearFieldsBtn.UseVisualStyleBackColor = False
         ' 
         ' AddContractBtn
         ' 
-        AddContractBtn.Font = New Font("Century Gothic", 12F, FontStyle.Bold)
+        AddContractBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddContractBtn.FlatAppearance.BorderSize = 0
+        AddContractBtn.FlatStyle = FlatStyle.Flat
+        AddContractBtn.Font = New Font("Century Gothic", 11.25F)
+        AddContractBtn.ForeColor = Color.White
         AddContractBtn.Location = New Point(16, 475)
         AddContractBtn.Name = "AddContractBtn"
-        AddContractBtn.Size = New Size(260, 30)
+        AddContractBtn.Size = New Size(260, 46)
         AddContractBtn.TabIndex = 6
         AddContractBtn.Text = "Add Contract"
-        AddContractBtn.UseVisualStyleBackColor = True
+        AddContractBtn.UseVisualStyleBackColor = False
         ' 
         ' Label3
         ' 
@@ -371,7 +393,7 @@ Partial Class Contracts
         Panel1.Dock = DockStyle.Fill
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(911, 611)
+        Panel1.Size = New Size(911, 758)
         Panel1.TabIndex = 2
         ' 
         ' DataGridView1
@@ -383,7 +405,7 @@ Partial Class Contracts
         DataGridView1.Location = New Point(0, 0)
         DataGridView1.Name = "DataGridView1"
         DataGridView1.ReadOnly = True
-        DataGridView1.Size = New Size(606, 611)
+        DataGridView1.Size = New Size(606, 758)
         DataGridView1.TabIndex = 0
         ' 
         ' PrintDocumentBill
@@ -393,7 +415,7 @@ Partial Class Contracts
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(911, 611)
+        ClientSize = New Size(911, 758)
         Controls.Add(Panel1)
         FormBorderStyle = FormBorderStyle.None
         Name = "Contracts"

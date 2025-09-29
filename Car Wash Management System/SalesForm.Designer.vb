@@ -120,13 +120,20 @@ Partial Class SalesForm
         ' 
         ' PrintBillBtn
         ' 
-        PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        PrintBillBtn.Location = New Point(17, 447)
+        PrintBillBtn.BackColor = Color.FromArgb(CByte(92), CByte(81), CByte(224))
+        PrintBillBtn.FlatAppearance.BorderSize = 0
+        PrintBillBtn.FlatStyle = FlatStyle.Flat
+        PrintBillBtn.Font = New Font("Century Gothic", 11.25F)
+        PrintBillBtn.ForeColor = Color.White
+        PrintBillBtn.Image = My.Resources.Resources.printer2
+        PrintBillBtn.Location = New Point(16, 471)
         PrintBillBtn.Name = "PrintBillBtn"
-        PrintBillBtn.Size = New Size(75, 23)
+        PrintBillBtn.Size = New Size(260, 46)
         PrintBillBtn.TabIndex = 33
         PrintBillBtn.Text = "Prin Bill"
-        PrintBillBtn.UseVisualStyleBackColor = True
+        PrintBillBtn.TextAlign = ContentAlignment.MiddleRight
+        PrintBillBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        PrintBillBtn.UseVisualStyleBackColor = False
         ' 
         ' Label9
         ' 
@@ -140,16 +147,18 @@ Partial Class SalesForm
         ' 
         ' AddBtn
         ' 
-        AddBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        AddBtn.Image = My.Resources.Resources.add
+        AddBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddBtn.FlatAppearance.BorderSize = 0
+        AddBtn.FlatStyle = FlatStyle.Flat
+        AddBtn.Font = New Font("Century Gothic", 11.25F)
+        AddBtn.ForeColor = Color.White
         AddBtn.Location = New Point(16, 367)
         AddBtn.Name = "AddBtn"
-        AddBtn.Size = New Size(258, 34)
+        AddBtn.Size = New Size(260, 46)
         AddBtn.TabIndex = 32
         AddBtn.Text = "Add"
-        AddBtn.TextAlign = ContentAlignment.MiddleRight
         AddBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        AddBtn.UseVisualStyleBackColor = True
+        AddBtn.UseVisualStyleBackColor = False
         ' 
         ' TextBoxPrice
         ' 
@@ -231,16 +240,20 @@ Partial Class SalesForm
         ' ClearBtn
         ' 
         ClearBtn.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        ClearBtn.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        ClearBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
+        ClearBtn.FlatAppearance.BorderSize = 0
+        ClearBtn.FlatStyle = FlatStyle.Flat
+        ClearBtn.Font = New Font("Century Gothic", 11.25F)
+        ClearBtn.ForeColor = Color.White
         ClearBtn.Image = CType(resources.GetObject("ClearBtn.Image"), Image)
-        ClearBtn.Location = New Point(16, 407)
+        ClearBtn.Location = New Point(16, 419)
         ClearBtn.Name = "ClearBtn"
-        ClearBtn.Size = New Size(261, 34)
+        ClearBtn.Size = New Size(260, 46)
         ClearBtn.TabIndex = 14
         ClearBtn.Text = "Clear Fields"
         ClearBtn.TextAlign = ContentAlignment.MiddleRight
         ClearBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        ClearBtn.UseVisualStyleBackColor = True
+        ClearBtn.UseVisualStyleBackColor = False
         ' 
         ' Label4
         ' 

@@ -122,11 +122,14 @@ Partial Class Appointment
         PrintBillBtn.FlatStyle = FlatStyle.Flat
         PrintBillBtn.Font = New Font("Century Gothic", 11.25F)
         PrintBillBtn.ForeColor = Color.White
-        PrintBillBtn.Location = New Point(16, 631)
+        PrintBillBtn.Image = My.Resources.Resources.printer1
+        PrintBillBtn.Location = New Point(15, 631)
         PrintBillBtn.Name = "PrintBillBtn"
         PrintBillBtn.Size = New Size(260, 46)
         PrintBillBtn.TabIndex = 35
         PrintBillBtn.Text = "Prin Bill"
+        PrintBillBtn.TextAlign = ContentAlignment.MiddleRight
+        PrintBillBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         PrintBillBtn.UseVisualStyleBackColor = False
         ' 
         ' LabelSales
