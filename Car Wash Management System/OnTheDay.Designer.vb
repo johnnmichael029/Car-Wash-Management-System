@@ -32,10 +32,10 @@ Partial Class OnTheDay
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Font = New Font("Century Gothic", 26.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label1.Font = New Font("Microsoft Sans Serif", 26.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label1.Location = New Point(3, 3)
         Label1.Name = "Label1"
-        Label1.Size = New Size(391, 41)
+        Label1.Size = New Size(380, 39)
         Label1.TabIndex = 1
         Label1.Text = "On-The-Day Schedule"
         ' 

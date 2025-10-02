@@ -2,8 +2,8 @@
 Imports System.Text
 Imports Microsoft.Data.SqlClient
 Public Class Login
-   
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly loginManagement As LoginManagement
     Private ReadOnly accountManagement As AccountManagement

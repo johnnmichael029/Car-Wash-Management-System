@@ -5,7 +5,7 @@ Imports Microsoft.Data.SqlClient
 
 
 Public Class Dashboard
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly dashboardManagement As New DashboardManagement(constr, TextBoxCustomerName)
     Private ReadOnly listOfActivityLog As ListOfActivityLog
     Private ReadOnly salesForm As New SalesForm()

@@ -5,7 +5,7 @@ Imports Microsoft.Data.SqlClient
 
 Public Class Carwash
 
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Dim listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly carwashManagement As CarwashManagement
     'Private isFullScreen As Boolean = False

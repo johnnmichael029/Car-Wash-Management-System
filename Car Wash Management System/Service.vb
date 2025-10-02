@@ -4,7 +4,7 @@ Imports Microsoft.Data.SqlClient
 Imports Windows.Win32.System
 
 Public Class Service
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Dim listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly serviceManagement As ServiceManagement
     Public Sub New()
@@ -25,9 +25,9 @@ Public Class Service
     Private Sub ChangeHeaderOfDataGridViewService()
         DataGridViewService.Columns(0).HeaderText = "Service ID"
         DataGridViewService.Columns(1).HeaderText = "Service Name"
-        DataGridViewService.Columns(2).HeaderText = "Description"
-        DataGridViewService.Columns(3).HeaderText = "Price"
-        DataGridViewService.Columns(4).HeaderText = "Addon"
+        DataGridViewService.Columns(2).HeaderText = "Addon"
+        DataGridViewService.Columns(3).HeaderText = "Description"
+        DataGridViewService.Columns(4).HeaderText = "Price"
     End Sub
     Private Sub LoadListOfService()
         DataGridViewService.DataSource = serviceManagement.ViewService()
@@ -56,7 +56,13 @@ Public Class Service
         LoadListOfServiceFromDataGridViewService()
     End Sub
     Private Sub AddService()
+        If String.IsNullOrEmpty(TextBoxServiceName.Text) Or String.IsNullOrEmpty(TextBoxPrice.Text) Then
+            MessageBox.Show("Please fill in all fields.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
         serviceManagement.AddService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
+        MessageBox.Show("Service added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        ClearFields()
     End Sub
     Private Sub LoadListOfServiceFromDataGridViewService()
         DataGridViewService.DataSource = serviceManagement.ViewService()
@@ -97,6 +103,7 @@ Public Class Service
 End Class
 Public Class ServiceManagement
     Private ReadOnly constr As String
+
     Public Sub New(connectionString As String)
         Me.constr = connectionString
     End Sub
@@ -126,10 +133,6 @@ Public Class ServiceManagement
         Return isAdmin
     End Function
     Public Sub AddService(serviceName As String, description As String, price As String, serviceID As String, Addon As String)
-        If String.IsNullOrEmpty(serviceName) Or String.IsNullOrEmpty(description) Or String.IsNullOrEmpty(price) Then
-            MessageBox.Show("Please fill in all fields.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
 
         Using con As New SqlConnection(constr)
             Try
@@ -146,8 +149,8 @@ Public Class ServiceManagement
                 Carwash.NotificationLabel.Text = "New Service Added"
                 Carwash.ShowNotification()
                 Service.AddNewServiceFromActivityLog()
-                MessageBox.Show("Service added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Service.ClearFields()
+
+
             Catch ex As Exception
                 MessageBox.Show("Error adding service: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally
@@ -157,7 +160,7 @@ Public Class ServiceManagement
         End Using
     End Sub
     Public Sub UpdateService(serviceName As String, description As String, price As String, serviceID As String, Addon As String)
-        If String.IsNullOrEmpty(serviceName) Or String.IsNullOrEmpty(description) Or String.IsNullOrEmpty(price) Then
+        If String.IsNullOrEmpty(serviceName) Or String.IsNullOrEmpty(price) Then
             MessageBox.Show("Please select service from the table to update", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If

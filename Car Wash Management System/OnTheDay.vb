@@ -1,7 +1,7 @@
 ﻿Imports Microsoft.Data.SqlClient
 
 Public Class OnTheDay
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Dim listOfActivityLog As New ListOfActivityLog(constr)
     Private ReadOnly onTheDayManagement As OnTheDayManagement
     Public Sub New()
@@ -117,6 +117,10 @@ Public Class OnTheDay
             .Name = "actionsColumn"
         }
         DataGridViewOnTheDay.Columns.Add(updateButtonColumn)
+
+    End Sub
+
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
 
     End Sub
 End Class

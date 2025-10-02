@@ -2,7 +2,7 @@
 Imports System.Runtime.InteropServices.JavaScript.JSType
 Imports Microsoft.Data.SqlClient
 Public Class CustomerInformation
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly customerInformationManagement As CustomerInformationManagement
     Dim listOfActivityLog As New ListOfActivityLog(constr)
     Public Sub New()

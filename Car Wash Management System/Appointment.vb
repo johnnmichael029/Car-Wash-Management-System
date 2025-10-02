@@ -2,7 +2,7 @@
 Imports Microsoft.Data.SqlClient
 
 Public Class Appointment
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly appointmentManagement As AppointmentManagement
     Private ReadOnly listOfActivityLog As New ListOfActivityLog(constr)
     Public Sub New()

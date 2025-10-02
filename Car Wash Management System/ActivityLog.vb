@@ -1,6 +1,6 @@
 ﻿Imports Microsoft.Data.SqlClient
 Public Class ActivityLog
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly activityLogManagement As ActivityLogManagement
     Public Sub New()
         ' This call is required by the designer.
@@ -35,6 +35,10 @@ Public Class ActivityLog
         DataGridViewActivityLog.DataSource = activityLogManagement.ViewActivityLog()
         DataGridViewActivityLog.Columns("ActionType").HeaderText = "Action Type"
         DataGridViewActivityLog.Columns("Timestamp").HeaderText = "Timestamp"
+    End Sub
+
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
     End Sub
 End Class
 Public Class ActivityLogManagement

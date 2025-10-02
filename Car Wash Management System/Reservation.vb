@@ -1,6 +1,6 @@
 ﻿Imports Microsoft.Data.SqlClient
 Public Class Reservation
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly reservationManagement As ReservationManagement
     Public Sub New()
 
@@ -44,7 +44,9 @@ Public Class Reservation
         DataGridViewListOfReservation.Columns(5).HeaderText = "Appointment Status"
     End Sub
 
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
 
+    End Sub
 End Class
 Public Class ReservationManagement
     Private ReadOnly constr

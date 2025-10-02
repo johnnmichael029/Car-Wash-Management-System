@@ -119,11 +119,11 @@ Partial Class Carwash
         ' LabelWelcome
         ' 
         LabelWelcome.AutoSize = True
-        LabelWelcome.Font = New Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelWelcome.Font = New Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelWelcome.Location = New Point(131, 0)
         LabelWelcome.Name = "LabelWelcome"
         LabelWelcome.RightToLeft = RightToLeft.No
-        LabelWelcome.Size = New Size(0, 19)
+        LabelWelcome.Size = New Size(0, 20)
         LabelWelcome.TabIndex = 1
         LabelWelcome.TextAlign = ContentAlignment.TopCenter
         ' 
@@ -152,22 +152,22 @@ Partial Class Carwash
         ' 
         LabelTotalSalesToday.Anchor = AnchorStyles.None
         LabelTotalSalesToday.AutoSize = True
-        LabelTotalSalesToday.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelTotalSalesToday.Font = New Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelTotalSalesToday.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         LabelTotalSalesToday.Location = New Point(36, 19)
         LabelTotalSalesToday.Name = "LabelTotalSalesToday"
-        LabelTotalSalesToday.Size = New Size(0, 23)
+        LabelTotalSalesToday.Size = New Size(0, 24)
         LabelTotalSalesToday.TabIndex = 2
         ' 
         ' Label2
         ' 
         Label2.Anchor = AnchorStyles.None
         Label2.AutoSize = True
-        Label2.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label2.Font = New Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label2.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label2.Location = New Point(38, 4)
         Label2.Name = "Label2"
-        Label2.Size = New Size(85, 16)
+        Label2.Size = New Size(96, 16)
         Label2.TabIndex = 1
         Label2.Text = "Sales Today"
         ' 
@@ -203,7 +203,7 @@ Partial Class Carwash
         ' NotificationLabel
         ' 
         NotificationLabel.Dock = DockStyle.Right
-        NotificationLabel.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        NotificationLabel.Font = New Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         NotificationLabel.ForeColor = SystemColors.ControlText
         NotificationLabel.Location = New Point(0, 0)
         NotificationLabel.Name = "NotificationLabel"
@@ -252,11 +252,11 @@ Partial Class Carwash
         ' 
         LabelNewCustomer.Anchor = AnchorStyles.None
         LabelNewCustomer.AutoSize = True
-        LabelNewCustomer.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold)
+        LabelNewCustomer.Font = New Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold)
         LabelNewCustomer.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         LabelNewCustomer.Location = New Point(36, 19)
         LabelNewCustomer.Name = "LabelNewCustomer"
-        LabelNewCustomer.Size = New Size(0, 23)
+        LabelNewCustomer.Size = New Size(0, 24)
         LabelNewCustomer.TabIndex = 3
         ' 
         ' PictureBoxCustomer
@@ -273,11 +273,11 @@ Partial Class Carwash
         ' 
         Label4.Anchor = AnchorStyles.None
         Label4.AutoSize = True
-        Label4.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label4.Font = New Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label4.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label4.Location = New Point(38, 4)
         Label4.Name = "Label4"
-        Label4.Size = New Size(106, 16)
+        Label4.Size = New Size(114, 16)
         Label4.TabIndex = 1
         Label4.Text = "New Customers"
         ' 
@@ -297,11 +297,11 @@ Partial Class Carwash
         ' 
         LabelTotalNewScheduleToday.Anchor = AnchorStyles.None
         LabelTotalNewScheduleToday.AutoSize = True
-        LabelTotalNewScheduleToday.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold)
+        LabelTotalNewScheduleToday.Font = New Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold)
         LabelTotalNewScheduleToday.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         LabelTotalNewScheduleToday.Location = New Point(36, 19)
         LabelTotalNewScheduleToday.Name = "LabelTotalNewScheduleToday"
-        LabelTotalNewScheduleToday.Size = New Size(0, 23)
+        LabelTotalNewScheduleToday.Size = New Size(0, 24)
         LabelTotalNewScheduleToday.TabIndex = 2
         ' 
         ' PictureBoxSchedule
@@ -318,11 +318,11 @@ Partial Class Carwash
         ' 
         Label8.Anchor = AnchorStyles.None
         Label8.AutoSize = True
-        Label8.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold)
+        Label8.Font = New Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold)
         Label8.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label8.Location = New Point(38, 4)
         Label8.Name = "Label8"
-        Label8.Size = New Size(99, 16)
+        Label8.Size = New Size(106, 16)
         Label8.TabIndex = 1
         Label8.Text = "New Schedule"
         ' 
@@ -352,33 +352,33 @@ Partial Class Carwash
         ' 
         LabelTotalNewContractToday.Anchor = AnchorStyles.None
         LabelTotalNewContractToday.AutoSize = True
-        LabelTotalNewContractToday.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold)
+        LabelTotalNewContractToday.Font = New Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold)
         LabelTotalNewContractToday.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         LabelTotalNewContractToday.Location = New Point(36, 19)
         LabelTotalNewContractToday.Name = "LabelTotalNewContractToday"
-        LabelTotalNewContractToday.Size = New Size(0, 23)
+        LabelTotalNewContractToday.Size = New Size(0, 24)
         LabelTotalNewContractToday.TabIndex = 2
         ' 
         ' Label6
         ' 
         Label6.Anchor = AnchorStyles.None
         Label6.AutoSize = True
-        Label6.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold)
+        Label6.Font = New Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold)
         Label6.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label6.Location = New Point(38, 4)
         Label6.Name = "Label6"
-        Label6.Size = New Size(101, 16)
+        Label6.Size = New Size(106, 16)
         Label6.TabIndex = 1
         Label6.Text = "New Contracts"
         ' 
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label3.Font = New Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label3.Location = New Point(49, 1)
         Label3.Name = "Label3"
         Label3.RightToLeft = RightToLeft.No
-        Label3.Size = New Size(87, 19)
+        Label3.Size = New Size(87, 20)
         Label3.TabIndex = 0
         Label3.Text = "Welcome,"
         Label3.TextAlign = ContentAlignment.TopCenter
@@ -439,7 +439,7 @@ Partial Class Carwash
         DashboardBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         DashboardBtn.FlatAppearance.BorderSize = 0
         DashboardBtn.FlatStyle = FlatStyle.Flat
-        DashboardBtn.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        DashboardBtn.Font = New Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         DashboardBtn.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         DashboardBtn.Image = CType(resources.GetObject("DashboardBtn.Image"), Image)
         DashboardBtn.ImageAlign = ContentAlignment.MiddleLeft
@@ -486,7 +486,7 @@ Partial Class Carwash
         ActivityLogBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         ActivityLogBtn.FlatAppearance.BorderSize = 0
         ActivityLogBtn.FlatStyle = FlatStyle.Flat
-        ActivityLogBtn.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        ActivityLogBtn.Font = New Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         ActivityLogBtn.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         ActivityLogBtn.Image = My.Resources.Resources.restore
         ActivityLogBtn.ImageAlign = ContentAlignment.MiddleLeft
@@ -530,101 +530,101 @@ Partial Class Carwash
         ' FIleToolStripMenuItem
         ' 
         FIleToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ExitToolStripMenuItem, SettingsToolStripMenuItem, AdminToolStripMenuItem})
-        FIleToolStripMenuItem.Font = New Font("Century Gothic", 8.25F, FontStyle.Bold)
+        FIleToolStripMenuItem.Font = New Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         FIleToolStripMenuItem.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         FIleToolStripMenuItem.Name = "FIleToolStripMenuItem"
-        FIleToolStripMenuItem.Size = New Size(37, 28)
+        FIleToolStripMenuItem.Size = New Size(36, 28)
         FIleToolStripMenuItem.Text = "&FIle"
         ' 
         ' ExitToolStripMenuItem
         ' 
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        ExitToolStripMenuItem.Size = New Size(115, 22)
+        ExitToolStripMenuItem.Size = New Size(180, 22)
         ExitToolStripMenuItem.Text = "E&xit"
         ' 
         ' SettingsToolStripMenuItem
         ' 
         SettingsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ChangePasswordToolStripMenuItem})
         SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        SettingsToolStripMenuItem.Size = New Size(115, 22)
+        SettingsToolStripMenuItem.Size = New Size(180, 22)
         SettingsToolStripMenuItem.Text = "Settings"
         ' 
         ' ChangePasswordToolStripMenuItem
         ' 
         ChangePasswordToolStripMenuItem.Name = "ChangePasswordToolStripMenuItem"
-        ChangePasswordToolStripMenuItem.Size = New Size(171, 22)
+        ChangePasswordToolStripMenuItem.Size = New Size(160, 22)
         ChangePasswordToolStripMenuItem.Text = "Change Password"
         ' 
         ' AdminToolStripMenuItem
         ' 
         AdminToolStripMenuItem.Name = "AdminToolStripMenuItem"
-        AdminToolStripMenuItem.Size = New Size(115, 22)
+        AdminToolStripMenuItem.Size = New Size(180, 22)
         AdminToolStripMenuItem.Text = "Admin"
         ' 
         ' ServiceTrackingToolStripMenuItem
         ' 
         ServiceTrackingToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ServiceCatalogToolStripMenuItem, CustomerInformationToolStripMenuItem, SaleHistoryToolStripMenuItem, ContractsToolStripMenuItem, PickUpToolStripMenuItem})
-        ServiceTrackingToolStripMenuItem.Font = New Font("Century Gothic", 8.25F, FontStyle.Bold)
+        ServiceTrackingToolStripMenuItem.Font = New Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ServiceTrackingToolStripMenuItem.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         ServiceTrackingToolStripMenuItem.Name = "ServiceTrackingToolStripMenuItem"
-        ServiceTrackingToolStripMenuItem.Size = New Size(64, 28)
+        ServiceTrackingToolStripMenuItem.Size = New Size(60, 28)
         ServiceTrackingToolStripMenuItem.Text = "&Services"
         ' 
         ' ServiceCatalogToolStripMenuItem
         ' 
         ServiceCatalogToolStripMenuItem.Name = "ServiceCatalogToolStripMenuItem"
-        ServiceCatalogToolStripMenuItem.Size = New Size(186, 22)
+        ServiceCatalogToolStripMenuItem.Size = New Size(180, 22)
         ServiceCatalogToolStripMenuItem.Text = "&Service Catalog"
         ' 
         ' CustomerInformationToolStripMenuItem
         ' 
         CustomerInformationToolStripMenuItem.Name = "CustomerInformationToolStripMenuItem"
-        CustomerInformationToolStripMenuItem.Size = New Size(186, 22)
+        CustomerInformationToolStripMenuItem.Size = New Size(180, 22)
         CustomerInformationToolStripMenuItem.Text = "Customer &Information"
         ' 
         ' SaleHistoryToolStripMenuItem
         ' 
         SaleHistoryToolStripMenuItem.Name = "SaleHistoryToolStripMenuItem"
-        SaleHistoryToolStripMenuItem.Size = New Size(186, 22)
+        SaleHistoryToolStripMenuItem.Size = New Size(180, 22)
         SaleHistoryToolStripMenuItem.Text = "Sales &History"
         ' 
         ' ContractsToolStripMenuItem
         ' 
         ContractsToolStripMenuItem.Name = "ContractsToolStripMenuItem"
-        ContractsToolStripMenuItem.Size = New Size(186, 22)
+        ContractsToolStripMenuItem.Size = New Size(180, 22)
         ContractsToolStripMenuItem.Text = "&Contracts"
         ' 
         ' PickUpToolStripMenuItem
         ' 
         PickUpToolStripMenuItem.Name = "PickUpToolStripMenuItem"
-        PickUpToolStripMenuItem.Size = New Size(186, 22)
+        PickUpToolStripMenuItem.Size = New Size(180, 22)
         PickUpToolStripMenuItem.Text = "Pick Up"
         ' 
         ' BookingToolStripMenuItem
         ' 
         BookingToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {AppointmentScheduleToolStripMenuItem1, ListToolStripMenuItem, OnTheDayScheduleToolStripMenuItem})
-        BookingToolStripMenuItem.Font = New Font("Century Gothic", 8.25F, FontStyle.Bold)
+        BookingToolStripMenuItem.Font = New Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         BookingToolStripMenuItem.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         BookingToolStripMenuItem.Name = "BookingToolStripMenuItem"
-        BookingToolStripMenuItem.Size = New Size(68, 28)
+        BookingToolStripMenuItem.Size = New Size(63, 28)
         BookingToolStripMenuItem.Text = "&Bookings"
         ' 
         ' AppointmentScheduleToolStripMenuItem1
         ' 
         AppointmentScheduleToolStripMenuItem1.Name = "AppointmentScheduleToolStripMenuItem1"
-        AppointmentScheduleToolStripMenuItem1.Size = New Size(196, 22)
+        AppointmentScheduleToolStripMenuItem1.Size = New Size(181, 22)
         AppointmentScheduleToolStripMenuItem1.Text = "&Appointment Schedule"
         ' 
         ' ListToolStripMenuItem
         ' 
         ListToolStripMenuItem.Name = "ListToolStripMenuItem"
-        ListToolStripMenuItem.Size = New Size(196, 22)
+        ListToolStripMenuItem.Size = New Size(181, 22)
         ListToolStripMenuItem.Text = "&List of Reserved"
         ' 
         ' OnTheDayScheduleToolStripMenuItem
         ' 
         OnTheDayScheduleToolStripMenuItem.Name = "OnTheDayScheduleToolStripMenuItem"
-        OnTheDayScheduleToolStripMenuItem.Size = New Size(196, 22)
+        OnTheDayScheduleToolStripMenuItem.Size = New Size(181, 22)
         OnTheDayScheduleToolStripMenuItem.Text = "&On-The-Day Schedule"
         ' 
         ' ExitToolStripMenuItem1

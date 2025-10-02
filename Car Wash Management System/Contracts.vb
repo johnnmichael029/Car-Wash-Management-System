@@ -5,7 +5,7 @@ Imports System.Drawing.Printing
 Public Class Contracts
 
 
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarWashManagementDB;Integrated Security=True;Trust Server Certificate=True"
+    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly billingContractsManagement As BillingContractsManagement
     Dim listOfActivityLog As New ListOfActivityLog(constr)
 
