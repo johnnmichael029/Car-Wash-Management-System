@@ -1,14 +1,14 @@
 ﻿Imports Microsoft.Data.SqlClient
 Public Class Reservation
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Private ReadOnly reservationManagement As ReservationManagement
+    Private ReadOnly reservationDatabaseHelper As ReservationDatabaseHelper
     Public Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        reservationManagement = New ReservationManagement(constr)
+        reservationDatabaseHelper = New ReservationDatabaseHelper(constr)
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
         LoadListOfReserved()
@@ -20,7 +20,7 @@ Public Class Reservation
         DataGridViewListOfReservation.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
     Private Sub LoadListOfReserved()
-        DataGridViewListOfReservation.DataSource = reservationManagement.ViewListOfReserved()
+        DataGridViewListOfReservation.DataSource = reservationDatabaseHelper.ViewListOfReserved()
     End Sub
     Private Sub DataGridViewListOfReserved_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewListOfReservation.CellFormatting
         ' Check if this is the column we care about ("AppointmentStatus") and
@@ -47,29 +47,4 @@ Public Class Reservation
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
 
     End Sub
-End Class
-Public Class ReservationManagement
-    Private ReadOnly constr
-    Public Sub New(connectionString As String)
-        Me.constr = connectionString
-
-    End Sub
-    Public Function ViewListOfReserved() As DataTable
-        Dim dt As New DataTable()
-        Using con As New SqlConnection(constr)
-            Dim viewListQuery As String = "SELECT a.AppointmentID As ReservationID, c.Name AS CustomerName, s.ServiceName AS BaseService, sa.ServiceName AS AddonService, a.AppointmentDateTime, a.AppointmentStatus
-                                         FROM AppointmentsTable a 
-                                         INNER JOIN CustomersTable c ON a.CustomerID = c.CustomerID
-                                         INNER JOIN ServicesTable s ON a.ServiceID = s.ServiceID
-                                         LEFT JOIN ServicesTable sa ON a.AddonServiceID = sa.ServiceID 
-                                         WHERE a.AppointmentStatus = 'Confirmed'
-                                         ORDER BY a.AppointmentID DESC"
-            Using cmd As New SqlCommand(viewListQuery, con)
-                Using adapater As New SqlDataAdapter(cmd)
-                    adapater.Fill(dt)
-                End Using
-            End Using
-        End Using
-        Return dt
-    End Function
 End Class

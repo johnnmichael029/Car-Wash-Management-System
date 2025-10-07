@@ -6,15 +6,15 @@ Imports Microsoft.Data.SqlClient
 Public Class Carwash
 
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Dim listOfActivityLog As New ListOfActivityLog(constr)
-    Private ReadOnly carwashManagement As CarwashManagement
+    Dim activityLogInDashboardService As New ActivityLogInDashboardService(constr)
+    Private ReadOnly carwashDatabaseHelper As CarwashDatabaseHelper
     'Private isFullScreen As Boolean = False
     'Private originalIcon As Icon
     Public Sub New()
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
-        carwashManagement = New CarwashManagement(constr)
+        carwashDatabaseHelper = New CarwashDatabaseHelper(constr)
     End Sub
 
     Private PrivateFonts As New PrivateFontCollection()
@@ -48,7 +48,7 @@ Public Class Carwash
             Me.Hide()
             Login.Show()
             Dim username As String = Login.TextBoxUsername.Text
-            listOfActivityLog.UserLogout(username)
+            activityLogInDashboardService.UserLogout(username)
         End If
     End Sub
 
@@ -205,39 +205,33 @@ Public Class Carwash
         Application.Exit()
     End Sub
     Public Sub PopulateAllTotal()
-        Dim totalSales As Decimal = carwashManagement.GetTodayTotalSales()
+        Dim totalSales As Decimal = carwashDatabaseHelper.GetTodayTotalSales()
         LabelTotalSalesToday.Text = "₱" & totalSales.ToString("N2")
 
-        Dim totalNewCustomers As Integer = carwashManagement.GetTotalNewCustomers()
+        Dim totalNewCustomers As Integer = carwashDatabaseHelper.GetTotalNewCustomers()
         LabelNewCustomer.Text = totalNewCustomers.ToString()
 
-        Dim totalAppointments As Integer = carwashManagement.GetTotalAppointments()
+        Dim totalAppointments As Integer = carwashDatabaseHelper.GetTotalAppointments()
         LabelTotalNewScheduleToday.Text = totalAppointments.ToString()
 
-        Dim totalContracts As Integer = carwashManagement.GetTotalContracts()
+        Dim totalContracts As Integer = carwashDatabaseHelper.GetTotalContracts()
         LabelTotalNewContractToday.Text = totalContracts.ToString()
     End Sub
-
     Private Sub PictureBoxSales_Click(sender As Object, e As EventArgs) Handles PictureBoxSales.Click
         ShowSalesFormFunction()
     End Sub
-
     Private Sub ContractsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ContractsToolStripMenuItem.Click
         ShowNewContractsTodayFormFunction()
     End Sub
-
     Private Sub PictureBoxCustomer_Click(sender As Object, e As EventArgs) Handles PictureBoxCustomer.Click
         ShowNewCustomersFormFunction()
     End Sub
-
     Private Sub PictureBoxContracts_Click(sender As Object, e As EventArgs) Handles PictureBoxContracts.Click
         ShowNewContractsTodayFormFunction()
     End Sub
-
     Private Sub PictureBoxSchedule_Click(sender As Object, e As EventArgs) Handles PictureBoxSchedule.Click
         ShowNewAppointmentsTodayFormFunction()
     End Sub
-
     Private Sub PickUpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PickUpToolStripMenuItem.Click
         PickUp()
     End Sub
@@ -251,7 +245,6 @@ Public Class Carwash
         pickUp.Dock = DockStyle.Fill
         pickUp.Show()
     End Sub
-
     Private Sub AdminToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdminToolStripMenuItem.Click
         AdminShowForm()
     End Sub
@@ -265,92 +258,4 @@ Public Class Carwash
         admmin.Dock = DockStyle.Fill
         admmin.Show()
     End Sub
-
-
-End Class
-Public Class CarwashManagement
-    Private ReadOnly constr
-    Public Sub New(connectionString As String)
-        Me.constr = connectionString
-    End Sub
-    ''' <summary>
-    ''' Gets the total sales for today from the SalesHistoryTable.
-    ''' </summary>
-    Public Function GetTodayTotalSales() As Decimal
-        Dim totalSales As Decimal = 0
-        Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT SUM(TotalPrice) FROM SalesHistoryTable WHERE CAST(SaleDate AS DATE) = CAST(GETDATE() AS DATE)"
-            Using cmd As New SqlCommand(query, con)
-                Try
-                    con.Open()
-                    Dim result As Object = cmd.ExecuteScalar()
-                    If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
-                        totalSales = Convert.ToDecimal(result)
-                    End If
-                Catch ex As Exception
-                    Console.WriteLine("Error in GetTodayTotalSales: " & ex.Message)
-                End Try
-            End Using
-        End Using
-        Return totalSales
-    End Function
-    ''' <summary>
-    ''' Gets the total number of new customers registered today from the CustomersTable.
-    ''' </summary>
-    Public Function GetTotalNewCustomers() As Integer
-        Dim totalNewCustomers As Integer = 0
-        Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT COUNT(*) FROM CustomersTable WHERE CAST(RegistrationDate AS DATE) = CAST(GETDATE() AS DATE)"
-            Using cmd As New SqlCommand(query, con)
-                Try
-                    con.Open()
-                    totalNewCustomers = Convert.ToInt32(cmd.ExecuteScalar())
-                Catch ex As Exception
-                    Console.WriteLine("Error in GetTotalNewCustomers: " & ex.Message)
-                End Try
-            End Using
-        End Using
-        Return totalNewCustomers
-    End Function
-    ''' <summary>
-    ''' Gets the total number of confirmed appointments scheduled for today from the AppointmentsTable.
-    ''' </summary>
-    Public Function GetTotalAppointments() As Integer
-        Dim totalAppointments As Integer = 0
-        Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT COUNT(*) FROM AppointmentsTable
-                                 WHERE CAST(AppointmentDateTime AS DATE) = CAST(GETDATE() AS DATE)
-                                 AND AppointmentStatus = 'Confirmed'"
-            Using cmd As New SqlCommand(query, con)
-                Try
-                    con.Open()
-                    totalAppointments = Convert.ToInt32(cmd.ExecuteScalar())
-                Catch ex As Exception
-                    Console.WriteLine("Error in GetTotalAppointments: " & ex.Message)
-                End Try
-            End Using
-        End Using
-        Return totalAppointments
-    End Function
-    ''' <summary>
-    ''' Gets the total number of new contracts created today from the ContractsTable.
-    ''' </summary>
-    Public Function GetTotalContracts() As Integer
-        Dim totalContracts As Integer = 0
-        Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT COUNT(*) FROM ContractsTable WHERE CAST(StartDate AS DATE) = CAST(GETDATE() AS DATE)"
-            Using cmd As New SqlCommand(query, con)
-                Try
-                    con.Open()
-                    totalContracts = Convert.ToInt32(cmd.ExecuteScalar())
-                Catch ex As Exception
-                    Console.WriteLine("Error in GetTotalContracts: " & ex.Message)
-                End Try
-            End Using
-        End Using
-        Return totalContracts
-    End Function
-    ''' <summary>
-    ''' Gets the list of sales records matching the search string from the SalesHistoryTable along with Customer and Service details.
-    ''' </summary>
 End Class

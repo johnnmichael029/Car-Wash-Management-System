@@ -2,15 +2,15 @@
 
 Public Class OnTheDay
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Dim listOfActivityLog As New ListOfActivityLog(constr)
-    Private ReadOnly onTheDayManagement As OnTheDayManagement
+    Dim activityLogInDashboardService As New ActivityLogInDashboardService(constr)
+    Private ReadOnly onTheDayDatabaseHelper As OnTheDayDatabaseHelper
     Public Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        onTheDayManagement = New OnTheDayManagement(constr)
+        onTheDayDatabaseHelper = New OnTheDayDatabaseHelper(constr)
 
     End Sub
     Private Sub OnTheDay_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -65,23 +65,23 @@ Public Class OnTheDay
 
                     Case "Queued"
                         nextStatus = "In-progress"
-                        listOfActivityLog.RecordActivity(customerName, nextStatus)
-                        onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
+                        activityLogInDashboardService.RecordActivity(customerName, nextStatus)
+                        onTheDayDatabaseHelper.UpdateStatus(appointmentID, nextStatus)
                         Carwash.NotificationLabel.Text = "Appointment In-progress"
                         Carwash.ShowNotification()
                     Case "In-progress"
                         nextStatus = "Completed"
-                        onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
-                        listOfActivityLog.RecordActivity(customerName, nextStatus)
+                        onTheDayDatabaseHelper.UpdateStatus(appointmentID, nextStatus)
+                        activityLogInDashboardService.RecordActivity(customerName, nextStatus)
                         Carwash.NotificationLabel.Text = "Appointment Completed"
                         Carwash.ShowNotification()
                         Carwash.PopulateAllTotal()
                     Case "Completed"
-                        onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
+                        onTheDayDatabaseHelper.UpdateStatus(appointmentID, nextStatus)
                     Case Else
                         nextStatus = "Queued" ' Default status if not set
-                        onTheDayManagement.UpdateStatus(appointmentID, nextStatus)
-                        listOfActivityLog.RecordActivity(customerName, nextStatus)
+                        onTheDayDatabaseHelper.UpdateStatus(appointmentID, nextStatus)
+                        activityLogInDashboardService.RecordActivity(customerName, nextStatus)
                         Carwash.NotificationLabel.Text = "Appointment Queued"
                         Carwash.ShowNotification()
                 End Select
@@ -103,7 +103,7 @@ Public Class OnTheDay
     End Sub
 
     Private Sub LoadListOfOnTheDay()
-        DataGridViewOnTheDay.DataSource = onTheDayManagement.ViewListOfReserved()
+        DataGridViewOnTheDay.DataSource = onTheDayDatabaseHelper.ViewListOfReserved()
     End Sub
     Private Sub DataGridViewOnTheDayFontStyle()
         DataGridViewOnTheDay.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
@@ -122,47 +122,5 @@ Public Class OnTheDay
 
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
 
-    End Sub
-End Class
-Public Class OnTheDayManagement
-    Private ReadOnly constr
-    Public Sub New(connectionString As String)
-        Me.constr = connectionString
-
-    End Sub
-    Public Function ViewListOfReserved() As DataTable
-        Dim dt As New DataTable()
-        Using con As New SqlConnection(constr)
-            Dim viewListQuery As String = "SELECT a.AppointmentID As OnTheDayID, c.Name AS CustomerName, s.ServiceName AS BaseService, sa.ServiceName AS AddonService, a.AppointmentDateTime, a.AppointmentStatus
-                                         FROM AppointmentsTable a 
-                                         INNER JOIN CustomersTable c ON a.CustomerID = c.CustomerID
-                                         INNER JOIN ServicesTable s ON a.ServiceID = s.ServiceID
-                                         LEFT JOIN ServicesTable sa ON a.AddonServiceID = sa.ServiceID 
-                                         WHERE a.AppointmentStatus IN ('Confirmed', 'Queued', 'In-progress')
-                                         ORDER BY a.AppointmentID DESC"
-            Using cmd As New SqlCommand(viewListQuery, con)
-                Using adapater As New SqlDataAdapter(cmd)
-                    adapater.Fill(dt)
-                End Using
-            End Using
-        End Using
-        Return dt
-    End Function
-    Public Sub UpdateStatus(appointmentID As Integer, newStatus As String)
-        Using con As New SqlConnection(constr)
-            Try
-                con.Open()
-                Dim UpdateStatusQuery As String = "UPDATE AppointmentsTable SET AppointmentStatus = @NewStatus WHERE AppointmentID = @AppointmentID"
-                Using cnd As New SqlCommand(UpdateStatusQuery, con)
-                    cnd.Parameters.AddWithValue("@NewStatus", newStatus)
-                    cnd.Parameters.AddWithValue("@AppointmentID", appointmentID)
-                    cnd.ExecuteNonQuery()
-                End Using
-            Catch ex As Exception
-                Console.WriteLine("Error updating status: " & ex.Message)
-            Finally
-                con.Close()
-            End Try
-        End Using
     End Sub
 End Class
