@@ -322,7 +322,7 @@ Public Class Appointment
         printPreviewDialog.ShowDialog()
     End Sub
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
-        AppointmentManagement.PrintBillInAppointment(e, New PrintDataInAppointment With {
+        appointmentManagement.PrintBillInAppointment(e, New PrintDataInAppointmentService With {
            .ContractID = If(DataGridViewAppointment.CurrentRow IsNot Nothing, Convert.ToInt32(DataGridViewAppointment.CurrentRow.Cells(0).Value), 0),
            .CustomerName = TextBoxCustomerName.Text,
            .BaseService = ComboBoxServices.Text,
@@ -561,7 +561,7 @@ Public Class AppointmentManagement
     ''' <summary>
     ''' Print Bill
     ''' </summary>
-    Public Shared Sub PrintBillInAppointment(e As PrintPageEventArgs, printData As PrintDataInAppointment)
+    Public Shared Sub PrintBillInAppointment(e As PrintPageEventArgs, printData As PrintDataInAppointmentService)
         If printData Is Nothing Then
             ' Handle case where no data is set
             Return
@@ -665,18 +665,4 @@ End Class
 Public Class AppointmentServiceDetails
     Public Property ServiceID As Integer
     Public Property Price As Decimal
-End Class
-Public Class PrintDataInAppointment
-    Public Property ContractID As Integer
-    Public Property CustomerName As String
-    Public Property CustomerID As Integer
-    Public Property BaseService As String
-    Public Property AddonService As String
-    Public Property TotalPrice As Decimal
-    Public Property PaymentMethod As String
-    Public Property SaleDate As DateTime
-    Public Property BaseServicePrice As Decimal
-    Public Property AddonServicePrice As Decimal
-    Public Property StartDate As DateTime
-    Public Property AppointmentStatus As String
 End Class
