@@ -99,7 +99,6 @@ Public Class OnTheDay
         DataGridViewOnTheDay.Columns(3).HeaderText = "Addon Service"
         DataGridViewOnTheDay.Columns(4).HeaderText = "Date & Time"
         DataGridViewOnTheDay.Columns(5).HeaderText = "Appointment Status"
-
     End Sub
 
     Private Sub LoadListOfOnTheDay()

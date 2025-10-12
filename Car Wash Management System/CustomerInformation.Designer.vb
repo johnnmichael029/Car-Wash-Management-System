@@ -25,25 +25,50 @@ Partial Class CustomerInformation
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CustomerInformation))
         Panel1 = New Panel()
         Panel2 = New Panel()
-        customerIDLabel = New Label()
-        Label1 = New Label()
-        UpdateBtn = New Button()
-        Label2 = New Label()
-        DeleteBtn = New Button()
-        TextBoxPlateNumber = New TextBox()
-        ViewBtn = New Button()
-        Label3 = New Label()
-        TextBoxAddress = New TextBox()
-        TextBoxEmail = New TextBox()
-        Label67 = New Label()
-        Label4 = New Label()
-        TextBoxNumber = New TextBox()
-        AddBtn = New Button()
+        AddVehicleBtn = New Button()
+        ListViewVehicles = New ListView()
+        Panel15 = New Panel()
+        Panel13 = New Panel()
         Label5 = New Label()
+        TextBoxVehicle = New TextBox()
+        Panel9 = New Panel()
+        Panel8 = New Panel()
+        TextBoxPlateNumber = New TextBox()
+        Label3 = New Label()
+        Panel6 = New Panel()
+        Panel17 = New Panel()
+        Label4 = New Label()
+        Panel7 = New Panel()
+        TextBoxAddress = New TextBox()
+        Panel12 = New Panel()
+        Panel3 = New Panel()
+        Label2 = New Label()
+        TextBoxEmail = New TextBox()
+        Panel11 = New Panel()
+        Panel5 = New Panel()
+        Label7 = New Label()
+        TextBoxNumber = New TextBox()
+        Panel10 = New Panel()
+        Panel4 = New Panel()
         TextBoxName = New TextBox()
+        Label6 = New Label()
+        customerIDLabel = New Label()
+        UpdateBtn = New Button()
+        DeleteBtn = New Button()
+        ViewBtn = New Button()
+        Label67 = New Label()
+        AddBtn = New Button()
         DataGridViewCustomerInformation = New DataGridView()
+        SqlConnection1 = New Microsoft.Data.SqlClient.SqlConnection()
         Panel1.SuspendLayout()
         Panel2.SuspendLayout()
+        Panel15.SuspendLayout()
+        Panel13.SuspendLayout()
+        Panel8.SuspendLayout()
+        Panel17.SuspendLayout()
+        Panel12.SuspendLayout()
+        Panel11.SuspendLayout()
+        Panel10.SuspendLayout()
         CType(DataGridViewCustomerInformation, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -60,46 +85,310 @@ Partial Class CustomerInformation
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
+        Panel2.Controls.Add(AddVehicleBtn)
+        Panel2.Controls.Add(ListViewVehicles)
+        Panel2.Controls.Add(Panel15)
+        Panel2.Controls.Add(Panel17)
+        Panel2.Controls.Add(Panel12)
+        Panel2.Controls.Add(Panel11)
+        Panel2.Controls.Add(Panel10)
         Panel2.Controls.Add(customerIDLabel)
-        Panel2.Controls.Add(Label1)
         Panel2.Controls.Add(UpdateBtn)
-        Panel2.Controls.Add(Label2)
         Panel2.Controls.Add(DeleteBtn)
-        Panel2.Controls.Add(TextBoxPlateNumber)
         Panel2.Controls.Add(ViewBtn)
-        Panel2.Controls.Add(Label3)
-        Panel2.Controls.Add(TextBoxAddress)
-        Panel2.Controls.Add(TextBoxEmail)
         Panel2.Controls.Add(Label67)
-        Panel2.Controls.Add(Label4)
-        Panel2.Controls.Add(TextBoxNumber)
         Panel2.Controls.Add(AddBtn)
-        Panel2.Controls.Add(Label5)
-        Panel2.Controls.Add(TextBoxName)
         Panel2.Dock = DockStyle.Right
         Panel2.Location = New Point(606, 0)
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(305, 758)
         Panel2.TabIndex = 1
         ' 
+        ' AddVehicleBtn
+        ' 
+        AddVehicleBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddVehicleBtn.FlatAppearance.BorderSize = 0
+        AddVehicleBtn.FlatStyle = FlatStyle.Flat
+        AddVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddVehicleBtn.ForeColor = Color.White
+        AddVehicleBtn.Location = New Point(16, 371)
+        AddVehicleBtn.Name = "AddVehicleBtn"
+        AddVehicleBtn.Size = New Size(75, 23)
+        AddVehicleBtn.TabIndex = 81
+        AddVehicleBtn.Text = "Add"
+        AddVehicleBtn.UseVisualStyleBackColor = False
+        ' 
+        ' ListViewVehicles
+        ' 
+        ListViewVehicles.FullRowSelect = True
+        ListViewVehicles.GridLines = True
+        ListViewVehicles.Location = New Point(16, 400)
+        ListViewVehicles.Name = "ListViewVehicles"
+        ListViewVehicles.Size = New Size(260, 102)
+        ListViewVehicles.TabIndex = 80
+        ListViewVehicles.UseCompatibleStateImageBehavior = False
+        ' 
+        ' Panel15
+        ' 
+        Panel15.Controls.Add(Panel13)
+        Panel15.Controls.Add(Panel8)
+        Panel15.Location = New Point(16, 306)
+        Panel15.Name = "Panel15"
+        Panel15.Size = New Size(261, 59)
+        Panel15.TabIndex = 79
+        ' 
+        ' Panel13
+        ' 
+        Panel13.Controls.Add(Label5)
+        Panel13.Controls.Add(TextBoxVehicle)
+        Panel13.Controls.Add(Panel9)
+        Panel13.Dock = DockStyle.Right
+        Panel13.Location = New Point(136, 0)
+        Panel13.Name = "Panel13"
+        Panel13.Size = New Size(125, 59)
+        Panel13.TabIndex = 82
+        ' 
+        ' Label5
+        ' 
+        Label5.AutoSize = True
+        Label5.Dock = DockStyle.Top
+        Label5.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        Label5.Location = New Point(0, 0)
+        Label5.Name = "Label5"
+        Label5.Size = New Size(62, 21)
+        Label5.TabIndex = 67
+        Label5.Text = "Vehicle"
+        ' 
+        ' TextBoxVehicle
+        ' 
+        TextBoxVehicle.BorderStyle = BorderStyle.None
+        TextBoxVehicle.Font = New Font("Century Gothic", 12F)
+        TextBoxVehicle.Location = New Point(0, 24)
+        TextBoxVehicle.Multiline = True
+        TextBoxVehicle.Name = "TextBoxVehicle"
+        TextBoxVehicle.Size = New Size(125, 31)
+        TextBoxVehicle.TabIndex = 51
+        ' 
+        ' Panel9
+        ' 
+        Panel9.BackColor = Color.FromArgb(CByte(103), CByte(103), CByte(231))
+        Panel9.Dock = DockStyle.Bottom
+        Panel9.Location = New Point(0, 57)
+        Panel9.Name = "Panel9"
+        Panel9.Size = New Size(125, 2)
+        Panel9.TabIndex = 81
+        ' 
+        ' Panel8
+        ' 
+        Panel8.Controls.Add(TextBoxPlateNumber)
+        Panel8.Controls.Add(Label3)
+        Panel8.Controls.Add(Panel6)
+        Panel8.Dock = DockStyle.Left
+        Panel8.Location = New Point(0, 0)
+        Panel8.Name = "Panel8"
+        Panel8.Size = New Size(125, 59)
+        Panel8.TabIndex = 80
+        ' 
+        ' TextBoxPlateNumber
+        ' 
+        TextBoxPlateNumber.BorderStyle = BorderStyle.None
+        TextBoxPlateNumber.Font = New Font("Century Gothic", 12F)
+        TextBoxPlateNumber.Location = New Point(0, 24)
+        TextBoxPlateNumber.Multiline = True
+        TextBoxPlateNumber.Name = "TextBoxPlateNumber"
+        TextBoxPlateNumber.Size = New Size(125, 31)
+        TextBoxPlateNumber.TabIndex = 82
+        ' 
+        ' Label3
+        ' 
+        Label3.AutoSize = True
+        Label3.Dock = DockStyle.Top
+        Label3.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        Label3.Location = New Point(0, 0)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(110, 21)
+        Label3.TabIndex = 75
+        Label3.Text = "Plate Number"
+        ' 
+        ' Panel6
+        ' 
+        Panel6.BackColor = Color.FromArgb(CByte(103), CByte(103), CByte(231))
+        Panel6.Dock = DockStyle.Bottom
+        Panel6.Location = New Point(0, 57)
+        Panel6.Name = "Panel6"
+        Panel6.Size = New Size(125, 2)
+        Panel6.TabIndex = 72
+        ' 
+        ' Panel17
+        ' 
+        Panel17.Controls.Add(Label4)
+        Panel17.Controls.Add(Panel7)
+        Panel17.Controls.Add(TextBoxAddress)
+        Panel17.Location = New Point(16, 183)
+        Panel17.Name = "Panel17"
+        Panel17.Size = New Size(261, 117)
+        Panel17.TabIndex = 78
+        ' 
+        ' Label4
+        ' 
+        Label4.AutoSize = True
+        Label4.Dock = DockStyle.Top
+        Label4.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        Label4.Location = New Point(0, 0)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(70, 21)
+        Label4.TabIndex = 66
+        Label4.Text = "Address"
+        ' 
+        ' Panel7
+        ' 
+        Panel7.BackColor = Color.FromArgb(CByte(103), CByte(103), CByte(231))
+        Panel7.Dock = DockStyle.Bottom
+        Panel7.Location = New Point(0, 115)
+        Panel7.Name = "Panel7"
+        Panel7.Size = New Size(261, 2)
+        Panel7.TabIndex = 71
+        ' 
+        ' TextBoxAddress
+        ' 
+        TextBoxAddress.BorderStyle = BorderStyle.None
+        TextBoxAddress.Font = New Font("Century Gothic", 12F)
+        TextBoxAddress.Location = New Point(0, 24)
+        TextBoxAddress.Multiline = True
+        TextBoxAddress.Name = "TextBoxAddress"
+        TextBoxAddress.Size = New Size(261, 93)
+        TextBoxAddress.TabIndex = 50
+        ' 
+        ' Panel12
+        ' 
+        Panel12.Controls.Add(Panel3)
+        Panel12.Controls.Add(Label2)
+        Panel12.Controls.Add(TextBoxEmail)
+        Panel12.Location = New Point(16, 122)
+        Panel12.Name = "Panel12"
+        Panel12.Size = New Size(261, 55)
+        Panel12.TabIndex = 77
+        ' 
+        ' Panel3
+        ' 
+        Panel3.BackColor = Color.FromArgb(CByte(103), CByte(103), CByte(231))
+        Panel3.Dock = DockStyle.Bottom
+        Panel3.Location = New Point(0, 53)
+        Panel3.Name = "Panel3"
+        Panel3.Size = New Size(261, 2)
+        Panel3.TabIndex = 72
+        ' 
+        ' Label2
+        ' 
+        Label2.AutoSize = True
+        Label2.Dock = DockStyle.Top
+        Label2.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        Label2.Location = New Point(0, 0)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(48, 21)
+        Label2.TabIndex = 65
+        Label2.Text = "Email"
+        ' 
+        ' TextBoxEmail
+        ' 
+        TextBoxEmail.BorderStyle = BorderStyle.None
+        TextBoxEmail.Font = New Font("Century Gothic", 12F)
+        TextBoxEmail.Location = New Point(0, 24)
+        TextBoxEmail.Multiline = True
+        TextBoxEmail.Name = "TextBoxEmail"
+        TextBoxEmail.Size = New Size(261, 31)
+        TextBoxEmail.TabIndex = 49
+        ' 
+        ' Panel11
+        ' 
+        Panel11.Controls.Add(Panel5)
+        Panel11.Controls.Add(Label7)
+        Panel11.Controls.Add(TextBoxNumber)
+        Panel11.Location = New Point(16, 61)
+        Panel11.Name = "Panel11"
+        Panel11.Size = New Size(261, 55)
+        Panel11.TabIndex = 76
+        ' 
+        ' Panel5
+        ' 
+        Panel5.BackColor = Color.FromArgb(CByte(103), CByte(103), CByte(231))
+        Panel5.Dock = DockStyle.Bottom
+        Panel5.Location = New Point(0, 53)
+        Panel5.Name = "Panel5"
+        Panel5.Size = New Size(261, 2)
+        Panel5.TabIndex = 71
+        ' 
+        ' Label7
+        ' 
+        Label7.AutoSize = True
+        Label7.Dock = DockStyle.Top
+        Label7.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label7.Location = New Point(0, 0)
+        Label7.Name = "Label7"
+        Label7.Size = New Size(120, 21)
+        Label7.TabIndex = 64
+        Label7.Text = "Phone Number"
+        ' 
+        ' TextBoxNumber
+        ' 
+        TextBoxNumber.BorderStyle = BorderStyle.None
+        TextBoxNumber.Font = New Font("Century Gothic", 12F)
+        TextBoxNumber.Location = New Point(0, 24)
+        TextBoxNumber.Multiline = True
+        TextBoxNumber.Name = "TextBoxNumber"
+        TextBoxNumber.Size = New Size(261, 31)
+        TextBoxNumber.TabIndex = 48
+        ' 
+        ' Panel10
+        ' 
+        Panel10.Controls.Add(Panel4)
+        Panel10.Controls.Add(TextBoxName)
+        Panel10.Controls.Add(Label6)
+        Panel10.Location = New Point(16, 0)
+        Panel10.Name = "Panel10"
+        Panel10.Size = New Size(261, 55)
+        Panel10.TabIndex = 75
+        ' 
+        ' Panel4
+        ' 
+        Panel4.BackColor = Color.FromArgb(CByte(103), CByte(103), CByte(231))
+        Panel4.Dock = DockStyle.Bottom
+        Panel4.Location = New Point(0, 53)
+        Panel4.Name = "Panel4"
+        Panel4.Size = New Size(261, 2)
+        Panel4.TabIndex = 71
+        ' 
+        ' TextBoxName
+        ' 
+        TextBoxName.BorderStyle = BorderStyle.None
+        TextBoxName.Font = New Font("Century Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TextBoxName.Location = New Point(0, 24)
+        TextBoxName.Multiline = True
+        TextBoxName.Name = "TextBoxName"
+        TextBoxName.Size = New Size(261, 31)
+        TextBoxName.TabIndex = 47
+        ' 
+        ' Label6
+        ' 
+        Label6.AutoSize = True
+        Label6.Dock = DockStyle.Top
+        Label6.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        Label6.Location = New Point(0, 0)
+        Label6.Name = "Label6"
+        Label6.Size = New Size(53, 21)
+        Label6.TabIndex = 58
+        Label6.Text = "Name"
+        ' 
         ' customerIDLabel
         ' 
         customerIDLabel.AutoSize = True
-        customerIDLabel.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
+        customerIDLabel.Font = New Font("Century Gothic", 9F, FontStyle.Underline, GraphicsUnit.Point, CByte(0))
         customerIDLabel.ForeColor = Color.Red
-        customerIDLabel.Location = New Point(89, 314)
+        customerIDLabel.Location = New Point(91, 505)
         customerIDLabel.Name = "customerIDLabel"
-        customerIDLabel.Size = New Size(0, 15)
+        customerIDLabel.Size = New Size(20, 17)
         customerIDLabel.TabIndex = 57
-        ' 
-        ' Label1
-        ' 
-        Label1.AutoSize = True
-        Label1.Location = New Point(16, 9)
-        Label1.Name = "Label1"
-        Label1.Size = New Size(39, 15)
-        Label1.TabIndex = 46
-        Label1.Text = "Name"
+        customerIDLabel.Text = "ID"
         ' 
         ' UpdateBtn
         ' 
@@ -109,22 +398,13 @@ Partial Class CustomerInformation
         UpdateBtn.FlatStyle = FlatStyle.Flat
         UpdateBtn.Font = New Font("Century Gothic", 11.25F)
         UpdateBtn.ForeColor = Color.White
-        UpdateBtn.Location = New Point(16, 436)
+        UpdateBtn.Location = New Point(16, 627)
         UpdateBtn.Name = "UpdateBtn"
         UpdateBtn.Size = New Size(260, 46)
         UpdateBtn.TabIndex = 43
         UpdateBtn.Text = "Update Customer"
         UpdateBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         UpdateBtn.UseVisualStyleBackColor = False
-        ' 
-        ' Label2
-        ' 
-        Label2.AutoSize = True
-        Label2.Location = New Point(16, 53)
-        Label2.Name = "Label2"
-        Label2.Size = New Size(88, 15)
-        Label2.TabIndex = 52
-        Label2.Text = "Phone Number"
         ' 
         ' DeleteBtn
         ' 
@@ -134,20 +414,13 @@ Partial Class CustomerInformation
         DeleteBtn.FlatStyle = FlatStyle.Flat
         DeleteBtn.Font = New Font("Century Gothic", 11.25F)
         DeleteBtn.ForeColor = Color.White
-        DeleteBtn.Location = New Point(16, 488)
+        DeleteBtn.Location = New Point(16, 679)
         DeleteBtn.Name = "DeleteBtn"
         DeleteBtn.Size = New Size(260, 46)
         DeleteBtn.TabIndex = 44
         DeleteBtn.Text = "Delete Customer"
         DeleteBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         DeleteBtn.UseVisualStyleBackColor = False
-        ' 
-        ' TextBoxPlateNumber
-        ' 
-        TextBoxPlateNumber.Location = New Point(16, 285)
-        TextBoxPlateNumber.Name = "TextBoxPlateNumber"
-        TextBoxPlateNumber.Size = New Size(120, 23)
-        TextBoxPlateNumber.TabIndex = 51
         ' 
         ' ViewBtn
         ' 
@@ -158,7 +431,7 @@ Partial Class CustomerInformation
         ViewBtn.Font = New Font("Century Gothic", 11.25F)
         ViewBtn.ForeColor = Color.White
         ViewBtn.Image = CType(resources.GetObject("ViewBtn.Image"), Image)
-        ViewBtn.Location = New Point(16, 384)
+        ViewBtn.Location = New Point(16, 575)
         ViewBtn.Name = "ViewBtn"
         ViewBtn.Size = New Size(260, 46)
         ViewBtn.TabIndex = 45
@@ -167,55 +440,15 @@ Partial Class CustomerInformation
         ViewBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         ViewBtn.UseVisualStyleBackColor = False
         ' 
-        ' Label3
-        ' 
-        Label3.AutoSize = True
-        Label3.Location = New Point(16, 97)
-        Label3.Name = "Label3"
-        Label3.Size = New Size(36, 15)
-        Label3.TabIndex = 53
-        Label3.Text = "Email"
-        ' 
-        ' TextBoxAddress
-        ' 
-        TextBoxAddress.Location = New Point(16, 171)
-        TextBoxAddress.Multiline = True
-        TextBoxAddress.Name = "TextBoxAddress"
-        TextBoxAddress.Size = New Size(261, 93)
-        TextBoxAddress.TabIndex = 50
-        ' 
-        ' TextBoxEmail
-        ' 
-        TextBoxEmail.Location = New Point(16, 115)
-        TextBoxEmail.Name = "TextBoxEmail"
-        TextBoxEmail.Size = New Size(261, 23)
-        TextBoxEmail.TabIndex = 49
-        ' 
         ' Label67
         ' 
         Label67.AutoSize = True
-        Label67.Font = New Font("Segoe UI", 9F)
-        Label67.Location = New Point(16, 314)
+        Label67.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label67.Location = New Point(16, 505)
         Label67.Name = "Label67"
-        Label67.Size = New Size(73, 15)
+        Label67.Size = New Size(80, 17)
         Label67.TabIndex = 56
         Label67.Text = "Customer ID"
-        ' 
-        ' Label4
-        ' 
-        Label4.AutoSize = True
-        Label4.Location = New Point(16, 153)
-        Label4.Name = "Label4"
-        Label4.Size = New Size(49, 15)
-        Label4.TabIndex = 54
-        Label4.Text = "Address"
-        ' 
-        ' TextBoxNumber
-        ' 
-        TextBoxNumber.Location = New Point(16, 71)
-        TextBoxNumber.Name = "TextBoxNumber"
-        TextBoxNumber.Size = New Size(120, 23)
-        TextBoxNumber.TabIndex = 48
         ' 
         ' AddBtn
         ' 
@@ -226,7 +459,7 @@ Partial Class CustomerInformation
         AddBtn.Font = New Font("Century Gothic", 11.25F)
         AddBtn.ForeColor = Color.White
         AddBtn.Image = CType(resources.GetObject("AddBtn.Image"), Image)
-        AddBtn.Location = New Point(16, 332)
+        AddBtn.Location = New Point(16, 523)
         AddBtn.Name = "AddBtn"
         AddBtn.Size = New Size(260, 46)
         AddBtn.TabIndex = 42
@@ -234,22 +467,6 @@ Partial Class CustomerInformation
         AddBtn.TextAlign = ContentAlignment.MiddleRight
         AddBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         AddBtn.UseVisualStyleBackColor = False
-        ' 
-        ' Label5
-        ' 
-        Label5.AutoSize = True
-        Label5.Location = New Point(16, 267)
-        Label5.Name = "Label5"
-        Label5.Size = New Size(80, 15)
-        Label5.TabIndex = 55
-        Label5.Text = "Plate Number"
-        ' 
-        ' TextBoxName
-        ' 
-        TextBoxName.Location = New Point(16, 27)
-        TextBoxName.Name = "TextBoxName"
-        TextBoxName.Size = New Size(261, 23)
-        TextBoxName.TabIndex = 47
         ' 
         ' DataGridViewCustomerInformation
         ' 
@@ -263,6 +480,11 @@ Partial Class CustomerInformation
         DataGridViewCustomerInformation.Size = New Size(606, 758)
         DataGridViewCustomerInformation.TabIndex = 0
         ' 
+        ' SqlConnection1
+        ' 
+        SqlConnection1.AccessTokenCallback = Nothing
+        SqlConnection1.FireInfoMessageEventOnUserErrors = False
+        ' 
         ' CustomerInformation
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -275,6 +497,19 @@ Partial Class CustomerInformation
         Panel1.ResumeLayout(False)
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
+        Panel15.ResumeLayout(False)
+        Panel13.ResumeLayout(False)
+        Panel13.PerformLayout()
+        Panel8.ResumeLayout(False)
+        Panel8.PerformLayout()
+        Panel17.ResumeLayout(False)
+        Panel17.PerformLayout()
+        Panel12.ResumeLayout(False)
+        Panel12.PerformLayout()
+        Panel11.ResumeLayout(False)
+        Panel11.PerformLayout()
+        Panel10.ResumeLayout(False)
+        Panel10.PerformLayout()
         CType(DataGridViewCustomerInformation, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
     End Sub
@@ -283,19 +518,37 @@ Partial Class CustomerInformation
     Friend WithEvents DataGridViewCustomerInformation As DataGridView
     Friend WithEvents Panel2 As Panel
     Friend WithEvents customerIDLabel As Label
-    Friend WithEvents Label1 As Label
     Friend WithEvents UpdateBtn As Button
-    Friend WithEvents Label2 As Label
     Friend WithEvents DeleteBtn As Button
-    Friend WithEvents TextBoxPlateNumber As TextBox
+    Friend WithEvents TextBoxVehicle As TextBox
     Friend WithEvents ViewBtn As Button
-    Friend WithEvents Label3 As Label
     Friend WithEvents TextBoxAddress As TextBox
     Friend WithEvents TextBoxEmail As TextBox
     Friend WithEvents Label67 As Label
-    Friend WithEvents Label4 As Label
     Friend WithEvents TextBoxNumber As TextBox
     Friend WithEvents AddBtn As Button
-    Friend WithEvents Label5 As Label
     Friend WithEvents TextBoxName As TextBox
+    Friend WithEvents Panel10 As Panel
+    Friend WithEvents Label6 As Label
+    Friend WithEvents Panel4 As Panel
+    Friend WithEvents Panel11 As Panel
+    Friend WithEvents Panel5 As Panel
+    Friend WithEvents Label7 As Label
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents Panel7 As Panel
+    Friend WithEvents Panel12 As Panel
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Panel6 As Panel
+    Friend WithEvents Panel17 As Panel
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Panel15 As Panel
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label5 As Label
+    Friend WithEvents Panel9 As Panel
+    Friend WithEvents Panel8 As Panel
+    Friend WithEvents Panel13 As Panel
+    Friend WithEvents TextBoxPlateNumber As TextBox
+    Friend WithEvents SqlConnection1 As Microsoft.Data.SqlClient.SqlConnection
+    Friend WithEvents ListViewVehicles As ListView
+    Friend WithEvents AddVehicleBtn As Button
 End Class

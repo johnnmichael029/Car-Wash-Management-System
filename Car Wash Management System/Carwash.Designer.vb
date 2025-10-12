@@ -539,14 +539,14 @@ Partial Class Carwash
         ' ExitToolStripMenuItem
         ' 
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        ExitToolStripMenuItem.Size = New Size(180, 22)
+        ExitToolStripMenuItem.Size = New Size(112, 22)
         ExitToolStripMenuItem.Text = "E&xit"
         ' 
         ' SettingsToolStripMenuItem
         ' 
         SettingsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ChangePasswordToolStripMenuItem})
         SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        SettingsToolStripMenuItem.Size = New Size(180, 22)
+        SettingsToolStripMenuItem.Size = New Size(112, 22)
         SettingsToolStripMenuItem.Text = "Settings"
         ' 
         ' ChangePasswordToolStripMenuItem
@@ -558,7 +558,7 @@ Partial Class Carwash
         ' AdminToolStripMenuItem
         ' 
         AdminToolStripMenuItem.Name = "AdminToolStripMenuItem"
-        AdminToolStripMenuItem.Size = New Size(180, 22)
+        AdminToolStripMenuItem.Size = New Size(112, 22)
         AdminToolStripMenuItem.Text = "Admin"
         ' 
         ' ServiceTrackingToolStripMenuItem
@@ -573,31 +573,31 @@ Partial Class Carwash
         ' ServiceCatalogToolStripMenuItem
         ' 
         ServiceCatalogToolStripMenuItem.Name = "ServiceCatalogToolStripMenuItem"
-        ServiceCatalogToolStripMenuItem.Size = New Size(180, 22)
+        ServiceCatalogToolStripMenuItem.Size = New Size(173, 22)
         ServiceCatalogToolStripMenuItem.Text = "&Service Catalog"
         ' 
         ' CustomerInformationToolStripMenuItem
         ' 
         CustomerInformationToolStripMenuItem.Name = "CustomerInformationToolStripMenuItem"
-        CustomerInformationToolStripMenuItem.Size = New Size(180, 22)
+        CustomerInformationToolStripMenuItem.Size = New Size(173, 22)
         CustomerInformationToolStripMenuItem.Text = "Customer &Information"
         ' 
         ' SaleHistoryToolStripMenuItem
         ' 
         SaleHistoryToolStripMenuItem.Name = "SaleHistoryToolStripMenuItem"
-        SaleHistoryToolStripMenuItem.Size = New Size(180, 22)
+        SaleHistoryToolStripMenuItem.Size = New Size(173, 22)
         SaleHistoryToolStripMenuItem.Text = "Sales &History"
         ' 
         ' ContractsToolStripMenuItem
         ' 
         ContractsToolStripMenuItem.Name = "ContractsToolStripMenuItem"
-        ContractsToolStripMenuItem.Size = New Size(180, 22)
+        ContractsToolStripMenuItem.Size = New Size(173, 22)
         ContractsToolStripMenuItem.Text = "&Contracts"
         ' 
         ' PickUpToolStripMenuItem
         ' 
         PickUpToolStripMenuItem.Name = "PickUpToolStripMenuItem"
-        PickUpToolStripMenuItem.Size = New Size(180, 22)
+        PickUpToolStripMenuItem.Size = New Size(173, 22)
         PickUpToolStripMenuItem.Text = "Pick Up"
         ' 
         ' BookingToolStripMenuItem

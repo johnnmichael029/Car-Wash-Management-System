@@ -86,7 +86,7 @@ Public Class Carwash
         billingContracts.Dock = DockStyle.Fill
         billingContracts.Show()
     End Sub
-    Private Sub ShowNewCustomersFormFunction()
+    Public Sub ShowNewCustomersFormFunction()
         Panel4.Controls.Clear()
         Dim customerInformation As New CustomerInformation With {
             .TopLevel = False,
