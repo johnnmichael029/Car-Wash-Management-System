@@ -118,6 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="PictureBox1.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
+        qAAAAKgBefSzxgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFTSURBVEhLtZQ/
+        TkJBEIe/loRabKCipYLGhoIbcBkTDkHshYIrUBouYOUBTDwApZ2J0Wd+ui8Ms7MPi6X4kpff/Ns3M7s0
+        TcM1yYTaZEJtMqE2mdAFcCO83kUmnBlhCjwCL8A7IFHoW5psUx93sQCwBJ5NwpbvQBPyXfo8WQGgD+yC
+        BHtgAfSAATAHDoGfYvthAWACvAZB9/5UJmYV+CvH5KwAMAaOgfPeJBsCa2AL3Bk9+hPlGic7t8Bb4CQW
+        yWkEfBj9qy2S2uXjhHIqN0+BUWigvZTkIbBvk00z8bYW5S4WEIOUZBPY1smmwZe267dAV4vmKckM+DS6
+        2jVMNm2XjxN/Lbow5IMZpi6d/kTtGhldK+zjTkM2jqU1XbU+Hq1w4J+vqQkoXTStorZFA1XP1Zbo5OWL
+        5gqVngoRDfR/T4Xnao9dierPdQ0yoTaZUJtMqM0PL/egWGwlXa0AAAAASUVORK5CYII=
+</value>
+  </data>
+  <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="TimerAnimator.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>173, 17</value>
+  </metadata>
+  <metadata name="TimerAnimator1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>296, 17</value>
+  </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAAF8AAAEAIAAIiAEAFgAAACgAAAAAAQAAvgAAAAEAIAAAAAAAAHwBAMMOAADDDgAAAAAAAAAA

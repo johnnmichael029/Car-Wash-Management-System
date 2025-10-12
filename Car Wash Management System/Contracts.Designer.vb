@@ -224,7 +224,7 @@ Partial Class Contracts
         ComboBoxBillingFrequency.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxBillingFrequency.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxBillingFrequency.FormattingEnabled = True
-        ComboBoxBillingFrequency.Items.AddRange(New Object() {"Monthly", "Quarterly ", "Yearly"})
+        ComboBoxBillingFrequency.Items.AddRange(New Object() {"Monthly", "Quarterly", "Yearly"})
         ComboBoxBillingFrequency.Location = New Point(16, 294)
         ComboBoxBillingFrequency.Name = "ComboBoxBillingFrequency"
         ComboBoxBillingFrequency.Size = New Size(261, 23)

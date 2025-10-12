@@ -107,6 +107,16 @@ Public Class Carwash
         appointment.Dock = DockStyle.Fill
         appointment.Show()
     End Sub
+    Private Sub ShowActivityLogFormFunction()
+        Panel4.Controls.Clear()
+        Dim activityLog As New ActivityLog With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(activityLog)
+        activityLog.Dock = DockStyle.Fill
+        activityLog.Show()
+    End Sub
     Private Sub SaleHistoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaleHistoryToolStripMenuItem.Click
         ShowSalesFormFunction()
     End Sub
@@ -184,11 +194,7 @@ Public Class Carwash
         End If
     End Sub
     Private Sub NotificationBtn_Click(sender As Object, e As EventArgs) Handles NotificationBtn.Click
-        Dim notification As New Notification()
-        Dim btnScreenLocation As Point = NotificationBtn.PointToScreen(New Point(149, 0))
-        notification.Top = btnScreenLocation.Y + NotificationBtn.Height
-        notification.Left = btnScreenLocation.X
-        notification.Show()
+        ShowActivityLogFormFunction()
     End Sub
 
     Private Sub NotificationTimer_Tick(sender As Object, e As EventArgs) Handles NotificationTimer.Tick

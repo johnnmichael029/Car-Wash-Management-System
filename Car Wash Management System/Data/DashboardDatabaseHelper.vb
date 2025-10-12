@@ -4,9 +4,11 @@ Imports Microsoft.Data.SqlClient
 Public Class DashboardDatabaseHelper
     Private ReadOnly constr As String
     Private ReadOnly textBoxCustomerName As TextBox
+
     Public Sub New(connectionString As String, customerNameTextBox As TextBox)
         constr = connectionString
         Me.textBoxCustomerName = customerNameTextBox
+
 
     End Sub
     ''' <summary>
@@ -102,8 +104,6 @@ Public Class DashboardDatabaseHelper
             INNER JOIN ServicesTable sv ON s.ServiceID = sv.ServiceID
             LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID
             WHERE c.Name LIKE @searchString
-            OR sv.ServiceName LIKE @searchString
-            OR sv_addon.ServiceName LIKE @searchString
             OR s.SalesID LIKE @searchString
             OR s.PaymentMethod LIKE @searchString
             "
@@ -229,7 +229,7 @@ Public Class DashboardDatabaseHelper
         yPos += offset
         e.Graphics.DrawString(printData.SaleDate.ToString("MM/dd/yyy HH:mm tt, ddd"), f10, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
-        e.Graphics.DrawString("InvoiceID: " & printData.SalesID, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString("InvoiceID: " & InvoiceGeneratorService.CreateInvoiceNumber(printData.SalesID), f10, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
         yPos += offset
         e.Graphics.DrawString("Customer Name: " & printData.CustomerName, f10, Brushes.Black, leftMargin, yPos)

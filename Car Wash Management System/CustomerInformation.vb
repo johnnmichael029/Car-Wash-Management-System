@@ -17,6 +17,7 @@ Public Class CustomerInformation
         LoadListOfCustomerInformation()
         ChangeHeaderOfDataGridViewCustomerInformation()
         DataGridViewCustomerInformationFontStyle()
+        AddButtonAction()
     End Sub
     Private Sub ChangeHeaderOfDataGridViewCustomerInformation()
         DataGridViewCustomerInformation.Columns(0).HeaderText = "Customer ID"
@@ -93,6 +94,15 @@ Public Class CustomerInformation
         TextBoxPlateNumber.Clear()
         customerIDLabel.Text = ""
     End Sub
+    Public Sub AddButtonAction()
+        Dim updateButtonColumn As New DataGridViewButtonColumn With {
+            .HeaderText = "Action",
+            .Text = "View Details",
+            .UseColumnTextForButtonValue = True,
+            .Name = "actionsColumn"
+        }
+        DataGridViewCustomerInformation.Columns.Add(updateButtonColumn)
 
+    End Sub
 
 End Class

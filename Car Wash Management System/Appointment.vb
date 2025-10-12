@@ -86,7 +86,6 @@ Public Class Appointment
     Public Sub AddAppointmentBtnFunction()
         Try
             ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
-
             Dim customerID As Integer
             If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Then
                 MessageBox.Show("Customer not found. Please select a valid customer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -105,6 +104,12 @@ Public Class Appointment
 
             If String.IsNullOrWhiteSpace(baseServiceName) Then
                 MessageBox.Show("Please select a base service.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
+            'Validate if the Start date is not in the past
+            If DateTimePickerStartDate.Value < DateTime.Now Then
+                MessageBox.Show("The appointment date and time cannot be in the past.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
 
@@ -322,7 +327,7 @@ Public Class Appointment
         printPreviewDialog.ShowDialog()
     End Sub
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
-        appointmentManagement.PrintBillInAppointment(e, New PrintDataInAppointmentService With {
+        AppointmentManagement.PrintBillInAppointment(e, New PrintDataInAppointment With {
            .ContractID = If(DataGridViewAppointment.CurrentRow IsNot Nothing, Convert.ToInt32(DataGridViewAppointment.CurrentRow.Cells(0).Value), 0),
            .CustomerName = TextBoxCustomerName.Text,
            .BaseService = ComboBoxServices.Text,
@@ -561,7 +566,7 @@ Public Class AppointmentManagement
     ''' <summary>
     ''' Print Bill
     ''' </summary>
-    Public Shared Sub PrintBillInAppointment(e As PrintPageEventArgs, printData As PrintDataInAppointmentService)
+    Public Shared Sub PrintBillInAppointment(e As PrintPageEventArgs, printData As PrintDataInAppointment)
         If printData Is Nothing Then
             ' Handle case where no data is set
             Return
@@ -600,7 +605,7 @@ Public Class AppointmentManagement
         yPos += offset
         e.Graphics.DrawString(printData.SaleDate.ToString("MM/dd/yyy HH:mm tt, ddd"), f10, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
-        e.Graphics.DrawString("InvoiceID: " & printData.ContractID, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString("InvoiceID: " & InvoiceGeneratorService.CreateInvoiceNumber(printData.ContractID), f10, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
         yPos += offset
         e.Graphics.DrawString("Customer Name: " & printData.CustomerName, f10, Brushes.Black, leftMargin, yPos)
@@ -665,4 +670,18 @@ End Class
 Public Class AppointmentServiceDetails
     Public Property ServiceID As Integer
     Public Property Price As Decimal
+End Class
+Public Class PrintDataInAppointment
+    Public Property ContractID As Integer
+    Public Property CustomerName As String
+    Public Property CustomerID As Integer
+    Public Property BaseService As String
+    Public Property AddonService As String
+    Public Property TotalPrice As Decimal
+    Public Property PaymentMethod As String
+    Public Property SaleDate As DateTime
+    Public Property BaseServicePrice As Decimal
+    Public Property AddonServicePrice As Decimal
+    Public Property StartDate As DateTime
+    Public Property AppointmentStatus As String
 End Class
