@@ -16,47 +16,51 @@ Public Class CustomerInformationDatabaseHelper
         Dim DialogResult = MessageBox.Show("Are you sure you want to delete this record?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
         If DialogResult = DialogResult.Yes Then
             Using con As New SqlConnection(constr)
+                con.Open()
+                Dim transaction As SqlTransaction = con.BeginTransaction()
                 Try
-                    con.Open()
-                    Dim deleteQuery = "DELETE FROM CustomersTable WHERE CustomerID = @CustomerID"
-                    Using cmd As New SqlCommand(deleteQuery, con)
+                    Dim deleteVehiclesQuery = "DELETE FROM CustomerVehicleTable WHERE CustomerID = @CustomerID"
+                    Using cmd As New SqlCommand(deleteVehiclesQuery, con, transaction)
+                        cmd.Parameters.AddWithValue("@CustomerID", customerID)
+                        cmd.ExecuteNonQuery()
+                    End Using
+
+                    Dim deleteCustomerQuery = "DELETE FROM CustomersTable WHERE CustomerID = @CustomerID"
+                    Using cmd As New SqlCommand(deleteCustomerQuery, con, transaction)
                         cmd.Parameters.AddWithValue("@CustomerID", customerID)
                         Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
+
                         If rowsAffected > 0 Then
+                            transaction.Commit()
                             Carwash.NotificationLabel.Text = "Customer Information Deleted!"
                             Carwash.ShowNotification()
                             MessageBox.Show("Customer deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             ViewCustomer()
+                        Else
+                            transaction.Rollback()
+                            MessageBox.Show("Customer record not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         End If
                     End Using
                 Catch ex As Exception
+                    transaction.Rollback()
                     MessageBox.Show("Error deleting customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Finally
-                    con.Close()
                 End Try
             End Using
-
         End If
     End Sub
     Public Sub AddCustomer(name As String, number As String, email As String, address As String, VehicleList As List(Of VehicleService))
         Using con As New SqlConnection(constr)
             con.Open()
-
-            ' Declare the Transaction object
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Dim newCustomerID As Integer = 0
 
             Try
-                ' --- 1. INSERT CUSTOMER AND GET NEW ID ---
-                ' We use the transaction object in the SqlCommand constructor
                 Dim insertCustomerQuery As String = "INSERT INTO CustomersTable (Name, PhoneNumber, Email, Address, RegistrationDate) VALUES (@Name, @PhoneNumber, @Email, @Address, @RegistrationDate); SELECT SCOPE_IDENTITY();"
 
                 Using cmd As New SqlCommand(insertCustomerQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@Name", name)
                     cmd.Parameters.AddWithValue("@PhoneNumber", number)
                     cmd.Parameters.AddWithValue("@Email", email)
-
-                    ' Handle the optional Address field
                     If String.IsNullOrEmpty(address) Then
                         cmd.Parameters.AddWithValue("@Address", DBNull.Value)
                     Else
@@ -64,8 +68,6 @@ Public Class CustomerInformationDatabaseHelper
                     End If
 
                     cmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now)
-
-                    ' ExecuteScalar retrieves the single value (the new CustomerID)
                     Dim result = cmd.ExecuteScalar()
 
                     If result IsNot Nothing AndAlso IsNumeric(result) Then
@@ -74,15 +76,12 @@ Public Class CustomerInformationDatabaseHelper
                         Throw New Exception("Failed to retrieve the new CustomerID after insertion.")
                     End If
                 End Using
-
-                ' --- 2. LOOP AND INSERT ALL VEHICLES ---
                 If VehicleList IsNot Nothing AndAlso VehicleList.Count > 0 Then
 
                     Dim insertVehicleQuery As String = "INSERT INTO CustomerVehicleTable (CustomerID, PlateNumber, VehicleType) VALUES (@CustomerID, @PlateNumber, @VehicleType)"
 
                     For Each vehicle In VehicleList
                         Using vehicleCmd As New SqlCommand(insertVehicleQuery, con, transaction)
-                            ' Use the ID retrieved from the customer insert
                             vehicleCmd.Parameters.AddWithValue("@CustomerID", newCustomerID)
                             vehicleCmd.Parameters.AddWithValue("@PlateNumber", vehicle.PlateNumber)
                             vehicleCmd.Parameters.AddWithValue("@VehicleType", vehicle.VehicleType)
@@ -90,57 +89,66 @@ Public Class CustomerInformationDatabaseHelper
                         End Using
                     Next
                 End If
-
-                ' --- 3. COMMIT THE TRANSACTION ---
-                ' If we reach here, both the customer and ALL vehicles were saved successfully.
                 transaction.Commit()
 
                 Carwash.NotificationLabel.Text = "New Customer and all " & VehicleList.Count.ToString() & " Vehicles Added Successfully (ID: " & newCustomerID.ToString() & ")"
                 Carwash.ShowNotification()
-
-                ' Optional: Clear the VehicleList after a successful save
                 VehicleList.Clear()
 
             Catch ex As Exception
-                ' --- 4. ROLLBACK ON ERROR ---
-                ' If an error occurred at any point (customer failed, or a vehicle failed), undo everything.
                 transaction.Rollback()
                 MessageBox.Show("Error adding customer and vehicles. Database changes were canceled: " & ex.Message, "Transaction Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
             End Try
         End Using
     End Sub
-
-    Public Sub UpdateCustomer(customerID As String, name As String, number As String, email As String, address As String, vehicleType As String, plateNumber As String)
-        If String.IsNullOrEmpty(customerID) Then
-            MessageBox.Show("Please select a customer in table to update.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
+    Public Sub UpdateCustomer(customerID As String, name As String, number As String, email As String, address As String, vehicleList As List(Of VehicleService))
+        Dim iCustomerID As Integer = CInt(customerID)
         Using con As New SqlConnection(constr)
+            con.Open()
+            Dim transaction As SqlTransaction = con.BeginTransaction()
 
             Try
-                con.Open()
-                Dim updateQuery = "UPDATE CustomersTable SET Name = @Name, PhoneNumber = @Phone, Email = @Email, Address = @Address, VehicleType = @VehicleType, PlateNumber = @PlateNumber WHERE CustomerID = @CustomerID"
-                Using cmd As New SqlCommand(updateQuery, con)
+                ' 1. Update Customer's main information
+                Dim updateCustomerQuery = "UPDATE CustomersTable SET Name = @Name, PhoneNumber = @Phone, Email = @Email, Address = @Address WHERE CustomerID = @CustomerID"
+                Using cmd As New SqlCommand(updateCustomerQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@Name", name)
                     cmd.Parameters.AddWithValue("@Phone", number)
                     cmd.Parameters.AddWithValue("@Email", email)
                     cmd.Parameters.AddWithValue("@Address", address)
-                    cmd.Parameters.AddWithValue("@VehicleType", vehicleType)
-                    cmd.Parameters.AddWithValue("@PlateNumber", plateNumber)
-                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
-                    Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
-                    If rowsAffected > 0 Then
-                        Carwash.NotificationLabel.Text = "Customer Information Updated"
-                        Carwash.ShowNotification()
-                        EditProfile.Hide()
-                        MessageBox.Show("Customer updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    End If
+                    cmd.Parameters.AddWithValue("@CustomerID", iCustomerID)
+                    cmd.ExecuteNonQuery()
                 End Using
+
+                ' 2. Handle Vehicle List: Delete all old vehicles first
+                Dim deleteVehiclesQuery = "DELETE FROM CustomerVehicleTable WHERE CustomerID = @CustomerID"
+                Using cmd As New SqlCommand(deleteVehiclesQuery, con, transaction)
+                    cmd.Parameters.AddWithValue("@CustomerID", iCustomerID)
+                    cmd.ExecuteNonQuery()
+                End Using
+
+                ' 3. Insert all vehicles from the current VehicleList (the updated list)
+                If vehicleList IsNot Nothing AndAlso vehicleList.Count > 0 Then
+                    Dim insertVehicleQuery As String = "INSERT INTO CustomerVehicleTable (CustomerID, PlateNumber, VehicleType) VALUES (@CustomerID, @PlateNumber, @VehicleType)"
+
+                    For Each vehicle In vehicleList
+                        Using vehicleCmd As New SqlCommand(insertVehicleQuery, con, transaction)
+                            vehicleCmd.Parameters.AddWithValue("@CustomerID", iCustomerID)
+                            vehicleCmd.Parameters.AddWithValue("@PlateNumber", vehicle.PlateNumber)
+                            vehicleCmd.Parameters.AddWithValue("@VehicleType", vehicle.VehicleType)
+                            vehicleCmd.ExecuteNonQuery()
+                        End Using
+                    Next
+                End If
+
+                transaction.Commit()
+                Carwash.NotificationLabel.Text = "Customer Information and Vehicles Updated"
+                Carwash.ShowNotification()
+                MessageBox.Show("Customer updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
             Catch ex As Exception
-                MessageBox.Show("Error updating customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Finally
-                con.Close()
+                transaction.Rollback()
+                MessageBox.Show("Error updating customer: " & ex.Message, "Transaction Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Using
     End Sub
@@ -181,5 +189,36 @@ Public Class CustomerInformationDatabaseHelper
             End Try
         End Using
         Return dt
+    End Function
+
+    Public Function GetCustomerVehicles(customerID As Integer) As List(Of VehicleService)
+        Dim vehicles As New List(Of VehicleService)
+        Dim selectQuery As String = "SELECT PlateNumber, VehicleType FROM CustomerVehicleTable WHERE CustomerID = @CustomerID"
+
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
+
+                    Using reader As SqlDataReader = cmd.ExecuteReader()
+                        While reader.Read()
+                            ' Create a new VehicleService object for each row found
+                            Dim vehicle As New VehicleService() With {
+                                .PlateNumber = reader("PlateNumber").ToString(),
+                                .VehicleType = reader("VehicleType").ToString()
+                            }
+                            vehicles.Add(vehicle)
+                        End While
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Database Error when loading vehicles: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+
+        Return vehicles
     End Function
 End Class

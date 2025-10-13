@@ -28,7 +28,7 @@ Public Class Login
 
     Private Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CenterToScreen()
-        DoesHaveAnyAccount()
+        LoginService.DoesHaveAnyAccount("admin", "admin123", True)
     End Sub
     Private Sub TimerAnimator_Tick(sender As Object, e As EventArgs) Handles TimerAnimator.Tick
         LoginAnimationService.TimerAnimation(LabelHolderUsername)
@@ -59,16 +59,9 @@ Public Class Login
         ' Only animate down if the textbox is empty
         LoginAnimationServiceForPassword.TextBoxLeave(TextBoxPassword, LabelHolderPassword)
     End Sub
-
     Private Sub TextBoxPassword_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPassword.TextChanged
         ' Hide the label if the user starts typing, even if the animation hasn't finished
         LoginAnimationServiceForPassword.TextBoxChanged(TextBoxPassword, LabelHolderPassword)
-    End Sub
-    Private Sub DoesHaveAnyAccount()
-        If Not loginDatabaseHelper.DoesAnyAccountExist() Then
-            Dim setupForm As New Admin()
-            setupForm.ShowDialog()
-        End If
     End Sub
     Private Sub LoginBtn_Click(sender As Object, e As EventArgs) Handles LoginBtn.Click
         LoginValidation()

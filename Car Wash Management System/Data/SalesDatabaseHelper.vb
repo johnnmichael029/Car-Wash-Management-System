@@ -15,11 +15,11 @@ Public Class SalesDatabaseHelper
         Me.textBoxCustomerID = customerIDTextBox
     End Sub
 
-    Public Sub AddSale(customerID As Integer, baseServiceID As Integer, addonServiceID As Integer?, paymentMethod As String, totalPrice As Decimal)
+    Public Sub AddSale(customerID As Integer, baseServiceID As Integer, addonServiceID As Integer?, paymentMethod As String, referenceID As String, totalPrice As Decimal)
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                Dim insertQuery = "INSERT INTO SalesHistoryTable (CustomerID, ServiceID, AddonServiceID, SaleDate, PaymentMethod, TotalPrice) VALUES (@CustomerID, @ServiceID, @AddonServiceID, @SaleDate, @PaymentMethod, @TotalPrice)"
+                Dim insertQuery = "INSERT INTO SalesHistoryTable (CustomerID, ServiceID, AddonServiceID, SaleDate, PaymentMethod, ReferenceID, TotalPrice) VALUES (@CustomerID, @ServiceID, @AddonServiceID, @SaleDate, @PaymentMethod, @ReferenceID, @TotalPrice)"
                 Using cmd As New SqlCommand(insertQuery, con)
                     cmd.Parameters.AddWithValue("@CustomerID", customerID)
                     cmd.Parameters.AddWithValue("@ServiceID", baseServiceID)
@@ -31,6 +31,7 @@ Public Class SalesDatabaseHelper
                     End If
                     cmd.Parameters.AddWithValue("@SaleDate", DateTime.Now)
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
+                    cmd.Parameters.AddWithValue("@ReferenceID", referenceID)
                     cmd.Parameters.AddWithValue("@TotalPrice", totalPrice)
                     cmd.ExecuteNonQuery()
                     Carwash.NotificationLabel.Text = "New Sale Added"
@@ -50,7 +51,7 @@ Public Class SalesDatabaseHelper
             Try
                 con.Open()
                 ' Join to the ServicesTable for the addon as well to show the full service name.
-                Dim selectQuery = "SELECT s.SalesID, c.Name AS CustomerName, sv.ServiceName AS BaseServiceName, sv_addon.ServiceName AS AddonServiceName, s.SaleDate, s.PaymentMethod, s.TotalPrice FROM SalesHistoryTable s 
+                Dim selectQuery = "SELECT s.SalesID, c.Name AS CustomerName, sv.ServiceName AS BaseServiceName, sv_addon.ServiceName AS AddonServiceName, s.SaleDate, s.PaymentMethod, s.ReferenceID, s.TotalPrice FROM SalesHistoryTable s 
                                   INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID 
                                   INNER JOIN ServicesTable sv ON s.ServiceID = sv.ServiceID 
                                   LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID ORDER BY s.SalesID DESC"

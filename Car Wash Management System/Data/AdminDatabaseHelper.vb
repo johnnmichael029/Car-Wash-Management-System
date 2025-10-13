@@ -1,11 +1,11 @@
 ﻿Imports Microsoft.Data.SqlClient
 
 Public Class AdminDatabaseHelper
-    Private ReadOnly constr As String
+    Private Shared constr As String
     Public Sub New(connectionString As String)
-        Me.constr = connectionString
+        constr = connectionString
     End Sub
-    Public Function DeleteUsers(username As String) As Boolean
+    Public Shared Function DeleteUsers(username As String) As Boolean
         If String.IsNullOrWhiteSpace(username) Then
             MessageBox.Show("Please enter a username to delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return False
@@ -41,8 +41,9 @@ Public Class AdminDatabaseHelper
                 con.Close()
             End Try
         End Using
+        Return True
     End Function
-    Public Function ViewUsers() As DataTable
+    Public Shared Function ViewUsers() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
             Try
@@ -61,9 +62,9 @@ Public Class AdminDatabaseHelper
         End Using
         Return dt
     End Function
-    Public Function AddUsers(username As String, password As String, is_admin As Boolean) As Boolean
+    Public Shared Function AddUsers(username As String, password As String, is_admin As Boolean) As Boolean
         If String.IsNullOrWhiteSpace(username) OrElse String.IsNullOrWhiteSpace(password) Then
-            MessageBox.Show("Please enter both a username and password.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Please enter both a username and password.", "No input data", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return False
         End If
         Dim passwordTuple = LoginService.HashPassword(password)
@@ -80,8 +81,7 @@ Public Class AdminDatabaseHelper
                     cmd.Parameters.AddWithValue("@is_admin", is_admin)
                     Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
                     If rowsAffected > 0 Then
-                        MessageBox.Show("User added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                        Admin.ClearFields()
+
                         Return True
                     Else
                         MessageBox.Show("Failed to add user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -96,7 +96,7 @@ Public Class AdminDatabaseHelper
             End Try
         End Using
     End Function
-    Public Sub AdminResetPassword(usernameToReset As String, newPassword As String)
+    Public Shared Sub AdminResetPassword(usernameToReset As String, newPassword As String)
         If String.IsNullOrWhiteSpace(usernameToReset) Or String.IsNullOrWhiteSpace(newPassword) Then
             MessageBox.Show("Please enter both username and passoword to reset.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return

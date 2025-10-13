@@ -1,7 +1,7 @@
 ﻿Imports Microsoft.Data.SqlClient
 
 Public Class LoginDatabaseHelper
-    Private ReadOnly constr As String
+    Private Shared constr As String
     Public Sub New(connectionString As String)
         constr = connectionString
     End Sub
@@ -49,8 +49,8 @@ Public Class LoginDatabaseHelper
             End Try
         End Using
     End Sub
-    Public Function DoesAnyAccountExist() As Boolean
-        Dim count As Integer = 5
+    Public Shared Function DoesAnyAccountExist() As Boolean
+        Dim count As Integer = 0
         Using con As New SqlConnection(constr)
             Dim query As String = "SELECT COUNT(*) FROM UserTable"
             Using cmd As New SqlCommand(query, con)
@@ -68,7 +68,7 @@ Public Class LoginDatabaseHelper
             End Using
         End Using
 
-        Return count >= 2
+        Return count >= 1
     End Function
 
 End Class

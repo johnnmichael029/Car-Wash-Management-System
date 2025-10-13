@@ -29,7 +29,8 @@ Public Class SalesForm
         DataGridViewSales.Columns(3).HeaderText = "Addon Service"
         DataGridViewSales.Columns(4).HeaderText = "Sale Date"
         DataGridViewSales.Columns(5).HeaderText = "Payment Method"
-        DataGridViewSales.Columns(6).HeaderText = "Total Price"
+        DataGridViewSales.Columns(6).HeaderText = "Reference ID"
+        DataGridViewSales.Columns(7).HeaderText = "Total Price"
     End Sub
     Private Sub LoadAllPopulateUI()
         salesDatabaseHelper.PopulateCustomerNames()
@@ -81,6 +82,7 @@ Public Class SalesForm
                 baseServiceDetails.ServiceID,
                 addonServiceID,
                 ComboBoxPaymentMethod.SelectedItem.ToString(),
+                TextBoxReferenceID.Text,
                 totalPrice
                 )
             Carwash.PopulateAllTotal()
@@ -134,7 +136,6 @@ Public Class SalesForm
 
     Private Sub ClearBtn_Click(sender As Object, e As EventArgs) Handles ClearBtn.Click
         ClearFields()
-
     End Sub
     Public Sub ClearFields()
         TextBoxCustomerName.Clear()
@@ -143,6 +144,7 @@ Public Class SalesForm
         ComboBoxServices.SelectedIndex = -1
         ComboBoxAddons.SelectedIndex = -1
         ComboBoxPaymentMethod.SelectedIndex = -1
+        TextBoxReferenceID.Clear()
     End Sub
     Private Sub DataGridViewSalesFontStyle()
         DataGridViewSales.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
@@ -154,8 +156,9 @@ Public Class SalesForm
         TextBoxCustomerName.Text = DataGridViewSales.CurrentRow.Cells(1).Value.ToString()
         ComboBoxServices.Text = DataGridViewSales.CurrentRow.Cells(2).Value.ToString()
         ComboBoxAddons.Text = DataGridViewSales.CurrentRow.Cells(3).Value.ToString()
-        TextBoxPrice.Text = DataGridViewSales.CurrentRow.Cells(6).Value.ToString()
         ComboBoxPaymentMethod.Text = DataGridViewSales.CurrentRow.Cells(5).Value.ToString()
+        TextBoxReferenceID.Text = DataGridViewSales.CurrentRow.Cells(6).Value.ToString()
+        TextBoxPrice.Text = DataGridViewSales.CurrentRow.Cells(7).Value.ToString()
 
     End Sub
     Private Sub DataGridViewSales_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewSales.CellFormatting
@@ -217,6 +220,15 @@ Public Class SalesForm
             .Document = PrintDocumentBill
         }
         printPreviewDialog.ShowDialog()
+    End Sub
+
+    Private Sub ComboBoxPaymentMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPaymentMethod.SelectedIndexChanged
+        If ComboBoxPaymentMethod.SelectedItem = "Gcash" Or ComboBoxPaymentMethod.SelectedItem = "Cheque" Then
+            TextBoxReferenceID.ReadOnly = False
+        Else
+            TextBoxReferenceID.ReadOnly = True
+            TextBoxReferenceID.Clear()
+        End If
     End Sub
 End Class
 

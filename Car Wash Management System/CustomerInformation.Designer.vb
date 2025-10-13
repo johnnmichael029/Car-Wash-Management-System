@@ -22,9 +22,11 @@ Partial Class CustomerInformation
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CustomerInformation))
         Panel1 = New Panel()
         Panel2 = New Panel()
+        RemoveVehicleBtn = New Button()
         AddVehicleBtn = New Button()
         ListViewVehicles = New ListView()
         Panel15 = New Panel()
@@ -45,21 +47,21 @@ Partial Class CustomerInformation
         Label2 = New Label()
         TextBoxEmail = New TextBox()
         Panel11 = New Panel()
+        LabelHolderPhone = New Label()
         Panel5 = New Panel()
-        Label7 = New Label()
         TextBoxNumber = New TextBox()
         Panel10 = New Panel()
+        LabelHolderName = New Label()
         Panel4 = New Panel()
         TextBoxName = New TextBox()
-        Label6 = New Label()
         customerIDLabel = New Label()
         UpdateBtn = New Button()
-        DeleteBtn = New Button()
         ViewBtn = New Button()
         Label67 = New Label()
         AddBtn = New Button()
         DataGridViewCustomerInformation = New DataGridView()
         SqlConnection1 = New Microsoft.Data.SqlClient.SqlConnection()
+        NameTimer = New Timer(components)
         Panel1.SuspendLayout()
         Panel2.SuspendLayout()
         Panel15.SuspendLayout()
@@ -85,6 +87,7 @@ Partial Class CustomerInformation
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
+        Panel2.Controls.Add(RemoveVehicleBtn)
         Panel2.Controls.Add(AddVehicleBtn)
         Panel2.Controls.Add(ListViewVehicles)
         Panel2.Controls.Add(Panel15)
@@ -94,7 +97,6 @@ Partial Class CustomerInformation
         Panel2.Controls.Add(Panel10)
         Panel2.Controls.Add(customerIDLabel)
         Panel2.Controls.Add(UpdateBtn)
-        Panel2.Controls.Add(DeleteBtn)
         Panel2.Controls.Add(ViewBtn)
         Panel2.Controls.Add(Label67)
         Panel2.Controls.Add(AddBtn)
@@ -103,6 +105,20 @@ Partial Class CustomerInformation
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(305, 758)
         Panel2.TabIndex = 1
+        ' 
+        ' RemoveVehicleBtn
+        ' 
+        RemoveVehicleBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
+        RemoveVehicleBtn.FlatAppearance.BorderSize = 0
+        RemoveVehicleBtn.FlatStyle = FlatStyle.Flat
+        RemoveVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveVehicleBtn.ForeColor = Color.White
+        RemoveVehicleBtn.Location = New Point(201, 371)
+        RemoveVehicleBtn.Name = "RemoveVehicleBtn"
+        RemoveVehicleBtn.Size = New Size(75, 23)
+        RemoveVehicleBtn.TabIndex = 82
+        RemoveVehicleBtn.Text = "Remove"
+        RemoveVehicleBtn.UseVisualStyleBackColor = False
         ' 
         ' AddVehicleBtn
         ' 
@@ -120,6 +136,8 @@ Partial Class CustomerInformation
         ' 
         ' ListViewVehicles
         ' 
+        ListViewVehicles.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewVehicles.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         ListViewVehicles.FullRowSelect = True
         ListViewVehicles.GridLines = True
         ListViewVehicles.Location = New Point(16, 400)
@@ -153,6 +171,7 @@ Partial Class CustomerInformation
         Label5.AutoSize = True
         Label5.Dock = DockStyle.Top
         Label5.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        Label5.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         Label5.Location = New Point(0, 0)
         Label5.Name = "Label5"
         Label5.Size = New Size(62, 21)
@@ -162,7 +181,8 @@ Partial Class CustomerInformation
         ' TextBoxVehicle
         ' 
         TextBoxVehicle.BorderStyle = BorderStyle.None
-        TextBoxVehicle.Font = New Font("Century Gothic", 12F)
+        TextBoxVehicle.Font = New Font("Century Gothic", 11.25F)
+        TextBoxVehicle.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         TextBoxVehicle.Location = New Point(0, 24)
         TextBoxVehicle.Multiline = True
         TextBoxVehicle.Name = "TextBoxVehicle"
@@ -192,7 +212,8 @@ Partial Class CustomerInformation
         ' TextBoxPlateNumber
         ' 
         TextBoxPlateNumber.BorderStyle = BorderStyle.None
-        TextBoxPlateNumber.Font = New Font("Century Gothic", 12F)
+        TextBoxPlateNumber.Font = New Font("Century Gothic", 11.25F)
+        TextBoxPlateNumber.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         TextBoxPlateNumber.Location = New Point(0, 24)
         TextBoxPlateNumber.Multiline = True
         TextBoxPlateNumber.Name = "TextBoxPlateNumber"
@@ -204,6 +225,7 @@ Partial Class CustomerInformation
         Label3.AutoSize = True
         Label3.Dock = DockStyle.Top
         Label3.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        Label3.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         Label3.Location = New Point(0, 0)
         Label3.Name = "Label3"
         Label3.Size = New Size(110, 21)
@@ -234,6 +256,7 @@ Partial Class CustomerInformation
         Label4.AutoSize = True
         Label4.Dock = DockStyle.Top
         Label4.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        Label4.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         Label4.Location = New Point(0, 0)
         Label4.Name = "Label4"
         Label4.Size = New Size(70, 21)
@@ -252,7 +275,8 @@ Partial Class CustomerInformation
         ' TextBoxAddress
         ' 
         TextBoxAddress.BorderStyle = BorderStyle.None
-        TextBoxAddress.Font = New Font("Century Gothic", 12F)
+        TextBoxAddress.Font = New Font("Century Gothic", 11.25F)
+        TextBoxAddress.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         TextBoxAddress.Location = New Point(0, 24)
         TextBoxAddress.Multiline = True
         TextBoxAddress.Name = "TextBoxAddress"
@@ -283,6 +307,7 @@ Partial Class CustomerInformation
         Label2.AutoSize = True
         Label2.Dock = DockStyle.Top
         Label2.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        Label2.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         Label2.Location = New Point(0, 0)
         Label2.Name = "Label2"
         Label2.Size = New Size(48, 21)
@@ -292,7 +317,8 @@ Partial Class CustomerInformation
         ' TextBoxEmail
         ' 
         TextBoxEmail.BorderStyle = BorderStyle.None
-        TextBoxEmail.Font = New Font("Century Gothic", 12F)
+        TextBoxEmail.Font = New Font("Century Gothic", 11.25F)
+        TextBoxEmail.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         TextBoxEmail.Location = New Point(0, 24)
         TextBoxEmail.Multiline = True
         TextBoxEmail.Name = "TextBoxEmail"
@@ -301,13 +327,25 @@ Partial Class CustomerInformation
         ' 
         ' Panel11
         ' 
+        Panel11.Controls.Add(LabelHolderPhone)
         Panel11.Controls.Add(Panel5)
-        Panel11.Controls.Add(Label7)
         Panel11.Controls.Add(TextBoxNumber)
         Panel11.Location = New Point(16, 61)
         Panel11.Name = "Panel11"
         Panel11.Size = New Size(261, 55)
         Panel11.TabIndex = 76
+        ' 
+        ' LabelHolderPhone
+        ' 
+        LabelHolderPhone.AutoSize = True
+        LabelHolderPhone.Dock = DockStyle.Top
+        LabelHolderPhone.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelHolderPhone.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        LabelHolderPhone.Location = New Point(0, 0)
+        LabelHolderPhone.Name = "LabelHolderPhone"
+        LabelHolderPhone.Size = New Size(120, 21)
+        LabelHolderPhone.TabIndex = 64
+        LabelHolderPhone.Text = "Phone Number"
         ' 
         ' Panel5
         ' 
@@ -318,21 +356,11 @@ Partial Class CustomerInformation
         Panel5.Size = New Size(261, 2)
         Panel5.TabIndex = 71
         ' 
-        ' Label7
-        ' 
-        Label7.AutoSize = True
-        Label7.Dock = DockStyle.Top
-        Label7.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label7.Location = New Point(0, 0)
-        Label7.Name = "Label7"
-        Label7.Size = New Size(120, 21)
-        Label7.TabIndex = 64
-        Label7.Text = "Phone Number"
-        ' 
         ' TextBoxNumber
         ' 
         TextBoxNumber.BorderStyle = BorderStyle.None
-        TextBoxNumber.Font = New Font("Century Gothic", 12F)
+        TextBoxNumber.Font = New Font("Century Gothic", 11.25F)
+        TextBoxNumber.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         TextBoxNumber.Location = New Point(0, 24)
         TextBoxNumber.Multiline = True
         TextBoxNumber.Name = "TextBoxNumber"
@@ -341,13 +369,25 @@ Partial Class CustomerInformation
         ' 
         ' Panel10
         ' 
+        Panel10.Controls.Add(LabelHolderName)
         Panel10.Controls.Add(Panel4)
         Panel10.Controls.Add(TextBoxName)
-        Panel10.Controls.Add(Label6)
         Panel10.Location = New Point(16, 0)
         Panel10.Name = "Panel10"
         Panel10.Size = New Size(261, 55)
         Panel10.TabIndex = 75
+        ' 
+        ' LabelHolderName
+        ' 
+        LabelHolderName.AutoSize = True
+        LabelHolderName.Dock = DockStyle.Top
+        LabelHolderName.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
+        LabelHolderName.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        LabelHolderName.Location = New Point(0, 0)
+        LabelHolderName.Name = "LabelHolderName"
+        LabelHolderName.Size = New Size(53, 21)
+        LabelHolderName.TabIndex = 58
+        LabelHolderName.Text = "Name"
         ' 
         ' Panel4
         ' 
@@ -361,23 +401,13 @@ Partial Class CustomerInformation
         ' TextBoxName
         ' 
         TextBoxName.BorderStyle = BorderStyle.None
-        TextBoxName.Font = New Font("Century Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TextBoxName.Font = New Font("Century Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TextBoxName.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         TextBoxName.Location = New Point(0, 24)
         TextBoxName.Multiline = True
         TextBoxName.Name = "TextBoxName"
         TextBoxName.Size = New Size(261, 31)
         TextBoxName.TabIndex = 47
-        ' 
-        ' Label6
-        ' 
-        Label6.AutoSize = True
-        Label6.Dock = DockStyle.Top
-        Label6.Font = New Font("Segoe UI Semibold", 12F, FontStyle.Bold)
-        Label6.Location = New Point(0, 0)
-        Label6.Name = "Label6"
-        Label6.Size = New Size(53, 21)
-        Label6.TabIndex = 58
-        Label6.Text = "Name"
         ' 
         ' customerIDLabel
         ' 
@@ -386,9 +416,8 @@ Partial Class CustomerInformation
         customerIDLabel.ForeColor = Color.Red
         customerIDLabel.Location = New Point(91, 505)
         customerIDLabel.Name = "customerIDLabel"
-        customerIDLabel.Size = New Size(20, 17)
+        customerIDLabel.Size = New Size(0, 17)
         customerIDLabel.TabIndex = 57
-        customerIDLabel.Text = "ID"
         ' 
         ' UpdateBtn
         ' 
@@ -405,22 +434,6 @@ Partial Class CustomerInformation
         UpdateBtn.Text = "Update Customer"
         UpdateBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         UpdateBtn.UseVisualStyleBackColor = False
-        ' 
-        ' DeleteBtn
-        ' 
-        DeleteBtn.Anchor = AnchorStyles.Top
-        DeleteBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
-        DeleteBtn.FlatAppearance.BorderSize = 0
-        DeleteBtn.FlatStyle = FlatStyle.Flat
-        DeleteBtn.Font = New Font("Century Gothic", 11.25F)
-        DeleteBtn.ForeColor = Color.White
-        DeleteBtn.Location = New Point(16, 679)
-        DeleteBtn.Name = "DeleteBtn"
-        DeleteBtn.Size = New Size(260, 46)
-        DeleteBtn.TabIndex = 44
-        DeleteBtn.Text = "Delete Customer"
-        DeleteBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        DeleteBtn.UseVisualStyleBackColor = False
         ' 
         ' ViewBtn
         ' 
@@ -485,6 +498,10 @@ Partial Class CustomerInformation
         SqlConnection1.AccessTokenCallback = Nothing
         SqlConnection1.FireInfoMessageEventOnUserErrors = False
         ' 
+        ' NameTimer
+        ' 
+        NameTimer.Interval = 15
+        ' 
         ' CustomerInformation
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -519,7 +536,6 @@ Partial Class CustomerInformation
     Friend WithEvents Panel2 As Panel
     Friend WithEvents customerIDLabel As Label
     Friend WithEvents UpdateBtn As Button
-    Friend WithEvents DeleteBtn As Button
     Friend WithEvents TextBoxVehicle As TextBox
     Friend WithEvents ViewBtn As Button
     Friend WithEvents TextBoxAddress As TextBox
@@ -529,11 +545,11 @@ Partial Class CustomerInformation
     Friend WithEvents AddBtn As Button
     Friend WithEvents TextBoxName As TextBox
     Friend WithEvents Panel10 As Panel
-    Friend WithEvents Label6 As Label
+    Friend WithEvents LabelHolderName As Label
     Friend WithEvents Panel4 As Panel
     Friend WithEvents Panel11 As Panel
     Friend WithEvents Panel5 As Panel
-    Friend WithEvents Label7 As Label
+    Friend WithEvents LabelHolderPhone As Label
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Panel7 As Panel
     Friend WithEvents Panel12 As Panel
@@ -551,4 +567,6 @@ Partial Class CustomerInformation
     Friend WithEvents SqlConnection1 As Microsoft.Data.SqlClient.SqlConnection
     Friend WithEvents ListViewVehicles As ListView
     Friend WithEvents AddVehicleBtn As Button
+    Friend WithEvents RemoveVehicleBtn As Button
+    Friend WithEvents NameTimer As Timer
 End Class

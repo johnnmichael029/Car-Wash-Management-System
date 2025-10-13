@@ -1,18 +1,8 @@
 ﻿Public Class EditProfileService
-    Public Shared Function ValidateFieldsInEditProfile(name As String, vehicle As String, plateNumber As String) As Boolean
+    Public Shared Function ValidateFieldsInEditProfile(customerID As String) As Boolean
         'Validate if Name is empty
-        If String.IsNullOrEmpty(name) Then
-            MessageBox.Show("Please enter the customer's name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return True
-        End If
-        'Validate if Vehilcle Type is empty
-        If String.IsNullOrEmpty(vehicle) Then
-            MessageBox.Show("Please enter the customer's vehicle.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return True
-        End If
-        'Validate if Plate Number is empty
-        If String.IsNullOrEmpty(plateNumber) Then
-            MessageBox.Show("Please enter the customer's plate number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        If String.IsNullOrEmpty(customerID) Then
+            MessageBox.Show("Please click the edit info button to edit customer info.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return True
         End If
         Return False

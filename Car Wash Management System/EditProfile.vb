@@ -37,15 +37,5 @@
 
     End Sub
 
-    Private Sub SaveBtn_Click(sender As Object, e As EventArgs) Handles SaveBtn.Click
-        UpdateCustomerInformation()
-    End Sub
-    Private Sub UpdateCustomerInformation()
-        If EditProfileService.ValidateFieldsInEditProfile(TextBoxName.Text, TextBoxVehicle.Text, TextBoxPlateNumber.Text) = True Then
-            Return
-        End If
-        customerInformationDatabaseHelper.UpdateCustomer(customerIDLabel.Text, TextBoxName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, TextBoxVehicle.Text, TextBoxPlateNumber.Text)
-        Carwash.ShowNewCustomersFormFunction()
-    End Sub
 
 End Class
