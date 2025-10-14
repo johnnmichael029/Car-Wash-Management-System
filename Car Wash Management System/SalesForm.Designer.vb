@@ -27,6 +27,12 @@ Partial Class SalesForm
         Panel2 = New Panel()
         Panel3 = New Panel()
         Panel1 = New Panel()
+        UpdateBtn = New Button()
+        Label8 = New Label()
+        TextBoxTotalPrice = New TextBox()
+        RemoveServiceBtn = New Button()
+        AddServiceBtn = New Button()
+        ListViewServices = New ListView()
         TextBoxReferenceID = New TextBox()
         Label7 = New Label()
         LabelSalesID = New Label()
@@ -87,6 +93,12 @@ Partial Class SalesForm
         ' Panel1
         ' 
         Panel1.BackColor = Color.White
+        Panel1.Controls.Add(UpdateBtn)
+        Panel1.Controls.Add(Label8)
+        Panel1.Controls.Add(TextBoxTotalPrice)
+        Panel1.Controls.Add(RemoveServiceBtn)
+        Panel1.Controls.Add(AddServiceBtn)
+        Panel1.Controls.Add(ListViewServices)
         Panel1.Controls.Add(TextBoxReferenceID)
         Panel1.Controls.Add(Label7)
         Panel1.Controls.Add(LabelSalesID)
@@ -112,10 +124,85 @@ Partial Class SalesForm
         Panel1.Size = New Size(305, 758)
         Panel1.TabIndex = 18
         ' 
+        ' UpdateBtn
+        ' 
+        UpdateBtn.Anchor = AnchorStyles.Top
+        UpdateBtn.BackColor = Color.FromArgb(CByte(84), CByte(98), CByte(161))
+        UpdateBtn.FlatAppearance.BorderSize = 0
+        UpdateBtn.FlatStyle = FlatStyle.Flat
+        UpdateBtn.Font = New Font("Century Gothic", 11.25F)
+        UpdateBtn.ForeColor = Color.White
+        UpdateBtn.Location = New Point(16, 670)
+        UpdateBtn.Name = "UpdateBtn"
+        UpdateBtn.Size = New Size(260, 46)
+        UpdateBtn.TabIndex = 88
+        UpdateBtn.Text = "Update Sales"
+        UpdateBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        UpdateBtn.UseVisualStyleBackColor = False
+        ' 
+        ' Label8
+        ' 
+        Label8.AutoSize = True
+        Label8.Font = New Font("Century Gothic", 9F)
+        Label8.Location = New Point(147, 487)
+        Label8.Name = "Label8"
+        Label8.Size = New Size(70, 17)
+        Label8.TabIndex = 87
+        Label8.Text = "Total Price"
+        ' 
+        ' TextBoxTotalPrice
+        ' 
+        TextBoxTotalPrice.Font = New Font("Century Gothic", 9F)
+        TextBoxTotalPrice.Location = New Point(147, 505)
+        TextBoxTotalPrice.Name = "TextBoxTotalPrice"
+        TextBoxTotalPrice.ReadOnly = True
+        TextBoxTotalPrice.Size = New Size(129, 22)
+        TextBoxTotalPrice.TabIndex = 86
+        ' 
+        ' RemoveServiceBtn
+        ' 
+        RemoveServiceBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
+        RemoveServiceBtn.FlatAppearance.BorderSize = 0
+        RemoveServiceBtn.FlatStyle = FlatStyle.Flat
+        RemoveServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveServiceBtn.ForeColor = Color.White
+        RemoveServiceBtn.Location = New Point(201, 233)
+        RemoveServiceBtn.Name = "RemoveServiceBtn"
+        RemoveServiceBtn.Size = New Size(75, 23)
+        RemoveServiceBtn.TabIndex = 85
+        RemoveServiceBtn.Text = "Remove"
+        RemoveServiceBtn.UseVisualStyleBackColor = False
+        ' 
+        ' AddServiceBtn
+        ' 
+        AddServiceBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddServiceBtn.FlatAppearance.BorderSize = 0
+        AddServiceBtn.FlatStyle = FlatStyle.Flat
+        AddServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddServiceBtn.ForeColor = Color.White
+        AddServiceBtn.Location = New Point(16, 233)
+        AddServiceBtn.Name = "AddServiceBtn"
+        AddServiceBtn.Size = New Size(75, 23)
+        AddServiceBtn.TabIndex = 84
+        AddServiceBtn.Text = "Add"
+        AddServiceBtn.UseVisualStyleBackColor = False
+        ' 
+        ' ListViewServices
+        ' 
+        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        ListViewServices.FullRowSelect = True
+        ListViewServices.GridLines = True
+        ListViewServices.Location = New Point(16, 262)
+        ListViewServices.Name = "ListViewServices"
+        ListViewServices.Size = New Size(260, 102)
+        ListViewServices.TabIndex = 83
+        ListViewServices.UseCompatibleStateImageBehavior = False
+        ' 
         ' TextBoxReferenceID
         ' 
         TextBoxReferenceID.Font = New Font("Century Gothic", 9F)
-        TextBoxReferenceID.Location = New Point(16, 310)
+        TextBoxReferenceID.Location = New Point(16, 451)
         TextBoxReferenceID.Name = "TextBoxReferenceID"
         TextBoxReferenceID.ReadOnly = True
         TextBoxReferenceID.Size = New Size(261, 22)
@@ -125,7 +212,7 @@ Partial Class SalesForm
         ' 
         Label7.AutoSize = True
         Label7.Font = New Font("Century Gothic", 9F)
-        Label7.Location = New Point(16, 292)
+        Label7.Location = New Point(16, 433)
         Label7.Name = "Label7"
         Label7.Size = New Size(85, 17)
         Label7.TabIndex = 34
@@ -136,7 +223,7 @@ Partial Class SalesForm
         LabelSalesID.AutoSize = True
         LabelSalesID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         LabelSalesID.ForeColor = Color.Red
-        LabelSalesID.Location = New Point(68, 404)
+        LabelSalesID.Location = New Point(68, 546)
         LabelSalesID.Name = "LabelSalesID"
         LabelSalesID.Size = New Size(0, 15)
         LabelSalesID.TabIndex = 33
@@ -146,12 +233,12 @@ Partial Class SalesForm
         PrintBillBtn.BackColor = Color.FromArgb(CByte(92), CByte(81), CByte(224))
         PrintBillBtn.FlatAppearance.BorderSize = 0
         PrintBillBtn.FlatStyle = FlatStyle.Flat
-        PrintBillBtn.Font = New Font("Century Gothic", 11.25F)
+        PrintBillBtn.Font = New Font("Century Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         PrintBillBtn.ForeColor = Color.White
-        PrintBillBtn.Image = My.Resources.Resources.printer2
-        PrintBillBtn.Location = New Point(15, 528)
+        PrintBillBtn.Image = CType(resources.GetObject("PrintBillBtn.Image"), Image)
+        PrintBillBtn.Location = New Point(188, 533)
         PrintBillBtn.Name = "PrintBillBtn"
-        PrintBillBtn.Size = New Size(260, 46)
+        PrintBillBtn.Size = New Size(87, 30)
         PrintBillBtn.TabIndex = 33
         PrintBillBtn.Text = "Prin Bill"
         PrintBillBtn.TextAlign = ContentAlignment.MiddleRight
@@ -162,7 +249,7 @@ Partial Class SalesForm
         ' 
         Label9.AutoSize = True
         Label9.Font = New Font("Century Gothic", 9F)
-        Label9.Location = New Point(16, 404)
+        Label9.Location = New Point(16, 546)
         Label9.Name = "Label9"
         Label9.Size = New Size(54, 17)
         Label9.TabIndex = 32
@@ -175,7 +262,7 @@ Partial Class SalesForm
         AddBtn.FlatStyle = FlatStyle.Flat
         AddBtn.Font = New Font("Century Gothic", 11.25F)
         AddBtn.ForeColor = Color.White
-        AddBtn.Location = New Point(15, 424)
+        AddBtn.Location = New Point(15, 566)
         AddBtn.Name = "AddBtn"
         AddBtn.Size = New Size(260, 46)
         AddBtn.TabIndex = 32
@@ -186,10 +273,10 @@ Partial Class SalesForm
         ' TextBoxPrice
         ' 
         TextBoxPrice.Font = New Font("Century Gothic", 9F)
-        TextBoxPrice.Location = New Point(16, 364)
+        TextBoxPrice.Location = New Point(16, 505)
         TextBoxPrice.Name = "TextBoxPrice"
         TextBoxPrice.ReadOnly = True
-        TextBoxPrice.Size = New Size(261, 22)
+        TextBoxPrice.Size = New Size(129, 22)
         TextBoxPrice.TabIndex = 31
         ' 
         ' ComboBoxPaymentMethod
@@ -199,7 +286,7 @@ Partial Class SalesForm
         ComboBoxPaymentMethod.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxPaymentMethod.Font = New Font("Century Gothic", 9F)
         ComboBoxPaymentMethod.FormattingEnabled = True
-        ComboBoxPaymentMethod.Location = New Point(16, 254)
+        ComboBoxPaymentMethod.Location = New Point(16, 395)
         ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod"
         ComboBoxPaymentMethod.Size = New Size(261, 25)
         ComboBoxPaymentMethod.TabIndex = 30
@@ -278,7 +365,7 @@ Partial Class SalesForm
         ClearBtn.Font = New Font("Century Gothic", 11.25F)
         ClearBtn.ForeColor = Color.White
         ClearBtn.Image = CType(resources.GetObject("ClearBtn.Image"), Image)
-        ClearBtn.Location = New Point(15, 476)
+        ClearBtn.Location = New Point(15, 618)
         ClearBtn.Name = "ClearBtn"
         ClearBtn.Size = New Size(260, 46)
         ClearBtn.TabIndex = 14
@@ -291,7 +378,7 @@ Partial Class SalesForm
         ' 
         Label4.AutoSize = True
         Label4.Font = New Font("Century Gothic", 9F)
-        Label4.Location = New Point(16, 236)
+        Label4.Location = New Point(16, 377)
         Label4.Name = "Label4"
         Label4.Size = New Size(105, 17)
         Label4.TabIndex = 15
@@ -311,11 +398,11 @@ Partial Class SalesForm
         ' 
         Label3.AutoSize = True
         Label3.Font = New Font("Century Gothic", 9F)
-        Label3.Location = New Point(15, 346)
+        Label3.Location = New Point(15, 487)
         Label3.Name = "Label3"
-        Label3.Size = New Size(38, 17)
+        Label3.Size = New Size(59, 17)
         Label3.TabIndex = 6
-        Label3.Text = "Price"
+        Label3.Text = "Subtotal"
         ' 
         ' PrintDocumentBill
         ' 
@@ -361,4 +448,10 @@ Partial Class SalesForm
     Friend WithEvents Label9 As Label
     Friend WithEvents TextBoxReferenceID As TextBox
     Friend WithEvents Label7 As Label
+    Friend WithEvents RemoveServiceBtn As Button
+    Friend WithEvents AddServiceBtn As Button
+    Friend WithEvents ListViewServices As ListView
+    Friend WithEvents Label8 As Label
+    Friend WithEvents TextBoxTotalPrice As TextBox
+    Friend WithEvents UpdateBtn As Button
 End Class

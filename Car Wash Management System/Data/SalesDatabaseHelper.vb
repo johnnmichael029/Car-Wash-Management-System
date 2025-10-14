@@ -2,59 +2,228 @@
 Imports Microsoft.Data.SqlClient
 
 Public Class SalesDatabaseHelper
-    Private ReadOnly constr As String
+    Private Shared constr As String
     Private ReadOnly comboBoxPaymentMethod As ComboBox
     Private ReadOnly textBoxCustomerName As TextBox
     Private ReadOnly textBoxCustomerID As TextBox
 
     Private ReadOnly printData As PrintDataInSales
     Public Sub New(connectionString As String, paymentMethodComboBox As ComboBox, customerNameTextBox As TextBox, customerIDTextBox As TextBox)
-        Me.constr = connectionString
+        constr = connectionString
         Me.comboBoxPaymentMethod = paymentMethodComboBox
         Me.textBoxCustomerName = customerNameTextBox
         Me.textBoxCustomerID = customerIDTextBox
     End Sub
 
-    Public Sub AddSale(customerID As Integer, baseServiceID As Integer, addonServiceID As Integer?, paymentMethod As String, referenceID As String, totalPrice As Decimal)
+    Public Shared Sub AddSale(saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, totalPrice As Decimal)
+        Dim iSaleID As Integer = CInt(saleID)
         Using con As New SqlConnection(constr)
+            con.Open()
+            Dim transaction As SqlTransaction = con.BeginTransaction()
+
             Try
-                con.Open()
-                Dim insertQuery = "INSERT INTO SalesHistoryTable (CustomerID, ServiceID, AddonServiceID, SaleDate, PaymentMethod, ReferenceID, TotalPrice) VALUES (@CustomerID, @ServiceID, @AddonServiceID, @SaleDate, @PaymentMethod, @ReferenceID, @TotalPrice)"
-                Using cmd As New SqlCommand(insertQuery, con)
-                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
-                    cmd.Parameters.AddWithValue("@ServiceID", baseServiceID)
-                    ' Handle the nullable addonServiceID parameter
-                    If addonServiceID.HasValue Then
-                        cmd.Parameters.AddWithValue("@AddonServiceID", addonServiceID.Value)
-                    Else
-                        cmd.Parameters.AddWithValue("@AddonServiceID", DBNull.Value) ' Insert NULL if no addon is selected
-                    End If
+                Dim newSalesID As Integer
+                Dim insertHistoryQuery = "INSERT INTO SalesHistoryTable (CustomerID, SaleDate, PaymentMethod, ReferenceID, TotalPrice) VALUES (@CustomerID, @SaleDate, @PaymentMethod, @ReferenceID, @TotalPrice); SELECT SCOPE_IDENTITY();"
+                Using cmd As New SqlCommand(insertHistoryQuery, con, transaction)
+                    cmd.Parameters.AddWithValue("@CustomerID", iSaleID)
                     cmd.Parameters.AddWithValue("@SaleDate", DateTime.Now)
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
                     cmd.Parameters.AddWithValue("@ReferenceID", referenceID)
                     cmd.Parameters.AddWithValue("@TotalPrice", totalPrice)
-                    cmd.ExecuteNonQuery()
-                    Carwash.NotificationLabel.Text = "New Sale Added"
-                    Carwash.ShowNotification()
+                    newSalesID = Convert.ToInt32(cmd.ExecuteScalar())
                 End Using
+                Dim insertServiceQuery = "INSERT INTO SalesServiceTable (SalesID, ServiceID, AddonServiceID, Subtotal) VALUES (@SalesID, @ServiceID, @AddonServiceID, @Subtotal)"
+
+                For Each item As SalesService In allSaleItems
+                    Dim baseServiceID As Integer = GetServiceIdByName(item.Service)
+                    Dim addonID As Integer? = GetAddonIdByName(item.Addon)
+
+                    Using cmdService As New SqlCommand(insertServiceQuery, con, transaction)
+                        cmdService.Parameters.AddWithValue("@SalesID", newSalesID)
+                        cmdService.Parameters.AddWithValue("@ServiceID", baseServiceID)
+                        If addonID.HasValue Then
+                            cmdService.Parameters.AddWithValue("@AddonServiceID", addonID.Value)
+                        Else
+                            cmdService.Parameters.AddWithValue("@AddonServiceID", DBNull.Value)
+                        End If
+
+                        cmdService.Parameters.AddWithValue("@Subtotal", item.ServicePrice)
+
+                        cmdService.ExecuteNonQuery()
+                    End Using
+                Next
+
+                transaction.Commit()
+                Carwash.NotificationLabel.Text = "New Sale Added"
+                Carwash.ShowNotification()
+
             Catch ex As Exception
+                transaction.Rollback()
                 MessageBox.Show("Error adding sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
             Finally
                 con.Close()
             End Try
         End Using
     End Sub
 
+    Public Shared Sub UpdateSale(saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, totalPrice As Decimal)
+        Dim iSaleID As Integer = CInt(saleID)
+        Using con As New SqlConnection(constr)
+            con.Open()
+            Dim transaction As SqlTransaction = con.BeginTransaction()
+            Try
+                ' Step 1: Update SalesHistoryTable
+                Dim updateHistoryQuery = "UPDATE SalesHistoryTable SET PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, TotalPrice = @TotalPrice WHERE SalesID = @SalesID"
+                Using cmd As New SqlCommand(updateHistoryQuery, con, transaction)
+                    cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
+                    cmd.Parameters.AddWithValue("@ReferenceID", referenceID)
+                    cmd.Parameters.AddWithValue("@TotalPrice", totalPrice)
+                    cmd.Parameters.AddWithValue("@SalesID", iSaleID)
+                    cmd.ExecuteNonQuery()
+                End Using
+                ' Step 2: Delete existing entries in SalesServiceTable for this SalesID
+                Dim deleteServicesQuery = "DELETE FROM SalesServiceTable WHERE SalesID = @SalesID"
+                Using cmdDelete As New SqlCommand(deleteServicesQuery, con, transaction)
+                    cmdDelete.Parameters.AddWithValue("@SalesID", saleID)
+                    cmdDelete.ExecuteNonQuery()
+                End Using
+                ' Step 3: Insert new entries into SalesServiceTable
+                Dim insertServiceQuery = "INSERT INTO SalesServiceTable (SalesID, ServiceID, AddonServiceID, Subtotal) VALUES (@SalesID, @ServiceID, @AddonServiceID, @Subtotal)"
+                For Each item As SalesService In allSaleItems
+                    Dim baseServiceID As Integer = GetServiceIdByName(item.Service)
+                    Dim addonID As Integer? = GetAddonIdByName(item.Addon)
+                    Using cmdService As New SqlCommand(insertServiceQuery, con, transaction)
+                        cmdService.Parameters.AddWithValue("@SalesID", iSaleID)
+                        cmdService.Parameters.AddWithValue("@ServiceID", baseServiceID)
+                        If addonID.HasValue Then
+                            cmdService.Parameters.AddWithValue("@AddonServiceID", addonID.Value)
+                        Else
+                            cmdService.Parameters.AddWithValue("@AddonServiceID", DBNull.Value)
+                        End If
+                        cmdService.Parameters.AddWithValue("@Subtotal", item.ServicePrice)
+                        cmdService.ExecuteNonQuery()
+                    End Using
+                Next
+                transaction.Commit()
+                Carwash.NotificationLabel.Text = "Sale Updated"
+                MessageBox.Show("Sale updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Carwash.ShowNotification()
+            Catch ex As Exception
+                transaction.Rollback()
+                MessageBox.Show("Error updating sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+    End Sub
+    ' --- BASE SERVICE ID LOOKUP ---
+    Private Shared Function GetServiceIdByName(serviceName As String) As Integer
+        If String.IsNullOrWhiteSpace(serviceName) Then
+            Throw New ArgumentException("Service name cannot be empty.")
+        End If
+
+        Dim serviceID As Integer = -1
+
+        ' IMPORTANT: This query needs to return the ServiceID based on the Name.
+        ' If Base Services and Addons are in the same table, you MUST add a filter 
+        ' (e.g., AND ServiceType = 'Base') to make sure you don't accidentally get an Addon ID.
+        Dim selectQuery As String = "SELECT ServiceID FROM ServicesTable WHERE ServiceName = @ServiceName"
+
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@ServiceName", serviceName)
+
+                    Dim result = cmd.ExecuteScalar()
+
+                    If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
+                        serviceID = Convert.ToInt32(result)
+                    End If
+                End Using
+            Catch ex As Exception
+                Throw New Exception("Error retrieving Base Service ID for: " & serviceName & vbCrLf & "Details: " & ex.Message)
+            Finally
+                con.Close()
+            End Try
+        End Using
+
+        If serviceID = -1 Then
+            Throw New Exception("Base Service '" & serviceName & "' ID could not be found. Check ServicesTable data.")
+        End If
+
+        Return serviceID
+    End Function
+
+    ' --- ADDON SERVICE ID LOOKUP ---
+    Private Shared Function GetAddonIdByName(addonName As String) As Integer?
+        If String.IsNullOrWhiteSpace(addonName) OrElse addonName.Equals("None", StringComparison.OrdinalIgnoreCase) Then
+            Return Nothing
+        End If
+        Dim addonID As Integer? = Nothing
+
+        ' IMPORTANT: This query needs to return the Addon ID based on the Name.
+        ' If Base Services and Addons are in the same table, you may need a filter 
+        ' (e.g., AND ServiceType = 'Addon') to ensure you get the right ID.
+        Dim selectQuery As String = "SELECT ServiceID FROM ServicesTable WHERE ServiceName = @AddonName"
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@AddonName", addonName)
+
+                    Dim result = cmd.ExecuteScalar()
+
+                    If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
+                        addonID = Convert.ToInt32(result)
+                    End If
+                End Using
+            Catch ex As Exception
+                Throw New Exception("Error retrieving Addon Service ID for: " & addonName & vbCrLf & "Details: " & ex.Message)
+            Finally
+                con.Close()
+            End Try
+        End Using
+        Return addonID
+    End Function
+
+
     Public Function ViewSales() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                ' Join to the ServicesTable for the addon as well to show the full service name.
-                Dim selectQuery = "SELECT s.SalesID, c.Name AS CustomerName, sv.ServiceName AS BaseServiceName, sv_addon.ServiceName AS AddonServiceName, s.SaleDate, s.PaymentMethod, s.ReferenceID, s.TotalPrice FROM SalesHistoryTable s 
-                                  INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID 
-                                  INNER JOIN ServicesTable sv ON s.ServiceID = sv.ServiceID 
-                                  LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID ORDER BY s.SalesID DESC"
+
+                ' Step 1: Subquery to aggregate Service NAMES for each SalesID
+                ' We join SalesServiceTable to ServicesTable TWICE (once for the base service, once for the addon)
+                ' Then we aggregate the resulting names into comma-separated strings.
+                Dim aggregateServiceNamesQuery =
+            "SELECT " &
+                "sst.SalesID, " &
+                "STRING_AGG(sv_base.ServiceName, ', ') AS AllServices, " &
+                "STRING_AGG(sv_addon.ServiceName, ', ') AS AllAddonServices " &
+            "FROM SalesServiceTable sst " &
+            "INNER JOIN ServicesTable sv_base ON sst.ServiceID = sv_base.ServiceID " &
+            "LEFT JOIN ServicesTable sv_addon ON sst.AddonServiceID = sv_addon.ServiceID " &
+            "GROUP BY sst.SalesID"
+
+                ' Step 2: Final query joins SalesHistoryTable to the aggregated names
+                Dim selectQuery =
+            "SELECT " &
+                "s.SalesID, " &
+                "c.Name AS CustomerName, " &
+                "agg.AllServices AS BaseServiceName, " &
+                "agg.AllAddonServices AS AddonServiceName, " &
+                "s.SaleDate, " &
+                "s.PaymentMethod, " &
+                "s.ReferenceID, " &
+                "s.TotalPrice " &
+            "FROM SalesHistoryTable s " &
+            "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
+            "LEFT JOIN (" & aggregateServiceNamesQuery & ") agg ON s.SalesID = agg.SalesID " &
+            "ORDER BY s.SalesID DESC"
+
                 Using cmd As New SqlCommand(selectQuery, con)
                     Using adapter As New SqlDataAdapter(cmd)
                         adapter.Fill(dt)
@@ -103,6 +272,55 @@ Public Class SalesDatabaseHelper
             End Using
             Return details
         End Using
+    End Function
+
+    Public Function GetSalesService(salesID As Integer) As List(Of SalesService)
+        ' Fix: Renamed list variable for clarity
+        Dim serviceList As New List(Of SalesService)
+
+        ' Fix: Use JOINs to retrieve human-readable names and look up by SalesID
+        Dim selectQuery As String = "SELECT " &
+                                "SST.SalesServiceID, " &
+                                "S_Base.ServiceName AS Service, " &
+                                "ISNULL(S_Addon.ServiceName, 'None') AS Addon, " &
+                                "SST.Subtotal AS ServicePrice, " &
+                                "SST.ServiceID, " &
+                                "SST.AddonServiceID " &
+                                "FROM SalesServiceTable SST " &
+                                "INNER JOIN ServicesTable S_Base ON SST.ServiceID = S_Base.ServiceID " &
+                                "LEFT JOIN ServicesTable S_Addon ON SST.AddonServiceID = S_Addon.ServiceID " &
+                                "WHERE SST.SalesID = @SalesID" ' Fix: Use SalesID for lookup
+
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Using cmd As New SqlCommand(selectQuery, con)
+                    ' Fix: Pass the salesID argument to the @SalesID parameter
+                    cmd.Parameters.AddWithValue("@SalesID", salesID)
+
+                    Using reader As SqlDataReader = cmd.ExecuteReader()
+                        While reader.Read()
+
+                            Dim item As New SalesService() With {
+                            .Service = reader.GetString(reader.GetOrdinal("Service")),
+                            .Addon = reader.GetString(reader.GetOrdinal("Addon")),
+                            .ServicePrice = reader.GetDecimal(reader.GetOrdinal("ServicePrice"))
+                        }
+
+                            ' Fix: Add the item to the list
+                            serviceList.Add(item)
+                        End While
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Database Error when loading sale services: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+
+
+        Return serviceList
     End Function
     Public Sub PopulateBaseServicesForUI(targetComboBox As ComboBox)
         Dim dt As New DataTable()

@@ -7,15 +7,13 @@ Public Class CustomerInformation
     Private VehicleList As New List(Of VehicleService)
     Private ReadOnly customerInformationDatabaseHelper As CustomerInformationDatabaseHelper
     Dim activityLogInDashboardService As New ActivityLogInDashboardService(constr)
-
     Public Sub New()
         ' This call is required by the designer.
         InitializeComponent()
 
-        ' Add any initialization after the InitializeComponent() call.
+        ' Add any initialization after the InitializeComponent() call
         customerInformationDatabaseHelper = New CustomerInformationDatabaseHelper(constr)
     End Sub
-
     Private Sub CustomerInformation_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadListOfCustomerInformation()
         ChangeHeaderOfDataGridViewCustomerInformation()
@@ -45,17 +43,45 @@ Public Class CustomerInformation
     End Sub
 
     Private Sub DataGridViewCustomerInformation_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCustomerInformation.CellContentClick
+        If e.RowIndex < 0 Then Return
+
         TextBoxName.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Name").Value.ToString()
         TextBoxNumber.Text = DataGridViewCustomerInformation.CurrentRow.Cells("PhoneNumber").Value.ToString()
         TextBoxEmail.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Email").Value.ToString()
         TextBoxAddress.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Address").Value.ToString()
-        customerIDLabel.Text = DataGridViewCustomerInformation.CurrentRow.Cells("CustomerID").Value.ToString()
 
-        If String.IsNullOrEmpty(customerIDLabel.Text) Then
-            MessageBox.Show("Please select a valid customer to edit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
+        Dim customerIDValue As String = DataGridViewCustomerInformation.CurrentRow.Cells("CustomerID").Value.ToString()
+        customerIDLabel.Text = customerIDValue
+
+        Try
+            If e.ColumnIndex = DataGridViewCustomerInformation.Columns("actionsColumn").Index Then
+                If String.IsNullOrEmpty(customerIDLabel.Text) Then
+                    MessageBox.Show("Please select a valid customer to edit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Return
+                End If
+
+                LoadVehiclesIntoListView(CInt(customerIDValue))
+            End If
+        Catch ex As Exception
+            MessageBox.Show("An error occurred during data selection: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
+    Private Sub LoadVehiclesIntoListView(customerID As Integer)
+        ListViewVehicles.Items.Clear()
+        Me.VehicleList.Clear()
+        Dim vehicles As List(Of VehicleService) = customerInformationDatabaseHelper.GetCustomerVehicles(customerID)
+
+        For Each vehicle As VehicleService In vehicles
+            ' 3. Add to the local tracking list (VehicleList)
+            Me.VehicleList.Add(vehicle)
+
+            ' 4. Add to the ListView (Visual Component)
+            Dim item As New ListViewItem(vehicle.PlateNumber)
+            item.SubItems.Add(vehicle.VehicleType)
+            ListViewVehicles.Items.Add(item)
+        Next
+    End Sub
+
 
     Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
         AddCustomerInformation()
@@ -157,18 +183,6 @@ Public Class CustomerInformation
         DataGridViewCustomerInformation.Columns.Add(updateButtonColumn)
     End Sub
 
-    Private Sub TextBoxPlateNumber_TextChanged(sender As Object, e As EventArgs) Handles TextBoxVehicle.TextChanged
-
-    End Sub
-
-    Private Sub Label5_Click(sender As Object, e As EventArgs) Handles Label5.Click
-
-    End Sub
-
-    Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles Panel2.Paint
-
-    End Sub
-
     Private Sub AddVehicleBtn_Click(sender As Object, e As EventArgs) Handles AddVehicleBtn.Click
         AddVehicleFunction()
     End Sub
@@ -234,4 +248,3 @@ Public Class CustomerInformation
         End If
     End Sub
 End Class
-

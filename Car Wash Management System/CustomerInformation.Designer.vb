@@ -174,9 +174,9 @@ Partial Class CustomerInformation
         Label5.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         Label5.Location = New Point(0, 0)
         Label5.Name = "Label5"
-        Label5.Size = New Size(62, 21)
+        Label5.Size = New Size(101, 21)
         Label5.TabIndex = 67
-        Label5.Text = "Vehicle"
+        Label5.Text = "Vehicle Type"
         ' 
         ' TextBoxVehicle
         ' 
