@@ -24,7 +24,7 @@ Public Class SalesForm
         DataGridViewSalesFontStyle()
         ChangeHeaderOfDataGridViewSales()
         SetupListView()
-        AddButtonAction()
+        ClearFields()
     End Sub
     Private Sub ChangeHeaderOfDataGridViewSales()
         DataGridViewSales.Columns(0).HeaderText = "Sales ID"
@@ -44,7 +44,6 @@ Public Class SalesForm
         DataGridViewSales.DataSource = salesDatabaseHelper.ViewSales()
     End Sub
     Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
-
         AddBtnFunction()
     End Sub
     Private Sub AddBtnFunction()
@@ -63,25 +62,27 @@ Public Class SalesForm
                 End If
             End If
             Dim customerID As Integer
-            If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Then
-                MessageBox.Show("Customer not found. Please select a valid customer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) OrElse customerID <= 0 Then
+                MessageBox.Show("Please select a valid customer from the list.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
+
+
             ' Guard clause: Ensure there are items to sell
             If SaleServiceList.Count = 0 Then
-                MessageBox.Show("Please add at least one service to the sale.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
 
             'Validate that a payment method is selected.
             If ComboBoxPaymentMethod.SelectedIndex = -1 Then
-                MessageBox.Show("Please select a payment method.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Please select a payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
 
             'Validate that a Reference ID is provided for certain payment methods.
             If (ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" Or ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque") AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
-                MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
 
@@ -161,46 +162,46 @@ Public Class SalesForm
         DataGridViewSales.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
 
+    Private Sub DataGridViewSales_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridViewSales.SelectionChanged
+
+
+    End Sub
     Private Sub DataGridViewSales_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewSales.CellContentClick
+        ' This event is not strictly needed since SelectionChanged handles data loading
+        ' but sometimes helps ensure a selection is made on cell click.
+        If e.RowIndex >= 0 Then
+            DataGridViewSales.Rows(e.RowIndex).Selected = True
+        End If
 
-        If e.RowIndex < 0 Then Return
+        If DataGridViewSales.CurrentRow Is Nothing Then Return
 
-        TextBoxCustomerName.Text = DataGridViewSales.CurrentRow.Cells("CustomerName").Value.ToString()
-        ComboBoxPaymentMethod.Text = DataGridViewSales.CurrentRow.Cells(6).Value.ToString()
-        TextBoxReferenceID.Text = DataGridViewSales.CurrentRow.Cells(7).Value.ToString()
-        TextBoxTotalPrice.Text = DataGridViewSales.CurrentRow.Cells(8).Value.ToString()
+        Dim currentRow As DataGridViewRow = DataGridViewSales.CurrentRow
 
-
-
+        ' 1. Populate TextBoxes/ComboBoxes
         Try
-            ' 1. Check if the "actionsColumn" was clicked
-            If e.ColumnIndex = DataGridViewSales.Columns("actionsColumn").Index Then
+            TextBoxCustomerName.Text = currentRow.Cells("CustomerName").Value?.ToString()
+            ComboBoxPaymentMethod.Text = currentRow.Cells("PaymentMethod").Value?.ToString()
+            TextBoxReferenceID.Text = currentRow.Cells("ReferenceID").Value?.ToString()
+            TextBoxTotalPrice.Text = currentRow.Cells("TotalPrice").Value?.ToString()
 
-                ' Get the SalesID value from the current row
-                Dim saleIDValue As String = DataGridViewSales.Rows(e.RowIndex).Cells("SalesID").Value?.ToString()
+            ' Set the ID for persistence
+            Dim saleIDValue As String = currentRow.Cells("SalesID").Value?.ToString()
+            LabelSalesID.Text = saleIDValue
 
-                If String.IsNullOrEmpty(saleIDValue) Then
-                    MessageBox.Show("Please select a valid sale to view details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Return
-                End If
+            If String.IsNullOrEmpty(saleIDValue) Then Return
 
-                ' Store ID in label (optional, but useful for persistence)
-                LabelSalesID.Text = saleIDValue
-
-                Dim saleID As Integer
-
-                ' 2. Attempt to parse the ID
-                If Integer.TryParse(saleIDValue, saleID) Then
-                    ' 3. Load the services using the newly implemented function
-
-                    LoadServicesIntoListView(saleID)
-
-                Else
-                    MessageBox.Show("Invalid Sales ID format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End If
+            ' 2. Load Services into ListView
+            Dim saleID As Integer
+            If Integer.TryParse(saleIDValue, saleID) Then
+                LoadServicesIntoListView(saleID)
+            Else
+                MessageBox.Show("Invalid Sales ID format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
+
         Catch ex As Exception
-            MessageBox.Show("An error occurred during data selection: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ' Log or handle error during population
+            MessageBox.Show("Error loading sale details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            TextBoxTotalPrice.Text = "0.00"
         End Try
 
     End Sub
@@ -234,18 +235,39 @@ Public Class SalesForm
     End Sub
 
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
+
+        ' 1. Get the Sales ID of the selected row
+        Dim currentSaleID As Integer = 0
+        Dim saleDate As DateTime = DateTime.Now
+
+        If DataGridViewSales.CurrentRow IsNot Nothing Then
+            ' Ensure the row is valid and the cell value is not null before converting
+            If DataGridViewSales.CurrentRow.Cells(0).Value IsNot DBNull.Value Then
+                currentSaleID = Convert.ToInt32(DataGridViewSales.CurrentRow.Cells(0).Value)
+            End If
+            If DataGridViewSales.CurrentRow.Cells(4).Value IsNot DBNull.Value Then
+                saleDate = Convert.ToDateTime(DataGridViewSales.CurrentRow.Cells(4).Value)
+            End If
+        End If
+
+        ' 2. Retrieve the list of all services (Base and Add-ons) associated with this sale ID.
+        Dim serviceLineItems As List(Of ServiceLineItem) = New List(Of ServiceLineItem)()
+        If currentSaleID > 0 AndAlso salesDatabaseHelper IsNot Nothing Then
+            ' *** FIX: Now passing the connection string (Me.constr) to the Shared function ***
+            serviceLineItems = SalesDatabaseHelper.GetSaleLineItems(currentSaleID, Me.constr)
+        End If
+
+        ' 3. Populate PrintDataInSales using the comprehensive list.
         ShowPrintPreviewService.PrintBillInSales(e, New PrintDataInSales With {
-             .SalesID = If(DataGridViewSales.CurrentRow IsNot Nothing, Convert.ToInt32(DataGridViewSales.CurrentRow.Cells(0).Value), 0),
-             .CustomerName = TextBoxCustomerName.Text,
-             .BaseService = ComboBoxServices.Text,
-             .BaseServicePrice = If(ComboBoxServices.SelectedIndex <> -1, salesDatabaseHelper.GetServiceID(ComboBoxServices.Text).Price, 0D),
-             .AddonService = ComboBoxAddons.Text,
-             .AddonServicePrice = If(ComboBoxAddons.SelectedIndex <> -1, salesDatabaseHelper.GetServiceID(ComboBoxAddons.Text).Price, 0D),
-             .TotalPrice = Decimal.Parse(TextBoxPrice.Text),
-             .PaymentMethod = ComboBoxPaymentMethod.Text,
-             .SaleDate = DataGridViewSales.CurrentRow.Cells(4).Value
-         })
+        .SalesID = currentSaleID,
+        .CustomerName = TextBoxCustomerName.Text,
+        .ServiceLineItems = serviceLineItems,
+        .PaymentMethod = ComboBoxPaymentMethod.Text,
+        .SaleDate = saleDate
+})
     End Sub
+
+
 
     Private Sub ValidatePrint()
         If String.IsNullOrEmpty(LabelSalesID.Text) Then
@@ -334,7 +356,7 @@ Public Class SalesForm
     Private Sub LoadServicesIntoListView(salesID As Integer)
         ListViewServices.Items.Clear()
         Me.SaleServiceList.Clear()
-        Dim serviceList As List(Of SalesService) = salesDatabaseHelper.GetSalesService(salesID)
+        Dim serviceList As List(Of SalesService) = salesDatabaseHelper.GetSalesServiceList(salesID)
 
         For Each service As SalesService In serviceList
             ' 3. Add to the local tracking list (VehicleList)
@@ -348,36 +370,23 @@ Public Class SalesForm
         Next
     End Sub
 
-    Public Sub AddButtonAction()
-        Dim updateButtonColumn As New DataGridViewButtonColumn With {
-            .HeaderText = "Action",
-            .Text = "Edit Info",
-            .UseColumnTextForButtonValue = True,
-            .Name = "actionsColumn"
-        }
-        DataGridViewSales.Columns.Add(updateButtonColumn)
-    End Sub
 
     Private Sub RemoveServiceBtn_Click(sender As Object, e As EventArgs) Handles RemoveServiceBtn.Click
-        RemoveSelectedVehicle()
+        RemoveSelectedService()
+        CalculateTotalPriceInService()
     End Sub
-    Private Sub RemoveSelectedVehicle()
+    Private Sub RemoveSelectedService()
         If ListViewServices.SelectedItems.Count = 0 Then
             MessageBox.Show("Please select a services from the list to remove.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        ' Get the selected ListViewItem
         Dim selectedItem As ListViewItem = ListViewServices.SelectedItems(0)
-
-        ' Get the Plate Number, which is used as the unique key to match the object in VehicleList
         Dim serviceToRemove As String = selectedItem.Text
         Dim addonServiceToRemove As String = selectedItem.Text
-        ' 1. Remove the vehicle from the local tracking list (VehicleList)
         Dim subtotalRemovedCount As Integer = Me.SaleServiceList.RemoveAll(Function(v)
                                                                                Return v.Service.Equals(serviceToRemove, StringComparison.OrdinalIgnoreCase)
                                                                            End Function)
-
         If subtotalRemovedCount > 0 Then
             ' 2. Remove the item from the visual ListView control
             ListViewServices.Items.Remove(selectedItem)

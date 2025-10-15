@@ -118,16 +118,12 @@ Public Class SalesDatabaseHelper
         End Using
     End Sub
     ' --- BASE SERVICE ID LOOKUP ---
-    Private Shared Function GetServiceIdByName(serviceName As String) As Integer
+    Public Shared Function GetServiceIdByName(serviceName As String) As Integer
         If String.IsNullOrWhiteSpace(serviceName) Then
             Throw New ArgumentException("Service name cannot be empty.")
         End If
 
         Dim serviceID As Integer = -1
-
-        ' IMPORTANT: This query needs to return the ServiceID based on the Name.
-        ' If Base Services and Addons are in the same table, you MUST add a filter 
-        ' (e.g., AND ServiceType = 'Base') to make sure you don't accidentally get an Addon ID.
         Dim selectQuery As String = "SELECT ServiceID FROM ServicesTable WHERE ServiceName = @ServiceName"
 
         Using con As New SqlConnection(constr)
@@ -157,15 +153,11 @@ Public Class SalesDatabaseHelper
     End Function
 
     ' --- ADDON SERVICE ID LOOKUP ---
-    Private Shared Function GetAddonIdByName(addonName As String) As Integer?
+    Public Shared Function GetAddonIdByName(addonName As String) As Integer?
         If String.IsNullOrWhiteSpace(addonName) OrElse addonName.Equals("None", StringComparison.OrdinalIgnoreCase) Then
             Return Nothing
         End If
         Dim addonID As Integer? = Nothing
-
-        ' IMPORTANT: This query needs to return the Addon ID based on the Name.
-        ' If Base Services and Addons are in the same table, you may need a filter 
-        ' (e.g., AND ServiceType = 'Addon') to ensure you get the right ID.
         Dim selectQuery As String = "SELECT ServiceID FROM ServicesTable WHERE ServiceName = @AddonName"
         Using con As New SqlConnection(constr)
             Try
@@ -273,12 +265,73 @@ Public Class SalesDatabaseHelper
             Return details
         End Using
     End Function
+    Public Shared Function GetSaleLineItems(saleId As Integer, constr As String) As List(Of ServiceLineItem)
+        Dim items As New List(Of ServiceLineItem)()
 
-    Public Function GetSalesService(salesID As Integer) As List(Of SalesService)
-        ' Fix: Renamed list variable for clarity
+        ' This query retrieves the subtotal, base service name, and addon service name 
+        ' for a given SaleID by joining SalesServiceTable with ServicesTable twice.
+        Dim sql As String = "
+        SELECT 
+            SST.Subtotal,
+            ST_BASE.ServiceName AS BaseServiceName,
+            ST_ADDON.ServiceName AS AddonServiceName
+        FROM 
+            SalesServiceTable AS SST
+        LEFT JOIN 
+            ServicesTable AS ST_BASE ON SST.ServiceID = ST_BASE.ServiceID
+        LEFT JOIN 
+            ServicesTable AS ST_ADDON ON SST.AddonServiceID = ST_ADDON.ServiceID
+        WHERE 
+            SST.SalesID = @SaleID
+        ORDER BY 
+            SST.SalesServiceID ASC;
+    "
+
+        Using conn As New SqlConnection(constr)
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@SaleID", saleId)
+
+                Try
+                    conn.Open()
+                    Dim reader As SqlDataReader = cmd.ExecuteReader()
+
+                    While reader.Read()
+                        Dim subtotal As Decimal = Convert.ToDecimal(reader("Subtotal"))
+                        Dim baseServiceName As String = reader("BaseServiceName").ToString()
+
+                        ' Safely retrieve AddonServiceName, converting DBNull to an empty string.
+                        Dim addonServiceName As String = If(reader("AddonServiceName") Is DBNull.Value, "", reader("AddonServiceName").ToString())
+
+                        Dim lineItemName As String = ""
+
+                        ' Check if a base service exists for this line item.
+                        If Not String.IsNullOrEmpty(baseServiceName) Then
+                            ' Start with the Base Service Name
+                            lineItemName = baseServiceName
+
+                            ' Append the Add-on Service Name if it exists
+                            If Not String.IsNullOrEmpty(addonServiceName) Then
+                                lineItemName &= " + " & addonServiceName
+                            End If
+                            items.Add(New ServiceLineItem With {
+                            .Name = lineItemName,
+                            .Price = subtotal
+                        })
+                        End If
+                    End While
+                    reader.Close()
+
+                Catch ex As Exception
+                    MessageBox.Show("Error retrieving sale line items: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End Using
+        End Using
+
+        Return items
+    End Function
+
+    Public Function GetSalesServiceList(salesID As Integer) As List(Of SalesService)
         Dim serviceList As New List(Of SalesService)
-
-        ' Fix: Use JOINs to retrieve human-readable names and look up by SalesID
         Dim selectQuery As String = "SELECT " &
                                 "SST.SalesServiceID, " &
                                 "S_Base.ServiceName AS Service, " &
@@ -289,13 +342,12 @@ Public Class SalesDatabaseHelper
                                 "FROM SalesServiceTable SST " &
                                 "INNER JOIN ServicesTable S_Base ON SST.ServiceID = S_Base.ServiceID " &
                                 "LEFT JOIN ServicesTable S_Addon ON SST.AddonServiceID = S_Addon.ServiceID " &
-                                "WHERE SST.SalesID = @SalesID" ' Fix: Use SalesID for lookup
+                                "WHERE SST.SalesID = @SalesID"
 
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
                 Using cmd As New SqlCommand(selectQuery, con)
-                    ' Fix: Pass the salesID argument to the @SalesID parameter
                     cmd.Parameters.AddWithValue("@SalesID", salesID)
 
                     Using reader As SqlDataReader = cmd.ExecuteReader()
@@ -306,8 +358,6 @@ Public Class SalesDatabaseHelper
                             .Addon = reader.GetString(reader.GetOrdinal("Addon")),
                             .ServicePrice = reader.GetDecimal(reader.GetOrdinal("ServicePrice"))
                         }
-
-                            ' Fix: Add the item to the list
                             serviceList.Add(item)
                         End While
                     End Using
@@ -348,7 +398,6 @@ Public Class SalesDatabaseHelper
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                ' Filter by both the Addon flag and the specific service names
                 Dim selectQuery = "SELECT ServiceID, ServiceName FROM ServicesTable WHERE Addon = 1 ORDER BY ServiceName"
                 Using cmd As New SqlCommand(selectQuery, con)
                     Using adapter As New SqlDataAdapter(cmd)

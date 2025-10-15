@@ -8,25 +8,53 @@ Public Class DashboardDatabaseHelper
     Public Sub New(connectionString As String, customerNameTextBox As TextBox)
         constr = connectionString
         Me.textBoxCustomerName = customerNameTextBox
-
-
     End Sub
     ''' <summary>
     ''' View Sales Data from the SalesHistoryTable along with Customer and Service details.
     ''' </summary>
     Public Function ViewSalesData() As DataTable
         Dim dt As New DataTable()
-        Using conn As New SqlConnection(constr)
-            conn.Open()
-            Dim ViewQuery As String = "SELECT s.SalesID, c.Name AS CustomerName, sv.ServiceName AS BaseServiceName, sv_addon.ServiceName AS AddonServiceName, s.SaleDate, s.PaymentMethod, s.TotalPrice FROM SalesHistoryTable s
-                                     INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID
-                                     INNER JOIN ServicesTable sv ON s.ServiceID = sv.ServiceID
-                                     LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID ORDER BY s.SalesID DESC"
-            Using cmd As New SqlCommand(ViewQuery, conn)
-                Using reader As SqlDataReader = cmd.ExecuteReader()
-                    dt.Load(reader)
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+
+                ' Step 1: Subquery to aggregate Service NAMES for each SalesID
+                ' We join SalesServiceTable to ServicesTable TWICE (once for the base service, once for the addon)
+                ' Then we aggregate the resulting names into comma-separated strings.
+                Dim aggregateServiceNamesQuery =
+            "SELECT " &
+                "sst.SalesID, " &
+                "STRING_AGG(sv_base.ServiceName, ', ') AS AllServices, " &
+                "STRING_AGG(sv_addon.ServiceName, ', ') AS AllAddonServices " &
+            "FROM SalesServiceTable sst " &
+            "INNER JOIN ServicesTable sv_base ON sst.ServiceID = sv_base.ServiceID " &
+            "LEFT JOIN ServicesTable sv_addon ON sst.AddonServiceID = sv_addon.ServiceID " &
+            "GROUP BY sst.SalesID"
+
+                ' Step 2: Final query joins SalesHistoryTable to the aggregated names
+                Dim selectQuery =
+            "SELECT " &
+                "s.SalesID, " &
+                "c.Name AS CustomerName, " &
+                "agg.AllServices AS BaseServiceName, " &
+                "agg.AllAddonServices AS AddonServiceName, " &
+                "s.SaleDate, " &
+                "s.PaymentMethod, " &
+                "s.ReferenceID, " &
+                "s.TotalPrice " &
+            "FROM SalesHistoryTable s " &
+            "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
+            "LEFT JOIN (" & aggregateServiceNamesQuery & ") agg ON s.SalesID = agg.SalesID " &
+            "ORDER BY s.SalesID DESC"
+
+                Using cmd As New SqlCommand(selectQuery, con)
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
                 End Using
-            End Using
+            Catch ex As Exception
+                MessageBox.Show("Error viewing sales history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
         End Using
         Return dt
     End Function
@@ -88,47 +116,55 @@ Public Class DashboardDatabaseHelper
         Return dt
     End Function
     Public Function GetListInSearchBar(searchInBar As String) As DataTable
-        Dim dt As New DataTable()
 
-        Dim query As String = "
-            SELECT
-                s.SalesID,
-                c.Name AS CustomerName,
-                sv.ServiceName AS BaseServiceName,
-                sv_addon.ServiceName AS AddonServiceName,
-                s.SaleDate,
-                s.PaymentMethod,
-                s.TotalPrice
-            FROM SalesHistoryTable s
-            INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID
-            INNER JOIN ServicesTable sv ON s.ServiceID = sv.ServiceID
-            LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID
-            WHERE c.Name LIKE @searchString
-            OR s.SalesID LIKE @searchString
-            OR s.PaymentMethod LIKE @searchString
-            "
+
+
+        Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
-            Using cmd As New SqlCommand(query, con)
-                cmd.Parameters.AddWithValue("@searchString", "%" & searchInBar & "%")
-                Try
-                    con.Open()
-                    Dim da As New SqlDataAdapter(cmd)
-                    da.Fill(dt)
-                Catch ex As Exception
-                    Console.WriteLine("Error in GetListInSearchBar: " & ex.Message)
-                Finally
-                    con.Close()
-                End Try
-            End Using
+            Try
+                con.Open()
+                Dim aggregateServiceNamesQuery =
+            "SELECT " &
+                "sst.SalesID, " &
+                "STRING_AGG(sv_base.ServiceName, ', ') AS AllServices, " &
+                "STRING_AGG(sv_addon.ServiceName, ', ') AS AllAddonServices " &
+            "FROM SalesServiceTable sst " &
+            "INNER JOIN ServicesTable sv_base ON sst.ServiceID = sv_base.ServiceID " &
+            "LEFT JOIN ServicesTable sv_addon ON sst.AddonServiceID = sv_addon.ServiceID " &
+            "GROUP BY sst.SalesID"
+
+                Dim selectQuery =
+            "SELECT " &
+                "s.SalesID, " &
+                "c.Name AS CustomerName, " &
+                "agg.AllServices AS BaseServiceName, " &
+                "agg.AllAddonServices AS AddonServiceName, " &
+                "s.SaleDate, " &
+                "s.PaymentMethod, " &
+                "s.ReferenceID, " &
+                "s.TotalPrice " &
+            "FROM SalesHistoryTable s " &
+            "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
+            "LEFT JOIN (" & aggregateServiceNamesQuery & ") agg ON s.SalesID = agg.SalesID " &
+            "WHERE c.Name LIKE @searchString
+            OR s.SalesID LIKE @searchString
+            OR s.PaymentMethod LIKE @searchString"
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@searchString", "%" & searchInBar & "%")
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error viewing sales history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
         End Using
         Return dt
+
     End Function
     ''' <summary>
     ''' Gets the activity log from the ActivityLogTable.
     ''' </summary>
-
-
-
     Public Sub AddSale(customerID As Integer, baseServiceID As Integer, addonServiceID As Integer?, paymentMethod As String, totalPrice As Decimal)
         Using con As New SqlConnection(constr)
             Try
@@ -301,7 +337,6 @@ Public Class DashboardDatabaseHelper
             End Try
         End Using
     End Sub
-
     Public Sub PopulateAddonServicesForUI(targetComboBox As ComboBox)
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -323,7 +358,6 @@ Public Class DashboardDatabaseHelper
             End Try
         End Using
     End Sub
-
     Public Sub PopulateCustomerNames()
         Dim customerNames As New AutoCompleteStringCollection()
         Using con As New SqlConnection(constr)
@@ -366,7 +400,6 @@ Public Class DashboardDatabaseHelper
             Return customerID
         End Using
     End Function
-
     Public Function GetServiceID(serviceName As String) As SalesInDashboardService
         Using con As New SqlConnection(constr)
             Dim details As New SalesInDashboardService()

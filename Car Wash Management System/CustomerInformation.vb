@@ -43,7 +43,9 @@ Public Class CustomerInformation
     End Sub
 
     Private Sub DataGridViewCustomerInformation_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCustomerInformation.CellContentClick
-        If e.RowIndex < 0 Then Return
+        If e.RowIndex >= 0 Then
+            DataGridViewCustomerInformation.Rows(e.RowIndex).Selected = True
+        End If
 
         TextBoxName.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Name").Value.ToString()
         TextBoxNumber.Text = DataGridViewCustomerInformation.CurrentRow.Cells("PhoneNumber").Value.ToString()
@@ -65,6 +67,7 @@ Public Class CustomerInformation
         Catch ex As Exception
             MessageBox.Show("An error occurred during data selection: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
     End Sub
     Private Sub LoadVehiclesIntoListView(customerID As Integer)
         ListViewVehicles.Items.Clear()
@@ -95,7 +98,7 @@ Public Class CustomerInformation
     Public Sub AddCustomerInformation()
 
         If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Then
-            MessageBox.Show("Please fill in all required customer fields (Name, Phone, Email).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Please fill in all required customer fields (Name, Phone, Email).", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
 

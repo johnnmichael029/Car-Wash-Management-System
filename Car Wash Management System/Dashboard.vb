@@ -100,6 +100,7 @@ Public Class Dashboard
         DataGridViewLatestTransaction.Columns("SaleDate").HeaderText = "Sale Date"
         DataGridViewLatestTransaction.Columns("PaymentMethod").HeaderText = "Payment Method"
         DataGridViewLatestTransaction.Columns("TotalPrice").HeaderText = "Total Price (₱)"
+        DataGridViewLatestTransaction.Columns("ReferenceID").HeaderText = "Reference ID"
     End Sub
     Private Sub DataGridViewLatestTransactionFontStyle()
         DataGridViewLatestTransaction.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
@@ -259,6 +260,10 @@ Public Class Dashboard
 
     Private Sub ClearBtn_Click(sender As Object, e As EventArgs) Handles ClearBtn.Click
         ClearFieldsOfSales()
+    End Sub
+
+    Private Sub DataGridViewLatestTransaction_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewLatestTransaction.CellContentClick
+
     End Sub
 End Class
 
