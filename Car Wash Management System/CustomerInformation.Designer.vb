@@ -483,6 +483,9 @@ Partial Class CustomerInformation
         ' 
         ' DataGridViewCustomerInformation
         ' 
+        DataGridViewCustomerInformation.AllowUserToAddRows = False
+        DataGridViewCustomerInformation.AllowUserToResizeColumns = False
+        DataGridViewCustomerInformation.AllowUserToResizeRows = False
         DataGridViewCustomerInformation.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         DataGridViewCustomerInformation.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewCustomerInformation.BackgroundColor = SystemColors.ControlLight

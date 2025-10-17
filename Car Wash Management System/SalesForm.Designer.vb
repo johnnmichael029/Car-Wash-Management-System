@@ -61,6 +61,9 @@ Partial Class SalesForm
         ' 
         ' DataGridViewSales
         ' 
+        DataGridViewSales.AllowUserToAddRows = False
+        DataGridViewSales.AllowUserToResizeColumns = False
+        DataGridViewSales.AllowUserToResizeRows = False
         DataGridViewSales.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewSales.BackgroundColor = SystemColors.ControlLight
         DataGridViewSales.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize

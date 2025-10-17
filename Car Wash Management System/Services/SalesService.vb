@@ -5,7 +5,6 @@
     Public Property Service As String
     Public Property ServicePrice As Decimal
 
-    ' --- FIX 1: Add a Parameterless Constructor to allow "New VehicleService() With {...}" ---
     Public Sub New()
         ' Parameterless constructor for object initialization
     End Sub

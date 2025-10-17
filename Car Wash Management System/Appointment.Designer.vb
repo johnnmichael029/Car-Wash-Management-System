@@ -77,6 +77,9 @@ Partial Class Appointment
         ' 
         ' DataGridViewAppointment
         ' 
+        DataGridViewAppointment.AllowUserToAddRows = False
+        DataGridViewAppointment.AllowUserToResizeColumns = False
+        DataGridViewAppointment.AllowUserToResizeRows = False
         DataGridViewAppointment.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewAppointment.BackgroundColor = SystemColors.ControlLight
         DataGridViewAppointment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize

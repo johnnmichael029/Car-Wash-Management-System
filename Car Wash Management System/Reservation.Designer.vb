@@ -52,6 +52,9 @@ Partial Class Reservation
         ' 
         ' DataGridViewListOfReservation
         ' 
+        DataGridViewListOfReservation.AllowUserToAddRows = False
+        DataGridViewListOfReservation.AllowUserToResizeColumns = False
+        DataGridViewListOfReservation.AllowUserToResizeRows = False
         DataGridViewListOfReservation.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         DataGridViewListOfReservation.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewListOfReservation.BackgroundColor = SystemColors.ControlLight

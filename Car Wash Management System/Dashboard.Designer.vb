@@ -29,11 +29,19 @@ Partial Class Dashboard
         PanelMontlySales = New Panel()
         Label10 = New Label()
         Panel12 = New Panel()
+        ComboBoxFilter = New ComboBox()
         TextBoxSearchBar = New TextBox()
         Label9 = New Label()
         Panel13 = New Panel()
         DataGridViewLatestTransaction = New DataGridView()
         Panel2 = New Panel()
+        RemoveServiceBtn = New Button()
+        AddServiceBtn = New Button()
+        ListViewServices = New ListView()
+        TextBoxReferenceID = New TextBox()
+        Label17 = New Label()
+        Label16 = New Label()
+        TextBoxTotalPrice = New TextBox()
         LabelSalesID = New Label()
         Label1 = New Label()
         AddSalesBtn = New Button()
@@ -52,6 +60,11 @@ Partial Class Dashboard
         Label7 = New Label()
         Panel3 = New Panel()
         Panel1 = New Panel()
+        RemoveVehicleBtn = New Button()
+        AddVehicleBtn = New Button()
+        ListViewVehicles = New ListView()
+        TextBoxVehicle = New TextBox()
+        Label15 = New Label()
         customerIDLabel = New Label()
         Label8 = New Label()
         Label11 = New Label()
@@ -140,6 +153,7 @@ Partial Class Dashboard
         ' 
         Panel12.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom
         Panel12.BackColor = Color.White
+        Panel12.Controls.Add(ComboBoxFilter)
         Panel12.Controls.Add(TextBoxSearchBar)
         Panel12.Controls.Add(Label9)
         Panel12.Controls.Add(Panel13)
@@ -147,6 +161,16 @@ Partial Class Dashboard
         Panel12.Name = "Panel12"
         Panel12.Size = New Size(596, 323)
         Panel12.TabIndex = 7
+        ' 
+        ' ComboBoxFilter
+        ' 
+        ComboBoxFilter.AutoCompleteMode = AutoCompleteMode.SuggestAppend
+        ComboBoxFilter.AutoCompleteSource = AutoCompleteSource.ListItems
+        ComboBoxFilter.FormattingEnabled = True
+        ComboBoxFilter.Location = New Point(341, 8)
+        ComboBoxFilter.Name = "ComboBoxFilter"
+        ComboBoxFilter.Size = New Size(97, 23)
+        ComboBoxFilter.TabIndex = 5
         ' 
         ' TextBoxSearchBar
         ' 
@@ -180,6 +204,9 @@ Partial Class Dashboard
         ' 
         ' DataGridViewLatestTransaction
         ' 
+        DataGridViewLatestTransaction.AllowUserToAddRows = False
+        DataGridViewLatestTransaction.AllowUserToResizeColumns = False
+        DataGridViewLatestTransaction.AllowUserToResizeRows = False
         DataGridViewLatestTransaction.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewLatestTransaction.BackgroundColor = Color.White
         DataGridViewLatestTransaction.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
@@ -192,6 +219,13 @@ Partial Class Dashboard
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
+        Panel2.Controls.Add(RemoveServiceBtn)
+        Panel2.Controls.Add(AddServiceBtn)
+        Panel2.Controls.Add(ListViewServices)
+        Panel2.Controls.Add(TextBoxReferenceID)
+        Panel2.Controls.Add(Label17)
+        Panel2.Controls.Add(Label16)
+        Panel2.Controls.Add(TextBoxTotalPrice)
         Panel2.Controls.Add(LabelSalesID)
         Panel2.Controls.Add(Label1)
         Panel2.Controls.Add(AddSalesBtn)
@@ -214,12 +248,90 @@ Partial Class Dashboard
         Panel2.Size = New Size(292, 680)
         Panel2.TabIndex = 19
         ' 
+        ' RemoveServiceBtn
+        ' 
+        RemoveServiceBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
+        RemoveServiceBtn.FlatAppearance.BorderSize = 0
+        RemoveServiceBtn.FlatStyle = FlatStyle.Flat
+        RemoveServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveServiceBtn.ForeColor = Color.White
+        RemoveServiceBtn.Location = New Point(202, 146)
+        RemoveServiceBtn.Name = "RemoveServiceBtn"
+        RemoveServiceBtn.Size = New Size(75, 23)
+        RemoveServiceBtn.TabIndex = 94
+        RemoveServiceBtn.Text = "Remove"
+        RemoveServiceBtn.UseVisualStyleBackColor = False
+        ' 
+        ' AddServiceBtn
+        ' 
+        AddServiceBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddServiceBtn.FlatAppearance.BorderSize = 0
+        AddServiceBtn.FlatStyle = FlatStyle.Flat
+        AddServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddServiceBtn.ForeColor = Color.White
+        AddServiceBtn.Location = New Point(16, 146)
+        AddServiceBtn.Name = "AddServiceBtn"
+        AddServiceBtn.Size = New Size(75, 23)
+        AddServiceBtn.TabIndex = 93
+        AddServiceBtn.Text = "Add"
+        AddServiceBtn.UseVisualStyleBackColor = False
+        ' 
+        ' ListViewServices
+        ' 
+        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        ListViewServices.FullRowSelect = True
+        ListViewServices.GridLines = True
+        ListViewServices.Location = New Point(16, 175)
+        ListViewServices.Name = "ListViewServices"
+        ListViewServices.Size = New Size(260, 102)
+        ListViewServices.TabIndex = 92
+        ListViewServices.UseCompatibleStateImageBehavior = False
+        ' 
+        ' TextBoxReferenceID
+        ' 
+        TextBoxReferenceID.Font = New Font("Century Gothic", 9F)
+        TextBoxReferenceID.Location = New Point(16, 344)
+        TextBoxReferenceID.Name = "TextBoxReferenceID"
+        TextBoxReferenceID.ReadOnly = True
+        TextBoxReferenceID.Size = New Size(261, 22)
+        TextBoxReferenceID.TabIndex = 91
+        ' 
+        ' Label17
+        ' 
+        Label17.AutoSize = True
+        Label17.Font = New Font("Century Gothic", 9F)
+        Label17.Location = New Point(16, 326)
+        Label17.Name = "Label17"
+        Label17.Size = New Size(85, 17)
+        Label17.TabIndex = 90
+        Label17.Text = "Reference ID"
+        ' 
+        ' Label16
+        ' 
+        Label16.AutoSize = True
+        Label16.Font = New Font("Century Gothic", 9F)
+        Label16.Location = New Point(147, 372)
+        Label16.Name = "Label16"
+        Label16.Size = New Size(70, 17)
+        Label16.TabIndex = 89
+        Label16.Text = "Total Price"
+        ' 
+        ' TextBoxTotalPrice
+        ' 
+        TextBoxTotalPrice.Font = New Font("Century Gothic", 9F)
+        TextBoxTotalPrice.Location = New Point(147, 390)
+        TextBoxTotalPrice.Name = "TextBoxTotalPrice"
+        TextBoxTotalPrice.ReadOnly = True
+        TextBoxTotalPrice.Size = New Size(129, 22)
+        TextBoxTotalPrice.TabIndex = 88
+        ' 
         ' LabelSalesID
         ' 
         LabelSalesID.AutoSize = True
         LabelSalesID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         LabelSalesID.ForeColor = Color.Red
-        LabelSalesID.Location = New Point(69, 347)
+        LabelSalesID.Location = New Point(69, 449)
         LabelSalesID.Name = "LabelSalesID"
         LabelSalesID.Size = New Size(0, 15)
         LabelSalesID.TabIndex = 33
@@ -228,7 +340,7 @@ Partial Class Dashboard
         ' 
         Label1.AutoSize = True
         Label1.Font = New Font("Century Gothic", 9F)
-        Label1.Location = New Point(17, 347)
+        Label1.Location = New Point(16, 449)
         Label1.Name = "Label1"
         Label1.Size = New Size(54, 17)
         Label1.TabIndex = 32
@@ -241,7 +353,7 @@ Partial Class Dashboard
         AddSalesBtn.FlatStyle = FlatStyle.Flat
         AddSalesBtn.Font = New Font("Century Gothic", 11.25F)
         AddSalesBtn.ForeColor = Color.White
-        AddSalesBtn.Location = New Point(16, 367)
+        AddSalesBtn.Location = New Point(16, 469)
         AddSalesBtn.Name = "AddSalesBtn"
         AddSalesBtn.Size = New Size(260, 46)
         AddSalesBtn.TabIndex = 32
@@ -251,10 +363,11 @@ Partial Class Dashboard
         ' 
         ' TextBoxPrice
         ' 
-        TextBoxPrice.Location = New Point(17, 307)
+        TextBoxPrice.Font = New Font("Century Gothic", 9F)
+        TextBoxPrice.Location = New Point(16, 390)
         TextBoxPrice.Name = "TextBoxPrice"
         TextBoxPrice.ReadOnly = True
-        TextBoxPrice.Size = New Size(261, 23)
+        TextBoxPrice.Size = New Size(129, 22)
         TextBoxPrice.TabIndex = 31
         ' 
         ' ComboBoxPaymentMethod
@@ -262,68 +375,76 @@ Partial Class Dashboard
         ComboBoxPaymentMethod.AutoCompleteCustomSource.AddRange(New String() {"Cash", "Gcash", "Cheque"})
         ComboBoxPaymentMethod.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxPaymentMethod.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxPaymentMethod.Font = New Font("Century Gothic", 9F)
         ComboBoxPaymentMethod.FormattingEnabled = True
         ComboBoxPaymentMethod.Items.AddRange(New Object() {"Cash", "Gcash", "Cheque"})
-        ComboBoxPaymentMethod.Location = New Point(16, 254)
+        ComboBoxPaymentMethod.Location = New Point(16, 298)
         ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod"
-        ComboBoxPaymentMethod.Size = New Size(261, 23)
+        ComboBoxPaymentMethod.Size = New Size(261, 25)
         ComboBoxPaymentMethod.TabIndex = 30
         ' 
         ' ComboBoxAddons
         ' 
+        ComboBoxAddons.Font = New Font("Century Gothic", 9F)
         ComboBoxAddons.FormattingEnabled = True
-        ComboBoxAddons.Location = New Point(16, 197)
+        ComboBoxAddons.Location = New Point(147, 115)
         ComboBoxAddons.Name = "ComboBoxAddons"
-        ComboBoxAddons.Size = New Size(261, 23)
+        ComboBoxAddons.Size = New Size(129, 25)
         ComboBoxAddons.TabIndex = 29
         ' 
         ' ComboBoxServices
         ' 
+        ComboBoxServices.Font = New Font("Century Gothic", 9F)
         ComboBoxServices.FormattingEnabled = True
-        ComboBoxServices.Location = New Point(16, 138)
+        ComboBoxServices.Location = New Point(16, 115)
         ComboBoxServices.Name = "ComboBoxServices"
-        ComboBoxServices.Size = New Size(261, 23)
+        ComboBoxServices.Size = New Size(129, 25)
         ComboBoxServices.TabIndex = 28
         ' 
         ' TextBoxCustomerID
         ' 
-        TextBoxCustomerID.Location = New Point(16, 82)
+        TextBoxCustomerID.Font = New Font("Century Gothic", 9F)
+        TextBoxCustomerID.Location = New Point(16, 70)
         TextBoxCustomerID.Name = "TextBoxCustomerID"
         TextBoxCustomerID.ReadOnly = True
-        TextBoxCustomerID.Size = New Size(261, 23)
+        TextBoxCustomerID.Size = New Size(261, 22)
         TextBoxCustomerID.TabIndex = 27
         ' 
         ' TextBoxCustomerName
         ' 
+        TextBoxCustomerName.Font = New Font("Century Gothic", 9F)
         TextBoxCustomerName.Location = New Point(16, 27)
         TextBoxCustomerName.Name = "TextBoxCustomerName"
-        TextBoxCustomerName.Size = New Size(261, 23)
+        TextBoxCustomerName.Size = New Size(261, 22)
         TextBoxCustomerName.TabIndex = 26
         ' 
         ' Label6
         ' 
         Label6.AutoSize = True
-        Label6.Location = New Point(16, 179)
+        Label6.Font = New Font("Century Gothic", 9F)
+        Label6.Location = New Point(147, 97)
         Label6.Name = "Label6"
-        Label6.Size = New Size(48, 15)
+        Label6.Size = New Size(53, 17)
         Label6.TabIndex = 23
         Label6.Text = "Addons"
         ' 
         ' Label5
         ' 
         Label5.AutoSize = True
+        Label5.Font = New Font("Century Gothic", 9F)
         Label5.Location = New Point(16, 9)
         Label5.Name = "Label5"
-        Label5.Size = New Size(94, 15)
+        Label5.Size = New Size(104, 17)
         Label5.TabIndex = 18
         Label5.Text = "Customer Name"
         ' 
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(16, 64)
+        Label2.Font = New Font("Century Gothic", 9F)
+        Label2.Location = New Point(16, 52)
         Label2.Name = "Label2"
-        Label2.Size = New Size(73, 15)
+        Label2.Size = New Size(80, 17)
         Label2.TabIndex = 4
         Label2.Text = "Customer ID"
         ' 
@@ -336,7 +457,7 @@ Partial Class Dashboard
         ClearBtn.Font = New Font("Century Gothic", 11.25F)
         ClearBtn.ForeColor = Color.White
         ClearBtn.Image = CType(resources.GetObject("ClearBtn.Image"), Image)
-        ClearBtn.Location = New Point(16, 419)
+        ClearBtn.Location = New Point(16, 521)
         ClearBtn.Name = "ClearBtn"
         ClearBtn.Size = New Size(260, 46)
         ClearBtn.TabIndex = 14
@@ -348,29 +469,32 @@ Partial Class Dashboard
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Location = New Point(16, 236)
+        Label4.Font = New Font("Century Gothic", 9F)
+        Label4.Location = New Point(16, 280)
         Label4.Name = "Label4"
-        Label4.Size = New Size(95, 15)
+        Label4.Size = New Size(105, 17)
         Label4.TabIndex = 15
         Label4.Text = "Paymen Method"
         ' 
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Location = New Point(16, 120)
+        Label3.Font = New Font("Century Gothic", 9F)
+        Label3.Location = New Point(16, 97)
         Label3.Name = "Label3"
-        Label3.Size = New Size(44, 15)
+        Label3.Size = New Size(54, 17)
         Label3.TabIndex = 5
         Label3.Text = "Service"
         ' 
         ' Label7
         ' 
         Label7.AutoSize = True
-        Label7.Location = New Point(16, 289)
+        Label7.Font = New Font("Century Gothic", 9F)
+        Label7.Location = New Point(16, 372)
         Label7.Name = "Label7"
-        Label7.Size = New Size(33, 15)
+        Label7.Size = New Size(59, 17)
         Label7.TabIndex = 6
-        Label7.Text = "Price"
+        Label7.Text = "Subtotal"
         ' 
         ' Panel3
         ' 
@@ -384,6 +508,11 @@ Partial Class Dashboard
         ' Panel1
         ' 
         Panel1.BackColor = Color.White
+        Panel1.Controls.Add(RemoveVehicleBtn)
+        Panel1.Controls.Add(AddVehicleBtn)
+        Panel1.Controls.Add(ListViewVehicles)
+        Panel1.Controls.Add(TextBoxVehicle)
+        Panel1.Controls.Add(Label15)
         Panel1.Controls.Add(customerIDLabel)
         Panel1.Controls.Add(Label8)
         Panel1.Controls.Add(Label11)
@@ -404,12 +533,70 @@ Partial Class Dashboard
         Panel1.Size = New Size(292, 680)
         Panel1.TabIndex = 2
         ' 
+        ' RemoveVehicleBtn
+        ' 
+        RemoveVehicleBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
+        RemoveVehicleBtn.FlatAppearance.BorderSize = 0
+        RemoveVehicleBtn.FlatStyle = FlatStyle.Flat
+        RemoveVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveVehicleBtn.ForeColor = Color.White
+        RemoveVehicleBtn.Location = New Point(201, 314)
+        RemoveVehicleBtn.Name = "RemoveVehicleBtn"
+        RemoveVehicleBtn.Size = New Size(75, 23)
+        RemoveVehicleBtn.TabIndex = 85
+        RemoveVehicleBtn.Text = "Remove"
+        RemoveVehicleBtn.UseVisualStyleBackColor = False
+        ' 
+        ' AddVehicleBtn
+        ' 
+        AddVehicleBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
+        AddVehicleBtn.FlatAppearance.BorderSize = 0
+        AddVehicleBtn.FlatStyle = FlatStyle.Flat
+        AddVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddVehicleBtn.ForeColor = Color.White
+        AddVehicleBtn.Location = New Point(16, 314)
+        AddVehicleBtn.Name = "AddVehicleBtn"
+        AddVehicleBtn.Size = New Size(75, 23)
+        AddVehicleBtn.TabIndex = 84
+        AddVehicleBtn.Text = "Add"
+        AddVehicleBtn.UseVisualStyleBackColor = False
+        ' 
+        ' ListViewVehicles
+        ' 
+        ListViewVehicles.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewVehicles.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        ListViewVehicles.FullRowSelect = True
+        ListViewVehicles.GridLines = True
+        ListViewVehicles.Location = New Point(16, 343)
+        ListViewVehicles.Name = "ListViewVehicles"
+        ListViewVehicles.Size = New Size(260, 102)
+        ListViewVehicles.TabIndex = 83
+        ListViewVehicles.UseCompatibleStateImageBehavior = False
+        ' 
+        ' TextBoxVehicle
+        ' 
+        TextBoxVehicle.Font = New Font("Century Gothic", 9F)
+        TextBoxVehicle.Location = New Point(148, 285)
+        TextBoxVehicle.Name = "TextBoxVehicle"
+        TextBoxVehicle.Size = New Size(129, 22)
+        TextBoxVehicle.TabIndex = 58
+        ' 
+        ' Label15
+        ' 
+        Label15.AutoSize = True
+        Label15.Font = New Font("Century Gothic", 9F)
+        Label15.Location = New Point(147, 267)
+        Label15.Name = "Label15"
+        Label15.Size = New Size(84, 17)
+        Label15.TabIndex = 59
+        Label15.Text = "Vehicle Type"
+        ' 
         ' customerIDLabel
         ' 
         customerIDLabel.AutoSize = True
         customerIDLabel.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         customerIDLabel.ForeColor = Color.Red
-        customerIDLabel.Location = New Point(89, 314)
+        customerIDLabel.Location = New Point(85, 449)
         customerIDLabel.Name = "customerIDLabel"
         customerIDLabel.Size = New Size(0, 15)
         customerIDLabel.TabIndex = 57
@@ -417,26 +604,29 @@ Partial Class Dashboard
         ' Label8
         ' 
         Label8.AutoSize = True
+        Label8.Font = New Font("Century Gothic", 9F)
         Label8.Location = New Point(16, 9)
         Label8.Name = "Label8"
-        Label8.Size = New Size(39, 15)
+        Label8.Size = New Size(44, 17)
         Label8.TabIndex = 46
         Label8.Text = "Name"
         ' 
         ' Label11
         ' 
         Label11.AutoSize = True
+        Label11.Font = New Font("Century Gothic", 9F)
         Label11.Location = New Point(16, 53)
         Label11.Name = "Label11"
-        Label11.Size = New Size(88, 15)
+        Label11.Size = New Size(95, 17)
         Label11.TabIndex = 52
         Label11.Text = "Phone Number"
         ' 
         ' TextBoxPlateNumber
         ' 
+        TextBoxPlateNumber.Font = New Font("Century Gothic", 9F)
         TextBoxPlateNumber.Location = New Point(16, 285)
         TextBoxPlateNumber.Name = "TextBoxPlateNumber"
-        TextBoxPlateNumber.Size = New Size(120, 23)
+        TextBoxPlateNumber.Size = New Size(129, 22)
         TextBoxPlateNumber.TabIndex = 51
         ' 
         ' ClearFieldsBtn
@@ -448,7 +638,7 @@ Partial Class Dashboard
         ClearFieldsBtn.Font = New Font("Century Gothic", 11.25F)
         ClearFieldsBtn.ForeColor = Color.White
         ClearFieldsBtn.Image = CType(resources.GetObject("ClearFieldsBtn.Image"), Image)
-        ClearFieldsBtn.Location = New Point(15, 419)
+        ClearFieldsBtn.Location = New Point(16, 521)
         ClearFieldsBtn.Name = "ClearFieldsBtn"
         ClearFieldsBtn.Size = New Size(260, 46)
         ClearFieldsBtn.TabIndex = 45
@@ -460,14 +650,16 @@ Partial Class Dashboard
         ' Label12
         ' 
         Label12.AutoSize = True
+        Label12.Font = New Font("Century Gothic", 9F)
         Label12.Location = New Point(16, 97)
         Label12.Name = "Label12"
-        Label12.Size = New Size(36, 15)
+        Label12.Size = New Size(39, 17)
         Label12.TabIndex = 53
         Label12.Text = "Email"
         ' 
         ' TextBoxAddress
         ' 
+        TextBoxAddress.Font = New Font("Century Gothic", 9F)
         TextBoxAddress.Location = New Point(16, 171)
         TextBoxAddress.Multiline = True
         TextBoxAddress.Name = "TextBoxAddress"
@@ -476,35 +668,38 @@ Partial Class Dashboard
         ' 
         ' TextBoxEmail
         ' 
+        TextBoxEmail.Font = New Font("Century Gothic", 9F)
         TextBoxEmail.Location = New Point(16, 115)
         TextBoxEmail.Name = "TextBoxEmail"
-        TextBoxEmail.Size = New Size(261, 23)
+        TextBoxEmail.Size = New Size(261, 22)
         TextBoxEmail.TabIndex = 49
         ' 
         ' Label67
         ' 
         Label67.AutoSize = True
-        Label67.Font = New Font("Segoe UI", 9F)
-        Label67.Location = New Point(15, 347)
+        Label67.Font = New Font("Century Gothic", 9F)
+        Label67.Location = New Point(16, 449)
         Label67.Name = "Label67"
-        Label67.Size = New Size(73, 15)
+        Label67.Size = New Size(80, 17)
         Label67.TabIndex = 56
         Label67.Text = "Customer ID"
         ' 
         ' Label13
         ' 
         Label13.AutoSize = True
+        Label13.Font = New Font("Century Gothic", 9F)
         Label13.Location = New Point(16, 153)
         Label13.Name = "Label13"
-        Label13.Size = New Size(49, 15)
+        Label13.Size = New Size(55, 17)
         Label13.TabIndex = 54
         Label13.Text = "Address"
         ' 
         ' TextBoxNumber
         ' 
+        TextBoxNumber.Font = New Font("Century Gothic", 9F)
         TextBoxNumber.Location = New Point(16, 71)
         TextBoxNumber.Name = "TextBoxNumber"
-        TextBoxNumber.Size = New Size(120, 23)
+        TextBoxNumber.Size = New Size(120, 22)
         TextBoxNumber.TabIndex = 48
         ' 
         ' AddCustomerBtn
@@ -516,7 +711,7 @@ Partial Class Dashboard
         AddCustomerBtn.Font = New Font("Century Gothic", 11.25F)
         AddCustomerBtn.ForeColor = Color.White
         AddCustomerBtn.Image = CType(resources.GetObject("AddCustomerBtn.Image"), Image)
-        AddCustomerBtn.Location = New Point(16, 367)
+        AddCustomerBtn.Location = New Point(16, 469)
         AddCustomerBtn.Name = "AddCustomerBtn"
         AddCustomerBtn.Size = New Size(260, 46)
         AddCustomerBtn.TabIndex = 42
@@ -528,17 +723,19 @@ Partial Class Dashboard
         ' Label14
         ' 
         Label14.AutoSize = True
+        Label14.Font = New Font("Century Gothic", 9F)
         Label14.Location = New Point(16, 267)
         Label14.Name = "Label14"
-        Label14.Size = New Size(80, 15)
+        Label14.Size = New Size(89, 17)
         Label14.TabIndex = 55
         Label14.Text = "Plate Number"
         ' 
         ' TextBoxName
         ' 
+        TextBoxName.Font = New Font("Century Gothic", 9F)
         TextBoxName.Location = New Point(16, 27)
         TextBoxName.Name = "TextBoxName"
-        TextBoxName.Size = New Size(261, 23)
+        TextBoxName.Size = New Size(261, 22)
         TextBoxName.TabIndex = 47
         ' 
         ' Panel4
@@ -625,4 +822,17 @@ Partial Class Dashboard
     Friend WithEvents Label14 As Label
     Friend WithEvents TextBoxName As TextBox
     Friend WithEvents PrintDocumentBill As Printing.PrintDocument
+    Friend WithEvents ComboBoxFilter As ComboBox
+    Friend WithEvents TextBoxVehicle As TextBox
+    Friend WithEvents Label15 As Label
+    Friend WithEvents RemoveVehicleBtn As Button
+    Friend WithEvents AddVehicleBtn As Button
+    Friend WithEvents ListViewVehicles As ListView
+    Friend WithEvents Label16 As Label
+    Friend WithEvents TextBoxTotalPrice As TextBox
+    Friend WithEvents TextBoxReferenceID As TextBox
+    Friend WithEvents Label17 As Label
+    Friend WithEvents RemoveServiceBtn As Button
+    Friend WithEvents AddServiceBtn As Button
+    Friend WithEvents ListViewServices As ListView
 End Class

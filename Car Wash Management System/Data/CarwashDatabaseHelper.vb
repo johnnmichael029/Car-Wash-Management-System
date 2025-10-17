@@ -50,9 +50,8 @@ Public Class CarwashDatabaseHelper
     Public Function GetTotalAppointments() As Integer
         Dim totalAppointments As Integer = 0
         Using con As New SqlConnection(constr)
-            Dim query As String = "SELECT COUNT(*) FROM AppointmentsTable
-                                 WHERE CAST(AppointmentDateTime AS DATE) = CAST(GETDATE() AS DATE)
-                                 AND AppointmentStatus = 'Confirmed'"
+            Dim query As String = "SELECT COUNT(*) FROM AppointmentServiceTable
+                                 WHERE AppointmentStatus = 'Confirmed'"
             Using cmd As New SqlCommand(query, con)
                 Try
                     con.Open()

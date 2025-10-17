@@ -144,7 +144,7 @@ Public Class Contracts
             ShowPrintPreview()
             ClearFields()
         Catch ex As Exception
-        MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
@@ -390,13 +390,13 @@ Public Class Contracts
         printPreviewDialog.ShowDialog()
     End Sub
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
-        billingContractsManagement.PrintBillInContracts(e, New PrintDataInContracts With {
+        BillingContractsManagement.PrintBillInContracts(e, New PrintDataInContracts With {
            .ContractID = If(DataGridView1.CurrentRow IsNot Nothing, Convert.ToInt32(DataGridView1.CurrentRow.Cells(0).Value), 0),
            .CustomerName = TextBoxCustomerName.Text,
            .BaseService = ComboBoxServices.Text,
-           .baseServicePrice = If(ComboBoxServices.SelectedIndex <> -1, billingContractsManagement.GetServiceDetails(ComboBoxServices.Text).Price, 0D),
+           .BaseServicePrice = If(ComboBoxServices.SelectedIndex <> -1, billingContractsManagement.GetServiceDetails(ComboBoxServices.Text).Price, 0D),
            .AddonService = ComboBoxAddon.Text,
-           .addonServicePrice = If(ComboBoxAddon.SelectedIndex <> -1, billingContractsManagement.GetServiceDetails(ComboBoxAddon.Text).Price, 0D),
+           .AddonServicePrice = If(ComboBoxAddon.SelectedIndex <> -1, billingContractsManagement.GetServiceDetails(ComboBoxAddon.Text).Price, 0D),
            .BillingFrequency = ComboBoxBillingFrequency.Text,
            .TotalPrice = Decimal.Parse(TextBoxPrice.Text),
            .PaymentMethod = ComboBoxPaymentMethod.Text,

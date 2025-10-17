@@ -264,8 +264,22 @@ Public Class Carwash
         admmin.Dock = DockStyle.Fill
         admmin.Show()
     End Sub
+    Private Sub SalesHistoryForm()
+        Panel4.Controls.Clear()
+        Dim salesHistory As New SalesHistory With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(salesHistory)
+        salesHistory.Dock = DockStyle.Fill
+        salesHistory.Show()
+    End Sub
 
     Private Sub MenuStrip1_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles MenuStrip1.ItemClicked
 
+    End Sub
+
+    Private Sub salesHistoryBtn_Click(sender As Object, e As EventArgs) Handles salesHistoryBtn.Click
+        SalesHistoryForm()
     End Sub
 End Class

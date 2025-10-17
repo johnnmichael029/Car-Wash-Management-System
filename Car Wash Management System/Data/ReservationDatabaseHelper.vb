@@ -9,13 +9,22 @@ Public Class ReservationDatabaseHelper
     Public Function ViewListOfReserved() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
-            Dim viewListQuery As String = "SELECT a.AppointmentID As ReservationID, c.Name AS CustomerName, s.ServiceName AS BaseService, sa.ServiceName AS AddonService, a.AppointmentDateTime, a.AppointmentStatus
-                                         FROM AppointmentsTable a 
-                                         INNER JOIN CustomersTable c ON a.CustomerID = c.CustomerID
-                                         INNER JOIN ServicesTable s ON a.ServiceID = s.ServiceID
-                                         LEFT JOIN ServicesTable sa ON a.AddonServiceID = sa.ServiceID 
-                                         WHERE a.AppointmentStatus = 'Confirmed'
-                                         ORDER BY a.AppointmentID DESC"
+            Dim viewListQuery As String =
+            "SELECT " &
+                "AST.AppointmentID As ReservationID, " &
+                "c.Name As CustomerName, " &
+                "sv_base.ServiceName As BaseService, " &
+                "sv_addon.ServiceName As AddonService, " &
+                "a.AppointmentDateTime As DateTime, " &
+                "AST.AppointmentStatus As AppointmentStatus " &
+            "FROM AppointmentServiceTable AST " &
+            "INNER JOIN CustomersTable c ON AST.CustomerID = c.CustomerID " &
+            "INNER JOIN AppointmentsTable a ON AST.AppointmentID = a.AppointmentID " &
+            "INNER JOIN ServicesTable sv_base ON AST.ServiceID = sv_base.ServiceID " &
+            "LEFT JOIN ServicesTable sv_addon ON AST.AddonServiceID = sv_addon.ServiceID " &
+            "WHERE AST.AppointmentStatus = 'Confirmed' " &
+            "ORDER BY a.AppointmentID DESC"
+
             Using cmd As New SqlCommand(viewListQuery, con)
                 Using adapater As New SqlDataAdapter(cmd)
                     adapater.Fill(dt)

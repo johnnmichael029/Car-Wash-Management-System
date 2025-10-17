@@ -17,34 +17,20 @@ Public Class DashboardDatabaseHelper
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-
-                ' Step 1: Subquery to aggregate Service NAMES for each SalesID
-                ' We join SalesServiceTable to ServicesTable TWICE (once for the base service, once for the addon)
-                ' Then we aggregate the resulting names into comma-separated strings.
-                Dim aggregateServiceNamesQuery =
-            "SELECT " &
-                "sst.SalesID, " &
-                "STRING_AGG(sv_base.ServiceName, ', ') AS AllServices, " &
-                "STRING_AGG(sv_addon.ServiceName, ', ') AS AllAddonServices " &
-            "FROM SalesServiceTable sst " &
-            "INNER JOIN ServicesTable sv_base ON sst.ServiceID = sv_base.ServiceID " &
-            "LEFT JOIN ServicesTable sv_addon ON sst.AddonServiceID = sv_addon.ServiceID " &
-            "GROUP BY sst.SalesID"
-
-                ' Step 2: Final query joins SalesHistoryTable to the aggregated names
                 Dim selectQuery =
             "SELECT " &
                 "s.SalesID, " &
                 "c.Name AS CustomerName, " &
-                "agg.AllServices AS BaseServiceName, " &
-                "agg.AllAddonServices AS AddonServiceName, " &
+                "sv_base.ServiceName, " &
+                "sv_addon.ServiceName," &
                 "s.SaleDate, " &
                 "s.PaymentMethod, " &
                 "s.ReferenceID, " &
                 "s.TotalPrice " &
             "FROM SalesHistoryTable s " &
             "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
-            "LEFT JOIN (" & aggregateServiceNamesQuery & ") agg ON s.SalesID = agg.SalesID " &
+            "INNER JOIN ServicesTable sv_base ON s.ServiceID = sv_base.ServiceID " &
+            "LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID " &
             "ORDER BY s.SalesID DESC"
 
                 Using cmd As New SqlCommand(selectQuery, con)
@@ -56,6 +42,7 @@ Public Class DashboardDatabaseHelper
                 MessageBox.Show("Error viewing sales history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Using
+
         Return dt
     End Function
     ''' <summary>
@@ -115,52 +102,63 @@ Public Class DashboardDatabaseHelper
         End Try
         Return dt
     End Function
-    Public Function GetListInSearchBar(searchInBar As String) As DataTable
-
-
-
+    Public Function GetFilteredList(searchInBar As String, filterColumn As String) As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
+            Dim selectQuery As String
+            con.Open()
             Try
-                con.Open()
-                Dim aggregateServiceNamesQuery =
-            "SELECT " &
-                "sst.SalesID, " &
-                "STRING_AGG(sv_base.ServiceName, ', ') AS AllServices, " &
-                "STRING_AGG(sv_addon.ServiceName, ', ') AS AllAddonServices " &
-            "FROM SalesServiceTable sst " &
-            "INNER JOIN ServicesTable sv_base ON sst.ServiceID = sv_base.ServiceID " &
-            "LEFT JOIN ServicesTable sv_addon ON sst.AddonServiceID = sv_addon.ServiceID " &
-            "GROUP BY sst.SalesID"
+                ' --- SQL SELECT Statement (Common to all cases) ---
+                Dim baseSelect As String =
+                    "SELECT " &
+                    "s.SalesID, " &
+                    "c.Name AS CustomerName, " &
+                    "sv_base.ServiceName AS BaseService, " & ' Added alias for clarity
+                    "sv_addon.ServiceName AS AddonService, " & ' Added alias for clarity
+                    "s.SaleDate, " &
+                    "s.PaymentMethod, " &
+                    "s.ReferenceID, " &
+                    "s.TotalPrice " &
+                    "FROM SalesHistoryTable s " &
+                    "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
+                    "INNER JOIN ServicesTable sv_base ON s.ServiceID = sv_base.ServiceID " &
+                    "LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID "
 
-                Dim selectQuery =
-            "SELECT " &
-                "s.SalesID, " &
-                "c.Name AS CustomerName, " &
-                "agg.AllServices AS BaseServiceName, " &
-                "agg.AllAddonServices AS AddonServiceName, " &
-                "s.SaleDate, " &
-                "s.PaymentMethod, " &
-                "s.ReferenceID, " &
-                "s.TotalPrice " &
-            "FROM SalesHistoryTable s " &
-            "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
-            "LEFT JOIN (" & aggregateServiceNamesQuery & ") agg ON s.SalesID = agg.SalesID " &
-            "WHERE c.Name LIKE @searchString
-            OR s.SalesID LIKE @searchString
-            OR s.PaymentMethod LIKE @searchString"
+                ' --- Determine the WHERE Clause based on filterColumn ---
+                If filterColumn = "Addon Service" Then
+                    ' FIX 1: Use LIKE and target the Addon service column
+                    selectQuery = baseSelect & "WHERE sv_addon.ServiceName LIKE @searchString"
+
+                ElseIf filterColumn = "Base Service" Then
+                    ' FIX 2: Use LIKE and target the Base service column
+                    selectQuery = baseSelect & "WHERE sv_base.ServiceName LIKE @searchString"
+
+                ElseIf filterColumn = "All Columns" Then
+                    ' Ensure your ComboBox has an "All Columns" option, otherwise this case handles the default catch-all.
+                    selectQuery = baseSelect &
+                            "WHERE c.Name LIKE @searchString " &
+                            "OR s.SalesID LIKE @searchString " &
+                            "OR s.PaymentMethod LIKE @searchString " &
+                            "OR sv_base.ServiceName LIKE @searchString " &
+                            "OR sv_addon.ServiceName LIKE @searchString"
+                Else
+                    selectQuery = baseSelect & "WHERE c.Name LIKE @searchString OR s.SalesID LIKE @SearchString"
+                End If
+
+                ' --- Execute the Query ---
                 Using cmd As New SqlCommand(selectQuery, con)
+                    ' Parameterization is correct: the wildcard '%' characters are added here
                     cmd.Parameters.AddWithValue("@searchString", "%" & searchInBar & "%")
                     Using adapter As New SqlDataAdapter(cmd)
                         adapter.Fill(dt)
                     End Using
                 End Using
+
             Catch ex As Exception
                 MessageBox.Show("Error viewing sales history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Using
         Return dt
-
     End Function
     ''' <summary>
     ''' Gets the activity log from the ActivityLogTable.
@@ -169,7 +167,7 @@ Public Class DashboardDatabaseHelper
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-                Dim insertQuery = "INSERT INTO SalesHistoryTable (CustomerID, ServiceID, AddonServiceID, SaleDate, PaymentMethod, TotalPrice) VALUES (@CustomerID, @ServiceID, @AddonServiceID, @SaleDate, @PaymentMethod, @TotalPrice)"
+                Dim insertQuery = "INSERT INTO RegularSaleTable (CustomerID, ServiceID, AddonServiceID, SaleDate, PaymentMethod, TotalPrice) VALUES (@CustomerID, @ServiceID, @AddonServiceID, @SaleDate, @PaymentMethod, @TotalPrice)"
                 Using cmd As New SqlCommand(insertQuery, con)
                     cmd.Parameters.AddWithValue("@CustomerID", customerID)
                     cmd.Parameters.AddWithValue("@ServiceID", baseServiceID)
@@ -193,56 +191,58 @@ Public Class DashboardDatabaseHelper
             End Try
         End Using
     End Sub
-    Public Sub AddCustomer(name As String, number As String, email As String, address As String, plateNumber As String)
-        Using con As New SqlConnection(constr)
-            Try
-                con.Open()
-                Dim insertQuery As String = "INSERT INTO CustomersTable (Name, PhoneNumber, Email, Address, PlateNumber, RegistrationDate) VALUES (@Name, @PhoneNumber, @Email, @Address, @PlateNUmber, @RegistrationDate)"
-                Using cmd As New SqlCommand(insertQuery, con)
-                    cmd.Parameters.AddWithValue("@Name", name)
-                    cmd.Parameters.AddWithValue("@PhoneNumber", number)
-                    cmd.Parameters.AddWithValue("@Email", email)
-                    If String.IsNullOrEmpty(address) Then
-                        cmd.Parameters.AddWithValue("@Address", DBNull.Value)
-                    Else
-                        cmd.Parameters.AddWithValue("@Address", address)
-                    End If
-                    cmd.Parameters.AddWithValue("@PlateNUmber", plateNumber)
-                    cmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now)
-                    cmd.ExecuteNonQuery()
-                End Using
-                Carwash.NotificationLabel.Text = "New Customer Information"
-                Carwash.ShowNotification()
-                MessageBox.Show("Customer added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Catch ex As Exception
-                MessageBox.Show("Error adding customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Finally
-                con.Close()
-            End Try
-        End Using
-    End Sub
+    'Public Sub AddCustomer(name As String, number As String, email As String, address As String, plateNumber As String)
+    '    Using con As New SqlConnection(constr)
+    '        Try
+    '            con.Open()
+    '            Dim insertQuery As String = "INSERT INTO CustomersTable (Name, PhoneNumber, Email, Address, PlateNumber, RegistrationDate) VALUES (@Name, @PhoneNumber, @Email, @Address, @PlateNUmber, @RegistrationDate)"
+    '            Using cmd As New SqlCommand(insertQuery, con)
+    '                cmd.Parameters.AddWithValue("@Name", name)
+    '                cmd.Parameters.AddWithValue("@PhoneNumber", number)
+    '                cmd.Parameters.AddWithValue("@Email", email)
+    '                If String.IsNullOrEmpty(address) Then
+    '                    cmd.Parameters.AddWithValue("@Address", DBNull.Value)
+    '                Else
+    '                    cmd.Parameters.AddWithValue("@Address", address)
+    '                End If
+    '                cmd.Parameters.AddWithValue("@PlateNUmber", plateNumber)
+    '                cmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now)
+    '                cmd.ExecuteNonQuery()
+    '            End Using
+    '            Carwash.NotificationLabel.Text = "New Customer Information"
+    '            Carwash.ShowNotification()
+    '            MessageBox.Show("Customer added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    '        Catch ex As Exception
+    '            MessageBox.Show("Error adding customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '        Finally
+    '            con.Close()
+    '        End Try
+    '    End Using
+    'End Sub
     Public Shared Sub ShowPrintPreview(doc As PrintDocument)
         doc.PrinterSettings = New PrinterSettings()
         doc.DefaultPageSettings.Margins = New Printing.Margins(10, 10, 0, 0)
         doc.DefaultPageSettings.PaperSize = New PaperSize("Custom", 300, 500)
     End Sub
-    Public Shared Sub PrintBillInDashboard(e As PrintPageEventArgs, printData As PrintDataInDashboardService)
+
+    Public Shared Sub PrintBillInDashboard(e As PrintPageEventArgs, printData As PrintSaleInDashboard)
         If printData Is Nothing Then
-            ' Handle case where no data is set
             Return
         End If
 
+        ' --- Font Definitions ---
         Dim f8 As New Font("Calibri", 8, FontStyle.Regular)
         Dim f10 As New Font("Calibri", 10, FontStyle.Regular)
         Dim f10b As New Font("Calibri", 10, FontStyle.Bold)
         Dim f14b As New Font("Calibri", 14, FontStyle.Bold)
 
+        ' --- Layout Calculations ---
         Dim leftMargin As Integer = e.PageSettings.Margins.Left
         Dim centerMargin As Integer = e.PageSettings.PaperSize.Width / 2
         Dim rightMargin As Integer = e.PageSettings.PaperSize.Width - e.PageSettings.Margins.Right
 
-        'Font alignment
-        Dim rightAlign As New StringFormat()
+        ' Font alignment
+        Dim rightAlign As New StringFormat()
         Dim centerAlign As New StringFormat()
         rightAlign.Alignment = StringAlignment.Far
         centerAlign.Alignment = StringAlignment.Center
@@ -252,7 +252,7 @@ Public Class DashboardDatabaseHelper
         Dim yPos As Integer = 20
         Dim offset As Integer = 12
 
-
+        ' --- Header ---
         e.Graphics.DrawString("Sandigan Carwash", f14b, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += 20
         e.Graphics.DrawString("Calzada Tipas, Taguig City", f8, Brushes.Black, centerMargin, yPos, centerAlign)
@@ -260,8 +260,7 @@ Public Class DashboardDatabaseHelper
         e.Graphics.DrawString("Contact No: 09553516404", f8, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
 
-        ' Add bill details from the class-level printData object
-
+        ' --- Sale Info ---
         yPos += offset
         e.Graphics.DrawString(printData.SaleDate.ToString("MM/dd/yyy HH:mm tt, ddd"), f10, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
@@ -270,6 +269,8 @@ Public Class DashboardDatabaseHelper
         yPos += offset
         e.Graphics.DrawString("Customer Name: " & printData.CustomerName, f10, Brushes.Black, leftMargin, yPos)
         yPos += offset
+
+        ' --- Table Header ---
         e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
         yPos += offset
         e.Graphics.DrawString("Qty", f10, Brushes.Black, leftMargin, yPos)
@@ -278,24 +279,36 @@ Public Class DashboardDatabaseHelper
         yPos += offset
         e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
         yPos += offset
-        e.Graphics.DrawString("1", f10, Brushes.Black, leftMargin, yPos)
-        e.Graphics.DrawString(printData.BaseService, f10, Brushes.Black, centerMargin, yPos, centerAlign)
-        e.Graphics.DrawString(printData.BaseServicePrice, f10, Brushes.Black, rightMargin, yPos, rightAlign)
-        yPos += offset
-        If Not String.IsNullOrWhiteSpace(printData.AddonService) Then
-            yPos += offset
-            e.Graphics.DrawString("1", f10, Brushes.Black, leftMargin, yPos)
-            e.Graphics.DrawString("Add-on: " & printData.AddonService, f10, Brushes.Black, centerMargin, yPos, centerAlign)
-            e.Graphics.DrawString(printData.AddonServicePrice, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+
+        ' --- Table Body (Looping through items) ---
+        If printData.ServiceLineItemInDashboard IsNot Nothing AndAlso printData.ServiceLineItemInDashboard.Count > 0 Then
+            For Each item As ServiceLineItemInDashboard In printData.ServiceLineItemInDashboard
+                ' Print Qty
+                e.Graphics.DrawString("1", f10, Brushes.Black, leftMargin, yPos)
+
+                ' Print Description
+                e.Graphics.DrawString(item.Name, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+
+                e.Graphics.DrawString(item.Price.ToString("N2"), f10, Brushes.Black, rightMargin, yPos, rightAlign)
+
+                yPos += offset
+            Next
+        Else
+            e.Graphics.DrawString("No services recorded.", f10, Brushes.Black, centerMargin, yPos, centerAlign)
             yPos += offset
         End If
+
+        Dim finalTotal As Decimal = printData.TotalPrice
+
+        ' --- Subtotal/Total Line ---
         e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
         yPos += offset
-        e.Graphics.DrawString("Total:", f10, Brushes.Black, leftMargin, yPos)
-        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        e.Graphics.DrawString("Subtotal:", f10b, Brushes.Black, leftMargin, yPos) ' Use bold for total
+        e.Graphics.DrawString(finalTotal.ToString("N2"), f10b, Brushes.Black, rightMargin, yPos, rightAlign) ' Use bold for total amount
         yPos += offset
         yPos += offset
 
+        ' --- Payment Section ---
         e.Graphics.DrawString(centerLine, f10, Brushes.Black, 90, yPos)
         e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
         yPos += offset
@@ -307,16 +320,81 @@ Public Class DashboardDatabaseHelper
         yPos += offset
 
         e.Graphics.DrawString(printData.PaymentMethod, f10, Brushes.Black, 90, yPos)
-        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10, Brushes.Black, 160, yPos)
+        e.Graphics.DrawString(finalTotal.ToString("N2"), f10, Brushes.Black, 160, yPos)
         yPos += 10
         e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
         yPos += 10
         e.Graphics.DrawString("Total:", f10b, Brushes.Black, 90, yPos)
-        e.Graphics.DrawString(printData.TotalPrice.ToString("N2"), f10b, Brushes.Black, 160, yPos)
+        e.Graphics.DrawString(finalTotal.ToString("N2"), f10b, Brushes.Black, 160, yPos)
         yPos += 50
 
         e.Graphics.DrawString("Thank You!!", f10b, Brushes.Black, centerMargin, yPos, centerAlign)
     End Sub
+    Public Shared Function GetSaleLineItems(saleId As Integer, constr As String) As List(Of ServiceLineItemInDashboard)
+        Dim items As New List(Of ServiceLineItemInDashboard)()
+
+        ' This query retrieves the subtotal, base service name, and addon service name 
+        ' for a given SaleID by joining SalesServiceTable with ServicesTable twice.
+        Dim sql As String = "
+        SELECT 
+            SST.Subtotal,
+            ST_BASE.ServiceName AS BaseServiceName,
+            ST_ADDON.ServiceName AS AddonServiceName
+        FROM 
+            SalesServiceTable AS SST
+        LEFT JOIN 
+            ServicesTable AS ST_BASE ON SST.ServiceID = ST_BASE.ServiceID
+        LEFT JOIN 
+            ServicesTable AS ST_ADDON ON SST.AddonServiceID = ST_ADDON.ServiceID
+        WHERE 
+            SST.SalesID = @SaleID
+        ORDER BY 
+            SST.SalesServiceID ASC;
+    "
+
+        Using conn As New SqlConnection(constr)
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@SaleID", saleId)
+
+                Try
+                    conn.Open()
+                    Dim reader As SqlDataReader = cmd.ExecuteReader()
+
+                    While reader.Read()
+                        Dim subtotal As Decimal = Convert.ToDecimal(reader("Subtotal"))
+                        Dim baseServiceName As String = reader("BaseServiceName").ToString()
+
+                        ' Safely retrieve AddonServiceName, converting DBNull to an empty string.
+                        Dim addonServiceName As String = If(reader("AddonServiceName") Is DBNull.Value, "", reader("AddonServiceName").ToString())
+
+                        Dim lineItemName As String = ""
+
+                        ' Check if a base service exists for this line item.
+                        If Not String.IsNullOrEmpty(baseServiceName) Then
+                            ' Start with the Base Service Name
+                            lineItemName = baseServiceName
+
+                            ' Append the Add-on Service Name if it exists
+                            If Not String.IsNullOrEmpty(addonServiceName) Then
+                                lineItemName &= " + " & addonServiceName
+                            End If
+                            items.Add(New ServiceLineItemInDashboard With {
+                            .Name = lineItemName,
+                            .Price = subtotal
+                        })
+                        End If
+                    End While
+                    reader.Close()
+
+                Catch ex As Exception
+                    MessageBox.Show("Error retrieving sale line items: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End Using
+        End Using
+
+        Return items
+    End Function
+
     Public Sub PopulateBaseServicesForUI(targetComboBox As ComboBox)
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)

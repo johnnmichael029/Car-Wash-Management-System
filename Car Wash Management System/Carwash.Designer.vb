@@ -55,7 +55,7 @@ Partial Class Carwash
         LogoutBtn = New Button()
         DashboardBtn = New Button()
         Button4 = New Button()
-        Btn3 = New Button()
+        salesHistoryBtn = New Button()
         ActivityLogBtn = New Button()
         Panel3 = New Panel()
         Panel4 = New Panel()
@@ -400,7 +400,7 @@ Partial Class Carwash
         PanelMenuBar.Controls.Add(Panel5)
         PanelMenuBar.Controls.Add(DashboardBtn)
         PanelMenuBar.Controls.Add(Button4)
-        PanelMenuBar.Controls.Add(Btn3)
+        PanelMenuBar.Controls.Add(salesHistoryBtn)
         PanelMenuBar.Controls.Add(ActivityLogBtn)
         PanelMenuBar.Dock = DockStyle.Left
         PanelMenuBar.Location = New Point(0, 45)
@@ -439,7 +439,7 @@ Partial Class Carwash
         DashboardBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         DashboardBtn.FlatAppearance.BorderSize = 0
         DashboardBtn.FlatStyle = FlatStyle.Flat
-        DashboardBtn.Font = New Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        DashboardBtn.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold)
         DashboardBtn.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         DashboardBtn.Image = CType(resources.GetObject("DashboardBtn.Image"), Image)
         DashboardBtn.ImageAlign = ContentAlignment.MiddleLeft
@@ -457,36 +457,42 @@ Partial Class Carwash
         Button4.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         Button4.FlatAppearance.BorderSize = 0
         Button4.FlatStyle = FlatStyle.Flat
-        Button4.Font = New Font("Palatino Linotype", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Button4.Font = New Font("Century Gothic", 12.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Button4.Image = CType(resources.GetObject("Button4.Image"), Image)
+        Button4.ImageAlign = ContentAlignment.MiddleLeft
         Button4.Location = New Point(0, 337)
         Button4.Name = "Button4"
+        Button4.Padding = New Padding(5, 0, 39, 0)
         Button4.Size = New Size(174, 56)
         Button4.TabIndex = 3
-        Button4.Text = "Button4"
+        Button4.Text = "Analytics"
+        Button4.TextAlign = ContentAlignment.MiddleRight
         Button4.UseVisualStyleBackColor = True
         ' 
-        ' Btn3
+        ' salesHistoryBtn
         ' 
-        Btn3.BackColor = Color.White
-        Btn3.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
-        Btn3.FlatAppearance.BorderSize = 0
-        Btn3.FlatStyle = FlatStyle.Flat
-        Btn3.Font = New Font("Palatino Linotype", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Btn3.ImageAlign = ContentAlignment.MiddleLeft
-        Btn3.Location = New Point(0, 275)
-        Btn3.Name = "Btn3"
-        Btn3.Size = New Size(174, 56)
-        Btn3.TabIndex = 2
-        Btn3.Text = "Button3"
-        Btn3.TextImageRelation = TextImageRelation.ImageBeforeText
-        Btn3.UseVisualStyleBackColor = False
+        salesHistoryBtn.BackColor = Color.White
+        salesHistoryBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        salesHistoryBtn.FlatAppearance.BorderSize = 0
+        salesHistoryBtn.FlatStyle = FlatStyle.Flat
+        salesHistoryBtn.Font = New Font("Century Gothic", 12.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        salesHistoryBtn.Image = My.Resources.Resources.history
+        salesHistoryBtn.ImageAlign = ContentAlignment.MiddleLeft
+        salesHistoryBtn.Location = New Point(0, 275)
+        salesHistoryBtn.Name = "salesHistoryBtn"
+        salesHistoryBtn.Padding = New Padding(5, 0, 10, 0)
+        salesHistoryBtn.Size = New Size(174, 56)
+        salesHistoryBtn.TabIndex = 2
+        salesHistoryBtn.Text = "Sales History"
+        salesHistoryBtn.TextAlign = ContentAlignment.MiddleRight
+        salesHistoryBtn.UseVisualStyleBackColor = False
         ' 
         ' ActivityLogBtn
         ' 
         ActivityLogBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         ActivityLogBtn.FlatAppearance.BorderSize = 0
         ActivityLogBtn.FlatStyle = FlatStyle.Flat
-        ActivityLogBtn.Font = New Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        ActivityLogBtn.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold)
         ActivityLogBtn.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         ActivityLogBtn.Image = My.Resources.Resources.restore
         ActivityLogBtn.ImageAlign = ContentAlignment.MiddleLeft
@@ -586,7 +592,7 @@ Partial Class Carwash
         ' 
         SaleHistoryToolStripMenuItem.Name = "SaleHistoryToolStripMenuItem"
         SaleHistoryToolStripMenuItem.Size = New Size(173, 22)
-        SaleHistoryToolStripMenuItem.Text = "Sales &History"
+        SaleHistoryToolStripMenuItem.Text = "&Regular Sale"
         ' 
         ' ContractsToolStripMenuItem
         ' 
@@ -716,7 +722,7 @@ Partial Class Carwash
     Friend WithEvents LogoutBtn As Button
     Friend WithEvents DashboardBtn As Button
     Friend WithEvents Button4 As Button
-    Friend WithEvents Btn3 As Button
+    Friend WithEvents salesHistoryBtn As Button
     Friend WithEvents ActivityLogBtn As Button
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Panel4 As Panel

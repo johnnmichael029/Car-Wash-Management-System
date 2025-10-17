@@ -25,10 +25,10 @@ Public Class Reservation
     Private Sub DataGridViewListOfReserved_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewListOfReservation.CellFormatting
         ' Check if this is the column we care about ("AppointmentStatus") and
         ' if the row is not new.
-        If e.ColumnIndex = Me.DataGridViewListOfReservation.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
+        If e.ColumnIndex = Me.DataGridViewListOfReservation.Columns(5).Index AndAlso e.RowIndex >= 0 Then
 
             ' Get the value from the current cell.
-            Dim status As String = e.Value?.ToString()
+            Dim status As String = e.Value?.ToString().Trim()
             If status = "Confirmed" Then
                 e.CellStyle.BackColor = Color.LightSkyBlue
                 e.CellStyle.ForeColor = Color.Black
@@ -45,6 +45,10 @@ Public Class Reservation
     End Sub
 
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
+    End Sub
+
+    Private Sub DataGridViewListOfReservation_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewListOfReservation.CellContentClick
 
     End Sub
 End Class

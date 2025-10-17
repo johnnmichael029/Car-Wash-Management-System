@@ -94,7 +94,7 @@ Public Class SalesForm
                 totalPrice
                 )
             Carwash.PopulateAllTotal()
-            DataGridViewSales.DataSource = salesDatabaseHelper.ViewSales()
+            ViewSales()
             MessageBox.Show("Sale added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             AddSalesActivityLog()
             ShowPrintPreview()
@@ -106,7 +106,7 @@ Public Class SalesForm
     End Sub
     Private Sub AddSalesActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
-        Dim amount As Decimal = Decimal.Parse(TextBoxPrice.Text)
+        Dim amount As Decimal = Decimal.Parse(TextBoxTotalPrice.Text)
         activityLogInDashboardService.RecordSale(customerName, amount)
     End Sub
 
@@ -251,7 +251,7 @@ Public Class SalesForm
         End If
 
         ' 2. Retrieve the list of all services (Base and Add-ons) associated with this sale ID.
-        Dim serviceLineItems As List(Of ServiceLineItem) = New List(Of ServiceLineItem)()
+        Dim serviceLineItems As New List(Of ServiceLineItem)()
         If currentSaleID > 0 AndAlso salesDatabaseHelper IsNot Nothing Then
             ' *** FIX: Now passing the connection string (Me.constr) to the Shared function ***
             serviceLineItems = SalesDatabaseHelper.GetSaleLineItems(currentSaleID, Me.constr)
@@ -266,8 +266,6 @@ Public Class SalesForm
         .SaleDate = saleDate
 })
     End Sub
-
-
 
     Private Sub ValidatePrint()
         If String.IsNullOrEmpty(LabelSalesID.Text) Then
@@ -356,7 +354,7 @@ Public Class SalesForm
     Private Sub LoadServicesIntoListView(salesID As Integer)
         ListViewServices.Items.Clear()
         Me.SaleServiceList.Clear()
-        Dim serviceList As List(Of SalesService) = salesDatabaseHelper.GetSalesServiceList(salesID)
+        Dim serviceList As List(Of SalesService) = SalesDatabaseHelper.GetSalesServiceList(salesID)
 
         For Each service As SalesService In serviceList
             ' 3. Add to the local tracking list (VehicleList)
@@ -407,6 +405,7 @@ Public Class SalesForm
     Private Sub ViewSales()
         DataGridViewSales.DataSource = salesDatabaseHelper.ViewSales()
     End Sub
+
 End Class
 
 

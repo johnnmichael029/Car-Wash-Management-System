@@ -55,6 +55,9 @@ Partial Class Service
         ' 
         ' DataGridViewService
         ' 
+        DataGridViewService.AllowUserToAddRows = False
+        DataGridViewService.AllowUserToResizeColumns = False
+        DataGridViewService.AllowUserToResizeRows = False
         DataGridViewService.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewService.BackgroundColor = SystemColors.ControlLight
         DataGridViewService.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize

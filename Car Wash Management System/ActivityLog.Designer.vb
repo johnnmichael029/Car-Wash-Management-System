@@ -52,6 +52,9 @@ Partial Class ActivityLog
         ' 
         ' DataGridViewActivityLog
         ' 
+        DataGridViewActivityLog.AllowUserToAddRows = False
+        DataGridViewActivityLog.AllowUserToResizeColumns = False
+        DataGridViewActivityLog.AllowUserToResizeRows = False
         DataGridViewActivityLog.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         DataGridViewActivityLog.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewActivityLog.BackgroundColor = SystemColors.ControlLight

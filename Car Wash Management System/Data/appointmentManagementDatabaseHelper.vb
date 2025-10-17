@@ -45,7 +45,7 @@ Public Class AppointmentManagementDatabaseHelper
                 End If
 
                 ' Assuming SalesServiceTable is now AppointmentServiceTable or related
-                Dim insertServiceQuery = "INSERT INTO AppointmentServiceTable (AppointmentID, ServiceID, AddonServiceID, Subtotal) VALUES (@AppointmentID, @ServiceID, @AddonServiceID, @Subtotal)"
+                Dim insertServiceQuery = "INSERT INTO AppointmentServiceTable (AppointmentID, CustomerID, ServiceID, AddonServiceID, Subtotal, AppointmentStatus) VALUES (@AppointmentID, @CustomerID, @ServiceID, @AddonServiceID, @Subtotal, @AppointmentStatus)"
 
                 For Each item As AppointmentService In allSaleItems
                     ' Assuming these helper functions are available in SalesDatabaseHelper
@@ -53,6 +53,7 @@ Public Class AppointmentManagementDatabaseHelper
                     Dim addonID As Integer? = SalesDatabaseHelper.GetAddonIdByName(item.Addon)
 
                     Using cmdService As New SqlCommand(insertServiceQuery, con, transaction) ' <-- FIX 2: Added transaction to cmdService
+                        cmdService.Parameters.AddWithValue("@CustomerID", customerID)
                         cmdService.Parameters.AddWithValue("@AppointmentID", newAppointmentID) ' Use the new ID
                         cmdService.Parameters.AddWithValue("@ServiceID", baseServiceID)
 
@@ -63,6 +64,7 @@ Public Class AppointmentManagementDatabaseHelper
                         End If
 
                         cmdService.Parameters.AddWithValue("@Subtotal", item.ServicePrice)
+                        cmdService.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus)
 
                         cmdService.ExecuteNonQuery()
                     End Using
@@ -345,16 +347,16 @@ Public Class AppointmentManagementDatabaseHelper
     Public Function GetSalesServiceList(appointmentID As Integer) As List(Of AppointmentService)
         Dim serviceList As New List(Of AppointmentService)
         Dim selectQuery As String = "SELECT " &
-                                "AST.AppointmentServiceID, " &
+                                "ast.AppointmentServiceID, " &
                                 "S_Base.ServiceName AS Service, " &
                                 "ISNULL(S_Addon.ServiceName, 'None') AS Addon, " &
-                                "AST.Subtotal AS ServicePrice, " &
-                                "AST.ServiceID, " &
-                                "AST.AddonServiceID " &
-                                "FROM AppointmentServiceTable AST " &
-                                "INNER JOIN ServicesTable S_Base ON AST.ServiceID = S_Base.ServiceID " &
-                                "LEFT JOIN ServicesTable S_Addon ON AST.AddonServiceID = S_Addon.ServiceID " &
-                                "WHERE AST.AppointmentID = @AppointmentID"
+                                "ast.Subtotal AS ServicePrice, " &
+                                "ast.ServiceID, " &
+                                "ast.AddonServiceID " &
+                                "FROM AppointmentServiceTable ast " &
+                                "INNER JOIN ServicesTable S_Base ON ast.ServiceID = S_Base.ServiceID " &
+                                "LEFT JOIN ServicesTable S_Addon ON ast.AddonServiceID = S_Addon.ServiceID " &
+                                "WHERE ast.AppointmentID = @AppointmentID"
 
         Using con As New SqlConnection(constr)
             Try

@@ -187,6 +187,9 @@ Partial Class Admin
         ' 
         ' DataGridViewUsers
         ' 
+        DataGridViewUsers.AllowUserToAddRows = False
+        DataGridViewUsers.AllowUserToResizeColumns = False
+        DataGridViewUsers.AllowUserToResizeRows = False
         DataGridViewUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewUsers.BackgroundColor = SystemColors.ControlLight
         DataGridViewUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize

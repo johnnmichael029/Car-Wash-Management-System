@@ -23,7 +23,7 @@ Public Class SalesDatabaseHelper
 
             Try
                 Dim newSalesID As Integer
-                Dim insertHistoryQuery = "INSERT INTO SalesHistoryTable (CustomerID, SaleDate, PaymentMethod, ReferenceID, TotalPrice) VALUES (@CustomerID, @SaleDate, @PaymentMethod, @ReferenceID, @TotalPrice); SELECT SCOPE_IDENTITY();"
+                Dim insertHistoryQuery = "INSERT INTO RegularSaleTable (CustomerID, SaleDate, PaymentMethod, ReferenceID, TotalPrice) VALUES (@CustomerID, @SaleDate, @PaymentMethod, @ReferenceID, @TotalPrice); SELECT SCOPE_IDENTITY();"
                 Using cmd As New SqlCommand(insertHistoryQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@CustomerID", iSaleID)
                     cmd.Parameters.AddWithValue("@SaleDate", DateTime.Now)
@@ -74,7 +74,7 @@ Public Class SalesDatabaseHelper
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Try
                 ' Step 1: Update SalesHistoryTable
-                Dim updateHistoryQuery = "UPDATE SalesHistoryTable SET PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, TotalPrice = @TotalPrice WHERE SalesID = @SalesID"
+                Dim updateHistoryQuery = "UPDATE RegularSaleTable SET PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, TotalPrice = @TotalPrice WHERE SalesID = @SalesID"
                 Using cmd As New SqlCommand(updateHistoryQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
                     cmd.Parameters.AddWithValue("@ReferenceID", referenceID)
@@ -211,7 +211,7 @@ Public Class SalesDatabaseHelper
                 "s.PaymentMethod, " &
                 "s.ReferenceID, " &
                 "s.TotalPrice " &
-            "FROM SalesHistoryTable s " &
+            "FROM RegularSaleTable s " &
             "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
             "LEFT JOIN (" & aggregateServiceNamesQuery & ") agg ON s.SalesID = agg.SalesID " &
             "ORDER BY s.SalesID DESC"
@@ -330,7 +330,7 @@ Public Class SalesDatabaseHelper
         Return items
     End Function
 
-    Public Function GetSalesServiceList(salesID As Integer) As List(Of SalesService)
+    Public Shared Function GetSalesServiceList(salesID As Integer) As List(Of SalesService)
         Dim serviceList As New List(Of SalesService)
         Dim selectQuery As String = "SELECT " &
                                 "SST.SalesServiceID, " &

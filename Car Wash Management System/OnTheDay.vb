@@ -19,31 +19,31 @@ Public Class OnTheDay
         DataGridViewOnTheDayFontStyle()
         ChangeHeaderOFDataGridVewOnTheDay()
     End Sub
-    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewOnTheDay.CellFormatting
+    Private Sub DataGridViewOnTheDay_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewOnTheDay.CellFormatting
         ' Check if this is the column we care about ("AppointmentStatus") and
         ' if the row is not new.
         If e.ColumnIndex = Me.DataGridViewOnTheDay.Columns("AppointmentStatus").Index AndAlso e.RowIndex >= 0 Then
 
             ' Get the value from the current cell.
-            Dim status As String = e.Value?.ToString()
+            Dim status As String = e.Value?.ToString().Trim()
 
             ' Check the status and apply the correct formatting to the entire row.
             Select Case status
                 Case "Confirmed"
-                    ' Blue for confirmed appointments.
-                    e.CellStyle.BackColor = Color.LightSkyBlue
+                    ' Blue for confirmed appointments.
+                    e.CellStyle.BackColor = Color.LightSkyBlue
                     e.CellStyle.ForeColor = Color.Black
                 Case "Queued"
-                    ' Gold for appointments that are pending.
-                    e.CellStyle.BackColor = Color.Gold
+                    ' Gold for appointments that are pending.
+                    e.CellStyle.BackColor = Color.Gold
                     e.CellStyle.ForeColor = Color.Black
                 Case "In-progress"
-                    ' Red for cancelled appointments.
-                    e.CellStyle.BackColor = Color.LightBlue
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Completed"
-                    ' Green for completed appointments.
-                    e.CellStyle.BackColor = Color.LightGreen
+                    ' Light blue for in-progress appointments. (Using Cornflower Blue for better visibility)
+                    e.CellStyle.BackColor = Color.CornflowerBlue ' Used a distinct color to confirm it's working
+                    e.CellStyle.ForeColor = Color.White ' Changed to White for better contrast
+                Case "Completed"
+                    ' Green for completed appointments.
+                    e.CellStyle.BackColor = Color.LightGreen
                     e.CellStyle.ForeColor = Color.Black
             End Select
         End If
@@ -53,43 +53,57 @@ Public Class OnTheDay
             If e.ColumnIndex = DataGridViewOnTheDay.Columns("actionsColumn").Index AndAlso e.RowIndex >= 0 Then
                 Dim row As DataGridViewRow = DataGridViewOnTheDay.Rows(e.RowIndex)
                 Dim appointmentID As Integer = Convert.ToInt32(row.Cells("OnTheDayID").Value)
-                Dim currentStatus As String = row.Cells("AppointmentStatus").Value.ToString()
+                Dim currentStatus As String = row.Cells("AppointmentStatus").Value.ToString().Trim()
                 Dim customerName As String = row.Cells("CustomerName").Value.ToString()
-                Dim customerNewStatus As String = row.Cells("AppointmentStatus").Value.ToString()
-                Dim nextStatus As String
-                If currentStatus = "Completed" Then
-                    Exit Sub
-                End If
+
+                Dim nextStatus As String = String.Empty ' Initialize nextStatus
+
+                If currentStatus = "Completed" Then
+                    Exit Sub ' Do nothing if already completed
+                End If
 
                 Select Case currentStatus
-
+                    Case "Confirmed"
+                        ' Confirmed is the start point, moves to Queued if not already there
+                        nextStatus = "Queued"
                     Case "Queued"
                         nextStatus = "In-progress"
-                        activityLogInDashboardService.RecordActivity(customerName, nextStatus)
-                        onTheDayDatabaseHelper.UpdateStatus(appointmentID, nextStatus)
-                        Carwash.NotificationLabel.Text = "Appointment In-progress"
-                        Carwash.ShowNotification()
                     Case "In-progress"
                         nextStatus = "Completed"
-                        onTheDayDatabaseHelper.UpdateStatus(appointmentID, nextStatus)
-                        activityLogInDashboardService.RecordActivity(customerName, nextStatus)
-                        Carwash.NotificationLabel.Text = "Appointment Completed"
-                        Carwash.ShowNotification()
-                        Carwash.PopulateAllTotal()
-                    Case "Completed"
-                        onTheDayDatabaseHelper.UpdateStatus(appointmentID, nextStatus)
                     Case Else
-                        nextStatus = "Queued" ' Default status if not set
-                        onTheDayDatabaseHelper.UpdateStatus(appointmentID, nextStatus)
-                        activityLogInDashboardService.RecordActivity(customerName, nextStatus)
-                        Carwash.NotificationLabel.Text = "Appointment Queued"
-                        Carwash.ShowNotification()
+                        ' Handle unknown or initial states by defaulting to Queued
+                        nextStatus = "Queued"
                 End Select
-                ' Update the AppointmentStatus cell value directly in the DataGridView
-                row.Cells("AppointmentStatus").Value = nextStatus
+
+
+                If nextStatus <> String.Empty Then
+                    ' 1. Update the database
+                    onTheDayDatabaseHelper.UpdateStatusInOTD(appointmentID, nextStatus)
+
+                    ' 2. Update the DataGridView cell value directly 
+                    row.Cells("AppointmentStatus").Value = nextStatus
+
+                    ' 3. Force the DataGridView to redraw the cell (which triggers CellFormatting)
+                    DataGridViewOnTheDay.InvalidateRow(e.RowIndex)
+
+                    ' 4. Handle additional actions (notifications, logging)
+                    activityLogInDashboardService.RecordActivity(customerName, nextStatus)
+
+                    Select Case nextStatus
+                        Case "In-progress"
+                            Carwash.NotificationLabel.Text = "Appointment In-progress"
+                        Case "Completed"
+                            Carwash.NotificationLabel.Text = "Appointment Completed"
+                            Carwash.PopulateAllTotal()
+                        Case "Queued"
+                            Carwash.NotificationLabel.Text = "Appointment Queued"
+                    End Select
+
+                    Carwash.ShowNotification()
+                End If
             End If
         Catch ex As Exception
-            MessageBox.Show("An error occurred: Cannot update the status without data. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error updating status: " & ex.Message)
         End Try
     End Sub
     Private Sub ChangeHeaderOFDataGridVewOnTheDay()

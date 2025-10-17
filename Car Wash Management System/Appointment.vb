@@ -498,7 +498,5 @@ Public Class Appointment
             ListViewServices.Items.Add(lvi)
         Next
     End Sub
-
-
 End Class
 
