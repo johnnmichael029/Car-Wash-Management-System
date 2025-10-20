@@ -1,4 +1,6 @@
 ﻿Imports System.Drawing.Printing
+Imports System.Security.Cryptography.Xml
+Imports System.Transactions
 Imports Microsoft.Data.SqlClient
 
 Public Class AppointmentManagementDatabaseHelper
@@ -126,45 +128,63 @@ Public Class AppointmentManagementDatabaseHelper
         Return dt
     End Function
 
-    Public Sub UpdateAppointment(appointmentID As Integer, customerID As Integer, serviceID As Integer, addonServiceID As Integer?, appointmentDateTime As Date, paymentMethod As String, price As Decimal, appointmentStatus As String, notes As String)
+    Public Sub UpdateAppointment(appointmentID As Integer, customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As Date, paymentMethod As String, referenceID As String, price As Decimal, appointmentStatus As String, notes As String)
         Using con As New SqlConnection(constr)
             con.Open()
-            ' SQL query to update a contract.
-            Dim updateQuery As String = "UPDATE AppointmentsTable SET CustomerID = @CustomerID, ServiceID = @ServiceID, AddonServiceID = @AddonServiceID, AppointmentDateTime = @AppointmentDateTime, PaymentMethod = @PaymentMethod, Price = @Price, AppointmentStatus = @AppointmentStatus, Notes = @Notes WHERE AppointmentID = @AppointmentID"
-            Using cmd As New SqlCommand(updateQuery, con)
-                cmd.Parameters.AddWithValue("@AppointmentID", appointmentID)
-                cmd.Parameters.AddWithValue("@ContractID", appointmentID)
-                cmd.Parameters.AddWithValue("@CustomerID", customerID)
-                cmd.Parameters.AddWithValue("@ServiceID", serviceID)
+            Dim transaction As SqlTransaction = con.BeginTransaction()
+            Try
+                ' SQL query to update a Appointment.
+                Dim updateAppointmentQuery As String = "UPDATE AppointmentsTable SET CustomerID = @CustomerID, AppointmentDateTime = @AppointmentDateTime, PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, Price = @Price, AppointmentStatus = @AppointmentStatus, Notes = @Notes WHERE AppointmentID = @AppointmentID"
+                Using cmd As New SqlCommand(updateAppointmentQuery, con, transaction)
+                    cmd.Parameters.AddWithValue("@AppointmentID", appointmentID)
+                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
+                    cmd.Parameters.AddWithValue("@AppointmentDateTime", appointmentDateTime)
+                    cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
+                    cmd.Parameters.AddWithValue("@ReferenceID", referenceID)
+                    cmd.Parameters.AddWithValue("@Price", price)
+                    cmd.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus)
+                    cmd.Parameters.AddWithValue("@Notes", notes)
+                    cmd.ExecuteNonQuery()
+                End Using
+                ' Step 2: Delete existing entries in AppointmentServiceTable and SalesHistoryTable for this SalesID
+                Dim deleteServicesQuery = "DELETE FROM AppointmentServiceTable WHERE AppointmentID = @AppointmentID"
+                Using cmdDelete As New SqlCommand(deleteServicesQuery, con, transaction)
+                    cmdDelete.Parameters.AddWithValue("@AppointmentID", appointmentID)
+                    cmdDelete.ExecuteNonQuery()
+                End Using
 
-                If addonServiceID.HasValue Then
-                    cmd.Parameters.AddWithValue("@AddonServiceID", addonServiceID.Value)
-                Else
-                    cmd.Parameters.AddWithValue("@AddonServiceID", DBNull.Value) ' Insert NULL if no addon is selected
-                End If
-                cmd.Parameters.AddWithValue("@AppointmentDateTime", appointmentDateTime)
-                cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
-                cmd.Parameters.AddWithValue("@Price", price)
-                cmd.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus)
-                cmd.Parameters.AddWithValue("@Notes", notes)
-                cmd.ExecuteNonQuery()
-            End Using
-            'If appointmentStatus.ToLower() = "completed" Then
-            '    Dim insertSaleQuery As String = "INSERT INTO SalesHistoryTable (CustomerID, ServiceID, AddonServiceID, SaleDate, PaymentMethod, TotalPrice) VALUES (@CustomerID, @ServiceID, @AddonServiceID, @SaleDate, @PaymentMethod, @TotalPRice)"
-            '    Using cmd2 As New SqlCommand(insertSaleQuery, con)
-            '        cmd2.Parameters.AddWithValue("@CustomerID", customerID)
-            '        cmd2.Parameters.AddWithValue("@ServiceID", serviceID)
-            '        If addonServiceID.HasValue Then
-            '            cmd2.Parameters.AddWithValue("@AddonServiceID", addonServiceID.Value)
-            '        Else
-            '            cmd2.Parameters.AddWithValue("@AddonServiceID", DBNull.Value)
-            '        End If
-            '        cmd2.Parameters.AddWithValue("SaleDate", appointmentDateTime)
-            '        cmd2.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
-            '        cmd2.Parameters.AddWithValue("@TotalPrice", price)
-            '        cmd2.ExecuteNonQuery()
-            '    End Using
-            'End If
+                Dim deleteSalesServicesFromHistoryQuery = "DELETE FROM SalesHistoryTable WHERE AppointmentID = @AppointmentID"
+                Using cmdDelete As New SqlCommand(deleteSalesServicesFromHistoryQuery, con, transaction)
+                    cmdDelete.Parameters.AddWithValue("@AppointmentID", appointmentID)
+                    cmdDelete.ExecuteNonQuery()
+                End Using
+
+                ' Step 3: Insert new entries into AppointmentServiceTable
+                Dim insertAppointmentServiceQuery = "INSERT INTO AppointmentServiceTable (AppointmentID, CustomerID, ServiceID, AddonServiceID, Subtotal, AppointmentStatus) VALUES (@AppointmentID, @CustomerID, @ServiceID, @AddonServiceID, @Subtotal, @AppointmentStatus)"
+                For Each item As AppointmentService In allSaleItems
+                    Dim baseServiceID As Integer = SalesDatabaseHelper.GetServiceIdByName(item.Service)
+                    Dim addonID As Integer? = SalesDatabaseHelper.GetAddonIdByName(item.Addon)
+                    Using cmdService As New SqlCommand(insertAppointmentServiceQuery, con, transaction)
+                        cmdService.Parameters.AddWithValue("@AppointmentID", appointmentID)
+                        cmdService.Parameters.AddWithValue("@CustomerID", customerID)
+                        cmdService.Parameters.AddWithValue("@ServiceID", baseServiceID)
+                        If addonID.HasValue Then
+                            cmdService.Parameters.AddWithValue("@AddonServiceID", addonID.Value)
+                        Else
+                            cmdService.Parameters.AddWithValue("@AddonServiceID", DBNull.Value)
+                        End If
+                        cmdService.Parameters.AddWithValue("@Subtotal", item.ServicePrice)
+                        cmdService.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus)
+                        cmdService.ExecuteNonQuery()
+                    End Using
+                Next
+                transaction.Commit()
+            Catch ex As Exception
+                transaction.Rollback()
+                MessageBox.Show("Error updating sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
         End Using
     End Sub
 

@@ -46,7 +46,7 @@ Partial Class OnTheDay
         DataGridViewOnTheDay.AllowUserToResizeRows = False
         DataGridViewOnTheDay.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         DataGridViewOnTheDay.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridViewOnTheDay.BackgroundColor = SystemColors.ControlLight
+        DataGridViewOnTheDay.BackgroundColor = Color.White
         DataGridViewOnTheDay.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridViewOnTheDay.Location = New Point(0, 53)
         DataGridViewOnTheDay.Name = "DataGridViewOnTheDay"

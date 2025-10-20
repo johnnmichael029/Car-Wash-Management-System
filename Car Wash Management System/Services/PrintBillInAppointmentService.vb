@@ -1,4 +1,5 @@
-﻿Imports System.Drawing.Printing
+﻿Imports System.Diagnostics.Contracts
+Imports System.Drawing.Printing
 
 Public Class PrintBillInAppointmentService
     ''' <summary>
@@ -53,7 +54,7 @@ Public Class PrintBillInAppointmentService
         yPos += offset
         e.Graphics.DrawString(printData.SaleDate.ToString("MM/dd/yyy HH:mm tt, ddd"), f10, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
-        e.Graphics.DrawString("InvoiceID: " & printData.ContractID, f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString("InvoiceID: " & InvoiceGeneratorService.CreateInvoiceNumber(printData.ContractID), f10, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
         yPos += offset
         e.Graphics.DrawString("Customer Name: " & printData.CustomerName, f10, Brushes.Black, leftMargin, yPos)

@@ -109,6 +109,10 @@ Public Class SalesForm
         Dim amount As Decimal = Decimal.Parse(TextBoxTotalPrice.Text)
         activityLogInDashboardService.RecordSale(customerName, amount)
     End Sub
+    Private Sub UpdateSalesActivityLog()
+        Dim customerName As String = TextBoxCustomerName.Text
+        activityLogInDashboardService.UpdateSale(customerName)
+    End Sub
 
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
         CalculateTotalPrice()
@@ -398,10 +402,52 @@ Public Class SalesForm
         UpdateSales()
     End Sub
     Private Sub UpdateSales()
-        SalesDatabaseHelper.UpdateSale(LabelSalesID.Text, SaleServiceList, ComboBoxPaymentMethod.Text, TextBoxReferenceID.Text, TextBoxTotalPrice.Text)
-        ViewSales()
-        ClearFields()
+
+        Try
+            Dim customerID As Integer
+            If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) OrElse customerID <= 0 Then
+                MessageBox.Show("Please select a valid customer from the list.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+
+            ' Guard clause: Ensure there are items to sell
+            If SaleServiceList.Count = 0 Then
+                MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+            'Validate that a payment method is selected.
+            If ComboBoxPaymentMethod.SelectedIndex = -1 Then
+                MessageBox.Show("Please select a payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+            'Validate that a Reference ID is provided for certain payment methods.
+            If (ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" Or ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque") AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
+                MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+            SalesDatabaseHelper.UpdateSale(
+                LabelSalesID.Text,
+                SaleServiceList,
+                ComboBoxPaymentMethod.Text,
+                TextBoxReferenceID.Text,
+                TextBoxTotalPrice.Text
+                )
+            Carwash.PopulateAllTotal()
+            Carwash.ShowNotification()
+            Carwash.NotificationLabel.Text = "Sale Updated"
+            UpdateSalesActivityLog()
+            MessageBox.Show("Sale updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ViewSales()
+            ClearFields()
+        Catch ex As Exception
+            MessageBox.Show("An error occurred while updating the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
     End Sub
+
     Private Sub ViewSales()
         DataGridViewSales.DataSource = salesDatabaseHelper.ViewSales()
     End Sub

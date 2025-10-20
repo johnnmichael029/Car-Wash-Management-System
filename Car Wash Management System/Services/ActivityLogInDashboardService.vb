@@ -13,8 +13,14 @@
     Public Sub RecordSale(customerName As String, amount As Decimal)
         actitvityLogDBHelper.LogActivity("New Sale", $"A new sale was recorded for customer: '{customerName}'. Amount: ₱{amount:N2}")
     End Sub
+    Public Sub UpdateSale(customerName As String)
+        actitvityLogDBHelper.LogActivity("Sale Update", $"A sale for customer: '{customerName}' was updated.")
+    End Sub
     Public Sub ScheduleAppointment(customerName As String, appointmentDate As DateTime, appointmentStatus As String)
         actitvityLogDBHelper.LogActivity("New Appointment Scheduled", $"An appointment was scheduled for customer: '{customerName}' on {appointmentDate}. status '{appointmentStatus}'")
+    End Sub
+    Public Sub UpdateAppointment(customerName As String)
+        actitvityLogDBHelper.LogActivity("Appointment Update", $"An appointment for customer: '{customerName}' was updated.")
     End Sub
     Public Sub UpdateAppointmentStatus(customerName As String, newStatus As String)
         actitvityLogDBHelper.LogActivity("Appointment Status Update", $"An appointment was scheduled for '{customerName}' was changed to new status '{newStatus}'")

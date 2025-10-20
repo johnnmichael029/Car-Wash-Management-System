@@ -59,7 +59,7 @@ Partial Class Service
         DataGridViewService.AllowUserToResizeColumns = False
         DataGridViewService.AllowUserToResizeRows = False
         DataGridViewService.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridViewService.BackgroundColor = SystemColors.ControlLight
+        DataGridViewService.BackgroundColor = Color.White
         DataGridViewService.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridViewService.Dock = DockStyle.Fill
         DataGridViewService.Location = New Point(0, 0)
@@ -70,7 +70,7 @@ Partial Class Service
         ' 
         ' Panel3
         ' 
-        Panel3.BackColor = Color.FromArgb(CByte(254), CByte(251), CByte(251))
+        Panel3.BackColor = Color.White
         Panel3.Controls.Add(LabelIsAdmin)
         Panel3.Controls.Add(CheckBoxAddon)
         Panel3.Controls.Add(LabelServiceID)

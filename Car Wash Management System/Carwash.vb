@@ -148,6 +148,9 @@ Public Class Carwash
     End Sub
 
     Private Sub DashboardBtn_Click(sender As Object, e As EventArgs) Handles DashboardBtn.Click
+        DashboardFormShow()
+    End Sub
+    Private Sub DashboardFormShow()
         Panel4.Controls.Clear()
         Dim dashboard As New Dashboard With {
             .TopLevel = False,
@@ -156,8 +159,15 @@ Public Class Carwash
         Panel4.Controls.Add(dashboard)
         dashboard.Dock = DockStyle.Fill
         dashboard.Show()
+        DashboardBtn.BackColor = Color.FromArgb(239, 238, 238)
+        ActivityLogBtn.BackColor = Color.White
+        salesHistoryBtn.BackColor = Color.White
     End Sub
     Private Sub ActivityLogBtn_Click(sender As Object, e As EventArgs) Handles ActivityLogBtn.Click
+        ActivityLogFormShow()
+    End Sub
+
+    Private Sub ActivityLogFormShow()
         Panel4.Controls.Clear()
         Dim activityLog As New ActivityLog With {
             .TopLevel = False,
@@ -166,6 +176,9 @@ Public Class Carwash
         Panel4.Controls.Add(activityLog)
         activityLog.Dock = DockStyle.Fill
         activityLog.Show()
+        DashboardBtn.BackColor = Color.White
+        ActivityLogBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesHistoryBtn.BackColor = Color.White
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
@@ -281,5 +294,8 @@ Public Class Carwash
 
     Private Sub salesHistoryBtn_Click(sender As Object, e As EventArgs) Handles salesHistoryBtn.Click
         SalesHistoryForm()
+        DashboardBtn.BackColor = Color.White
+        ActivityLogBtn.BackColor = Color.White
+        salesHistoryBtn.BackColor = Color.FromArgb(239, 238, 238)
     End Sub
 End Class

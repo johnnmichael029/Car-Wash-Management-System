@@ -82,9 +82,14 @@ Public Class SalesDatabaseHelper
                     cmd.Parameters.AddWithValue("@SalesID", iSaleID)
                     cmd.ExecuteNonQuery()
                 End Using
-                ' Step 2: Delete existing entries in SalesServiceTable for this SalesID
+                ' Step 2: Delete existing entries in SalesServiceTable and SalesHistoryTable for this SalesID
                 Dim deleteServicesQuery = "DELETE FROM SalesServiceTable WHERE SalesID = @SalesID"
                 Using cmdDelete As New SqlCommand(deleteServicesQuery, con, transaction)
+                    cmdDelete.Parameters.AddWithValue("@SalesID", saleID)
+                    cmdDelete.ExecuteNonQuery()
+                End Using
+                Dim deleteSalesServicesFromHistoryQuery = "DELETE FROM SalesHistoryTable WHERE RegularSaleID = @SalesID"
+                Using cmdDelete As New SqlCommand(deleteSalesServicesFromHistoryQuery, con, transaction)
                     cmdDelete.Parameters.AddWithValue("@SalesID", saleID)
                     cmdDelete.ExecuteNonQuery()
                 End Using
@@ -106,9 +111,6 @@ Public Class SalesDatabaseHelper
                     End Using
                 Next
                 transaction.Commit()
-                Carwash.NotificationLabel.Text = "Sale Updated"
-                MessageBox.Show("Sale updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Carwash.ShowNotification()
             Catch ex As Exception
                 transaction.Rollback()
                 MessageBox.Show("Error updating sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -181,7 +183,7 @@ Public Class SalesDatabaseHelper
     End Function
 
 
-    Public Function ViewSales() As DataTable
+    Public Shared Function ViewSales() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
             Try

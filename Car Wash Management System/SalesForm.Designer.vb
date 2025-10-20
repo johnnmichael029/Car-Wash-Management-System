@@ -65,7 +65,7 @@ Partial Class SalesForm
         DataGridViewSales.AllowUserToResizeColumns = False
         DataGridViewSales.AllowUserToResizeRows = False
         DataGridViewSales.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridViewSales.BackgroundColor = SystemColors.ControlLight
+        DataGridViewSales.BackgroundColor = Color.White
         DataGridViewSales.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridViewSales.Dock = DockStyle.Fill
         DataGridViewSales.Location = New Point(0, 0)
@@ -269,7 +269,7 @@ Partial Class SalesForm
         AddBtn.Name = "AddBtn"
         AddBtn.Size = New Size(260, 46)
         AddBtn.TabIndex = 32
-        AddBtn.Text = "Add"
+        AddBtn.Text = "Add Sales"
         AddBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         AddBtn.UseVisualStyleBackColor = False
         ' 

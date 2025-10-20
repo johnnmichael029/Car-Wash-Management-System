@@ -170,16 +170,19 @@ Public Class Appointment
             Carwash.PopulateAllTotal()
             Carwash.NotificationLabel.Text = "Appointment Added"
             Carwash.ShowNotification()
-            DataGridViewAppointment.DataSource = appointmentManagementDatabaseHelper.ViewAppointment()
+            ViewAppointments()
             MessageBox.Show("Appointment added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            AppointmentActivityLog()
+            AddAppointmentActivityLog()
             ShowPrintPreview()
             ClearFields()
         Catch ex As Exception
             MessageBox.Show("An error occurred while adding the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Public Sub AppointmentActivityLog()
+    Private Sub ViewAppointments()
+        DataGridViewAppointment.DataSource = appointmentManagementDatabaseHelper.ViewAppointment()
+    End Sub
+    Public Sub AddAppointmentActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim appointmentDate As Date = DateTimePickerStartDate.Value
         Dim appointmentStatus As String = ComboBoxAppointmentStatus.Text
@@ -281,7 +284,7 @@ Public Class Appointment
 
     Private Sub UpdateAppointmentBtn_Click(sender As Object, e As EventArgs) Handles UpdateAppointmentBtn.Click
         UpdateAppointmentStatusFunction()
-        UpdateAppointmentActivityLog()
+        UpdateAppointmentStatusActivityLog()
         ClearFields()
     End Sub
     Public Sub UpdateAppointmentStatusFunction()
@@ -292,41 +295,69 @@ Public Class Appointment
             Dim appointmentStatus As String = ComboBoxAppointmentStatus.Text
             Dim salesLabel As String = "Sales Added!"
 
-            If Not Integer.TryParse(LabelAppointmentID.Text, appointmentID) Or Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Or Not Decimal.TryParse(TextBoxPrice.Text, price) Then
-                MessageBox.Show("Please select customer from appointment Table to update!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Or Not Integer.TryParse(LabelAppointmentID.Text, appointmentID) Then
+                MessageBox.Show("Customer not found. Please select a valid customer.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
 
-            Dim baseServiceDetails As AppointmentService = appointmentManagementDatabaseHelper.GetServiceDetails(ComboBoxServices.Text)
-            Dim addonServiceID As Integer? = Nothing
-            If ComboBoxAddon.SelectedIndex <> -1 Then
-                Dim addonServiceDetails As AppointmentService = appointmentManagementDatabaseHelper.GetServiceDetails(ComboBoxAddon.Text)
-                If addonServiceDetails IsNot Nothing Then
-                    addonServiceID = addonServiceDetails.ServiceID
-                End If
+            Dim totalPrice As Decimal
+            If Not Decimal.TryParse(TextBoxTotalPrice.Text, totalPrice) Then
+                MessageBox.Show("Please enter a valid price.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
             End If
-            If appointmentStatus = "completed" Then
-                LabelSales.Text = salesLabel
+
+            ' Determine the service name and ID based on both combo boxes.
+            Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
+            Dim addonServiceName As String = If(ComboBoxAddon.SelectedIndex <> -1, ComboBoxAddon.Text, String.Empty)
+
+            If appointmentServiceList.Count = 0 Then
+                MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+            'Validate if the Start date is not in the past
+            If DateTimePickerStartDate.Value < DateTime.Now Then
+                MessageBox.Show("The appointment date and time cannot be in the past.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+            If ComboBoxPaymentMethod.SelectedIndex = -1 Then
+                MessageBox.Show("Please select a payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+            'Validate that a Reference ID is provided for certain payment methods.
+            If (ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" Or ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque") AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
+                MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+            If ComboBoxAppointmentStatus.SelectedIndex = -1 Then
+                MessageBox.Show("Please select an appointment status.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
             End If
             appointmentManagementDatabaseHelper.UpdateAppointment(
                 appointmentID,
                 customerID,
-                baseServiceDetails.ServiceID,
-                addonServiceID,
+                appointmentServiceList,
                 DateTimePickerStartDate.Value,
                 ComboBoxPaymentMethod.Text,
+                TextBoxReferenceID.Text,
                 price,
                 ComboBoxAppointmentStatus.Text,
                 TextBoxNotes.Text
                 )
+
             MessageBox.Show("Appointment updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            DataGridViewAppointment.DataSource = appointmentManagementDatabaseHelper.ViewAppointment()
+            Carwash.PopulateAllTotal()
+            Carwash.ShowNotification()
+            Carwash.NotificationLabel.Text = "Appointment Updated"
+            ViewAppointments()
+            ClearFields()
         Catch ex As Exception
             MessageBox.Show("An error occurred while updating the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
     End Sub
-    Public Sub UpdateAppointmentActivityLog()
+    Public Sub UpdateAppointmentStatusActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim newtStatus As String = ComboBoxAppointmentStatus.Text
         activityLogInDashboardService.UpdateAppointmentStatus(customerName, newtStatus)
@@ -375,7 +406,7 @@ Public Class Appointment
         End If
 
         ' 2. Retrieve the list of all services (Base and Add-ons) associated with this sale ID.
-        Dim serviceLineItems As List(Of ServiceLineItem) = New List(Of ServiceLineItem)()
+        Dim serviceLineItems As New List(Of ServiceLineItem)()
         If currentAppointmentID > 0 AndAlso appointmentManagementDatabaseHelper IsNot Nothing Then
             ' *** FIX: Now passing the connection string (Me.constr) to the Shared function ***
             serviceLineItems = AppointmentManagementDatabaseHelper.GetSaleLineItems(currentAppointmentID, Me.constr)
@@ -387,7 +418,7 @@ Public Class Appointment
            .CustomerName = TextBoxCustomerName.Text,
            .ServiceLineItems = serviceLineItems,
            .PaymentMethod = ComboBoxPaymentMethod.Text,
-           .SaleDate = DataGridViewAppointment.CurrentRow.Cells(4).Value,
+           .SaleDate = DateTime.Now,
            .StartDate = saleDate,
            .AppointmentStatus = ComboBoxAppointmentStatus.Text
        })
@@ -498,5 +529,6 @@ Public Class Appointment
             ListViewServices.Items.Add(lvi)
         Next
     End Sub
+
 End Class
 

@@ -21,7 +21,8 @@ Public Class OnTheDayDatabaseHelper
             "INNER JOIN ServicesTable sv_base ON AST.ServiceID = sv_base.ServiceID " &
             "LEFT JOIN ServicesTable sv_addon ON AST.AddonServiceID = sv_addon.ServiceID " &
             "WHERE AST.AppointmentStatus IN ('Confirmed', 'Queued', 'In-progress')" &
-            "ORDER BY a.AppointmentID DESC"
+            "AND CAST(AppointmentDateTime AS DATE) = CAST(GETDATE() AS DATE) " &
+            "ORDER BY AST.AppointmentServiceID DESC"
 
 
 

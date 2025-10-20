@@ -435,9 +435,10 @@ Partial Class Carwash
         ' 
         ' DashboardBtn
         ' 
-        DashboardBtn.BackColor = Color.White
+        DashboardBtn.BackColor = Color.FromArgb(CByte(239), CByte(238), CByte(238))
         DashboardBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         DashboardBtn.FlatAppearance.BorderSize = 0
+        DashboardBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(239), CByte(238), CByte(238))
         DashboardBtn.FlatStyle = FlatStyle.Flat
         DashboardBtn.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold)
         DashboardBtn.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
@@ -474,6 +475,7 @@ Partial Class Carwash
         salesHistoryBtn.BackColor = Color.White
         salesHistoryBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         salesHistoryBtn.FlatAppearance.BorderSize = 0
+        salesHistoryBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(239), CByte(238), CByte(238))
         salesHistoryBtn.FlatStyle = FlatStyle.Flat
         salesHistoryBtn.Font = New Font("Century Gothic", 12.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         salesHistoryBtn.Image = My.Resources.Resources.history
@@ -489,8 +491,10 @@ Partial Class Carwash
         ' 
         ' ActivityLogBtn
         ' 
+        ActivityLogBtn.BackColor = Color.White
         ActivityLogBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         ActivityLogBtn.FlatAppearance.BorderSize = 0
+        ActivityLogBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(239), CByte(238), CByte(238))
         ActivityLogBtn.FlatStyle = FlatStyle.Flat
         ActivityLogBtn.Font = New Font("Century Gothic", 14.25F, FontStyle.Bold)
         ActivityLogBtn.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
@@ -503,7 +507,7 @@ Partial Class Carwash
         ActivityLogBtn.TabIndex = 1
         ActivityLogBtn.Text = "Activity Log"
         ActivityLogBtn.TextAlign = ContentAlignment.MiddleRight
-        ActivityLogBtn.UseVisualStyleBackColor = True
+        ActivityLogBtn.UseVisualStyleBackColor = False
         ' 
         ' Panel3
         ' 
