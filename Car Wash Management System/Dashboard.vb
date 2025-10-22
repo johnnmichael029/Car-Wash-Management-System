@@ -59,8 +59,8 @@ Public Class Dashboard
             chartTitle = "Monthly Sales"
             xAxisTitle = "Month"
         Else
-            chartData = dashboardDatabaseHelper.GetWeeklySales()
-            chartTitle = "Weekly Sales"
+            chartData = dashboardDatabaseHelper.GetDailySales()
+            chartTitle = "Daily Sales"
             xAxisTitle = "Day"
         End If
         Dim salesChartForm As New SalesChartService(chartData, chartTitle, xAxisTitle) With {
@@ -76,15 +76,24 @@ Public Class Dashboard
 
     Private Sub ButtonToggleChart_Click(sender As Object, e As EventArgs) Handles ButtonToggleChart.Click
         'Toggle On and Off
-        isMonthlyView = Not isMonthlyView And Not isYearlyView
-        isYearlyView = Not isYearlyView And Not isMonthlyView
         If isYearlyView Then
-            ButtonToggleChart.Text = "Weekly Sales"
-        ElseIf isMonthlyView Then
-            ButtonToggleChart.Text = "Yearly Sales"
-        Else
+            ' If currently Yearly, switch back to Daily (or default)
+            isYearlyView = False
+            isMonthlyView = False
+            ' Day is the implicit default (Else)
             ButtonToggleChart.Text = "Monthly Sales"
+        ElseIf isMonthlyView Then
+            ' If currently Monthly, switch to Yearly
+            isMonthlyView = False
+            isYearlyView = True
+            ButtonToggleChart.Text = "Daily Sales"
+        Else
+            ' If currently Daily (or any other state), switch to Monthly
+            isMonthlyView = True
+            isYearlyView = False
+            ButtonToggleChart.Text = "Yearly Sales"
         End If
+
         LoadSalesChart()
     End Sub
     Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
@@ -103,7 +112,7 @@ Public Class Dashboard
             filterColumn = "Filter"
         End If
 
-        Dim salesData As DataTable = New DataTable()
+        Dim salesData As New DataTable()
 
         If String.IsNullOrWhiteSpace(currentSearchTerm) Then
             ' Load all data if search box is empty
@@ -233,13 +242,6 @@ Public Class Dashboard
         End If
 
     End Sub
-
-    Private Sub DataGridViewLatestTransaction_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridViewLatestTransaction.SelectionChanged
-
-        ' Deselect any selected rows to prevent highlighting.
-
-    End Sub
-
     Private Sub DataGridViewLatestTransactionFontStyle()
         DataGridViewLatestTransaction.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
         DataGridViewLatestTransaction.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
@@ -431,8 +433,6 @@ Public Class Dashboard
 
         TextBoxPrice.Text = totalPrice.ToString("N2") ' Format to 2 decimal places
     End Sub
-
-    'Get CustomerID when typing in the CustomerName textbox
     Private Sub TextBoxCustomerName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCustomerName.TextChanged
         Dim customerID As Integer = dashboardDatabaseHelper.GetCustomerID(TextBoxCustomerName.Text)
         If customerID > 0 Then
@@ -457,10 +457,6 @@ Public Class Dashboard
         ComboBoxFilter.Items.Add("All Columns")
         ComboBoxFilter.SelectedIndex = 0
     End Sub
-    Private Sub ComboBoxFilter_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFilter.SelectedIndexChanged
-
-    End Sub
-
     Private Sub AddVehicleBtn_Click(sender As Object, e As EventArgs) Handles AddVehicleBtn.Click
         AddVehicleFunction()
     End Sub
@@ -532,7 +528,6 @@ Public Class Dashboard
         ListViewServices.FullRowSelect = True
 
     End Sub
-
     Private Sub RemoveServiceBtn_Click(sender As Object, e As EventArgs) Handles RemoveServiceBtn.Click
         RemoveSelectedService()
         CalculateTotalPriceInService()
@@ -558,7 +553,6 @@ Public Class Dashboard
         Next
         TextBoxTotalPrice.Text = totalPrice.ToString("N2")
     End Sub
-
     Private Sub RemoveSelectedService()
         If ListViewServices.SelectedItems.Count = 0 Then
             MessageBox.Show("Please select a services from the list to remove.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -579,12 +573,10 @@ Public Class Dashboard
             MessageBox.Show("Could not find the selected vehicle in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
-
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
         AddSaleService()
         CalculateTotalPriceInService()
     End Sub
-
     Private Sub AddSaleService()
         If String.IsNullOrWhiteSpace(ComboBoxServices.Text) Then
             MessageBox.Show("Please enter service.", "Missing Service Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -617,22 +609,14 @@ Public Class Dashboard
     Private Sub ViewLatestSales()
         DataGridViewLatestTransaction.DataSource = salesDatabaseHelper.ViewSales()
     End Sub
-
     Public Function GetNextSalesID() As Integer
-        Dim nextId As Integer = 1 ' Default ID if the table is empty
-
-        ' SQL query to find the maximum SalesID
-        ' The ISNULL checks if the result is NULL (meaning the table is empty), and if so, returns 0.
+        Dim nextId As Integer = 1
         Dim sql As String = "SELECT ISNULL(MAX(SalesID), 0) FROM RegularSaleTable"
-
         Try
             Using conn As New SqlConnection(constr)
                 Using cmd As New SqlCommand(sql, conn)
                     conn.Open()
-
-                    ' ExecuteScalar retrieves the first column of the first row (the MAX value)
                     Dim result As Object = cmd.ExecuteScalar()
-
                     If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
                         ' Convert the result (which is the MAX SalesID, or 0) to an integer
                         Dim maxId As Integer = CInt(result)
@@ -645,34 +629,22 @@ Public Class Dashboard
             End Using
 
         Catch ex As Exception
-            ' Handle errors (e.g., database connection failure, table not found)
             MessageBox.Show("Database Error generating Sales ID: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
-            ' You may want to return a special error code or keep the default ID of 1
-            Return -1 ' Return -1 or another value to indicate an error
+            Return -1
         End Try
 
         Return nextId
     End Function
-
     Private Sub DisplayNextSalesID()
         ' 1. Get the next available ID from the database
         Dim nextId As Integer = GetNextSalesID()
 
         If nextId > 0 Then
-            ' 2. Format the output and set the Label text
-            ' We format it to show "Sales ID: 62" as requested
             LabelSalesID.Text = nextId.ToString()
-
-            ' Optional: Store the raw ID in a hidden control or a module-level variable
-            ' This ID will be used when you save the new sale record.
-            ' Me.CurrentSalesID = nextId 
         Else
-            ' Handle the error case (nextId returned -1)
             LabelSalesID.Text = "Sales ID: ERROR"
         End If
     End Sub
-
 
 End Class
 

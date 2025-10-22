@@ -162,6 +162,7 @@ Public Class Carwash
         DashboardBtn.BackColor = Color.FromArgb(239, 238, 238)
         ActivityLogBtn.BackColor = Color.White
         salesHistoryBtn.BackColor = Color.White
+        SalesAnalyticsBtn.BackColor = Color.White
     End Sub
     Private Sub ActivityLogBtn_Click(sender As Object, e As EventArgs) Handles ActivityLogBtn.Click
         ActivityLogFormShow()
@@ -179,6 +180,7 @@ Public Class Carwash
         DashboardBtn.BackColor = Color.White
         ActivityLogBtn.BackColor = Color.FromArgb(239, 238, 238)
         salesHistoryBtn.BackColor = Color.White
+        SalesAnalyticsBtn.BackColor = Color.White
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
@@ -286,6 +288,10 @@ Public Class Carwash
         Panel4.Controls.Add(salesHistory)
         salesHistory.Dock = DockStyle.Fill
         salesHistory.Show()
+        DashboardBtn.BackColor = Color.White
+        ActivityLogBtn.BackColor = Color.White
+        SalesAnalyticsBtn.BackColor = Color.White
+        salesHistoryBtn.BackColor = Color.FromArgb(239, 238, 238)
     End Sub
 
     Private Sub MenuStrip1_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles MenuStrip1.ItemClicked
@@ -294,8 +300,25 @@ Public Class Carwash
 
     Private Sub salesHistoryBtn_Click(sender As Object, e As EventArgs) Handles salesHistoryBtn.Click
         SalesHistoryForm()
+
+    End Sub
+
+    Private Sub AnalyticsShowForm()
+        Panel4.Controls.Clear()
+        Dim slesAnalytics As New SalesAnalytics With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(slesAnalytics)
+        slesAnalytics.Dock = DockStyle.Fill
+        slesAnalytics.Show()
         DashboardBtn.BackColor = Color.White
         ActivityLogBtn.BackColor = Color.White
-        salesHistoryBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesHistoryBtn.BackColor = Color.White
+        SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+    End Sub
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles SalesAnalyticsBtn.Click
+        AnalyticsShowForm()
+
     End Sub
 End Class

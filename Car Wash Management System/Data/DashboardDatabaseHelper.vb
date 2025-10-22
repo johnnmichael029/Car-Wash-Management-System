@@ -86,8 +86,8 @@ Public Class DashboardDatabaseHelper
     ''' <summary>
     ''' Gets the total sales for the past 7 days from the SalesHistoryTable.
     ''' </summary>
-    Public Function GetWeeklySales() As DataTable
-        Dim query As String = "SELECT CAST(SaleDate AS DATE) AS SaleDate, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable WHERE SaleDate >= DATEADD(DAY, -6, CAST(GETDATE() AS DATE)) GROUP BY CAST(SaleDate AS DATE) ORDER BY SaleDate ASC"
+    Public Function GetDailySales() As DataTable
+        Dim query As String = "SELECT CAST(SaleDate AS DATE) AS SaleDate, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable WHERE SaleDate >= DATEADD(DAY, -7, CAST(GETDATE() AS DATE)) GROUP BY CAST(SaleDate AS DATE) ORDER BY SaleDate ASC"
         Dim dt As New DataTable()
         Try
             Using con As New SqlConnection(constr)
@@ -102,6 +102,74 @@ Public Class DashboardDatabaseHelper
         End Try
         Return dt
     End Function
+    ''' <summary>
+    ''' Gets the filtered sales data based on the search string and filter column.
+    ''' </summary>
+    Public Function GetWeeklySales() As DataTable
+        ' The query calculates the starting date of the 7-day period (WeekStartDate) for grouping.
+        Dim query As String = "
+    WITH MinSaleDate (StartDate) AS (
+        -- 1. Find the absolute minimum/first sales date
+        SELECT MIN(CAST(SaleDate AS DATE)) FROM SalesHistoryTable
+    )
+    SELECT
+        -- Returns the first day of the calculated week for the purpose of grouping
+        CAST(DATEADD(wk, DATEDIFF(wk, (SELECT StartDate FROM MinSaleDate), CAST(SaleDate AS DATE)), (SELECT StartDate FROM MinSaleDate)) AS DATE) AS WeekStartDate,
+        SUM(TotalPrice) AS TotalSales
+    FROM SalesHistoryTable T
+    GROUP BY 
+        CAST(DATEADD(wk, DATEDIFF(wk, (SELECT StartDate FROM MinSaleDate), CAST(SaleDate AS DATE)), (SELECT StartDate FROM MinSaleDate)) AS DATE)
+    ORDER BY 
+        WeekStartDate ASC"
+
+        Dim dt As New DataTable()
+        Try
+            Using con As New SqlConnection(constr)
+                Using cmd As New SqlCommand(query, con)
+                    con.Open()
+                    Dim adapter As New SqlDataAdapter(cmd)
+                    adapter.Fill(dt)
+                End Using
+            End Using
+
+            ' --- POST-PROCESSING IN VB.NET TO GET 'Week 1', 'Week 2', etc. ---
+
+            If dt.Rows.Count > 0 Then
+                ' Add a new column to the DataTable for the Week Label
+                dt.Columns.Add("SalesWeek", GetType(String))
+
+                ' Determine the true starting date of the sales data for calculation
+                Dim firstWeekStartDate As Date = CDate(dt.Rows(0)("WeekStartDate"))
+
+                For i As Integer = 0 To dt.Rows.Count - 1
+                    Dim currentWeekStartDate As Date = CDate(dt.Rows(i)("WeekStartDate"))
+
+                    ' Calculate the difference in days from the first week's start date
+                    Dim timeSpan As TimeSpan = currentWeekStartDate.Subtract(firstWeekStartDate)
+
+                    ' Calculate the week index (0, 1, 2...)
+                    Dim weekIndex As Integer = CInt(Math.Floor(timeSpan.TotalDays / 7))
+
+                    ' Set the 'SalesWeek' label (Week 1, Week 2, etc.)
+                    dt.Rows(i)("SalesWeek") = "Week " & (weekIndex + 1).ToString()
+                Next
+
+                ' Clean up the DataTable to remove the intermediate date column
+                dt.Columns.Remove("WeekStartDate")
+                dt.Columns("SalesWeek").SetOrdinal(0) ' Make it the first column
+            End If
+
+        Catch ex As Exception
+            ' Log or display the error if something goes wrong with the database
+            Console.WriteLine("Error in GetWeeklySales: " & ex.Message)
+        End Try
+
+        Return dt
+    End Function
+
+    ''' <summary>
+    ''' Gets the filtered sales data based on the search string and filter column.
+    ''' </summary>
     Public Function GetFilteredList(searchInBar As String, filterColumn As String) As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)

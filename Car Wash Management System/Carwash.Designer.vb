@@ -54,7 +54,7 @@ Partial Class Carwash
         Panel5 = New Panel()
         LogoutBtn = New Button()
         DashboardBtn = New Button()
-        Button4 = New Button()
+        SalesAnalyticsBtn = New Button()
         salesHistoryBtn = New Button()
         ActivityLogBtn = New Button()
         Panel3 = New Panel()
@@ -399,7 +399,7 @@ Partial Class Carwash
         PanelMenuBar.BackColor = Color.White
         PanelMenuBar.Controls.Add(Panel5)
         PanelMenuBar.Controls.Add(DashboardBtn)
-        PanelMenuBar.Controls.Add(Button4)
+        PanelMenuBar.Controls.Add(SalesAnalyticsBtn)
         PanelMenuBar.Controls.Add(salesHistoryBtn)
         PanelMenuBar.Controls.Add(ActivityLogBtn)
         PanelMenuBar.Dock = DockStyle.Left
@@ -453,22 +453,22 @@ Partial Class Carwash
         DashboardBtn.TextAlign = ContentAlignment.MiddleRight
         DashboardBtn.UseVisualStyleBackColor = False
         ' 
-        ' Button4
+        ' SalesAnalyticsBtn
         ' 
-        Button4.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
-        Button4.FlatAppearance.BorderSize = 0
-        Button4.FlatStyle = FlatStyle.Flat
-        Button4.Font = New Font("Century Gothic", 12.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Button4.Image = CType(resources.GetObject("Button4.Image"), Image)
-        Button4.ImageAlign = ContentAlignment.MiddleLeft
-        Button4.Location = New Point(0, 337)
-        Button4.Name = "Button4"
-        Button4.Padding = New Padding(5, 0, 39, 0)
-        Button4.Size = New Size(174, 56)
-        Button4.TabIndex = 3
-        Button4.Text = "Analytics"
-        Button4.TextAlign = ContentAlignment.MiddleRight
-        Button4.UseVisualStyleBackColor = True
+        SalesAnalyticsBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        SalesAnalyticsBtn.FlatAppearance.BorderSize = 0
+        SalesAnalyticsBtn.FlatStyle = FlatStyle.Flat
+        SalesAnalyticsBtn.Font = New Font("Century Gothic", 12.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        SalesAnalyticsBtn.Image = CType(resources.GetObject("SalesAnalyticsBtn.Image"), Image)
+        SalesAnalyticsBtn.ImageAlign = ContentAlignment.MiddleLeft
+        SalesAnalyticsBtn.Location = New Point(0, 337)
+        SalesAnalyticsBtn.Name = "SalesAnalyticsBtn"
+        SalesAnalyticsBtn.Padding = New Padding(5, 0, 39, 0)
+        SalesAnalyticsBtn.Size = New Size(174, 56)
+        SalesAnalyticsBtn.TabIndex = 3
+        SalesAnalyticsBtn.Text = "Analytics"
+        SalesAnalyticsBtn.TextAlign = ContentAlignment.MiddleRight
+        SalesAnalyticsBtn.UseVisualStyleBackColor = True
         ' 
         ' salesHistoryBtn
         ' 
@@ -725,7 +725,7 @@ Partial Class Carwash
     Friend WithEvents Panel5 As Panel
     Friend WithEvents LogoutBtn As Button
     Friend WithEvents DashboardBtn As Button
-    Friend WithEvents Button4 As Button
+    Friend WithEvents SalesAnalyticsBtn As Button
     Friend WithEvents salesHistoryBtn As Button
     Friend WithEvents ActivityLogBtn As Button
     Friend WithEvents Panel3 As Panel
