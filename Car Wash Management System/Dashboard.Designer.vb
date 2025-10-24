@@ -126,7 +126,7 @@ Partial Class Dashboard
         ButtonToggleChart.Name = "ButtonToggleChart"
         ButtonToggleChart.Size = New Size(140, 27)
         ButtonToggleChart.TabIndex = 9
-        ButtonToggleChart.Text = "Monthly Sales"
+        ButtonToggleChart.Text = "Daily Sales"
         ButtonToggleChart.UseVisualStyleBackColor = False
         ' 
         ' PanelMontlySales

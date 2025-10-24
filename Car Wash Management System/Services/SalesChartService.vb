@@ -26,14 +26,15 @@ Public Class SalesChartService
             .Color = Color.Black,
             .MarkerStyle = MarkerStyle.Circle,
             .MarkerSize = 10,
-            .MarkerColor = Color.Black
+            .MarkerColor = Color.Black,
+            .ToolTip = "₱#VALY{N2}"
         }
         chart1.Series.Add(series1)
 
         ' Set the title of the chart.
         Dim title1 As New Title With {
             .Text = chartTitle,
-            .Font = New Font("Century Gothic", 15, FontStyle.Bold)
+            .Font = New Font("Century Gothic", 12, FontStyle.Bold)
         }
         chart1.Titles.Add(title1)
 

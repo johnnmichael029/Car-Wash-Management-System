@@ -26,7 +26,8 @@ Partial Class Login
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Login))
         Panel1 = New Panel()
         Panel4 = New Panel()
-        PictureBox1 = New PictureBox()
+        PictureBoxHidden = New PictureBox()
+        PictureBoxShow = New PictureBox()
         LabelHolderPassword = New Label()
         Panel5 = New Panel()
         TextBoxPassword = New TextBox()
@@ -40,7 +41,8 @@ Partial Class Login
         TimerAnimator1 = New Timer(components)
         Panel1.SuspendLayout()
         Panel4.SuspendLayout()
-        CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(PictureBoxHidden, ComponentModel.ISupportInitialize).BeginInit()
+        CType(PictureBoxShow, ComponentModel.ISupportInitialize).BeginInit()
         Panel2.SuspendLayout()
         SuspendLayout()
         ' 
@@ -60,7 +62,8 @@ Partial Class Login
         ' 
         ' Panel4
         ' 
-        Panel4.Controls.Add(PictureBox1)
+        Panel4.Controls.Add(PictureBoxHidden)
+        Panel4.Controls.Add(PictureBoxShow)
         Panel4.Controls.Add(LabelHolderPassword)
         Panel4.Controls.Add(Panel5)
         Panel4.Controls.Add(TextBoxPassword)
@@ -69,14 +72,23 @@ Partial Class Login
         Panel4.Size = New Size(260, 49)
         Panel4.TabIndex = 6
         ' 
-        ' PictureBox1
+        ' PictureBoxHidden
         ' 
-        PictureBox1.BackgroundImage = CType(resources.GetObject("PictureBox1.BackgroundImage"), Image)
-        PictureBox1.Location = New Point(235, 19)
-        PictureBox1.Name = "PictureBox1"
-        PictureBox1.Size = New Size(24, 28)
-        PictureBox1.TabIndex = 7
-        PictureBox1.TabStop = False
+        PictureBoxHidden.BackgroundImage = CType(resources.GetObject("PictureBoxHidden.BackgroundImage"), Image)
+        PictureBoxHidden.Location = New Point(235, 19)
+        PictureBoxHidden.Name = "PictureBoxHidden"
+        PictureBoxHidden.Size = New Size(24, 28)
+        PictureBoxHidden.TabIndex = 8
+        PictureBoxHidden.TabStop = False
+        ' 
+        ' PictureBoxShow
+        ' 
+        PictureBoxShow.BackgroundImage = CType(resources.GetObject("PictureBoxShow.BackgroundImage"), Image)
+        PictureBoxShow.Location = New Point(235, 19)
+        PictureBoxShow.Name = "PictureBoxShow"
+        PictureBoxShow.Size = New Size(24, 28)
+        PictureBoxShow.TabIndex = 7
+        PictureBoxShow.TabStop = False
         ' 
         ' LabelHolderPassword
         ' 
@@ -193,7 +205,8 @@ Partial Class Login
         Panel1.ResumeLayout(False)
         Panel4.ResumeLayout(False)
         Panel4.PerformLayout()
-        CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
+        CType(PictureBoxHidden, ComponentModel.ISupportInitialize).EndInit()
+        CType(PictureBoxShow, ComponentModel.ISupportInitialize).EndInit()
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
         ResumeLayout(False)
@@ -209,9 +222,10 @@ Partial Class Login
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Panel4 As Panel
     Friend WithEvents Panel5 As Panel
-    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents PictureBoxShow As PictureBox
     Friend WithEvents TimerAnimator As Timer
     Friend WithEvents TimerAnimator1 As Timer
+    Friend WithEvents PictureBoxHidden As PictureBox
 
 
 End Class

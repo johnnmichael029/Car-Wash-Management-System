@@ -2,7 +2,7 @@
 Imports Microsoft.Data.SqlClient
 
 Public Class DashboardDatabaseHelper
-    Private ReadOnly constr As String
+    Private Shared constr As String
     Private ReadOnly textBoxCustomerName As TextBox
 
     Public Sub New(connectionString As String, customerNameTextBox As TextBox)
@@ -48,7 +48,7 @@ Public Class DashboardDatabaseHelper
     ''' <summary>
     ''' Gets the total sales grouped by year from the SalesHistoryTable.
     ''' </summary>
-    Public Function GetYearlySales() As DataTable
+    Public Shared Function GetYearlySales() As DataTable
         Dim query As String = "SELECT YEAR(SaleDate) AS SalesYear, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable GROUP BY YEAR(SaleDate) ORDER BY SalesYear"
         Dim dt As New DataTable()
         Try
@@ -67,7 +67,7 @@ Public Class DashboardDatabaseHelper
     ''' <summary>
     ''' Gets the total sales grouped by month and year from the SalesHistoryTable.
     ''' </summary>
-    Public Function GetMonthlySales() As DataTable
+    Public Shared Function GetMonthlySales() As DataTable
         Dim query As String = "SELECT YEAR(SaleDate) AS SalesYear, MONTH(SaleDate) AS SalesMonth, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable GROUP BY YEAR(SaleDate), MONTH(SaleDate) ORDER BY SalesYear, SalesMonth"
         Dim dt As New DataTable()
         Try
@@ -86,7 +86,7 @@ Public Class DashboardDatabaseHelper
     ''' <summary>
     ''' Gets the total sales for the past 7 days from the SalesHistoryTable.
     ''' </summary>
-    Public Function GetDailySales() As DataTable
+    Public Shared Function GetDailySales() As DataTable
         Dim query As String = "SELECT CAST(SaleDate AS DATE) AS SaleDate, SUM(TotalPrice) AS TotalSales FROM SalesHistoryTable WHERE SaleDate >= DATEADD(DAY, -7, CAST(GETDATE() AS DATE)) GROUP BY CAST(SaleDate AS DATE) ORDER BY SaleDate ASC"
         Dim dt As New DataTable()
         Try

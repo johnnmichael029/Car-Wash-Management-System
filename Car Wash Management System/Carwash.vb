@@ -22,6 +22,7 @@ Public Class Carwash
         DashboardFormLoad()
         NotificationLoad()
         PopulateAllTotal()
+
     End Sub
 
     Private Sub NotificationLoad()
@@ -227,6 +228,7 @@ Public Class Carwash
     End Sub
     Public Sub PopulateAllTotal()
         Dim totalSales As Decimal = carwashDatabaseHelper.GetTodayTotalSales()
+        UpdateEarningsDisplay()
         LabelTotalSalesToday.Text = "₱" & totalSales.ToString("N2")
 
         Dim totalNewCustomers As Integer = carwashDatabaseHelper.GetTotalNewCustomers()
@@ -319,6 +321,42 @@ Public Class Carwash
     End Sub
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles SalesAnalyticsBtn.Click
         AnalyticsShowForm()
+    End Sub
+    Private Sub UpdateEarningsDisplay()
+        Dim earningsData As CarwashDatabaseHelper = CarwashDatabaseHelper.GetEarningsData()
+
+        ' 1. Update the Main Earnings Value (e.g., 13213)
+        Dim earningsValue As Decimal = earningsData.CurrentDayEarnings - earningsData.PreviousDayEarnings
+        LabelEarningsValue.Text = "₱" & earningsValue.ToString("N2")
+        ' 2. Determine the color and arrow symbol
+        Dim colorToUse As Color
+
+        If earningsData.PercentageChangeEarnings > 0 Then
+            ' UP/GREEN
+            PictureBoxUpEarnings.Visible = True
+            PictureBoxDownEarnings.Visible = False
+            colorToUse = Color.Green
+            LabelEarningsValue.ForeColor = Color.Green
+        ElseIf earningsData.PercentageChangeEarnings < 0 Then
+            ' DOWN/RED
+            PictureBoxUpEarnings.Visible = False
+            PictureBoxDownEarnings.Visible = True
+            colorToUse = Color.Red
+            LabelEarningsValue.ForeColor = Color.Red
+        Else
+            ' NO CHANGE
+            colorToUse = Color.Gray
+            LabelEarningsValue.ForeColor = Color.Gray
+            PictureBoxUpEarnings.Visible = False
+            PictureBoxDownEarnings.Visible = False
+
+        End If
+        Dim displayPercentage As Decimal = Math.Abs(earningsData.PercentageChangeEarnings)
+        LabelPercentageEarnings.Text = displayPercentage.ToString("N0") & "%"
+        LabelPercentageEarnings.ForeColor = colorToUse
+    End Sub
+
+    Private Sub Panel6_Paint(sender As Object, e As PaintEventArgs) Handles Panel6.Paint
 
     End Sub
 End Class

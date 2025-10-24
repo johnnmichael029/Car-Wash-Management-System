@@ -93,11 +93,15 @@ Public Class Login
         activityLogInDashboardService.UserLogin(username)
     End Sub
 
-    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
+    Private Sub PictureBoxShow_Click(sender As Object, e As EventArgs) Handles PictureBoxShow.Click
         If TextBoxPassword.UseSystemPasswordChar = True Then
             TextBoxPassword.UseSystemPasswordChar = False
+            PictureBoxHidden.Visible = True
+            PictureBoxShow.Visible = False
         Else
             TextBoxPassword.UseSystemPasswordChar = True
+            PictureBoxHidden.Visible = False
+            PictureBoxShow.Visible = True
         End If
     End Sub
 
@@ -107,6 +111,22 @@ Public Class Login
 
     Private Sub Panel6_Paint(sender As Object, e As PaintEventArgs)
 
+    End Sub
+
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
+    End Sub
+
+    Private Sub PictureBoxHidden_Click(sender As Object, e As EventArgs) Handles PictureBoxHidden.Click
+        If TextBoxPassword.UseSystemPasswordChar = True Then
+            TextBoxPassword.UseSystemPasswordChar = False
+            PictureBoxHidden.Visible = True
+            PictureBoxShow.Visible = False
+        Else
+            TextBoxPassword.UseSystemPasswordChar = True
+            PictureBoxHidden.Visible = False
+            PictureBoxShow.Visible = True
+        End If
     End Sub
 End Class
 

@@ -28,9 +28,13 @@ Partial Class Carwash
         LabelWelcome = New Label()
         PictureBox1 = New PictureBox()
         Panel7 = New Panel()
-        LabelTotalSalesToday = New Label()
-        Label2 = New Label()
+        Label1 = New Label()
         PictureBoxSales = New PictureBox()
+        PictureBoxUpEarnings = New PictureBox()
+        LabelTotalSalesToday = New Label()
+        LabelPercentageEarnings = New Label()
+        LabelEarningsValue = New Label()
+        PictureBoxDownEarnings = New PictureBox()
         Panel1 = New Panel()
         Panel8 = New Panel()
         NotificationLabel = New Label()
@@ -83,6 +87,8 @@ Partial Class Carwash
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         Panel7.SuspendLayout()
         CType(PictureBoxSales, ComponentModel.ISupportInitialize).BeginInit()
+        CType(PictureBoxUpEarnings, ComponentModel.ISupportInitialize).BeginInit()
+        CType(PictureBoxDownEarnings, ComponentModel.ISupportInitialize).BeginInit()
         Panel1.SuspendLayout()
         Panel8.SuspendLayout()
         Panel11.SuspendLayout()
@@ -113,7 +119,7 @@ Partial Class Carwash
         Panel2.Dock = DockStyle.Top
         Panel2.Location = New Point(0, 0)
         Panel2.Name = "Panel2"
-        Panel2.Size = New Size(1385, 45)
+        Panel2.Size = New Size(1385, 54)
         Panel2.TabIndex = 4
         ' 
         ' LabelWelcome
@@ -140,13 +146,47 @@ Partial Class Carwash
         ' 
         Panel7.Anchor = AnchorStyles.Top
         Panel7.BackColor = Color.White
-        Panel7.Controls.Add(LabelTotalSalesToday)
-        Panel7.Controls.Add(Label2)
+        Panel7.Controls.Add(Label1)
         Panel7.Controls.Add(PictureBoxSales)
+        Panel7.Controls.Add(PictureBoxUpEarnings)
+        Panel7.Controls.Add(LabelTotalSalesToday)
+        Panel7.Controls.Add(LabelPercentageEarnings)
+        Panel7.Controls.Add(LabelEarningsValue)
+        Panel7.Controls.Add(PictureBoxDownEarnings)
         Panel7.Location = New Point(271, 0)
         Panel7.Name = "Panel7"
-        Panel7.Size = New Size(173, 44)
+        Panel7.Size = New Size(173, 68)
         Panel7.TabIndex = 10
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label1.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
+        Label1.Location = New Point(41, 38)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(61, 16)
+        Label1.TabIndex = 26
+        Label1.Text = "This Day"
+        ' 
+        ' PictureBoxSales
+        ' 
+        PictureBoxSales.Anchor = AnchorStyles.None
+        PictureBoxSales.BackgroundImage = CType(resources.GetObject("PictureBoxSales.BackgroundImage"), Image)
+        PictureBoxSales.Location = New Point(3, 0)
+        PictureBoxSales.Name = "PictureBoxSales"
+        PictureBoxSales.Size = New Size(35, 33)
+        PictureBoxSales.TabIndex = 1
+        PictureBoxSales.TabStop = False
+        ' 
+        ' PictureBoxUpEarnings
+        ' 
+        PictureBoxUpEarnings.Image = My.Resources.Resources.triangle1
+        PictureBoxUpEarnings.Location = New Point(120, 21)
+        PictureBoxUpEarnings.Name = "PictureBoxUpEarnings"
+        PictureBoxUpEarnings.Size = New Size(21, 19)
+        PictureBoxUpEarnings.TabIndex = 23
+        PictureBoxUpEarnings.TabStop = False
         ' 
         ' LabelTotalSalesToday
         ' 
@@ -154,32 +194,40 @@ Partial Class Carwash
         LabelTotalSalesToday.AutoSize = True
         LabelTotalSalesToday.Font = New Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelTotalSalesToday.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
-        LabelTotalSalesToday.Location = New Point(36, 19)
+        LabelTotalSalesToday.Location = New Point(41, 0)
         LabelTotalSalesToday.Name = "LabelTotalSalesToday"
-        LabelTotalSalesToday.Size = New Size(0, 24)
+        LabelTotalSalesToday.Size = New Size(54, 24)
         LabelTotalSalesToday.TabIndex = 2
+        LabelTotalSalesToday.Text = "1234"
         ' 
-        ' Label2
+        ' LabelPercentageEarnings
         ' 
-        Label2.Anchor = AnchorStyles.None
-        Label2.AutoSize = True
-        Label2.Font = New Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label2.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
-        Label2.Location = New Point(38, 4)
-        Label2.Name = "Label2"
-        Label2.Size = New Size(96, 16)
-        Label2.TabIndex = 1
-        Label2.Text = "Sales Today"
+        LabelPercentageEarnings.AutoSize = True
+        LabelPercentageEarnings.Location = New Point(135, 21)
+        LabelPercentageEarnings.Name = "LabelPercentageEarnings"
+        LabelPercentageEarnings.Size = New Size(35, 15)
+        LabelPercentageEarnings.TabIndex = 25
+        LabelPercentageEarnings.Text = "100%"
         ' 
-        ' PictureBoxSales
+        ' LabelEarningsValue
         ' 
-        PictureBoxSales.Anchor = AnchorStyles.None
-        PictureBoxSales.BackgroundImage = CType(resources.GetObject("PictureBoxSales.BackgroundImage"), Image)
-        PictureBoxSales.Location = New Point(3, 6)
-        PictureBoxSales.Name = "PictureBoxSales"
-        PictureBoxSales.Size = New Size(32, 34)
-        PictureBoxSales.TabIndex = 1
-        PictureBoxSales.TabStop = False
+        LabelEarningsValue.AutoSize = True
+        LabelEarningsValue.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        LabelEarningsValue.ForeColor = Color.Green
+        LabelEarningsValue.Location = New Point(41, 21)
+        LabelEarningsValue.Name = "LabelEarningsValue"
+        LabelEarningsValue.Size = New Size(36, 17)
+        LabelEarningsValue.TabIndex = 24
+        LabelEarningsValue.Text = "1000"
+        ' 
+        ' PictureBoxDownEarnings
+        ' 
+        PictureBoxDownEarnings.Image = My.Resources.Resources.down
+        PictureBoxDownEarnings.Location = New Point(120, 21)
+        PictureBoxDownEarnings.Name = "PictureBoxDownEarnings"
+        PictureBoxDownEarnings.Size = New Size(21, 19)
+        PictureBoxDownEarnings.TabIndex = 27
+        PictureBoxDownEarnings.TabStop = False
         ' 
         ' Panel1
         ' 
@@ -188,7 +236,7 @@ Partial Class Carwash
         Panel1.Dock = DockStyle.Right
         Panel1.Location = New Point(1185, 0)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(200, 45)
+        Panel1.Size = New Size(200, 54)
         Panel1.TabIndex = 9
         ' 
         ' Panel8
@@ -197,7 +245,7 @@ Partial Class Carwash
         Panel8.Dock = DockStyle.Fill
         Panel8.Location = New Point(0, 0)
         Panel8.Name = "Panel8"
-        Panel8.Size = New Size(149, 45)
+        Panel8.Size = New Size(149, 54)
         Panel8.TabIndex = 10
         ' 
         ' NotificationLabel
@@ -207,7 +255,7 @@ Partial Class Carwash
         NotificationLabel.ForeColor = SystemColors.ControlText
         NotificationLabel.Location = New Point(0, 0)
         NotificationLabel.Name = "NotificationLabel"
-        NotificationLabel.Size = New Size(149, 45)
+        NotificationLabel.Size = New Size(149, 54)
         NotificationLabel.TabIndex = 7
         NotificationLabel.TextAlign = ContentAlignment.MiddleRight
         ' 
@@ -219,7 +267,7 @@ Partial Class Carwash
         NotificationBtn.Image = My.Resources.Resources.bell1
         NotificationBtn.Location = New Point(149, 0)
         NotificationBtn.Name = "NotificationBtn"
-        NotificationBtn.Size = New Size(51, 45)
+        NotificationBtn.Size = New Size(51, 54)
         NotificationBtn.TabIndex = 8
         NotificationBtn.Text = CStr(ChrW(127))
         NotificationBtn.UseVisualStyleBackColor = True
@@ -403,16 +451,16 @@ Partial Class Carwash
         PanelMenuBar.Controls.Add(salesHistoryBtn)
         PanelMenuBar.Controls.Add(ActivityLogBtn)
         PanelMenuBar.Dock = DockStyle.Left
-        PanelMenuBar.Location = New Point(0, 45)
+        PanelMenuBar.Location = New Point(0, 54)
         PanelMenuBar.Name = "PanelMenuBar"
-        PanelMenuBar.Size = New Size(177, 711)
+        PanelMenuBar.Size = New Size(177, 702)
         PanelMenuBar.TabIndex = 2
         ' 
         ' Panel5
         ' 
         Panel5.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         Panel5.Controls.Add(LogoutBtn)
-        Panel5.Location = New Point(0, 558)
+        Panel5.Location = New Point(0, 549)
         Panel5.Name = "Panel5"
         Panel5.Size = New Size(177, 153)
         Panel5.TabIndex = 7
@@ -513,9 +561,9 @@ Partial Class Carwash
         ' 
         Panel3.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         Panel3.Controls.Add(Panel4)
-        Panel3.Location = New Point(183, 51)
+        Panel3.Location = New Point(183, 60)
         Panel3.Name = "Panel3"
-        Panel3.Size = New Size(1202, 705)
+        Panel3.Size = New Size(1202, 693)
         Panel3.TabIndex = 6
         ' 
         ' Panel4
@@ -524,7 +572,7 @@ Partial Class Carwash
         Panel4.Dock = DockStyle.Fill
         Panel4.Location = New Point(0, 0)
         Panel4.Name = "Panel4"
-        Panel4.Size = New Size(1202, 705)
+        Panel4.Size = New Size(1202, 693)
         Panel4.TabIndex = 0
         ' 
         ' MenuStrip1
@@ -678,6 +726,8 @@ Partial Class Carwash
         Panel7.ResumeLayout(False)
         Panel7.PerformLayout()
         CType(PictureBoxSales, ComponentModel.ISupportInitialize).EndInit()
+        CType(PictureBoxUpEarnings, ComponentModel.ISupportInitialize).EndInit()
+        CType(PictureBoxDownEarnings, ComponentModel.ISupportInitialize).EndInit()
         Panel1.ResumeLayout(False)
         Panel8.ResumeLayout(False)
         Panel11.ResumeLayout(False)
@@ -734,7 +784,6 @@ Partial Class Carwash
     Friend WithEvents ExitToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents Panel7 As Panel
     Friend WithEvents LabelTotalSalesToday As Label
-    Friend WithEvents Label2 As Label
     Friend WithEvents PictureBoxSales As PictureBox
     Friend WithEvents Panel11 As Panel
     Friend WithEvents Panel9 As Panel
@@ -753,4 +802,9 @@ Partial Class Carwash
     Friend WithEvents AdminToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents PickUpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents LabelWelcome As Label
+    Friend WithEvents PictureBoxUpEarnings As PictureBox
+    Friend WithEvents LabelPercentageEarnings As Label
+    Friend WithEvents LabelEarningsValue As Label
+    Friend WithEvents Label1 As Label
+    Friend WithEvents PictureBoxDownEarnings As PictureBox
 End Class

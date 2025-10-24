@@ -77,21 +77,22 @@ Public Class Dashboard
     Private Sub ButtonToggleChart_Click(sender As Object, e As EventArgs) Handles ButtonToggleChart.Click
         'Toggle On and Off
         If isYearlyView Then
-            ' If currently Yearly, switch back to Daily (or default)
+            ' Currently Daily view
             isYearlyView = False
             isMonthlyView = False
             ' Day is the implicit default (Else)
-            ButtonToggleChart.Text = "Monthly Sales"
+            ButtonToggleChart.Text = "Daily Sales"
+
         ElseIf isMonthlyView Then
-            ' If currently Monthly, switch to Yearly
+            ' Currently Yearly view
             isMonthlyView = False
             isYearlyView = True
-            ButtonToggleChart.Text = "Daily Sales"
+            ButtonToggleChart.Text = "Yearly Sales"
         Else
-            ' If currently Daily (or any other state), switch to Monthly
+            ' Currently Monthly view
             isMonthlyView = True
             isYearlyView = False
-            ButtonToggleChart.Text = "Yearly Sales"
+            ButtonToggleChart.Text = "Monthly Sales"
         End If
 
         LoadSalesChart()
