@@ -137,7 +137,6 @@ Public Class Dashboard
         DataGridViewLatestTransaction.Columns(5).HeaderText = "Payment Method"
         DataGridViewLatestTransaction.Columns(6).HeaderText = "Reference ID"
         DataGridViewLatestTransaction.Columns(7).HeaderText = "Total Price (₱)"
-
     End Sub
 
     Private Sub DataGridViewLatestTransaction_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridViewLatestTransaction.CellPainting

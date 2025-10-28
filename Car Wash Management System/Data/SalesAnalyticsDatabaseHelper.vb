@@ -589,7 +589,6 @@ Public Class SalesAnalyticsDatabaseHelper
             ORDER BY TotalRevenue DESC;
         "
     End Function
-
     Public Shared Function GetDynamicAverageSalesQuery(timePeriod As String) As String
         ' This function generates the SQL to calculate the average sales price based on a time period
 
@@ -598,13 +597,13 @@ Public Class SalesAnalyticsDatabaseHelper
         Select Case timePeriod.ToUpper()
             Case "DAY"
                 ' Groups by the date (e.g., '2023-10-24')
-                dateGroupingColumn = "FORMAT(SaleDate, 'yyyy-MM-dd')"
+                dateGroupingColumn = "FORMAT(CONVERT(DATETIME, SaleDate), 'yyyy-MM-dd')"
             Case "MONTH"
                 ' Groups by the year and month (e.g., '2023-10')
-                dateGroupingColumn = "FORMAT(SaleDate, 'yyyy-MM')"
+                dateGroupingColumn = "FORMAT(CONVERT(DATETIME, SaleDate), 'yyyy-MM')"
             Case "YEAR"
                 ' Groups by the year (e.g., '2023')
-                dateGroupingColumn = "FORMAT(SaleDate, 'yyyy')"
+                dateGroupingColumn = "FORMAT(CONVERT(DATETIME, SaleDate), 'yyyy')"
             Case Else
                 Throw New ArgumentException("Invalid time period specified for SQL query in GetDynamicAverageSalesQuery.")
         End Select
@@ -620,5 +619,68 @@ Public Class SalesAnalyticsDatabaseHelper
             GROUP BY {1}
             ORDER BY {1};
         ", timePeriod.ToUpper(), dateGroupingColumn)
+    End Function
+
+    Public Shared Function GetSalesSummaryData() As DataTable
+        Dim dt As New DataTable()
+        Using con As New SqlConnection(constr)
+            Dim salesQuery As String = "SELECT
+                                        -- 1. Use CAST to strip off the time part, ensuring grouping is by DATE only.
+                                        CAST(SaleDate AS DATE) AS SaleDay,
+                                        -- 2. SUM the sales for every record within that group (that day).
+                                        SUM(TotalPrice) AS TotalEarnings
+                                    FROM
+                                        SalesHistoryTable
+                                    -- 3. The GROUP BY clause must match the selected non-aggregated column.
+                                    GROUP BY
+                                        CAST(SaleDate AS DATE)
+                                    ORDER BY
+                                        SaleDay DESC;"
+            Using cmd As New SqlCommand(salesQuery, con)
+                Try
+                    con.Open()
+                    Using reader As SqlDataReader = cmd.ExecuteReader()
+                        dt.Load(reader)
+                    End Using
+                Catch ex As Exception
+                    MessageBox.Show("Error in SalesSummary: " & ex.Message)
+                End Try
+            End Using
+        End Using
+        Return dt
+    End Function
+
+    Public Shared Function SearchInSalesSummary(searchInBar As String) As DataTable
+        Dim dt As New DataTable()
+        Using con As New SqlConnection(constr)
+            Dim searchQuery As String = " SELECT
+                    FORMAT(CAST(SaleDate AS DATE), 'MM/dd/yyyy') AS SaleDay,
+                    SUM(TotalPrice) AS TotalEarnings
+                FROM
+                    SalesHistoryTable
+                WHERE
+                    FORMAT(CAST(SaleDate AS DATE), 'MM/dd/yyyy') LIKE @SearchDate + '%' 
+                    OR FORMAT(CAST(SaleDate AS DATE), 'MM') LIKE @SearchDate + '%' 
+                    OR FORMAT(CAST(SaleDate AS DATE), 'dd') LIKE @SearchDate + '%'     
+                    OR FORMAT(CAST(SaleDate AS DATE), 'yyyy') LIKE @SearchDate + '%'   
+                GROUP BY
+                    FORMAT(CAST(SaleDate AS DATE), 'MM/dd/yyyy')
+                ORDER BY
+                    SaleDay DESC;"
+            Using cmd As New SqlCommand(searchQuery, con)
+                cmd.Parameters.AddWithValue("@SearchDate", searchInBar)
+                Using adapter As New SqlDataAdapter(cmd)
+                    Try
+                        con.Open()
+                        Using reader As SqlDataReader = cmd.ExecuteReader()
+                            dt.Load(reader)
+                        End Using
+                    Catch ex As Exception
+                        MessageBox.Show("Error in SearchInSalesSummary: " & ex.Message)
+                    End Try
+                End Using
+            End Using
+        End Using
+        Return dt
     End Function
 End Class

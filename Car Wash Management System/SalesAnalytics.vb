@@ -9,6 +9,7 @@ Public Class SalesAnalytics
     Private barGraph As Chart
     Private isMonthlyView As Boolean = False
     Private isYearlyView As Boolean = False
+    Private currentSearchTerm As String = String.Empty
 
     Private Sub SalesAnalytics_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         PopulateAllTotal(currentPeriod)
@@ -19,6 +20,10 @@ Public Class SalesAnalytics
         LoadCustomersChart()
         LoadBarGraphAverage()
         LoadSalesChart()
+        ViewSalesSummary()
+        ChangeHeadrOfDataGridViewSalesSummary()
+        DataGridSalesSummaryFontStyle()
+
     End Sub
     Private Sub LoadServicesChart()
         SetupPieChartControlInCustomers()
@@ -35,9 +40,6 @@ Public Class SalesAnalytics
         SetupBarChartControl()
         InitializeBarGraphStructure()
         LoadAverageData(currentPeriod)
-    End Sub
-    Private Sub Panel10_Paint(sender As Object, e As PaintEventArgs) Handles Panel10.Paint
-
     End Sub
     Public Sub PopulateAllTotal(period As String)
 
@@ -615,7 +617,7 @@ Public Class SalesAnalytics
                     End While
 
                 Catch ex As Exception
-                    MessageBox.Show("DATABASE ERROR: " & ex.Message, "Connection Failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show("DATABASE ERRORasdasdasd: " & ex.Message, "Connection Failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             End Using
         End Using
@@ -671,7 +673,6 @@ Public Class SalesAnalytics
 
         LoadSalesChart()
     End Sub
-
     Private Sub LoadSalesChart()
         Dim chartData As DataTable
         Dim chartTitle As String
@@ -701,6 +702,124 @@ Public Class SalesAnalytics
         salesChartForm.Dock = DockStyle.Fill
         salesChartForm.Show()
 
+    End Sub
+
+    Private Sub ViewSalesSummary()
+        DataGridViewSalesSummary.DataSource = SalesAnalyticsDatabaseHelper.GetSalesSummaryData()
+    End Sub
+
+    Private Sub DataGridSalesSummaryFontStyle()
+        DataGridViewSalesSummary.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        DataGridViewSalesSummary.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+    End Sub
+    Private Sub ChangeHeadrOfDataGridViewSalesSummary()
+        DataGridViewSalesSummary.Columns(0).HeaderText = "Sales Day"
+        DataGridViewSalesSummary.Columns(1).HeaderText = "Total Sales (₱)"
+    End Sub
+    Private Sub SearchBarFunction()
+        currentSearchTerm = Trim(TextBoxSearchBar.Text)
+        Dim salesData As DataTable
+
+        If String.IsNullOrWhiteSpace(currentSearchTerm) Then
+            salesData = SalesAnalyticsDatabaseHelper.GetSalesSummaryData()
+        Else
+            salesData = SalesAnalyticsDatabaseHelper.SearchInSalesSummary(currentSearchTerm)
+        End If
+
+        DataGridViewSalesSummary.DataSource = salesData
+        DataGridViewSalesSummary.Refresh()
+    End Sub
+
+    Private Sub DataGridVIewSalesSummary_Formatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewSalesSummary.CellFormatting
+        ' Format the "Total Sales" column as Peso currency
+        If DataGridViewSalesSummary.Columns(e.ColumnIndex).HeaderText = "Total Sales (₱)" AndAlso e.Value IsNot Nothing Then
+            If Decimal.TryParse(e.Value.ToString(), Nothing) Then
+                e.Value = Convert.ToDecimal(e.Value).ToString("N2")
+                e.FormattingApplied = True
+            End If
+        End If
+
+    End Sub
+
+    Private Sub TextBoxSearchBar_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearchBar.TextChanged
+        SearchBarFunction()
+    End Sub
+    Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
+        TextBoxSearchBar.Text = ""
+    End Sub
+    Private Sub DataGridViewSalesSummary_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridViewSalesSummary.CellPainting
+        ' Only proceed if we are in a data row, not the header, and we have a search term
+        If e.RowIndex < 0 OrElse String.IsNullOrWhiteSpace(currentSearchTerm) Then
+            Exit Sub
+        End If
+
+        ' Get the cell value (which should be searchable text)
+        Dim cellValue As String = e.FormattedValue?.ToString()
+
+        If String.IsNullOrWhiteSpace(cellValue) Then
+            Exit Sub
+        End If
+
+        ' 1. Check if the cell text contains the search term (case-insensitive)
+        Dim searchIndex As Integer = cellValue.IndexOf(currentSearchTerm, StringComparison.OrdinalIgnoreCase)
+
+        If searchIndex >= 0 Then
+            ' A match was found!
+
+            ' A. Do the default painting (draw background, borders, etc.)
+            e.PaintBackground(e.ClipBounds, True)
+
+            ' B. Set up colors and fonts
+            Dim baseFont As Font = e.CellStyle.Font
+            Dim highlightColor As Color = Color.Yellow ' Use a bright color for highlighting
+            Dim highlightTextBrush As Brush = New SolidBrush(e.CellStyle.ForeColor)
+
+            ' C. Calculate positions and sizes
+
+            ' Calculate the size of the entire string using the cell's font
+            Dim textSize As SizeF = e.Graphics.MeasureString(cellValue, baseFont)
+
+            ' Get the original bounds (where the text starts)
+            Dim textX As Integer = e.CellBounds.X + 3 ' Small padding from the left edge
+            Dim textY As Integer = e.CellBounds.Y + (e.CellBounds.Height - CInt(textSize.Height)) \ 2 ' Center vertically
+
+            ' 1. Text before the match
+            Dim textBefore As String = cellValue.Substring(0, searchIndex)
+            Dim sizeBefore As SizeF = e.Graphics.MeasureString(textBefore, baseFont)
+
+            ' 2. The matching search term
+            Dim textMatch As String = cellValue.Substring(searchIndex, currentSearchTerm.Length)
+            Dim sizeMatch As SizeF = e.Graphics.MeasureString(textMatch, baseFont)
+
+            ' --- Draw the three parts of the text ---
+
+            ' Part 1: Text before the match (using default cell color)
+            e.Graphics.DrawString(textBefore, baseFont, New SolidBrush(e.CellStyle.ForeColor), textX, textY)
+
+            ' Part 2: The highlighted match
+            ' Draw the yellow background rectangle
+            Dim highlightRect As New Rectangle(
+                CInt(textX + sizeBefore.Width),
+                e.CellBounds.Y,
+                CInt(sizeMatch.Width),
+                e.CellBounds.Height
+            )
+            e.Graphics.FillRectangle(New SolidBrush(highlightColor), highlightRect)
+
+            ' Draw the matched text (over the yellow background)
+            e.Graphics.DrawString(textMatch, baseFont, highlightTextBrush, CInt(textX + sizeBefore.Width), textY)
+
+            ' Part 3: Text after the match
+            Dim textAfter As String = cellValue.Substring(searchIndex + currentSearchTerm.Length)
+            e.Graphics.DrawString(textAfter, baseFont, New SolidBrush(e.CellStyle.ForeColor), CInt(textX + sizeBefore.Width + sizeMatch.Width), textY)
+
+            ' Indicate that we have manually drawn the cell contents
+            e.Handled = True
+        Else
+            ' If no match, let the default rendering happen
+            e.Paint(e.ClipBounds, DataGridViewPaintParts.All)
+            e.Handled = True
+        End If
     End Sub
 
 End Class

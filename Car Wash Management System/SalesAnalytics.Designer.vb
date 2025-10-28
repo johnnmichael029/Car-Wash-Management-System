@@ -27,6 +27,9 @@ Partial Class SalesAnalytics
         Label1 = New Label()
         PanelSales = New Panel()
         Panel7 = New Panel()
+        Label3 = New Label()
+        TextBoxSearchBar = New TextBox()
+        DataGridViewSalesSummary = New DataGridView()
         Panel3 = New Panel()
         PictureBoxUpCustomers = New PictureBox()
         PictureBoxDownCustomers = New PictureBox()
@@ -56,6 +59,8 @@ Partial Class SalesAnalytics
         PanelBarGraphAverage = New Panel()
         PanelChartAverage = New Panel()
         Panel1.SuspendLayout()
+        Panel7.SuspendLayout()
+        CType(DataGridViewSalesSummary, ComponentModel.ISupportInitialize).BeginInit()
         Panel3.SuspendLayout()
         CType(PictureBoxUpCustomers, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBoxDownCustomers, ComponentModel.ISupportInitialize).BeginInit()
@@ -116,10 +121,47 @@ Partial Class SalesAnalytics
         ' 
         Panel7.Anchor = AnchorStyles.Top
         Panel7.BackColor = Color.White
+        Panel7.Controls.Add(Label3)
+        Panel7.Controls.Add(TextBoxSearchBar)
+        Panel7.Controls.Add(DataGridViewSalesSummary)
         Panel7.Location = New Point(476, 128)
         Panel7.Name = "Panel7"
         Panel7.Size = New Size(456, 261)
         Panel7.TabIndex = 6
+        ' 
+        ' Label3
+        ' 
+        Label3.AutoSize = True
+        Label3.Font = New Font("Century Gothic", 11F, FontStyle.Bold)
+        Label3.Location = New Point(3, 11)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(117, 18)
+        Label3.TabIndex = 24
+        Label3.Text = "Sales summary"
+        ' 
+        ' TextBoxSearchBar
+        ' 
+        TextBoxSearchBar.Font = New Font("Century Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TextBoxSearchBar.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
+        TextBoxSearchBar.Location = New Point(316, 11)
+        TextBoxSearchBar.Name = "TextBoxSearchBar"
+        TextBoxSearchBar.Size = New Size(140, 23)
+        TextBoxSearchBar.TabIndex = 5
+        TextBoxSearchBar.Text = "Search Day"
+        ' 
+        ' DataGridViewSalesSummary
+        ' 
+        DataGridViewSalesSummary.AllowUserToAddRows = False
+        DataGridViewSalesSummary.AllowUserToDeleteRows = False
+        DataGridViewSalesSummary.AllowUserToResizeColumns = False
+        DataGridViewSalesSummary.AllowUserToResizeRows = False
+        DataGridViewSalesSummary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewSalesSummary.BackgroundColor = Color.White
+        DataGridViewSalesSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewSalesSummary.Location = New Point(0, 36)
+        DataGridViewSalesSummary.Name = "DataGridViewSalesSummary"
+        DataGridViewSalesSummary.Size = New Size(456, 224)
+        DataGridViewSalesSummary.TabIndex = 0
         ' 
         ' Panel3
         ' 
@@ -438,6 +480,9 @@ Partial Class SalesAnalytics
         Text = "SalesAnalytics"
         Panel1.ResumeLayout(False)
         Panel1.PerformLayout()
+        Panel7.ResumeLayout(False)
+        Panel7.PerformLayout()
+        CType(DataGridViewSalesSummary, ComponentModel.ISupportInitialize).EndInit()
         Panel3.ResumeLayout(False)
         Panel3.PerformLayout()
         CType(PictureBoxUpCustomers, ComponentModel.ISupportInitialize).EndInit()
@@ -487,4 +532,7 @@ Partial Class SalesAnalytics
     Friend WithEvents PanelChartCustomers As Panel
     Friend WithEvents PanelChartAverage As Panel
     Friend WithEvents ButtonToggleChart As Button
+    Friend WithEvents DataGridViewSalesSummary As DataGridView
+    Friend WithEvents TextBoxSearchBar As TextBox
+    Friend WithEvents Label3 As Label
 End Class
