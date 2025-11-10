@@ -4,40 +4,40 @@ Imports Microsoft.Data.SqlClient
 
 Public Class SalesAnalytics
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Private currentPeriod As String = "Day" ' Default view
+    Public currentPeriod As String = "Day" ' Default view
     Private pieChart As Chart
     Private barGraph As Chart
-    Private isMonthlyView As Boolean = False
-    Private isYearlyView As Boolean = False
-    Private currentSearchTerm As String = String.Empty
+    Public isMonthlyView As Boolean = False
+    Public isYearlyView As Boolean = False
+    Public currentSearchTerm As String = String.Empty
 
     Private Sub SalesAnalytics_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         PopulateAllTotal(currentPeriod)
         UpdateEarningsDisplay(currentPeriod)
         UpdateCustomersDisplay(currentPeriod)
         UpdateServiceDisplay(currentPeriod)
-        LoadServicesChart()
-        LoadCustomersChart()
+        LoadServicesChart(PanelChartCustomers)
+        LoadCustomersChart(PanelChartAverage)
         LoadBarGraphAverage()
-        LoadSalesChart()
-        ViewSalesSummary()
-        ChangeHeadrOfDataGridViewSalesSummary()
-        DataGridSalesSummaryFontStyle()
+        LoadSalesChart(PanelSales)
+        ViewSalesSummary(DataGridViewSalesSummary)
+        ChangeHeadrOfDataGridViewSalesSummary(DataGridViewSalesSummary)
+        DataGridSalesSummaryFontStyle(DataGridViewSalesSummary)
 
     End Sub
-    Private Sub LoadServicesChart()
-        SetupPieChartControlInCustomers()
+    Public Sub LoadServicesChart(anelChartAverage As Panel)
+        SetupPieChartControlInCustomers(anelChartAverage)
         InitializeChartStructureInCustomers()
         LoadCustomersData()
     End Sub
-    Private Sub LoadCustomersChart()
-        SetupPieChartControl()
+    Public Sub LoadCustomersChart(panelChartAverage As Panel)
+        SetupPieChartControl(panelChartAverage)
         InitializeChartStructure()
         LoadServiceData()
     End Sub
 
     Private Sub LoadBarGraphAverage()
-        SetupBarChartControl()
+        SetupBarChartControl(PanelBarGraphAverage)
         InitializeBarGraphStructure()
         LoadAverageData(currentPeriod)
     End Sub
@@ -120,7 +120,7 @@ Public Class SalesAnalytics
         LabelPercentage.Text = displayPercentage.ToString("N0") & "%"
         LabelPercentage.ForeColor = colorToUse
     End Sub
-    Private Sub UpdateCustomersDisplay(period As String)
+    Public Sub UpdateCustomersDisplay(period As String)
         Dim customersData As SalesAnalyticsDatabaseHelper
 
         Select Case period.ToLower()
@@ -212,7 +212,7 @@ Public Class SalesAnalytics
     End Sub
 
     '--- PIE CHART FOR SERVICES REVENUE DISTRIBUTION ---'
-    Private Sub SetupPieChartControl()
+    Private Sub SetupPieChartControl(panelChartAverage As Panel)
         If Me.Controls.Find("PanelChartAverage", True).Length = 0 Then
             MessageBox.Show("The PanelChartAverage control was not found on the form.", "UI Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
@@ -220,9 +220,9 @@ Public Class SalesAnalytics
 
         pieChart = New Chart With {
             .Dock = DockStyle.Fill,
-            .BackColor = PanelChartAverage.BackColor
+            .BackColor = panelChartAverage.BackColor
         }
-        PanelChartAverage.Controls.Add(pieChart)
+        panelChartAverage.Controls.Add(pieChart)
     End Sub
     Private Sub InitializeChartStructure()
         Dim chartData As Chart = pieChart ' Use the dynamically created chart
@@ -352,36 +352,17 @@ Public Class SalesAnalytics
     End Sub
 
     '--- PIE CHART FOR CUSTOMERS REVENUE DISTRIBUTION ---'
-    Private Sub SetupPieChartControlInCustomers()
-        ' This function creates the Chart control and docks it to the specified panel.
-
-        ' Find the panel control
-        Dim chartPanel As Panel = TryCast(Me.Controls.Find("PanelChartCustomers", True).FirstOrDefault(), Panel)
-
-        If chartPanel Is Nothing Then
-            ' Corrected the error message reference
+    Private Sub SetupPieChartControlInCustomers(PanelChartCustomers As Panel)
+        If Me.Controls.Find("PanelChartCustomers", True).Length = 0 Then
             MessageBox.Show("The PanelChartCustomers control was not found on the form.", "UI Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
 
-        ' Clear any existing chart controls from the panel
-        For Each ctrl As Control In chartPanel.Controls
-            If TypeOf ctrl Is Chart Then
-                chartPanel.Controls.Remove(ctrl)
-                ctrl.Dispose()
-                Exit For
-            End If
-        Next
-
-        ' Create the new Chart instance
-        pieChart = New Chart()
-
-        ' Configure the Chart to fill the panel
-        pieChart.Dock = DockStyle.Fill
-        pieChart.BackColor = chartPanel.BackColor ' Match the background for seamless look
-
-        ' Add the Chart to the Panel's controls collection
-        chartPanel.Controls.Add(pieChart)
+        pieChart = New Chart With {
+            .Dock = DockStyle.Fill,
+            .BackColor = PanelChartCustomers.BackColor
+        }
+        PanelChartCustomers.Controls.Add(pieChart)
     End Sub
     Private Sub InitializeChartStructureInCustomers()
         Dim chartData As Chart = pieChart ' Use the dynamically created chart
@@ -519,7 +500,7 @@ Public Class SalesAnalytics
     End Sub
 
     '--- BAR CHART FOR AVERAGE SALES PER PERIOD ---'    
-    Private Sub SetupBarChartControl()
+    Public Sub SetupBarChartControl(panelBarGraphAverage As Panel)
         If Me.Controls.Find("PanelBarGraphAverage", True).Length = 0 Then
             MessageBox.Show("The PanelBarGraphAverage control was not found on the form.", "UI Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
@@ -527,13 +508,13 @@ Public Class SalesAnalytics
 
         barGraph = New Chart With {
             .Dock = DockStyle.Fill,
-            .BackColor = PanelBarGraphAverage.BackColor
+            .BackColor = panelBarGraphAverage.BackColor
         }
 
         ' *** CRITICAL FIX: Add the chart control to the panel so it displays ***
-        PanelBarGraphAverage.Controls.Add(barGraph)
+        panelBarGraphAverage.Controls.Add(barGraph)
     End Sub
-    Private Sub InitializeBarGraphStructure()
+    Public Sub InitializeBarGraphStructure()
         Dim chartData As Chart = barGraph ' Use barGraph
 
         ' Clear previous state if this were run multiple times
@@ -561,7 +542,7 @@ Public Class SalesAnalytics
 
         chartData.Series.Add(series1)
     End Sub
-    Private Sub LoadAverageData(period As String)
+    Public Sub LoadAverageData(period As String)
         If barGraph Is Nothing Then ' Use barGraph
             Console.WriteLine("Bar Chart object is not initialized.")
             Exit Sub
@@ -671,9 +652,9 @@ Public Class SalesAnalytics
             ChangePeriodView("Month")
         End If
 
-        LoadSalesChart()
+        LoadSalesChart(PanelSales)
     End Sub
-    Private Sub LoadSalesChart()
+    Public Sub LoadSalesChart(panelSales As Panel)
         Dim chartData As DataTable
         Dim chartTitle As String
         Dim xAxisTitle As String
@@ -697,27 +678,27 @@ Public Class SalesAnalytics
             .FormBorderStyle = FormBorderStyle.None
         }
 
-        PanelSales.Controls.Clear()
-        PanelSales.Controls.Add(salesChartForm)
+        panelSales.Controls.Clear()
+        panelSales.Controls.Add(salesChartForm)
         salesChartForm.Dock = DockStyle.Fill
         salesChartForm.Show()
 
     End Sub
 
-    Private Sub ViewSalesSummary()
-        DataGridViewSalesSummary.DataSource = SalesAnalyticsDatabaseHelper.GetSalesSummaryData()
+    Public Sub ViewSalesSummary(gridView As DataGridView)
+        gridView.DataSource = SalesAnalyticsDatabaseHelper.GetSalesSummaryData()
     End Sub
 
-    Private Sub DataGridSalesSummaryFontStyle()
-        DataGridViewSalesSummary.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridViewSalesSummary.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+    Public Sub DataGridSalesSummaryFontStyle(gridView As DataGridView)
+        gridView.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
+        gridView.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
-    Private Sub ChangeHeadrOfDataGridViewSalesSummary()
-        DataGridViewSalesSummary.Columns(0).HeaderText = "Sales Day"
-        DataGridViewSalesSummary.Columns(1).HeaderText = "Total Sales (₱)"
+    Public Sub ChangeHeadrOfDataGridViewSalesSummary(gridView As DataGridView)
+        gridView.Columns(0).HeaderText = "Sales Day"
+        gridView.Columns(1).HeaderText = "Total Sales (₱)"
     End Sub
-    Private Sub SearchBarFunction()
-        currentSearchTerm = Trim(TextBoxSearchBar.Text)
+    Public Sub SearchBarFunction(searchBar As TextBox, gridView As DataGridView)
+        currentSearchTerm = Trim(searchBar.Text)
         Dim salesData As DataTable
 
         If String.IsNullOrWhiteSpace(currentSearchTerm) Then
@@ -726,8 +707,8 @@ Public Class SalesAnalytics
             salesData = SalesAnalyticsDatabaseHelper.SearchInSalesSummary(currentSearchTerm)
         End If
 
-        DataGridViewSalesSummary.DataSource = salesData
-        DataGridViewSalesSummary.Refresh()
+        gridView.DataSource = salesData
+        gridView.Refresh()
     End Sub
 
     Private Sub DataGridVIewSalesSummary_Formatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewSalesSummary.CellFormatting
@@ -742,7 +723,7 @@ Public Class SalesAnalytics
     End Sub
 
     Private Sub TextBoxSearchBar_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearchBar.TextChanged
-        SearchBarFunction()
+        SearchBarFunction(TextBoxSearchBar, DataGridViewSalesSummary)
     End Sub
     Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
         TextBoxSearchBar.Text = ""
@@ -822,6 +803,9 @@ Public Class SalesAnalytics
         End If
     End Sub
 
+    Private Sub LabelOrders_Click(sender As Object, e As EventArgs) Handles LabelOrders.Click
+
+    End Sub
 End Class
 
 

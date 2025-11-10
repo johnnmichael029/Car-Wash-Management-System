@@ -4,9 +4,11 @@ Imports Microsoft.Data.SqlClient
 Public Class CustomerInformation
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
 
-    Private VehicleList As New List(Of VehicleService)
+    Public VehicleList As New List(Of VehicleService)
     Private ReadOnly customerInformationDatabaseHelper As CustomerInformationDatabaseHelper
     Dim activityLogInDashboardService As New ActivityLogInDashboardService(constr)
+    Private viewCustomerInfo As New ViewCustomerInfo(Me)
+    Public customerIDValue As String
     Public Sub New()
         ' This call is required by the designer.
         InitializeComponent()
@@ -21,16 +23,20 @@ Public Class CustomerInformation
         AddButtonAction()
         SetupListView()
     End Sub
+    Private Sub LoadAllQuery()
 
+    End Sub
     Private Sub ChangeHeaderOfDataGridViewCustomerInformation()
-        DataGridViewCustomerInformation.Columns(0).HeaderText = "Customer ID"
-        DataGridViewCustomerInformation.Columns(1).HeaderText = "Name"
-        DataGridViewCustomerInformation.Columns(2).HeaderText = "Phone Number"
-        DataGridViewCustomerInformation.Columns(3).HeaderText = "Email"
-        DataGridViewCustomerInformation.Columns(4).HeaderText = "Address"
-        DataGridViewCustomerInformation.Columns(5).HeaderText = "Registration Date"
-        DataGridViewCustomerInformation.Columns(6).HeaderText = "Plate Number"
-        DataGridViewCustomerInformation.Columns(7).HeaderText = "Vehicle Type"
+        DataGridViewCustomerInformation.Columns("CustomerID").HeaderText = "Customer ID"
+        DataGridViewCustomerInformation.Columns(1).HeaderText = "First Name"
+        DataGridViewCustomerInformation.Columns(2).HeaderText = "Last Name"
+        DataGridViewCustomerInformation.Columns(3).HeaderText = "Phone Number"
+        DataGridViewCustomerInformation.Columns(4).HeaderText = "Email"
+        DataGridViewCustomerInformation.Columns(5).HeaderText = "City"
+        DataGridViewCustomerInformation.Columns(6).HeaderText = "Barangay"
+        DataGridViewCustomerInformation.Columns(7).HeaderText = "Registration Date"
+        DataGridViewCustomerInformation.Columns(8).HeaderText = "Plate Number"
+        DataGridViewCustomerInformation.Columns(9).HeaderText = "Vehicle Type"
     End Sub
 
     Private Sub LoadListOfCustomerInformation()
@@ -43,21 +49,29 @@ Public Class CustomerInformation
     End Sub
 
     Private Sub DataGridViewCustomerInformation_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCustomerInformation.CellContentClick
+        If e.ColumnIndex = DataGridViewCustomerInformation.Columns("actionsColumn").Index AndAlso e.RowIndex >= 0 Then
+            ViewCustomerInfo.Show()
+        End If
         If e.RowIndex >= 0 Then
             DataGridViewCustomerInformation.Rows(e.RowIndex).Selected = True
         End If
 
-        TextBoxName.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Name").Value.ToString()
-        TextBoxNumber.Text = DataGridViewCustomerInformation.CurrentRow.Cells("PhoneNumber").Value.ToString()
-        TextBoxEmail.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Email").Value.ToString()
-        TextBoxAddress.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Address").Value.ToString()
+        ViewCustomerInfo.TextBoxName.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Name").Value.ToString()
+        ViewCustomerInfo.TextBoxLastName.Text = DataGridViewCustomerInformation.CurrentRow.Cells("LastName").Value.ToString()
+        ViewCustomerInfo.TextBoxNumber.Text = DataGridViewCustomerInformation.CurrentRow.Cells("PhoneNumber").Value.ToString()
+        ViewCustomerInfo.TextBoxEmail.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Email").Value.ToString()
+        ViewCustomerInfo.TextBoxAddress.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Address").Value.ToString()
+        ViewCustomerInfo.TextBoxBarangay.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Barangay").Value.ToString()
 
-        Dim customerIDValue As String = DataGridViewCustomerInformation.CurrentRow.Cells("CustomerID").Value.ToString()
-        customerIDLabel.Text = customerIDValue
+        customerIDValue = DataGridViewCustomerInformation.CurrentRow.Cells("CustomerID").Value.ToString()
+        viewCustomerInfo.customerIDLabel.Text = customerIDValue
 
+        viewCustomerInfo.DataGridViewCustomerHistory.DataSource = customerInformationDatabaseHelper.GetCustomerTransactionHistory(customerIDValue)
+        viewCustomerInfo.LabelTotalSaleMade.Text = customerInformationDatabaseHelper.GetCustomerSalesCount(customerIDValue)
+        viewCustomerInfo.LabelRevenue.Text = "₱" & customerInformationDatabaseHelper.GetTotalSalesAmountByCustomer(customerIDValue).ToString("N2")
         Try
             If e.ColumnIndex = DataGridViewCustomerInformation.Columns("actionsColumn").Index Then
-                If String.IsNullOrEmpty(customerIDLabel.Text) Then
+                If String.IsNullOrEmpty(ViewCustomerInfo.customerIDLabel.Text) Then
                     MessageBox.Show("Please select a valid customer to edit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Return
                 End If
@@ -69,19 +83,21 @@ Public Class CustomerInformation
         End Try
 
     End Sub
+
+
     Private Sub LoadVehiclesIntoListView(customerID As Integer)
-        ListViewVehicles.Items.Clear()
-        Me.VehicleList.Clear()
+        ViewCustomerInfo.ListViewVehicles.Items.Clear()
+        ViewCustomerInfo.VehicleList.Clear()
         Dim vehicles As List(Of VehicleService) = customerInformationDatabaseHelper.GetCustomerVehicles(customerID)
 
         For Each vehicle As VehicleService In vehicles
             ' 3. Add to the local tracking list (VehicleList)
-            Me.VehicleList.Add(vehicle)
+            ViewCustomerInfo.VehicleList.Add(vehicle)
 
             ' 4. Add to the ListView (Visual Component)
             Dim item As New ListViewItem(vehicle.PlateNumber)
             item.SubItems.Add(vehicle.VehicleType)
-            ListViewVehicles.Items.Add(item)
+            ViewCustomerInfo.ListViewVehicles.Items.Add(item)
         Next
     End Sub
 
@@ -97,8 +113,8 @@ Public Class CustomerInformation
 
     Public Sub AddCustomerInformation()
 
-        If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Then
-            MessageBox.Show("Please fill in all required customer fields (Name, Phone, Email).", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Or String.IsNullOrEmpty(TextBoxLastName.Text) Then
+            MessageBox.Show("Please fill in all required customer fields (First Name,Last Name, Phone, Email).", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
 
@@ -110,9 +126,11 @@ Public Class CustomerInformation
         Try
             customerInformationDatabaseHelper.AddCustomer(
             TextBoxName.Text.Trim(),
+            TextBoxLastName.Text.Trim(),
             TextBoxNumber.Text,
             TextBoxEmail.Text.Trim(),
             TextBoxAddress.Text.Trim(),
+            TextBoxBarangay.Text.Trim(),
             VehicleList
             )
             VehicleList.Clear()
@@ -138,17 +156,10 @@ Public Class CustomerInformation
     End Sub
 
     Private Sub UpdateBtn_Click(sender As Object, e As EventArgs) Handles UpdateBtn.Click
-        UpdateCustomerInformation()
+        ViewCustomerInformation()
     End Sub
 
-    Private Sub UpdateCustomerInformation()
-        If EditProfileService.ValidateFieldsInEditProfile(customerIDLabel.Text) = True Then
-            Return
-        End If
-        customerInformationDatabaseHelper.UpdateCustomer(customerIDLabel.Text, TextBoxName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, VehicleList)
-        ViewCustomerInformation()
-        ClearFields()
-    End Sub
+
 
     'Private Sub DeleteBtn_Click(sender As Object, e As EventArgs) Handles DeleteBtn.Click
     '    DeleteCustomerInformation()
@@ -179,16 +190,13 @@ Public Class CustomerInformation
     Public Sub AddButtonAction()
         Dim updateButtonColumn As New DataGridViewButtonColumn With {
             .HeaderText = "Action",
-            .Text = "Edit Info",
+            .Text = "View Info",
             .UseColumnTextForButtonValue = True,
             .Name = "actionsColumn"
         }
         DataGridViewCustomerInformation.Columns.Add(updateButtonColumn)
     End Sub
 
-    Private Sub AddVehicleBtn_Click(sender As Object, e As EventArgs) Handles AddVehicleBtn.Click
-        AddVehicleFunction()
-    End Sub
 
     Private Sub AddVehicleFunction()
         If String.IsNullOrWhiteSpace(TextBoxVehicle.Text) OrElse String.IsNullOrWhiteSpace(TextBoxPlateNumber.Text) Then
@@ -220,10 +228,6 @@ Public Class CustomerInformation
     End Sub
 
 
-    Private Sub RemoveVehicleBtn_Click(sender As Object, e As EventArgs) Handles RemoveVehicleBtn.Click
-        RemoveSelectedVehicle()
-    End Sub
-
     ' --- NEW: Logic to remove the selected vehicle ---
     Private Sub RemoveSelectedVehicle()
         If ListViewVehicles.SelectedItems.Count = 0 Then
@@ -249,5 +253,17 @@ Public Class CustomerInformation
         Else
             MessageBox.Show("Could not find the selected vehicle in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
+    End Sub
+
+    Private Sub RemoveVehicleBtn_Click_1(sender As Object, e As EventArgs) Handles RemoveVehicleBtn.Click
+        RemoveSelectedVehicle()
+    End Sub
+
+    Private Sub AddVehicleBtn_Click_1(sender As Object, e As EventArgs) Handles AddVehicleBtn.Click
+        AddVehicleFunction()
+    End Sub
+
+    Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles Panel2.Paint
+
     End Sub
 End Class

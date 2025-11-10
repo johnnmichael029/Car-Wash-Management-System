@@ -22,7 +22,22 @@ Public Class Carwash
         DashboardFormLoad()
         NotificationLoad()
         PopulateAllTotal()
+        HideButtons()
+    End Sub
 
+    Private Sub HideButtons()
+        revenueCustomerBtn.Visible = False
+        salesBtn.Visible = False
+        averageSaleBtn.Visible = False
+        salesSummaryBtn.Visible = False
+        revenueServiceBtn.Visible = False
+    End Sub
+    Private Sub ShowButtons()
+        revenueCustomerBtn.Visible = True
+        salesBtn.Visible = True
+        averageSaleBtn.Visible = True
+        salesSummaryBtn.Visible = True
+        revenueServiceBtn.Visible = True
     End Sub
 
     Private Sub NotificationLoad()
@@ -55,6 +70,7 @@ Public Class Carwash
 
     Private Sub CustomerInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomerInformationToolStripMenuItem.Click
         ShowNewCustomersFormFunction()
+        HideButtons()
     End Sub
 
     Private Sub ServiceCatalogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ServiceCatalogToolStripMenuItem.Click
@@ -66,6 +82,7 @@ Public Class Carwash
         Panel4.Controls.Add(service)
         service.Dock = DockStyle.Fill
         service.Show()
+        HideButtons()
     End Sub
     Private Sub ShowSalesFormFunction()
         Panel4.Controls.Clear()
@@ -120,10 +137,12 @@ Public Class Carwash
     End Sub
     Private Sub SaleHistoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaleHistoryToolStripMenuItem.Click
         ShowSalesFormFunction()
+        HideButtons()
     End Sub
 
     Private Sub AppointmentScheduleToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles AppointmentScheduleToolStripMenuItem1.Click
         ShowNewAppointmentsTodayFormFunction()
+        HideButtons()
     End Sub
 
     Private Sub ListToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ListToolStripMenuItem.Click
@@ -135,6 +154,7 @@ Public Class Carwash
         Panel4.Controls.Add(reservation)
         reservation.Dock = DockStyle.Fill
         reservation.Show()
+        HideButtons()
     End Sub
 
     Private Sub OnTheDayScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OnTheDayScheduleToolStripMenuItem.Click
@@ -146,10 +166,12 @@ Public Class Carwash
         Panel4.Controls.Add(onTheDay)
         onTheDay.Dock = DockStyle.Fill
         onTheDay.Show()
+        HideButtons()
     End Sub
 
     Private Sub DashboardBtn_Click(sender As Object, e As EventArgs) Handles DashboardBtn.Click
         DashboardFormShow()
+        HideButtons()
     End Sub
     Private Sub DashboardFormShow()
         Panel4.Controls.Clear()
@@ -167,6 +189,7 @@ Public Class Carwash
     End Sub
     Private Sub ActivityLogBtn_Click(sender As Object, e As EventArgs) Handles ActivityLogBtn.Click
         ActivityLogFormShow()
+        HideButtons()
     End Sub
 
     Private Sub ActivityLogFormShow()
@@ -200,6 +223,7 @@ Public Class Carwash
         Else
             Timer2.Enabled = True
         End If
+        HideButtons()
     End Sub
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
@@ -242,21 +266,27 @@ Public Class Carwash
     End Sub
     Private Sub PictureBoxSales_Click(sender As Object, e As EventArgs) Handles PictureBoxSales.Click
         ShowSalesFormFunction()
+        HideButtons()
+        HideButtons()
     End Sub
     Private Sub ContractsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ContractsToolStripMenuItem.Click
         ShowNewContractsTodayFormFunction()
     End Sub
     Private Sub PictureBoxCustomer_Click(sender As Object, e As EventArgs) Handles PictureBoxCustomer.Click
         ShowNewCustomersFormFunction()
+        HideButtons()
     End Sub
     Private Sub PictureBoxContracts_Click(sender As Object, e As EventArgs) Handles PictureBoxContracts.Click
         ShowNewContractsTodayFormFunction()
+        HideButtons()
     End Sub
     Private Sub PictureBoxSchedule_Click(sender As Object, e As EventArgs) Handles PictureBoxSchedule.Click
         ShowNewAppointmentsTodayFormFunction()
+        HideButtons()
     End Sub
     Private Sub PickUpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PickUpToolStripMenuItem.Click
         PickUp()
+        HideButtons()
     End Sub
     Private Sub PickUp()
         Panel4.Controls.Clear()
@@ -270,6 +300,7 @@ Public Class Carwash
     End Sub
     Private Sub AdminToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdminToolStripMenuItem.Click
         AdminShowForm()
+        HideButtons()
     End Sub
     Private Sub AdminShowForm()
         Panel4.Controls.Clear()
@@ -302,6 +333,7 @@ Public Class Carwash
 
     Private Sub salesHistoryBtn_Click(sender As Object, e As EventArgs) Handles salesHistoryBtn.Click
         SalesHistoryForm()
+        HideButtons()
 
     End Sub
 
@@ -317,10 +349,32 @@ Public Class Carwash
         DashboardBtn.BackColor = Color.White
         ActivityLogBtn.BackColor = Color.White
         salesHistoryBtn.BackColor = Color.White
+        revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
+        revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesBtn.BackColor = Color.FromArgb(239, 238, 238)
+        averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
+        SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+    End Sub
+    Private Sub SaleAnalyticsShowForm()
+        Panel4.Controls.Clear()
+        Dim salesMadeAnalyticsvb As New SalesMadeAnalyticsvb With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(salesMadeAnalyticsvb)
+        salesMadeAnalyticsvb.Dock = DockStyle.Fill
+        salesMadeAnalyticsvb.Show()
+        revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
+        revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesBtn.BackColor = Color.White
+        averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
         SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
     End Sub
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles SalesAnalyticsBtn.Click
         AnalyticsShowForm()
+        ShowButtons()
     End Sub
     Private Sub UpdateEarningsDisplay()
         Dim earningsData As CarwashDatabaseHelper = CarwashDatabaseHelper.GetEarningsData()
@@ -359,4 +413,94 @@ Public Class Carwash
     Private Sub Panel6_Paint(sender As Object, e As PaintEventArgs) Handles Panel6.Paint
 
     End Sub
+
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        Application.Exit()
+        HideButtons()
+    End Sub
+
+    Private Sub salesBtn_Click(sender As Object, e As EventArgs) Handles salesBtn.Click
+        SaleAnalyticsShowForm()
+    End Sub
+
+    Private Sub averageSaleBtn_Click(sender As Object, e As EventArgs) Handles averageSaleBtn.Click
+        AverageSaleAnalyticsShowForm()
+    End Sub
+    Private Sub AverageSaleAnalyticsShowForm()
+        Panel4.Controls.Clear()
+        Dim averageSaleAnalytics As New AverageSaleAnalytics With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(averageSaleAnalytics)
+        averageSaleAnalytics.Dock = DockStyle.Fill
+        averageSaleAnalytics.Show()
+        revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
+        revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesBtn.BackColor = Color.FromArgb(239, 238, 238)
+        averageSaleBtn.BackColor = Color.White
+        SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+    End Sub
+
+    Private Sub salesSummaryBtn_Click(sender As Object, e As EventArgs) Handles salesSummaryBtn.Click
+        SaleSummaryAnalyticsShowForm()
+    End Sub
+    Private Sub SaleSummaryAnalyticsShowForm()
+        Panel4.Controls.Clear()
+        Dim saleSummaryAnalytics As New SaleSummaryAnalytics With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(saleSummaryAnalytics)
+        saleSummaryAnalytics.Dock = DockStyle.Fill
+        saleSummaryAnalytics.Show()
+        revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
+        revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesSummaryBtn.BackColor = Color.White
+        salesBtn.BackColor = Color.FromArgb(239, 238, 238)
+        averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
+        SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+    End Sub
+
+    Private Sub revenueCustomerBtn_Click(sender As Object, e As EventArgs) Handles revenueCustomerBtn.Click
+        RevenueCustomerAnalyticsShowForm()
+    End Sub
+    Private Sub RevenueServiceAnalyticsShowForm()
+        Panel4.Controls.Clear()
+        Dim RevenueServiceAnalytics As New RevenueServiceAnalytics With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(RevenueServiceAnalytics)
+        RevenueServiceAnalytics.Dock = DockStyle.Fill
+        RevenueServiceAnalytics.Show()
+        revenueServiceBtn.BackColor = Color.White
+        revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesBtn.BackColor = Color.FromArgb(239, 238, 238)
+        averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
+        SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+    End Sub
+    Private Sub RevenueCustomerAnalyticsShowForm()
+        Panel4.Controls.Clear()
+        Dim revenueCustomerAnalytics As New RevenueCustomerAnalytics With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(revenueCustomerAnalytics)
+        revenueCustomerAnalytics.Dock = DockStyle.Fill
+        revenueCustomerAnalytics.Show()
+        revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
+        revenueCustomerBtn.BackColor = Color.White
+        salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesBtn.BackColor = Color.FromArgb(239, 238, 238)
+        averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
+        SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+    End Sub
+
+    Private Sub revenueServiceBtn_Click(sender As Object, e As EventArgs) Handles revenueServiceBtn.Click
+        RevenueServiceAnalyticsShowForm()
+    End Sub
+
 End Class

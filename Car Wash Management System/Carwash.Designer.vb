@@ -55,6 +55,11 @@ Partial Class Carwash
         Label3 = New Label()
         Panel6 = New Panel()
         PanelMenuBar = New Panel()
+        revenueCustomerBtn = New Button()
+        revenueServiceBtn = New Button()
+        salesSummaryBtn = New Button()
+        averageSaleBtn = New Button()
+        salesBtn = New Button()
         Panel5 = New Panel()
         LogoutBtn = New Button()
         DashboardBtn = New Button()
@@ -445,6 +450,11 @@ Partial Class Carwash
         ' PanelMenuBar
         ' 
         PanelMenuBar.BackColor = Color.White
+        PanelMenuBar.Controls.Add(revenueCustomerBtn)
+        PanelMenuBar.Controls.Add(revenueServiceBtn)
+        PanelMenuBar.Controls.Add(salesSummaryBtn)
+        PanelMenuBar.Controls.Add(averageSaleBtn)
+        PanelMenuBar.Controls.Add(salesBtn)
         PanelMenuBar.Controls.Add(Panel5)
         PanelMenuBar.Controls.Add(DashboardBtn)
         PanelMenuBar.Controls.Add(SalesAnalyticsBtn)
@@ -455,6 +465,81 @@ Partial Class Carwash
         PanelMenuBar.Name = "PanelMenuBar"
         PanelMenuBar.Size = New Size(177, 702)
         PanelMenuBar.TabIndex = 2
+        ' 
+        ' revenueCustomerBtn
+        ' 
+        revenueCustomerBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        revenueCustomerBtn.FlatStyle = FlatStyle.Flat
+        revenueCustomerBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        revenueCustomerBtn.ImageAlign = ContentAlignment.MiddleLeft
+        revenueCustomerBtn.Location = New Point(0, 431)
+        revenueCustomerBtn.Name = "revenueCustomerBtn"
+        revenueCustomerBtn.Padding = New Padding(5, 0, 39, 0)
+        revenueCustomerBtn.Size = New Size(174, 28)
+        revenueCustomerBtn.TabIndex = 12
+        revenueCustomerBtn.Text = "Revenue Customer"
+        revenueCustomerBtn.TextAlign = ContentAlignment.MiddleLeft
+        revenueCustomerBtn.UseVisualStyleBackColor = True
+        ' 
+        ' revenueServiceBtn
+        ' 
+        revenueServiceBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        revenueServiceBtn.FlatStyle = FlatStyle.Flat
+        revenueServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
+        revenueServiceBtn.ImageAlign = ContentAlignment.MiddleLeft
+        revenueServiceBtn.Location = New Point(0, 404)
+        revenueServiceBtn.Name = "revenueServiceBtn"
+        revenueServiceBtn.Padding = New Padding(5, 0, 39, 0)
+        revenueServiceBtn.Size = New Size(174, 28)
+        revenueServiceBtn.TabIndex = 11
+        revenueServiceBtn.Text = "Revenue Service"
+        revenueServiceBtn.TextAlign = ContentAlignment.MiddleLeft
+        revenueServiceBtn.UseVisualStyleBackColor = True
+        ' 
+        ' salesSummaryBtn
+        ' 
+        salesSummaryBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        salesSummaryBtn.FlatStyle = FlatStyle.Flat
+        salesSummaryBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
+        salesSummaryBtn.ImageAlign = ContentAlignment.MiddleLeft
+        salesSummaryBtn.Location = New Point(0, 377)
+        salesSummaryBtn.Name = "salesSummaryBtn"
+        salesSummaryBtn.Padding = New Padding(5, 0, 39, 0)
+        salesSummaryBtn.Size = New Size(174, 28)
+        salesSummaryBtn.TabIndex = 10
+        salesSummaryBtn.Text = "Sales Summary"
+        salesSummaryBtn.TextAlign = ContentAlignment.MiddleLeft
+        salesSummaryBtn.UseVisualStyleBackColor = True
+        ' 
+        ' averageSaleBtn
+        ' 
+        averageSaleBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        averageSaleBtn.FlatStyle = FlatStyle.Flat
+        averageSaleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
+        averageSaleBtn.ImageAlign = ContentAlignment.MiddleLeft
+        averageSaleBtn.Location = New Point(0, 350)
+        averageSaleBtn.Name = "averageSaleBtn"
+        averageSaleBtn.Padding = New Padding(5, 0, 39, 0)
+        averageSaleBtn.Size = New Size(174, 28)
+        averageSaleBtn.TabIndex = 9
+        averageSaleBtn.Text = "Average sale"
+        averageSaleBtn.TextAlign = ContentAlignment.MiddleLeft
+        averageSaleBtn.UseVisualStyleBackColor = True
+        ' 
+        ' salesBtn
+        ' 
+        salesBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        salesBtn.FlatStyle = FlatStyle.Flat
+        salesBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
+        salesBtn.ImageAlign = ContentAlignment.MiddleLeft
+        salesBtn.Location = New Point(0, 323)
+        salesBtn.Name = "salesBtn"
+        salesBtn.Padding = New Padding(5, 0, 39, 0)
+        salesBtn.Size = New Size(174, 28)
+        salesBtn.TabIndex = 8
+        salesBtn.Text = "Sales "
+        salesBtn.TextAlign = ContentAlignment.MiddleLeft
+        salesBtn.UseVisualStyleBackColor = True
         ' 
         ' Panel5
         ' 
@@ -492,7 +577,7 @@ Partial Class Carwash
         DashboardBtn.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         DashboardBtn.Image = CType(resources.GetObject("DashboardBtn.Image"), Image)
         DashboardBtn.ImageAlign = ContentAlignment.MiddleLeft
-        DashboardBtn.Location = New Point(0, 151)
+        DashboardBtn.Location = New Point(0, 82)
         DashboardBtn.Name = "DashboardBtn"
         DashboardBtn.Padding = New Padding(5, 0, 5, 0)
         DashboardBtn.Size = New Size(174, 56)
@@ -509,7 +594,7 @@ Partial Class Carwash
         SalesAnalyticsBtn.Font = New Font("Century Gothic", 12.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         SalesAnalyticsBtn.Image = CType(resources.GetObject("SalesAnalyticsBtn.Image"), Image)
         SalesAnalyticsBtn.ImageAlign = ContentAlignment.MiddleLeft
-        SalesAnalyticsBtn.Location = New Point(0, 337)
+        SalesAnalyticsBtn.Location = New Point(0, 268)
         SalesAnalyticsBtn.Name = "SalesAnalyticsBtn"
         SalesAnalyticsBtn.Padding = New Padding(5, 0, 39, 0)
         SalesAnalyticsBtn.Size = New Size(174, 56)
@@ -528,7 +613,7 @@ Partial Class Carwash
         salesHistoryBtn.Font = New Font("Century Gothic", 12.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         salesHistoryBtn.Image = My.Resources.Resources.history
         salesHistoryBtn.ImageAlign = ContentAlignment.MiddleLeft
-        salesHistoryBtn.Location = New Point(0, 275)
+        salesHistoryBtn.Location = New Point(0, 206)
         salesHistoryBtn.Name = "salesHistoryBtn"
         salesHistoryBtn.Padding = New Padding(5, 0, 10, 0)
         salesHistoryBtn.Size = New Size(174, 56)
@@ -548,7 +633,7 @@ Partial Class Carwash
         ActivityLogBtn.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
         ActivityLogBtn.Image = My.Resources.Resources.restore
         ActivityLogBtn.ImageAlign = ContentAlignment.MiddleLeft
-        ActivityLogBtn.Location = New Point(0, 213)
+        ActivityLogBtn.Location = New Point(0, 144)
         ActivityLogBtn.Name = "ActivityLogBtn"
         ActivityLogBtn.Padding = New Padding(5, 0, 5, 0)
         ActivityLogBtn.Size = New Size(177, 56)
@@ -807,4 +892,9 @@ Partial Class Carwash
     Friend WithEvents LabelEarningsValue As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents PictureBoxDownEarnings As PictureBox
+    Friend WithEvents salesBtn As Button
+    Friend WithEvents revenueCustomerBtn As Button
+    Friend WithEvents revenueServiceBtn As Button
+    Friend WithEvents salesSummaryBtn As Button
+    Friend WithEvents averageSaleBtn As Button
 End Class

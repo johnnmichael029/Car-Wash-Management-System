@@ -20,7 +20,7 @@ Public Class DashboardDatabaseHelper
                 Dim selectQuery =
             "SELECT " &
                 "s.SalesID, " &
-                "c.Name AS CustomerName, " &
+                 "ISNULL(c.Name, '') + ' ' + ISNULL(c.LastName, '') AS CustomerName, " &
                 "sv_base.ServiceName, " &
                 "sv_addon.ServiceName," &
                 "s.SaleDate, " &
@@ -180,7 +180,7 @@ Public Class DashboardDatabaseHelper
                 Dim baseSelect As String =
                     "SELECT " &
                     "s.SalesID, " &
-                    "c.Name AS CustomerName, " &
+                    "ISNULL(c.Name, '') + ' ' + ISNULL(c.LastName, '') AS CustomerName, " &
                     "sv_base.ServiceName AS BaseService, " & ' Added alias for clarity
                     "sv_addon.ServiceName AS AddonService, " & ' Added alias for clarity
                     "s.SaleDate, " &
@@ -205,13 +205,19 @@ Public Class DashboardDatabaseHelper
                     ' Ensure your ComboBox has an "All Columns" option, otherwise this case handles the default catch-all.
                     selectQuery = baseSelect &
                             "WHERE c.Name LIKE @searchString " &
+                            "OR c.LastName LIKE @searchString " &
                             "OR s.SalesID LIKE @searchString " &
                             "OR s.PaymentMethod LIKE @searchString " &
                             "OR sv_base.ServiceName LIKE @searchString " &
                             "OR sv_addon.ServiceName LIKE @searchString"
                 Else
-                    selectQuery = baseSelect & "WHERE c.Name LIKE @searchString OR s.SalesID LIKE @SearchString"
+                    selectQuery = baseSelect & "WHERE c.Name LIKE @searchString
+                                                OR c.LastName LIKE @searchString 
+                                                OR s.SalesID LIKE @SearchString
+                                                OR c.Name + ' ' + c.LastName LIKE @searchString"
                 End If
+
+                selectQuery = selectQuery & " ORDER BY s.SalesID DESC"
 
                 ' --- Execute the Query ---
                 Using cmd As New SqlCommand(selectQuery, con)

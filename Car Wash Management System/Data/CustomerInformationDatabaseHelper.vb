@@ -48,23 +48,29 @@ Public Class CustomerInformationDatabaseHelper
             End Using
         End If
     End Sub
-    Public Sub AddCustomer(name As String, number As String, email As String, address As String, VehicleList As List(Of VehicleService))
+    Public Sub AddCustomer(firstName As String, lastName As String, number As String, email As String, address As String, barangay As String, VehicleList As List(Of VehicleService))
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Dim newCustomerID As Integer = 0
 
             Try
-                Dim insertCustomerQuery As String = "INSERT INTO CustomersTable (Name, PhoneNumber, Email, Address, RegistrationDate) VALUES (@Name, @PhoneNumber, @Email, @Address, @RegistrationDate); SELECT SCOPE_IDENTITY();"
+                Dim insertCustomerQuery As String = "INSERT INTO CustomersTable (Name, LastName, PhoneNumber, Email, Address, Barangay, RegistrationDate) VALUES (@Name, @LastName @PhoneNumber, @Email, @Address, @Barangay, @RegistrationDate); SELECT SCOPE_IDENTITY();"
 
                 Using cmd As New SqlCommand(insertCustomerQuery, con, transaction)
-                    cmd.Parameters.AddWithValue("@Name", name)
+                    cmd.Parameters.AddWithValue("@Name", firstName)
+                    cmd.Parameters.AddWithValue("@LastName", lastName)
                     cmd.Parameters.AddWithValue("@PhoneNumber", number)
                     cmd.Parameters.AddWithValue("@Email", email)
                     If String.IsNullOrEmpty(address) Then
                         cmd.Parameters.AddWithValue("@Address", DBNull.Value)
                     Else
                         cmd.Parameters.AddWithValue("@Address", address)
+                    End If
+                    If String.IsNullOrEmpty(barangay) Then
+                        cmd.Parameters.AddWithValue("@Barangay", DBNull.Value)
+                    Else
+                        cmd.Parameters.AddWithValue("@Barangay", barangay)
                     End If
 
                     cmd.Parameters.AddWithValue("@RegistrationDate", DateTime.Now)
@@ -102,20 +108,21 @@ Public Class CustomerInformationDatabaseHelper
             End Try
         End Using
     End Sub
-    Public Sub UpdateCustomer(customerID As String, name As String, number As String, email As String, address As String, vehicleList As List(Of VehicleService))
+    Public Sub UpdateCustomer(customerID As String, name As String, lastName As String, number As String, email As String, address As String, barangay As String, vehicleList As List(Of VehicleService))
         Dim iCustomerID As Integer = CInt(customerID)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
-
             Try
                 ' 1. Update Customer's main information
-                Dim updateCustomerQuery = "UPDATE CustomersTable SET Name = @Name, PhoneNumber = @Phone, Email = @Email, Address = @Address WHERE CustomerID = @CustomerID"
+                Dim updateCustomerQuery = "UPDATE CustomersTable SET Name = @Name, LastName= @LastName, PhoneNumber = @Phone, Email = @Email, Address = @Address, Barangay = @Barangay WHERE CustomerID = @CustomerID"
                 Using cmd As New SqlCommand(updateCustomerQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@Name", name)
+                    cmd.Parameters.AddWithValue("@LastName", lastName)
                     cmd.Parameters.AddWithValue("@Phone", number)
                     cmd.Parameters.AddWithValue("@Email", email)
                     cmd.Parameters.AddWithValue("@Address", address)
+                    cmd.Parameters.AddWithValue("@Barangay", barangay)
                     cmd.Parameters.AddWithValue("@CustomerID", iCustomerID)
                     cmd.ExecuteNonQuery()
                 End Using
@@ -139,6 +146,9 @@ Public Class CustomerInformationDatabaseHelper
                             vehicleCmd.ExecuteNonQuery()
                         End Using
                     Next
+                Else
+                    MessageBox.Show("No vehicles to update for this customer.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Return
                 End If
 
                 transaction.Commit()
@@ -170,7 +180,7 @@ Public Class CustomerInformationDatabaseHelper
                 ' Final query joins the main customer table with the aggregated vehicle data
                 Dim selectQuery =
                 "SELECT " &
-                    "c.CustomerID, c.Name, c.PhoneNumber, c.Email, c.Address, c.RegistrationDate AS RegisteredDate, " &
+                    "c.CustomerID, c.Name, c.LastName, c.PhoneNumber, c.Email, c.Address, c.Barangay, c.RegistrationDate AS RegisteredDate, " &
                     "v.AllPlateNumbers AS VehiclePlateNumber, " &
                     "v.AllVehicleTypes AS RegisteredVehicleType " &
                 "FROM CustomersTable c " &
@@ -184,6 +194,43 @@ Public Class CustomerInformationDatabaseHelper
                 End Using
             Catch ex As Exception
                 MessageBox.Show("Error viewing customers: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+        Return dt
+    End Function
+
+    Public Function GetCustomerTransactionHistory(customerID As String) As DataTable
+
+        Dim dt As New DataTable()
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Dim selectQuery =
+                 "SELECT " &
+                "s.SalesID, " &
+                "sv_base.ServiceName AS Service, " &
+                "sv_addon.ServiceName AS AddonService, " &
+                "s.SaleDate, " &
+                "s.PaymentMethod, " &
+                "s.ReferenceID, " &
+                "s.TotalPrice " &
+            "FROM SalesHistoryTable s " &
+            "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
+            "INNER JOIN ServicesTable sv_base ON s.ServiceID = sv_base.ServiceID " &
+            "LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID " &
+            "WHERE s.CustomerID = @CustomerID " &
+            "ORDER BY s.SalesID DESC"
+
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error viewing customer transaction history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally
                 con.Close()
             End Try
@@ -220,5 +267,66 @@ Public Class CustomerInformationDatabaseHelper
         End Using
 
         Return vehicles
+    End Function
+
+    Public Function GetCustomerSalesCount(customerID As String) As Integer
+        Dim salesCount As Integer = 0
+
+        ' Assuming constr is defined globally or passed in
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+
+                Dim selectQuery =
+            "SELECT COUNT(s.SalesID) AS TotalSalesCount " &
+            "FROM SalesHistoryTable s " &
+            "WHERE s.CustomerID = @CustomerID"
+
+                Using cmd As New SqlCommand(selectQuery, con)
+                    ' 1. FIX: Add the required parameter binding
+                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
+
+                    ' Use ExecuteScalar to retrieve a single value (the count)
+                    Dim result = cmd.ExecuteScalar()
+
+                    ' 2. FIX: Convert the result to an Integer (CInt) since COUNT returns an integer.
+                    If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
+                        salesCount = CInt(result)
+                    End If
+
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error getting customer sales count: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+
+        Return salesCount
+    End Function
+
+    Public Function GetTotalSalesAmountByCustomer(customerID As String) As Decimal
+        Dim totalAmount As Decimal = 0D.ToString("N2")
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Dim selectQuery =
+            "SELECT SUM(s.TotalPrice) AS TotalSalesAmount " &
+            "FROM SalesHistoryTable s " &
+            "WHERE s.CustomerID = @CustomerID"
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
+                    Dim result = cmd.ExecuteScalar()
+                    If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
+                        totalAmount = Convert.ToDecimal(result)
+                    End If
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error getting total sales amount by customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+        Return totalAmount
     End Function
 End Class

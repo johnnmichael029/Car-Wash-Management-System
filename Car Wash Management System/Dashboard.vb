@@ -267,14 +267,17 @@ Public Class Dashboard
         End If
 
         Try
-            CustomerInformationDatabaseHelper.AddCustomer(
+            customerInformationDatabaseHelper.AddCustomer(
             TextBoxName.Text.Trim(),
+            TextBoxLastName.Text.Trim(),
             TextBoxNumber.Text,
             TextBoxEmail.Text.Trim(),
             TextBoxAddress.Text.Trim(),
+            TextBoxBarangay.Text.Trim(),
             VehicleList
             )
             VehicleList.Clear()
+            ListViewVehicles.Items.Clear()
             ListViewVehicles.Items.Clear()
 
         Catch ex As Exception
@@ -644,6 +647,10 @@ Public Class Dashboard
         Else
             LabelSalesID.Text = "Sales ID: ERROR"
         End If
+    End Sub
+
+    Private Sub DataGridViewLatestTransaction_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewLatestTransaction.CellContentClick
+
     End Sub
 
 End Class

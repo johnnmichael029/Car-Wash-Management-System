@@ -235,46 +235,98 @@ Public Class Contracts
     Private Sub UpdateContractBtn_Click(sender As Object, e As EventArgs) Handles UpdateContractBtn.Click
         UpdateContractActivityLog()
         ContractUpdated()
-        ClearFields()
+
     End Sub
     Private Sub ContractUpdated()
         Try
-            Dim contractID As Integer
             Dim customerID As Integer
-            Dim price As Decimal
-
-            If Not Integer.TryParse(LabelContractID.Text, contractID) Or Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Or Not Decimal.TryParse(TextBoxPrice.Text, price) Then
-                MessageBox.Show("Please select customer from contract Table to update!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Then
+                MessageBox.Show("Customer not found. Please select a valid customer.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+            If contractServiceList.Count = 0 Then
+                MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
 
-            Dim baseServiceDetails As ContractsService = contractsDatabaseHelper.GetServiceDetails(ComboBoxServices.Text)
-            Dim addonServiceID As Integer? = Nothing
-            If ComboBoxAddon.SelectedIndex <> -1 Then
-                Dim addonServiceDetails As ContractsService = contractsDatabaseHelper.GetServiceDetails(ComboBoxAddon.Text)
-                If addonServiceDetails IsNot Nothing Then
-                    addonServiceID = addonServiceDetails.ServiceID
+            'Validate if the end date greather than or equal to monthly, quarterly or yearly
+            If DateTimePickerEndDate.Checked Then
+                Dim minEndDate As DateTime
+                Select Case ComboBoxBillingFrequency.Text
+                    Case "Monthly"
+                        minEndDate = DateTimePickerStartDate.Value.AddMonths(1)
+                    Case "Quarterly"
+                        minEndDate = DateTimePickerStartDate.Value.AddMonths(4)
+                    Case "Yearly"
+                        minEndDate = DateTimePickerStartDate.Value.AddYears(1)
+                    Case Else
+                        MessageBox.Show("Please select a valid billing frequency.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Return
+                End Select
+                If DateTimePickerEndDate.Value.Date < minEndDate.Date Then
+                    MessageBox.Show($"End date must be at least {ComboBoxBillingFrequency.Text.ToLower()} from the start date.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Return
                 End If
             End If
 
-            Dim endDate As Date? = If(DateTimePickerEndDate.Checked, CType(DateTimePickerEndDate.Value, Date?), Nothing)
+            ' Validate if the end date is not equal to today
+            If Me.DateTimePickerEndDate.Value.Date = DateTime.Now.Date Then
+                MessageBox.Show("Date end must not equal to DateTime today", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+            ' Validate if the start date is greater than the end date
+            If DateTimePickerEndDate.Checked AndAlso DateTimePickerStartDate.Value.Date > DateTimePickerEndDate.Value.Date Then
+                MessageBox.Show("Start date cannot be later than end date.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+            ' Validate if billing frequency is selected
+            If String.IsNullOrWhiteSpace(ComboBoxBillingFrequency.Text) Then
+                MessageBox.Show("Please select a billing frequency.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
+            ' Validate if payment method is selected
+            If ComboBoxPaymentMethod.SelectedIndex = -1 Then
+                MessageBox.Show("Please select a payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+            'Validate that a Reference ID is provided for certain payment methods.
+            If (ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" Or ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque") AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
+                MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+            ' Validate if contract status is selected
+            If String.IsNullOrWhiteSpace(ComboBoxContractStatus.Text) Then
+                MessageBox.Show("Please select a contract status.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
+            'Validate if the price is decimal
+            Dim totalPrice As Decimal
+            If Not Decimal.TryParse(TextBoxTotalPrice.Text, totalPrice) Then
+                MessageBox.Show("Please enter a valid price.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
 
             contractsDatabaseHelper.UpdateContract(
-                contractID,
+                LabelContractID.Text,
                 customerID,
-                baseServiceDetails.ServiceID,
-                addonServiceID,
+                contractServiceList,
                 DateTimePickerStartDate.Value,
-                endDate,
+                DateTimePickerEndDate.Value,
                 ComboBoxBillingFrequency.Text,
                 ComboBoxPaymentMethod.Text,
-                price,
+                TextBoxReferenceID.Text,
+                totalPrice,
                 ComboBoxContractStatus.Text
             )
             Carwash.NotificationLabel.Text = "Contract Updated"
             Carwash.ShowNotification()
             MessageBox.Show("Contract updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             DataGridViewContract.DataSource = contractsDatabaseHelper.ViewContracts()
+            ClearFields()
         Catch ex As Exception
             MessageBox.Show("An error occurred while updating the contract: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -305,8 +357,64 @@ Public Class Contracts
     End Sub
 
     Private Sub DataGridViewContract_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewContract.CellContentClick
+        ' but sometimes helps ensure a selection is made on cell click.
+        If e.RowIndex >= 0 Then
+            DataGridViewContract.Rows(e.RowIndex).Selected = True
+        End If
 
+        If DataGridViewContract.CurrentRow Is Nothing Then Return
+
+        Dim currentRow As DataGridViewRow = DataGridViewContract.CurrentRow
+
+        ' 1. Populate TextBoxes/ComboBoxes
+        Try
+            TextBoxCustomerName.Text = currentRow.Cells(1).Value?.ToString()
+            DateTimePickerStartDate.Text = currentRow.Cells(4).Value?.ToString()
+            DateTimePickerEndDate.Text = currentRow.Cells(5).Value?.ToString()
+            ComboBoxBillingFrequency.Text = currentRow.Cells(6).Value?.ToString()
+            ComboBoxPaymentMethod.Text = currentRow.Cells(7).Value?.ToString()
+            TextBoxReferenceID.Text = currentRow.Cells(8).Value?.ToString()
+            TextBoxTotalPrice.Text = currentRow.Cells(9).Value?.ToString()
+
+            ComboBoxContractStatus.Text = currentRow.Cells(10).Value?.ToString()
+
+            ' Set the ID for persistence
+            Dim contractIDValue As String = currentRow.Cells(0).Value?.ToString()
+            LabelContractID.Text = contractIDValue
+
+            If String.IsNullOrEmpty(contractIDValue) Then Return
+
+            ' 2. Load Services into ListView
+            Dim contractID As Integer
+            If Integer.TryParse(contractIDValue, contractID) Then
+                LoadServicesIntoListView(contractID)
+            Else
+                MessageBox.Show("Invalid Sales ID format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+
+        Catch ex As Exception
+            ' Log or handle error during population
+            MessageBox.Show("Error loading sale details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            TextBoxTotalPrice.Text = "0.00"
+        End Try
     End Sub
+    Private Sub LoadServicesIntoListView(salesID As Integer)
+        ListViewServices.Items.Clear()
+        Me.contractServiceList.Clear()
+        Dim serviceList As List(Of ContractsService) = contractsDatabaseHelper.GetSalesServiceList(salesID)
+
+        For Each service As ContractsService In serviceList
+            ' 3. Add to the local tracking list (VehicleList)
+            Me.contractServiceList.Add(service)
+            ' 4. Add to the ListView for display
+            Dim lvi As New ListViewItem(service.Service)
+            lvi.SubItems.Add(service.Addon)
+            lvi.SubItems.Add(service.ServicePrice.ToString("N2"))
+            ListViewServices.Items.Add(lvi)
+
+        Next
+    End Sub
+
     Private Sub DataGridViewContract_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewContract.CellFormatting
         If e.ColumnIndex = Me.DataGridViewContract.Columns("PaymentMethod").Index AndAlso e.RowIndex >= 0 Then
             ' Get the value from the current cell.
@@ -482,6 +590,10 @@ Public Class Contracts
             TextBoxReferenceID.ReadOnly = True
             TextBoxReferenceID.Clear()
         End If
+    End Sub
+
+    Private Sub Label9_Click(sender As Object, e As EventArgs)
+
     End Sub
 End Class
 

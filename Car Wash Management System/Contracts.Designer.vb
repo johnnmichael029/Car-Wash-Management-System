@@ -176,7 +176,7 @@ Partial Class Contracts
         PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         PrintBillBtn.ForeColor = Color.White
         PrintBillBtn.Image = CType(resources.GetObject("PrintBillBtn.Image"), Image)
-        PrintBillBtn.Location = New Point(189, 566)
+        PrintBillBtn.Location = New Point(189, 542)
         PrintBillBtn.Name = "PrintBillBtn"
         PrintBillBtn.Size = New Size(87, 30)
         PrintBillBtn.TabIndex = 92
@@ -255,7 +255,7 @@ Partial Class Contracts
         LabelContractID.AutoSize = True
         LabelContractID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         LabelContractID.ForeColor = Color.Red
-        LabelContractID.Location = New Point(82, 579)
+        LabelContractID.Location = New Point(87, 555)
         LabelContractID.Name = "LabelContractID"
         LabelContractID.Size = New Size(0, 15)
         LabelContractID.TabIndex = 23
@@ -264,7 +264,7 @@ Partial Class Contracts
         ' 
         Label9.AutoSize = True
         Label9.Font = New Font("Century Gothic", 9F)
-        Label9.Location = New Point(16, 579)
+        Label9.Location = New Point(16, 555)
         Label9.Name = "Label9"
         Label9.Size = New Size(77, 17)
         Label9.TabIndex = 22
@@ -385,7 +385,7 @@ Partial Class Contracts
         UpdateContractBtn.FlatStyle = FlatStyle.Flat
         UpdateContractBtn.Font = New Font("Century Gothic", 9F)
         UpdateContractBtn.ForeColor = Color.White
-        UpdateContractBtn.Location = New Point(146, 651)
+        UpdateContractBtn.Location = New Point(146, 627)
         UpdateContractBtn.Name = "UpdateContractBtn"
         UpdateContractBtn.Size = New Size(129, 30)
         UpdateContractBtn.TabIndex = 8
@@ -400,7 +400,7 @@ Partial Class Contracts
         ClearFieldsBtn.Font = New Font("Century Gothic", 9F)
         ClearFieldsBtn.ForeColor = Color.White
         ClearFieldsBtn.Image = My.Resources.Resources.clean1
-        ClearFieldsBtn.Location = New Point(16, 651)
+        ClearFieldsBtn.Location = New Point(16, 627)
         ClearFieldsBtn.Name = "ClearFieldsBtn"
         ClearFieldsBtn.Size = New Size(129, 30)
         ClearFieldsBtn.TabIndex = 7
@@ -416,7 +416,7 @@ Partial Class Contracts
         AddContractBtn.FlatStyle = FlatStyle.Flat
         AddContractBtn.Font = New Font("Century Gothic", 11.25F)
         AddContractBtn.ForeColor = Color.White
-        AddContractBtn.Location = New Point(16, 599)
+        AddContractBtn.Location = New Point(16, 575)
         AddContractBtn.Name = "AddContractBtn"
         AddContractBtn.Size = New Size(260, 46)
         AddContractBtn.TabIndex = 6

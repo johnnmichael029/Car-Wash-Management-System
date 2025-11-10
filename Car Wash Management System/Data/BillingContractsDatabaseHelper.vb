@@ -1,10 +1,11 @@
 ﻿Imports System.Security.Cryptography.Xml
+Imports System.Transactions
 Imports Microsoft.Data.SqlClient
 
 Public Class ContractsDatabaseHelper
-    Private ReadOnly constr As String
+    Private Shared constr As String
     Public Sub New(connectionString As String)
-        Me.constr = connectionString
+        constr = connectionString
     End Sub
     Public Sub AddContract(customerID As Integer, allSaleItems As List(Of ContractsService), endDate As Date?, billingFrequency As String, paymentMethod As String, referenceID As String, price As Decimal, contractStatus As String)
         Using con As New SqlConnection(constr)
@@ -130,67 +131,67 @@ Public Class ContractsDatabaseHelper
     ''' <summary>
     ''' Updates an existing billing contract in the database.
     ''' </summary>
-    Public Sub UpdateContract(contractID As Integer, customerID As Integer, serviceID As Integer, addonServiceID As Integer?, startDate As Date, endDate As Date?, billingFrequency As String, paymentMethod As String, price As Decimal, contractStatus As String)
+    Public Sub UpdateContract(contractID As Integer, customerID As Integer, allSaleItems As List(Of ContractsService), startDate As Date, endDate As Date?, billingFrequency As String, paymentMethod As String, referenceID As String, price As Decimal, contractStatus As String)
         Using con As New SqlConnection(constr)
             con.Open()
-            ' SQL query to update a contract.
-            Dim updateQuery As String = "UPDATE ContractsTable SET CustomerID = @CustomerID, ServiceID = @ServiceID, AddonServiceID = @AddonServiceID, StartDate = @StartDate, EndDate = @EndDate, BillingFrequency = @BillingFrequency, PaymentMethod = @PaymentMethod, Price = @Price, ContractStatus = @ContractStatus WHERE ContractID = @ContractID"
-            Using cmd As New SqlCommand(updateQuery, con)
-                cmd.Parameters.AddWithValue("@ContractID", contractID)
-                cmd.Parameters.AddWithValue("@CustomerID", customerID)
-                cmd.Parameters.AddWithValue("@ServiceID", serviceID)
-                cmd.Parameters.AddWithValue("@StartDate", startDate)
+            Dim transaction As SqlTransaction = con.BeginTransaction()
+            Try
+                ' SQL query to update a contract.
+                Dim updateQuery As String = "UPDATE ContractsTable SET CustomerID = @CustomerID, StartDate = @StartDate, EndDate = @EndDate, BillingFrequency = @BillingFrequency, PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, Price = @Price, ContractStatus = @ContractStatus WHERE ContractID = @ContractID"
+                Using cmd As New SqlCommand(updateQuery, con, transaction)
+                    cmd.Parameters.AddWithValue("@ContractID", contractID)
+                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
+                    cmd.Parameters.AddWithValue("@StartDate", startDate)
 
-                ' Handle the nullable EndDate parameter
-                If endDate.HasValue Then
-                    cmd.Parameters.AddWithValue("@EndDate", endDate.Value)
-                Else
-                    cmd.Parameters.AddWithValue("@EndDate", DBNull.Value)
-                End If
-                If addonServiceID.HasValue Then
-                    cmd.Parameters.AddWithValue("@AddonServiceID", addonServiceID.Value)
-                Else
-                    cmd.Parameters.AddWithValue("@AddonServiceID", DBNull.Value) ' Insert NULL if no addon is selected
-                End If
-                cmd.Parameters.AddWithValue("@BillingFrequency", billingFrequency)
-                cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
-                cmd.Parameters.AddWithValue("@Price", price)
-                cmd.Parameters.AddWithValue("@ContractStatus", contractStatus)
-                cmd.ExecuteNonQuery()
-            End Using
+                    ' Handle the nullable EndDate parameter
+                    If endDate.HasValue Then
+                        cmd.Parameters.AddWithValue("@EndDate", endDate.Value)
+                    Else
+                        cmd.Parameters.AddWithValue("@EndDate", DBNull.Value)
+                    End If
+                    cmd.Parameters.AddWithValue("@BillingFrequency", billingFrequency)
+                    cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
+                    cmd.Parameters.AddWithValue("@ReferenceID", referenceID)
+                    cmd.Parameters.AddWithValue("@Price", price)
+                    cmd.Parameters.AddWithValue("@ContractStatus", contractStatus)
+                    cmd.ExecuteNonQuery()
+                End Using
+                Dim deleteServicesQuery = "DELETE FROM ContractServiceTable WHERE ContractID = @ContractID"
+                Using cmdDelete As New SqlCommand(deleteServicesQuery, con, transaction)
+                    cmdDelete.Parameters.AddWithValue("@ContractID", contractID)
+                    cmdDelete.ExecuteNonQuery()
+                End Using
+                Dim deleteSalesServicesFromHistoryQuery = "DELETE FROM SalesHistoryTable WHERE ContractID = @ContractID"
+                Using cmdDelete As New SqlCommand(deleteSalesServicesFromHistoryQuery, con, transaction)
+                    cmdDelete.Parameters.AddWithValue("@ContractID", contractID)
+                    cmdDelete.ExecuteNonQuery()
+                End Using
+
+                Dim insertServiceQuery = "INSERT INTO ContractServiceTable (ContractID, ServiceID, AddonServiceID, Subtotal) VALUES (@ContractID, @ServiceID, @AddonServiceID, @Subtotal)"
+                For Each item As ContractsService In allSaleItems
+                    Dim baseServiceID As Integer = GetServiceIdByName(item.Service)
+                    Dim addonID As Integer? = GetAddonIdByName(item.Addon)
+                    Using cmdService As New SqlCommand(insertServiceQuery, con, transaction)
+                        cmdService.Parameters.AddWithValue("@ContractID", contractID)
+                        cmdService.Parameters.AddWithValue("@ServiceID", baseServiceID)
+                        If addonID.HasValue Then
+                            cmdService.Parameters.AddWithValue("@AddonServiceID", addonID.Value)
+                        Else
+                            cmdService.Parameters.AddWithValue("@AddonServiceID", DBNull.Value)
+                        End If
+                        cmdService.Parameters.AddWithValue("@Subtotal", item.ServicePrice)
+                        cmdService.ExecuteNonQuery()
+                    End Using
+                Next
+                transaction.Commit()
+            Catch ex As Exception
+                transaction.Rollback()
+                MessageBox.Show("Error updating sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
         End Using
     End Sub
-
-    ''' <summary>
-    ''' Deletes an existing billing contract from the database.
-    ''' </summary>
-    'Public Sub DeleteContract(contractID As String)
-    '    If String.IsNullOrEmpty(contractID) Then
-    '        MessageBox.Show("Please select contract from the table to delete", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '        Return
-    '    End If
-    '    Dim DialogResult = MessageBox.Show("Are you sure you want to delete this contract?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-    '    If DialogResult = DialogResult.Yes Then
-
-    '        Using con As New SqlConnection(constr)
-    '            Try
-    '                con.Open()
-    '                ' SQL query to delete a contract.
-    '                Dim deleteQuery As String = "DELETE FROM ContractsTable WHERE ContractID = @ContractID"
-    '                Using cmd As New SqlCommand(deleteQuery, con)
-    '                    cmd.Parameters.AddWithValue("@ContractID", contractID)
-    '                    cmd.ExecuteNonQuery()
-    '                    MessageBox.Show("Contract deleted successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-    '                End Using
-    '            Catch ex As Exception
-    '                MessageBox.Show("An error occurred while deleting contract" & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '            Finally
-    '                con.Close()
-    '            End Try
-    '        End Using
-    '    End If
-    'End Sub
-
     ''' <summary>
     ''' Gets all customer names from the database.
     ''' </summary>
@@ -346,5 +347,112 @@ Public Class ContractsDatabaseHelper
 
         Return items
     End Function
+    Public Shared Function GetSalesServiceList(contractID As Integer) As List(Of ContractsService)
+        Dim serviceList As New List(Of ContractsService)
+        Dim selectQuery As String = "SELECT " &
+                                "CST.ContractServiceID, " &
+                                "S_Base.ServiceName AS Service, " &
+                                "ISNULL(S_Addon.ServiceName, 'None') AS Addon, " &
+                                "CST.Subtotal AS ServicePrice, " &
+                                "CST.ServiceID, " &
+                                "CST.AddonServiceID " &
+                                "FROM ContractServiceTable CST " &
+                                "INNER JOIN ServicesTable S_Base ON CST.ServiceID = S_Base.ServiceID " &
+                                "LEFT JOIN ServicesTable S_Addon ON CST.AddonServiceID = S_Addon.ServiceID " &
+                                "WHERE CST.ContractID = @ContractID"
+
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@ContractID", contractID)
+
+                    Using reader As SqlDataReader = cmd.ExecuteReader()
+                        While reader.Read()
+
+                            Dim item As New ContractsService() With {
+                            .Service = reader.GetString(reader.GetOrdinal("Service")),
+                            .Addon = reader.GetString(reader.GetOrdinal("Addon")),
+                            .ServicePrice = reader.GetDecimal(reader.GetOrdinal("ServicePrice"))
+                        }
+                            serviceList.Add(item)
+                        End While
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Database Error when loading sale services: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+
+
+        Return serviceList
+    End Function
+
+    ' --- BASE SERVICE ID LOOKUP ---
+    Public Shared Function GetServiceIdByName(serviceName As String) As Integer
+        If String.IsNullOrWhiteSpace(serviceName) Then
+            Throw New ArgumentException("Service name cannot be empty.")
+        End If
+
+        Dim serviceID As Integer = -1
+        Dim selectQuery As String = "SELECT ServiceID FROM ServicesTable WHERE ServiceName = @ServiceName"
+
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@ServiceName", serviceName)
+
+                    Dim result = cmd.ExecuteScalar()
+
+                    If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
+                        serviceID = Convert.ToInt32(result)
+                    End If
+                End Using
+            Catch ex As Exception
+                Throw New Exception("Error retrieving Base Service ID for: " & serviceName & vbCrLf & "Details: " & ex.Message)
+            Finally
+                con.Close()
+            End Try
+        End Using
+
+        If serviceID = -1 Then
+            Throw New Exception("Base Service '" & serviceName & "' ID could not be found. Check ServicesTable data.")
+        End If
+
+        Return serviceID
+    End Function
+
+    ' --- ADDON SERVICE ID LOOKUP ---
+    Public Shared Function GetAddonIdByName(addonName As String) As Integer?
+        If String.IsNullOrWhiteSpace(addonName) OrElse addonName.Equals("None", StringComparison.OrdinalIgnoreCase) Then
+            Return Nothing
+        End If
+        Dim addonID As Integer? = Nothing
+        Dim selectQuery As String = "SELECT ServiceID FROM ServicesTable WHERE ServiceName = @AddonName"
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@AddonName", addonName)
+
+                    Dim result = cmd.ExecuteScalar()
+
+                    If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
+                        addonID = Convert.ToInt32(result)
+                    End If
+                End Using
+            Catch ex As Exception
+                Throw New Exception("Error retrieving Addon Service ID for: " & addonName & vbCrLf & "Details: " & ex.Message)
+            Finally
+                con.Close()
+            End Try
+        End Using
+        Return addonID
+    End Function
+
+
 
 End Class
