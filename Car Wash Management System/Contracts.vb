@@ -7,8 +7,10 @@ Public Class Contracts
 
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly contractsDatabaseHelper As ContractsDatabaseHelper
-    Dim activityLogInDashboardService As New ActivityLogInDashboardService(constr)
-    Private contractServiceList As New List(Of ContractsService)()
+    Dim activityLogInDashboardService As ActivityLogInDashboardService
+    Private contractServiceList As List(Of ContractsService)
+    Private ReadOnly salesDatabaseHelper As SalesDatabaseHelper
+    Private nextServiceID As Integer = 1
 
     Public Sub New()
         ' This call is required by the designer.
@@ -16,12 +18,16 @@ Public Class Contracts
 
         ' Initialize the data access layer
         contractsDatabaseHelper = New ContractsDatabaseHelper(constr)
+        salesDatabaseHelper = New SalesDatabaseHelper(constr)
+        contractServiceList = New List(Of ContractsService)()
+        activityLogInDashboardService = New ActivityLogInDashboardService(constr)
     End Sub
     Private Sub Contracts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         PopulateUIForContract()
         DataGridViewFontStyle()
         ChangeHeaderOfDataGridViewContracts()
         SetupListView()
+        contractsDatabaseHelper.UpdateTheStatusOfContractWhenExpired()
     End Sub
     Private Sub AddContractBtn_Click(sender As Object, e As EventArgs) Handles AddContractBtn.Click
         AddBillingContracts()
@@ -45,7 +51,7 @@ Public Class Contracts
     End Sub
     Private Sub AddBillingContracts()
         Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
-        Dim addonServiceName As String = If(ComboBoxAddon.SelectedIndex <> -1, ComboBoxAddon.Text, String.Empty)
+        Dim addonServiceName As String = If(ComboBoxAddons.SelectedIndex <> -1, ComboBoxAddons.Text, String.Empty)
 
         Try
             ' The CustomerID is now retrieved directly from the textbox
@@ -102,8 +108,12 @@ Public Class Contracts
             End If
 
             'Validate that a Reference ID is provided for certain payment methods.
-            If (ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" Or ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque") AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
+            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
                 MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque" AndAlso String.IsNullOrWhiteSpace(TextBoxCheque.Text) Then
+                MessageBox.Show("Please enter a Cheque Number for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
 
@@ -120,23 +130,14 @@ Public Class Contracts
                 Return
             End If
 
-            ' Get the separate Service IDs for the base service and the addon.
-            Dim baseServiceDetails As ContractsService = contractsDatabaseHelper.GetServiceDetails(baseServiceName)
-            Dim addonServiceID As Integer? = Nothing ' Use a nullable integer for the addon service ID
-            If Not String.IsNullOrWhiteSpace(addonServiceName) Then
-                Dim addonServiceDetails As ContractsService = contractsDatabaseHelper.GetServiceDetails(addonServiceName)
-                If addonServiceDetails IsNot Nothing Then
-                    addonServiceID = addonServiceDetails.ServiceID
-                End If
-            End If
-
             contractsDatabaseHelper.AddContract(
                 customerID,
                 contractServiceList,
-                If(DateTimePickerEndDate.Checked, CType(DateTimePickerEndDate.Value, Date?), Nothing),
+                DateTimePickerEndDate.Text,
                 ComboBoxBillingFrequency.Text,
                 ComboBoxPaymentMethod.Text,
                 TextBoxReferenceID.Text,
+                TextBoxCheque.Text,
                 totalPrice,
                 ComboBoxContractStatus.Text
             )
@@ -160,33 +161,10 @@ Public Class Contracts
     Private Sub PopulateUIForContract()
         Try
             ' Populate UI components using the data returned from the management class
-            Dim customerNames As DataTable = contractsDatabaseHelper.GetAllCustomerNames()
-            Dim customerNamesCollection As New AutoCompleteStringCollection()
-            For Each row As DataRow In customerNames.Rows
-                customerNamesCollection.Add(row("Name").ToString())
-            Next
-            TextBoxCustomerName.AutoCompleteCustomSource = customerNamesCollection
-            TextBoxCustomerName.AutoCompleteMode = AutoCompleteMode.SuggestAppend
-            TextBoxCustomerName.AutoCompleteSource = AutoCompleteSource.CustomSource
-
-            Dim baseServices As DataTable = contractsDatabaseHelper.GetBaseServices()
-            ComboBoxServices.DataSource = baseServices
-            ComboBoxServices.DisplayMember = "ServiceName"
-            ComboBoxServices.ValueMember = "ServiceID"
-            ComboBoxServices.DropDownStyle = ComboBoxStyle.DropDownList
-
-            Dim addonServices As DataTable = contractsDatabaseHelper.GetAddonServices()
-            ComboBoxAddon.DataSource = addonServices
-            ComboBoxAddon.DisplayMember = "ServiceName"
-            ComboBoxAddon.ValueMember = "ServiceID"
-            ComboBoxAddon.DropDownStyle = ComboBoxStyle.DropDownList
-            ComboBoxAddon.Text = ""
-
-            ' This part is not in the management class anymore, as it's static UI logic
-            ComboBoxPaymentMethod.Items.AddRange({"Cash", "Gcash", "Cheque"})
-            ComboBoxPaymentMethod.SelectedIndex = 0
-
-            ' Load existing contracts into the DataGridView when the form loads.
+            salesDatabaseHelper.PopulateCustomerNames(TextBoxCustomerName)
+            salesDatabaseHelper.PopulatePaymentMethod(ComboBoxPaymentMethod)
+            salesDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
+            salesDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
             DataGridViewContract.DataSource = contractsDatabaseHelper.ViewContracts()
             ClearFields()
         Catch ex As Exception
@@ -195,41 +173,15 @@ Public Class Contracts
 
     End Sub
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
-        CalculateTotalPrice()
+        SalesForm.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, TextBoxPrice)
     End Sub
 
-    Private Sub ComboBoxAddon_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxAddon.SelectedIndexChanged
-        CalculateTotalPrice()
-    End Sub
-
-    Private Sub CalculateTotalPrice()
-        Dim totalPrice As Decimal = 0.0D
-
-        If ComboBoxServices.SelectedIndex <> -1 Then
-            Dim baseServiceDetails As ContractsService = contractsDatabaseHelper.GetServiceDetails(ComboBoxServices.Text)
-            totalPrice += baseServiceDetails.Price
-        End If
-
-        If ComboBoxAddon.SelectedIndex <> -1 Then
-            Dim addonServiceDetails As ContractsService = contractsDatabaseHelper.GetServiceDetails(ComboBoxAddon.Text)
-            totalPrice += addonServiceDetails.Price
-        End If
-
-        TextBoxPrice.Text = totalPrice.ToString("N2") ' Format to 2 decimal places
+    Private Sub ComboBoxAddon_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxAddons.SelectedIndexChanged
+        SalesForm.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, TextBoxPrice)
     End Sub
 
     Private Sub TextBoxCustomerName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCustomerName.TextChanged
-        Try
-            Dim customerID As Integer = contractsDatabaseHelper.GetCustomerID(TextBoxCustomerName.Text)
-            If customerID > 0 Then
-                TextBoxCustomerID.Text = customerID.ToString()
-            Else
-                TextBoxCustomerID.Text = String.Empty ' Clear the ID if no match is found.
-            End If
-        Catch ex As Exception
-            MessageBox.Show("An error occurred while retrieving customer ID: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            TextBoxCustomerID.Text = String.Empty
-        End Try
+        CustomerNameTextChangedService.CustomerNameTextChanged(TextBoxCustomerID, TextBoxCustomerName)
     End Sub
 
     Private Sub UpdateContractBtn_Click(sender As Object, e As EventArgs) Handles UpdateContractBtn.Click
@@ -292,8 +244,12 @@ Public Class Contracts
             End If
 
             'Validate that a Reference ID is provided for certain payment methods.
-            If (ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" Or ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque") AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
+            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
                 MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque" AndAlso String.IsNullOrWhiteSpace(TextBoxCheque.Text) Then
+                MessageBox.Show("Please enter a Cheque Number for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
 
@@ -319,9 +275,11 @@ Public Class Contracts
                 ComboBoxBillingFrequency.Text,
                 ComboBoxPaymentMethod.Text,
                 TextBoxReferenceID.Text,
+                TextBoxCheque.Text,
                 totalPrice,
                 ComboBoxContractStatus.Text
             )
+            Carwash.PopulateAllTotal
             Carwash.NotificationLabel.Text = "Contract Updated"
             Carwash.ShowNotification()
             MessageBox.Show("Contract updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -341,7 +299,7 @@ Public Class Contracts
         TextBoxCustomerID.Clear()
         TextBoxCustomerName.Clear()
         ComboBoxServices.SelectedIndex = -1
-        ComboBoxAddon.SelectedIndex = -1
+        ComboBoxAddons.SelectedIndex = -1
         DateTimePickerStartDate.Value = DateTime.Now
         DateTimePickerEndDate.Value = DateTime.Now
         DateTimePickerEndDate.Checked = False
@@ -351,9 +309,11 @@ Public Class Contracts
         ComboBoxContractStatus.SelectedIndex = -1
         LabelContractID.Text = String.Empty
         TextBoxReferenceID.Clear()
+        TextBoxCheque.Clear()
         contractServiceList.Clear()
         ListViewServices.Items.Clear()
         TextBoxTotalPrice.Text = "0.00"
+        nextServiceID = 1
     End Sub
 
     Private Sub DataGridViewContract_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewContract.CellContentClick
@@ -373,7 +333,13 @@ Public Class Contracts
             DateTimePickerEndDate.Text = currentRow.Cells(5).Value?.ToString()
             ComboBoxBillingFrequency.Text = currentRow.Cells(6).Value?.ToString()
             ComboBoxPaymentMethod.Text = currentRow.Cells(7).Value?.ToString()
-            TextBoxReferenceID.Text = currentRow.Cells(8).Value?.ToString()
+            If ComboBoxPaymentMethod.SelectedItem = "Gcash" Then
+                TextBoxReferenceID.Text = currentRow.Cells(8).Value?.ToString()
+                TextBoxCheque.Clear()
+            ElseIf ComboBoxPaymentMethod.SelectedItem = "Cheque" Then
+                TextBoxCheque.Text = currentRow.Cells(8).Value?.ToString()
+                TextBoxReferenceID.Clear()
+            End If
             TextBoxTotalPrice.Text = currentRow.Cells(9).Value?.ToString()
 
             ComboBoxContractStatus.Text = currentRow.Cells(10).Value?.ToString()
@@ -401,18 +367,23 @@ Public Class Contracts
     Private Sub LoadServicesIntoListView(salesID As Integer)
         ListViewServices.Items.Clear()
         Me.contractServiceList.Clear()
-        Dim serviceList As List(Of ContractsService) = contractsDatabaseHelper.GetSalesServiceList(salesID)
+        Dim serviceList As List(Of ContractsService) = ContractsDatabaseHelper.GetSalesServiceList(salesID)
+        Dim listItemIDCounter As Integer = 1
 
         For Each service As ContractsService In serviceList
-            ' 3. Add to the local tracking list (VehicleList)
+
             Me.contractServiceList.Add(service)
-            ' 4. Add to the ListView for display
-            Dim lvi As New ListViewItem(service.Service)
+            Dim lvi As New ListViewItem(listItemIDCounter.ToString())
+
+            lvi.SubItems.Add(service.Service)
             lvi.SubItems.Add(service.Addon)
             lvi.SubItems.Add(service.ServicePrice.ToString("N2"))
+
             ListViewServices.Items.Add(lvi)
+            listItemIDCounter += 1
 
         Next
+        Me.nextServiceID = listItemIDCounter
     End Sub
 
     Private Sub DataGridViewContract_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewContract.CellFormatting
@@ -492,14 +463,11 @@ Public Class Contracts
            .PaymentMethod = ComboBoxPaymentMethod.Text,
            .SaleDate = DataGridViewContract.CurrentRow.Cells(4).Value,
            .StartDate = DateTimePickerStartDate.Value,
-           .EndDate = If(DateTimePickerEndDate.Checked, CType(DateTimePickerEndDate.Value, Date?), Nothing),
+           .EndDate = DateTimePickerEndDate.Value,
            .ContractStatus = ComboBoxContractStatus.Text
        })
     End Sub
 
-    Private Sub PrintBillBtn_Click_1(sender As Object, e As EventArgs) Handles PrintBillBtn.Click
-        ValidatePrint()
-    End Sub
 
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
         AddSaleService()
@@ -514,7 +482,7 @@ Public Class Contracts
 
         For Each item As ListViewItem In ListViewServices.Items
             If item.SubItems.Count > 2 Then
-                Dim priceText As String = item.SubItems(2).Text
+                Dim priceText As String = item.SubItems(3).Text
 
                 Dim itemPrice As Decimal
                 If Decimal.TryParse(priceText, itemPrice) Then
@@ -532,19 +500,36 @@ Public Class Contracts
             Return
         End If
 
+        ' 1. Get the current ID and prepare the next one
+        Dim currentID As Integer = nextServiceID
+        nextServiceID += 1 ' Increment the counter for the next line item
+
         Dim services As String = ComboBoxServices.Text.Trim()
-        Dim addons As String = ComboBoxAddon.Text.Trim()
-        Dim price As Decimal = Decimal.Parse(TextBoxPrice.Text)
-        Dim newService As New ContractsService(services, addons, price)
+        Dim addons As String = ComboBoxAddons.Text.Trim()
+
+        ' Use TryParse for safer decimal conversion
+        Dim price As Decimal
+        If Not Decimal.TryParse(TextBoxPrice.Text, price) Then
+            MessageBox.Show("Invalid price value.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+
+        ' 2. Create the new service, passing the current ID
+        Dim newService As New ContractsService(currentID, services, addons, price)
 
         Me.contractServiceList.Add(newService)
-        Dim lvi As New ListViewItem(newService.Service)
-        lvi.SubItems.Add(newService.Addon)
-        lvi.SubItems.Add(newService.ServicePrice.ToString("N2"))
+
+        ' 3. Add the ID as the FIRST column in the ListView
+        Dim lvi As New ListViewItem(newService.ID.ToString()) ' ID is the main item text
+
+        ' Add the rest of the columns as sub-items
+        lvi.SubItems.Add(newService.Service)        ' Service
+        lvi.SubItems.Add(newService.Addon)          ' Addon
+        lvi.SubItems.Add(newService.ServicePrice.ToString("N2")) ' Price
         ListViewServices.Items.Add(lvi)
 
         ComboBoxServices.SelectedIndex = -1
-        ComboBoxAddon.SelectedIndex = -1
+        ComboBoxAddons.SelectedIndex = -1
         TextBoxPrice.Text = "0.00"
     End Sub
 
@@ -552,8 +537,9 @@ Public Class Contracts
         ListViewServices.View = View.Details
         ListViewServices.HeaderStyle = ColumnHeaderStyle.Nonclickable
         ListViewServices.Columns.Clear()
-        ListViewServices.Columns.Add("Service", 100, HorizontalAlignment.Left)
-        ListViewServices.Columns.Add("Addon", 100, HorizontalAlignment.Left)
+        ListViewServices.Columns.Add("ID", 30, HorizontalAlignment.Left)
+        ListViewServices.Columns.Add("Service", 85, HorizontalAlignment.Left)
+        ListViewServices.Columns.Add("Addon", 85, HorizontalAlignment.Left)
         ListViewServices.Columns.Add("Price", 50, HorizontalAlignment.Left)
         ListViewServices.GridLines = True
         ListViewServices.FullRowSelect = True
@@ -565,35 +551,84 @@ Public Class Contracts
     End Sub
     Private Sub RemoveSelectedService()
         If ListViewServices.SelectedItems.Count = 0 Then
-            MessageBox.Show("Please select a services from the list to remove.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Please select a service from the list to remove.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
-        Dim selectedItem As ListViewItem = ListViewServices.SelectedItems(0)
-        Dim serviceToRemove As String = selectedItem.Text
-        Dim addonServiceToRemove As String = selectedItem.Text
-        Dim subtotalRemovedCount As Integer = Me.contractServiceList.RemoveAll(Function(v)
-                                                                                   Return v.Service.Equals(serviceToRemove, StringComparison.OrdinalIgnoreCase)
-                                                                               End Function)
 
-        If subtotalRemovedCount > 0 Then
+        Dim selectedItem As ListViewItem = ListViewServices.SelectedItems(0)
+
+        ' Get the 0-based index of the selected item in the ListView
+        Dim selectedIndex As Integer = selectedItem.Index
+
+        ' 1. Check if the index is valid for our tracking list
+        If selectedIndex >= 0 AndAlso selectedIndex < Me.contractServiceList.Count Then
+
+            ' 2. Remove the service object from the internal list based on index
+            Me.contractServiceList.RemoveAt(selectedIndex)
+
+            ' 3. Remove the item from the visual ListView control
+            ' (This step is technically optional since we clear and re-add below, but good practice)
             ListViewServices.Items.Remove(selectedItem)
-            MessageBox.Show($"Service was removed successfully from the list.", "Removed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            ' 4. After removing, we must re-load and re-number the entire list
+            ' This ensures the IDs (1, 2, 3...) remain sequential without gaps.
+
+            ' Get the current list of remaining services
+            ' Using ToList() creates a copy, so we can manipulate the original SaleServiceList safely below.
+            Dim remainingServices As List(Of ContractsService) = Me.contractServiceList.ToList()
+
+            ' Clear the UI and internal list (before re-adding)
+            ListViewServices.Items.Clear()
+            Me.contractServiceList.Clear() ' Clear the internal list so we can rebuild it with the same items
+
+            ' Now, iterate through the remaining items and re-add them with new sequential IDs
+            Dim listItemIDCounter As Integer = 1
+            For Each service As ContractsService In remainingServices
+                Me.contractServiceList.Add(service) ' Re-add to the internal list
+
+                ' Create the ListView item with the new sequential ID
+                Dim lvi As New ListViewItem(listItemIDCounter.ToString())
+                lvi.SubItems.Add(service.Service)
+                lvi.SubItems.Add(service.Addon)
+                lvi.SubItems.Add(service.ServicePrice.ToString("N2"))
+                ListViewServices.Items.Add(lvi)
+
+                listItemIDCounter += 1
+            Next
+
+            ' 5. Update the global counter for new additions
+            Me.nextServiceID = listItemIDCounter
+
+            MessageBox.Show($"Service (ID: {selectedItem.Text}) was removed successfully and the list was renumbered.", "Removed", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            MessageBox.Show("Could not find the selected vehicle in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Could not find the selected service in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 
     Private Sub ComboBoxPaymentMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPaymentMethod.SelectedIndexChanged
-        If ComboBoxPaymentMethod.SelectedItem = "Gcash" Or ComboBoxPaymentMethod.SelectedItem = "Cheque" Then
+        If ComboBoxPaymentMethod.SelectedItem = "Gcash" Then
             TextBoxReferenceID.ReadOnly = False
-        Else
+            TextBoxCheque.ReadOnly = True
+            TextBoxCheque.Clear()
+        ElseIf ComboBoxPaymentMethod.SelectedItem = "Cheque" Then
+            TextBoxCheque.ReadOnly = False
             TextBoxReferenceID.ReadOnly = True
             TextBoxReferenceID.Clear()
+        Else
+            TextBoxReferenceID.ReadOnly = True
+            TextBoxCheque.ReadOnly = True
+            TextBoxReferenceID.Clear()
+            TextBoxCheque.Clear()
         End If
     End Sub
 
     Private Sub Label9_Click(sender As Object, e As EventArgs)
 
     End Sub
+
+    Private Sub FullScreenServiceBtn_Click(sender As Object, e As EventArgs) Handles FullScreenServiceBtn.Click
+        ShowPanelDocked.ShowServicesPanelDocked(PanelServiceInfo, ListViewServices)
+    End Sub
+
 End Class
 

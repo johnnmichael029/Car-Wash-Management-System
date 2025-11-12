@@ -14,6 +14,8 @@ Public Class Reservation
         LoadListOfReserved()
         DataGridViewListOfReservedFontStyle()
         ChangeHeaderOfDataGridViewListOfReserved()
+        ReservationDatabaseHelper.UpdateStatusOfAppointment()
+        ReservationDatabaseHelper.UpdateStatusOfAppointmentServiceTable()
     End Sub
     Private Sub DataGridViewListOfReservedFontStyle()
         DataGridViewListOfReservation.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)

@@ -10,7 +10,7 @@ Public Class OnTheDayDatabaseHelper
         Using con As New SqlConnection(constr)
             Dim viewListQuery As String = "SELECT " &
                 "AST.AppointmentServiceID As OnTheDayID, " &
-                "c.Name As CustomerName, " &
+                "c.Name + ' ' + c.LastName As CustomerName, " &
                 "sv_base.ServiceName As BaseService, " &
                 "sv_addon.ServiceName As AddonService, " &
                 "a.AppointmentDateTime As DateTime, " &
@@ -24,9 +24,6 @@ Public Class OnTheDayDatabaseHelper
             "AND CAST(AppointmentDateTime AS DATE) = CAST(GETDATE() AS DATE) " &
             "ORDER BY AST.AppointmentServiceID DESC"
 
-
-
-
             Using cmd As New SqlCommand(viewListQuery, con)
                 Using adapater As New SqlDataAdapter(cmd)
                     adapater.Fill(dt)
@@ -37,7 +34,6 @@ Public Class OnTheDayDatabaseHelper
     End Function
     Public Sub UpdateStatusInOTD(otdID As Integer, newStatus As String)
         Using con As New SqlConnection(constr)
-            ' Declare variables for transaction and AppointmentID
             Dim tran As SqlTransaction = Nothing
             Dim parentAppointmentID As Integer = 0
 
@@ -47,8 +43,8 @@ Public Class OnTheDayDatabaseHelper
 
                 ' 1. Update the status of the specific service line item (OTD ID)
                 Dim UpdateOTDStatusQuery As String = "UPDATE AppointmentServiceTable " &
-                                                 "SET AppointmentStatus = @NewStatus " &
-                                                 "WHERE AppointmentServiceID = @OnTheDayID"
+                                                     "SET AppointmentStatus = @NewStatus " &
+                                                     "WHERE AppointmentServiceID = @OnTheDayID"
 
                 Using cmdOTD As New SqlCommand(UpdateOTDStatusQuery, con, tran)
                     cmdOTD.Parameters.AddWithValue("@NewStatus", newStatus)
@@ -61,7 +57,6 @@ Public Class OnTheDayDatabaseHelper
                 Using cmdGetID As New SqlCommand(GetParentIDQuery, con, tran)
                     cmdGetID.Parameters.AddWithValue("@OnTheDayID", otdID)
 
-                    ' ExecuteScalar retrieves a single value (the AppointmentID)
                     Dim result As Object = cmdGetID.ExecuteScalar()
                     If result IsNot Nothing AndAlso Not DBNull.Value.Equals(result) Then
                         parentAppointmentID = Convert.ToInt32(result)
@@ -70,16 +65,46 @@ Public Class OnTheDayDatabaseHelper
                     End If
                 End Using
 
-                ' 3. Update the status of the parent AppointmentsTable using the retrieved ID
-                Dim UpdateAppointmentStatusQuery As String = "UPDATE AppointmentsTable " &
-                                                         "SET AppointmentStatus = @NewStatus " &
-                                                         "WHERE AppointmentID = @AppointmentID"
+                ' 3. Conditional Parent Appointment Status Update (THE FIX)
+                If parentAppointmentID > 0 Then
+                    ' Check if ANY service item for this parent appointment is NOT "Completed"
+                    Dim CheckPendingServicesQuery As String =
+                        "SELECT COUNT(*) FROM AppointmentServiceTable " &
+                        "WHERE AppointmentID = @AppointmentID AND AppointmentStatus <> 'Completed'"
 
-                Using cmdParent As New SqlCommand(UpdateAppointmentStatusQuery, con, tran)
-                    cmdParent.Parameters.AddWithValue("@NewStatus", newStatus)
-                    cmdParent.Parameters.AddWithValue("@AppointmentID", parentAppointmentID)
-                    cmdParent.ExecuteNonQuery()
-                End Using
+                    Using cmdCheckPending As New SqlCommand(CheckPendingServicesQuery, con, tran)
+                        cmdCheckPending.Parameters.AddWithValue("@AppointmentID", parentAppointmentID)
+                        Dim pendingCount As Integer = Convert.ToInt32(cmdCheckPending.ExecuteScalar())
+
+                        If pendingCount = 0 Then
+                            ' Only update the parent AppointmentStatus to the newStatus if ALL services are completed (count is 0)
+                            ' We assume the only time we want to update the parent status is to mark it as Completed.
+                            Dim UpdateAppointmentStatusQuery As String = "UPDATE AppointmentsTable " &
+                                                                         "SET AppointmentStatus = @NewStatus " &
+                                                                         "WHERE AppointmentID = @AppointmentID"
+
+                            Using cmdParent As New SqlCommand(UpdateAppointmentStatusQuery, con, tran)
+                                cmdParent.Parameters.AddWithValue("@NewStatus", newStatus)
+                                cmdParent.Parameters.AddWithValue("@AppointmentID", parentAppointmentID)
+                                cmdParent.ExecuteNonQuery()
+                            End Using
+                        Else
+                            ' IMPORTANT: If newStatus is 'Completed' and there are still pending items, 
+                            ' we must prevent the main AppointmentStatus from being set to 'Completed'.
+                            ' We will set the parent status to something like 'In Progress' or 'Partially Completed' 
+                            ' if the newStatus is "Completed" but others are still pending/confirmed.
+                            If newStatus = "Completed" Then
+                                Dim UpdateAppointmentStatusToInProgress As String = "UPDATE AppointmentsTable " &
+                                                                                    "SET AppointmentStatus = 'In-Progress' " &
+                                                                                    "WHERE AppointmentID = @AppointmentID AND AppointmentStatus <> 'In Progress'"
+                                Using cmdParentInProgress As New SqlCommand(UpdateAppointmentStatusToInProgress, con, tran)
+                                    cmdParentInProgress.Parameters.AddWithValue("@AppointmentID", parentAppointmentID)
+                                    cmdParentInProgress.ExecuteNonQuery()
+                                End Using
+                            End If
+                        End If
+                    End Using
+                End If
 
                 ' Commit the transaction if all steps succeeded
                 tran.Commit()
@@ -94,81 +119,12 @@ Public Class OnTheDayDatabaseHelper
                     End Try
                 End If
                 Console.WriteLine("Error updating status: " & ex.Message)
-
+                ' Display error to the user (assuming this is part of your application's flow)
+                MessageBox.Show("Error updating status: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally
                 If con IsNot Nothing AndAlso con.State = ConnectionState.Open Then
                     con.Close()
                 End If
-            End Try
-        End Using
-    End Sub
-
-    'Public Sub AddSalesInSalesHistoryTableWhenCompleted(salesID As Integer, status As String)
-    '    If status <> "Completed" Then
-    '        ' Only proceed if the status is "Completed"
-    '        Return
-    '    End If
-    '    Using con As New SqlConnection(constr)
-    '        Try
-    '            con.Open()
-    '            ' Insert into SalesHistoryTable
-    '            Dim insertSalesHistoryQuery As String = "INSERT INTO SalesHistoryTable (
-    '                    CustomerID,
-    '                    ServiceID,
-    '                    AddonServiceID,
-    '                    SaleDate,
-    '                    PaymentMethod,
-    '                    TotalPrice
-    '                )
-    '                SELECT
-    '                    a.CustomerID, -- Assumes you want to record the CustomerID
-    '                    d.ServiceID, -- Assumes you want to record the ServiceID
-    '                    a.AddonServiceID, -- Assumes you want to record the AddonServiceID
-    '                    GETDATE(), -- Set the sale date to the current date and time
-    '                    a.PaymentMethod, -- A clear payment method for automated sales
-    '              a.Price
-    '                FROM
-    '                    AppointmentsTable AS a
-    '                INNER JOIN
-    '                    AppointmentServiceTable AS d ON a.AppointmentID = d.AppointmentID
-    '                LEFT JOIN
-    '                    AppointmentServiceTable As ad_sv ON a.AppointmentID = ad_sv.AppointmentID
-    '                WHERE
-    '                    a.AppointmentStatus = 'Completed'
-    '                    AND d.AppointmentStatus <> 'Completed'"
-
-
-
-
-    '            Using cmd As New SqlCommand(insertSalesHistoryQuery, con)
-    '                cmd.Parameters.AddWithValue("@SaleID", salesID)
-    '                cmd.Parameters.AddWithValue("@SaleDate", DateTime.Now) ' Assuming current date as sale date
-    '                cmd.ExecuteNonQuery()
-    '            End Using
-    '        Catch ex As Exception
-    '            Console.WriteLine("Error adding to sales history: " & ex.Message)
-    '        Finally
-    '            con.Close()
-    '        End Try
-    '    End Using
-
-    'End Sub
-    Public Sub UpdateStatusInAppointment(AppointmentID As Integer, newStatus As String)
-        Using con As New SqlConnection(constr)
-            Try
-                con.Open()
-                Dim UpdateAppointmentStatusQuery As String = "UPDATE AppointmentsTable " &
-                                             "SET AppointmentStatus = @NewStatus " &
-                                             "WHERE AppointmentID = @AppointmentID"
-                Using cnd As New SqlCommand(UpdateAppointmentStatusQuery, con)
-                    cnd.Parameters.AddWithValue("@NewStatus", newStatus)
-                    cnd.Parameters.AddWithValue("@AppointmentID", AppointmentID)
-                    cnd.ExecuteNonQuery()
-                End Using
-            Catch ex As Exception
-                Console.WriteLine("Error updating status: " & ex.Message)
-            Finally
-                con.Close()
             End Try
         End Using
     End Sub

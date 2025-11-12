@@ -26,9 +26,13 @@ Partial Class Appointment
         Panel1 = New Panel()
         DataGridViewAppointment = New DataGridView()
         Panel3 = New Panel()
+        Label13 = New Label()
+        TextBoxCheque = New TextBox()
+        PanelServiceInfo = New Panel()
+        ListViewServices = New ListView()
+        FullScreenServiceBtn = New Button()
         RemoveServiceBtn = New Button()
         AddServiceBtn = New Button()
-        ListViewServices = New ListView()
         Label12 = New Label()
         TextBoxTotalPrice = New TextBox()
         TextBoxReferenceID = New TextBox()
@@ -40,7 +44,7 @@ Partial Class Appointment
         Label3 = New Label()
         Label11 = New Label()
         ComboBoxPaymentMethod = New ComboBox()
-        ComboBoxAddon = New ComboBox()
+        ComboBoxAddons = New ComboBox()
         Label10 = New Label()
         ComboBoxServices = New ComboBox()
         Label9 = New Label()
@@ -63,6 +67,7 @@ Partial Class Appointment
         Panel1.SuspendLayout()
         CType(DataGridViewAppointment, ComponentModel.ISupportInitialize).BeginInit()
         Panel3.SuspendLayout()
+        PanelServiceInfo.SuspendLayout()
         SuspendLayout()
         ' 
         ' Panel1
@@ -93,9 +98,12 @@ Partial Class Appointment
         ' Panel3
         ' 
         Panel3.BackColor = Color.White
+        Panel3.Controls.Add(Label13)
+        Panel3.Controls.Add(TextBoxCheque)
+        Panel3.Controls.Add(PanelServiceInfo)
+        Panel3.Controls.Add(FullScreenServiceBtn)
         Panel3.Controls.Add(RemoveServiceBtn)
         Panel3.Controls.Add(AddServiceBtn)
-        Panel3.Controls.Add(ListViewServices)
         Panel3.Controls.Add(Label12)
         Panel3.Controls.Add(TextBoxTotalPrice)
         Panel3.Controls.Add(TextBoxReferenceID)
@@ -107,7 +115,7 @@ Partial Class Appointment
         Panel3.Controls.Add(Label3)
         Panel3.Controls.Add(Label11)
         Panel3.Controls.Add(ComboBoxPaymentMethod)
-        Panel3.Controls.Add(ComboBoxAddon)
+        Panel3.Controls.Add(ComboBoxAddons)
         Panel3.Controls.Add(Label10)
         Panel3.Controls.Add(ComboBoxServices)
         Panel3.Controls.Add(Label9)
@@ -131,6 +139,57 @@ Partial Class Appointment
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(305, 758)
         Panel3.TabIndex = 2
+        ' 
+        ' Label13
+        ' 
+        Label13.AutoSize = True
+        Label13.Font = New Font("Century Gothic", 9F)
+        Label13.Location = New Point(146, 365)
+        Label13.Name = "Label13"
+        Label13.Size = New Size(78, 17)
+        Label13.TabIndex = 136
+        Label13.Text = "Cheque No."
+        ' 
+        ' TextBoxCheque
+        ' 
+        TextBoxCheque.Font = New Font("Century Gothic", 9F)
+        TextBoxCheque.Location = New Point(148, 383)
+        TextBoxCheque.Name = "TextBoxCheque"
+        TextBoxCheque.ReadOnly = True
+        TextBoxCheque.Size = New Size(129, 22)
+        TextBoxCheque.TabIndex = 135
+        ' 
+        ' PanelServiceInfo
+        ' 
+        PanelServiceInfo.Controls.Add(ListViewServices)
+        PanelServiceInfo.Location = New Point(16, 173)
+        PanelServiceInfo.Name = "PanelServiceInfo"
+        PanelServiceInfo.Size = New Size(260, 102)
+        PanelServiceInfo.TabIndex = 134
+        ' 
+        ' ListViewServices
+        ' 
+        ListViewServices.Dock = DockStyle.Fill
+        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        ListViewServices.FullRowSelect = True
+        ListViewServices.GridLines = True
+        ListViewServices.Location = New Point(0, 0)
+        ListViewServices.Name = "ListViewServices"
+        ListViewServices.Size = New Size(260, 102)
+        ListViewServices.TabIndex = 100
+        ListViewServices.UseCompatibleStateImageBehavior = False
+        ' 
+        ' FullScreenServiceBtn
+        ' 
+        FullScreenServiceBtn.FlatAppearance.BorderSize = 0
+        FullScreenServiceBtn.FlatStyle = FlatStyle.Flat
+        FullScreenServiceBtn.Image = My.Resources.Resources.expand1
+        FullScreenServiceBtn.Location = New Point(128, 139)
+        FullScreenServiceBtn.Name = "FullScreenServiceBtn"
+        FullScreenServiceBtn.Size = New Size(37, 33)
+        FullScreenServiceBtn.TabIndex = 133
+        FullScreenServiceBtn.UseVisualStyleBackColor = True
         ' 
         ' RemoveServiceBtn
         ' 
@@ -160,18 +219,6 @@ Partial Class Appointment
         AddServiceBtn.Text = "Add"
         AddServiceBtn.UseVisualStyleBackColor = False
         ' 
-        ' ListViewServices
-        ' 
-        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
-        ListViewServices.FullRowSelect = True
-        ListViewServices.GridLines = True
-        ListViewServices.Location = New Point(16, 173)
-        ListViewServices.Name = "ListViewServices"
-        ListViewServices.Size = New Size(260, 102)
-        ListViewServices.TabIndex = 90
-        ListViewServices.UseCompatibleStateImageBehavior = False
-        ' 
         ' Label12
         ' 
         Label12.AutoSize = True
@@ -197,7 +244,7 @@ Partial Class Appointment
         TextBoxReferenceID.Location = New Point(16, 383)
         TextBoxReferenceID.Name = "TextBoxReferenceID"
         TextBoxReferenceID.ReadOnly = True
-        TextBoxReferenceID.Size = New Size(261, 22)
+        TextBoxReferenceID.Size = New Size(129, 22)
         TextBoxReferenceID.TabIndex = 37
         ' 
         ' Label7
@@ -206,9 +253,9 @@ Partial Class Appointment
         Label7.Font = New Font("Century Gothic", 9F)
         Label7.Location = New Point(16, 365)
         Label7.Name = "Label7"
-        Label7.Size = New Size(85, 17)
+        Label7.Size = New Size(71, 17)
         Label7.TabIndex = 36
-        Label7.Text = "Reference ID"
+        Label7.Text = "Gcash Ref."
         ' 
         ' PrintBillBtn
         ' 
@@ -286,13 +333,13 @@ Partial Class Appointment
         ComboBoxPaymentMethod.Size = New Size(262, 23)
         ComboBoxPaymentMethod.TabIndex = 27
         ' 
-        ' ComboBoxAddon
+        ' ComboBoxAddons
         ' 
-        ComboBoxAddon.FormattingEnabled = True
-        ComboBoxAddon.Location = New Point(148, 115)
-        ComboBoxAddon.Name = "ComboBoxAddon"
-        ComboBoxAddon.Size = New Size(129, 23)
-        ComboBoxAddon.TabIndex = 26
+        ComboBoxAddons.FormattingEnabled = True
+        ComboBoxAddons.Location = New Point(148, 115)
+        ComboBoxAddons.Name = "ComboBoxAddons"
+        ComboBoxAddons.Size = New Size(129, 23)
+        ComboBoxAddons.TabIndex = 26
         ' 
         ' Label10
         ' 
@@ -334,11 +381,11 @@ Partial Class Appointment
         ' 
         ' ComboBoxAppointmentStatus
         ' 
-        ComboBoxAppointmentStatus.AutoCompleteCustomSource.AddRange(New String() {"Pending", "Confirmed", "Cancelled", "No-Show", "Completed"})
+        ComboBoxAppointmentStatus.AutoCompleteCustomSource.AddRange(New String() {"Pending", "Confirmed", "Cancelled", "No-Show"})
         ComboBoxAppointmentStatus.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxAppointmentStatus.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxAppointmentStatus.FormattingEnabled = True
-        ComboBoxAppointmentStatus.Items.AddRange(New Object() {"Pending", "Confirmed", "Cancelled", "No-Show", "Completed"})
+        ComboBoxAppointmentStatus.Items.AddRange(New Object() {"Pending", "Confirmed", "Cancelled", "No-Show"})
         ComboBoxAppointmentStatus.Location = New Point(16, 470)
         ComboBoxAppointmentStatus.Name = "ComboBoxAppointmentStatus"
         ComboBoxAppointmentStatus.Size = New Size(261, 23)
@@ -497,6 +544,7 @@ Partial Class Appointment
         CType(DataGridViewAppointment, ComponentModel.ISupportInitialize).EndInit()
         Panel3.ResumeLayout(False)
         Panel3.PerformLayout()
+        PanelServiceInfo.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -505,7 +553,7 @@ Partial Class Appointment
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Label11 As Label
     Friend WithEvents ComboBoxPaymentMethod As ComboBox
-    Friend WithEvents ComboBoxAddon As ComboBox
+    Friend WithEvents ComboBoxAddons As ComboBox
     Friend WithEvents Label10 As Label
     Friend WithEvents ComboBoxServices As ComboBox
     Friend WithEvents Label9 As Label
@@ -536,5 +584,9 @@ Partial Class Appointment
     Friend WithEvents TextBoxTotalPrice As TextBox
     Friend WithEvents RemoveServiceBtn As Button
     Friend WithEvents AddServiceBtn As Button
+    Friend WithEvents FullScreenServiceBtn As Button
+    Friend WithEvents PanelServiceInfo As Panel
     Friend WithEvents ListViewServices As ListView
+    Friend WithEvents Label13 As Label
+    Friend WithEvents TextBoxCheque As TextBox
 End Class

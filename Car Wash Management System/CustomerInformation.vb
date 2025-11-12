@@ -21,7 +21,7 @@ Public Class CustomerInformation
         ChangeHeaderOfDataGridViewCustomerInformation()
         DataGridViewCustomerInformationFontStyle()
         AddButtonAction()
-        SetupListView()
+        SetupListView(ListViewVehicles, 150, 100)
     End Sub
     Private Sub LoadAllQuery()
 
@@ -67,6 +67,7 @@ Public Class CustomerInformation
         viewCustomerInfo.customerIDLabel.Text = customerIDValue
 
         viewCustomerInfo.DataGridViewCustomerHistory.DataSource = customerInformationDatabaseHelper.GetCustomerTransactionHistory(customerIDValue)
+        viewCustomerInfo.LabelContractStatus.Text = customerInformationDatabaseHelper.GetCustomerContractStatus(customerIDValue)
         viewCustomerInfo.LabelTotalSaleMade.Text = customerInformationDatabaseHelper.GetCustomerSalesCount(customerIDValue)
         viewCustomerInfo.LabelRevenue.Text = "₱" & customerInformationDatabaseHelper.GetTotalSalesAmountByCustomer(customerIDValue).ToString("N2")
         Try
@@ -85,19 +86,19 @@ Public Class CustomerInformation
     End Sub
 
 
-    Private Sub LoadVehiclesIntoListView(customerID As Integer)
-        ViewCustomerInfo.ListViewVehicles.Items.Clear()
-        ViewCustomerInfo.VehicleList.Clear()
+    Public Sub LoadVehiclesIntoListView(customerID As Integer)
+        viewCustomerInfo.ListViewVehicles.Items.Clear()
+        viewCustomerInfo.VehicleList.Clear()
         Dim vehicles As List(Of VehicleService) = customerInformationDatabaseHelper.GetCustomerVehicles(customerID)
 
         For Each vehicle As VehicleService In vehicles
             ' 3. Add to the local tracking list (VehicleList)
-            ViewCustomerInfo.VehicleList.Add(vehicle)
+            viewCustomerInfo.VehicleList.Add(vehicle)
 
             ' 4. Add to the ListView (Visual Component)
             Dim item As New ListViewItem(vehicle.PlateNumber)
             item.SubItems.Add(vehicle.VehicleType)
-            ViewCustomerInfo.ListViewVehicles.Items.Add(item)
+            viewCustomerInfo.ListViewVehicles.Items.Add(item)
         Next
     End Sub
 
@@ -159,13 +160,6 @@ Public Class CustomerInformation
         ViewCustomerInformation()
     End Sub
 
-
-
-    'Private Sub DeleteBtn_Click(sender As Object, e As EventArgs) Handles DeleteBtn.Click
-    '    DeleteCustomerInformation()
-    '    ClearFields()
-    'End Sub
-
     Public Sub ViewCustomerInformation()
         DataGridViewCustomerInformation.DataSource = customerInformationDatabaseHelper.ViewCustomer()
     End Sub
@@ -198,7 +192,7 @@ Public Class CustomerInformation
     End Sub
 
 
-    Private Sub AddVehicleFunction()
+    Private Sub AddVehicleFunction(listView As ListView)
         If String.IsNullOrWhiteSpace(TextBoxVehicle.Text) OrElse String.IsNullOrWhiteSpace(TextBoxPlateNumber.Text) Then
             MessageBox.Show("Please enter both the Vehicle Type and the Plate Number.", "Missing Vehicle Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
@@ -211,20 +205,21 @@ Public Class CustomerInformation
         Me.VehicleList.Add(newVehicle)
         Dim lvi As New ListViewItem(newVehicle.VehicleType)
         lvi.SubItems.Add(newVehicle.PlateNumber)
-        ListViewVehicles.Items.Add(lvi)
+        listView.Items.Add(lvi)
+        'ViewVehiclesDetailsInFullScreen.ListViewVehicles.Items.Add(lvi.Clone())
 
         TextBoxVehicle.Clear()
         TextBoxPlateNumber.Clear()
         TextBoxVehicle.Focus()
     End Sub
-    Private Sub SetupListView()
-        ListViewVehicles.View = View.Details
-        ListViewVehicles.HeaderStyle = ColumnHeaderStyle.Nonclickable
-        ListViewVehicles.Columns.Clear()
-        ListViewVehicles.Columns.Add("Plate Number", 150, HorizontalAlignment.Left)
-        ListViewVehicles.Columns.Add("Vehicle Type", 100, HorizontalAlignment.Left)
-        ListViewVehicles.GridLines = True
-        ListViewVehicles.FullRowSelect = True
+    Public Sub SetupListView(listVIew As ListView, widthPlateNumber As Integer, widthVehicleType As Integer)
+        listVIew.View = View.Details
+        listVIew.HeaderStyle = ColumnHeaderStyle.Nonclickable
+        listVIew.Columns.Clear()
+        listVIew.Columns.Add("Plate Number", widthPlateNumber, HorizontalAlignment.Left)
+        listVIew.Columns.Add("Vehicle Type", widthVehicleType, HorizontalAlignment.Left)
+        listVIew.GridLines = True
+        listVIew.FullRowSelect = True
     End Sub
 
 
@@ -260,10 +255,11 @@ Public Class CustomerInformation
     End Sub
 
     Private Sub AddVehicleBtn_Click_1(sender As Object, e As EventArgs) Handles AddVehicleBtn.Click
-        AddVehicleFunction()
+        AddVehicleFunction(ListViewVehicles)
     End Sub
 
-    Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles Panel2.Paint
-
+    Private Sub FullScreenBtn_Click(sender As Object, e As EventArgs) Handles FullScreenBtn.Click
+        ShowPanelDocked.ShowVehiclePanelDocked(PanelVehicleInfo, ListViewVehicles)
     End Sub
+   
 End Class

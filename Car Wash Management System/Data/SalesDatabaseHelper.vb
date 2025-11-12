@@ -3,24 +3,16 @@ Imports Microsoft.Data.SqlClient
 
 Public Class SalesDatabaseHelper
     Private Shared constr As String
-    Private ReadOnly comboBoxPaymentMethod As ComboBox
-    Private ReadOnly textBoxCustomerName As TextBox
-    Private ReadOnly textBoxCustomerID As TextBox
-
     Private ReadOnly printData As PrintDataInSales
-    Public Sub New(connectionString As String, paymentMethodComboBox As ComboBox, customerNameTextBox As TextBox, customerIDTextBox As TextBox)
+    Public Sub New(connectionString As String)
         constr = connectionString
-        Me.comboBoxPaymentMethod = paymentMethodComboBox
-        Me.textBoxCustomerName = customerNameTextBox
-        Me.textBoxCustomerID = customerIDTextBox
     End Sub
 
-    Public Shared Sub AddSale(saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, totalPrice As Decimal)
+    Public Shared Sub AddSale(saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, cheque As String, totalPrice As Decimal)
         Dim iSaleID As Integer = CInt(saleID)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
-
             Try
                 Dim newSalesID As Integer
                 Dim insertHistoryQuery = "INSERT INTO RegularSaleTable (CustomerID, SaleDate, PaymentMethod, ReferenceID, TotalPrice) VALUES (@CustomerID, @SaleDate, @PaymentMethod, @ReferenceID, @TotalPrice); SELECT SCOPE_IDENTITY();"
@@ -28,7 +20,11 @@ Public Class SalesDatabaseHelper
                     cmd.Parameters.AddWithValue("@CustomerID", iSaleID)
                     cmd.Parameters.AddWithValue("@SaleDate", DateTime.Now)
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
-                    cmd.Parameters.AddWithValue("@ReferenceID", referenceID)
+                    If paymentMethod = "Cheque" Then
+                        cmd.Parameters.AddWithValue("@ReferenceID", cheque)
+                    Else
+                        cmd.Parameters.AddWithValue("@ReferenceID", If(String.IsNullOrEmpty(referenceID), CType(DBNull.Value, Object), referenceID))
+                    End If
                     cmd.Parameters.AddWithValue("@TotalPrice", totalPrice)
                     newSalesID = Convert.ToInt32(cmd.ExecuteScalar())
                 End Using
@@ -46,7 +42,6 @@ Public Class SalesDatabaseHelper
                         Else
                             cmdService.Parameters.AddWithValue("@AddonServiceID", DBNull.Value)
                         End If
-
                         cmdService.Parameters.AddWithValue("@Subtotal", item.ServicePrice)
 
                         cmdService.ExecuteNonQuery()
@@ -66,18 +61,22 @@ Public Class SalesDatabaseHelper
             End Try
         End Using
     End Sub
-
-    Public Shared Sub UpdateSale(saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, totalPrice As Decimal)
+    Public Shared Sub UpdateSale(customerID As Integer, saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, cheque As String, totalPrice As Decimal)
         Dim iSaleID As Integer = CInt(saleID)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Try
                 ' Step 1: Update SalesHistoryTable
-                Dim updateHistoryQuery = "UPDATE RegularSaleTable SET PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, TotalPrice = @TotalPrice WHERE SalesID = @SalesID"
+                Dim updateHistoryQuery = "UPDATE RegularSaleTable SET CustomerID = @CustomerID, PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, TotalPrice = @TotalPrice WHERE SalesID = @SalesID"
                 Using cmd As New SqlCommand(updateHistoryQuery, con, transaction)
+                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
-                    cmd.Parameters.AddWithValue("@ReferenceID", referenceID)
+                    If paymentMethod = "Cheque" Then
+                        cmd.Parameters.AddWithValue("@ReferenceID", cheque)
+                    Else
+                        cmd.Parameters.AddWithValue("@ReferenceID", If(String.IsNullOrEmpty(referenceID), CType(DBNull.Value, Object), referenceID))
+                    End If
                     cmd.Parameters.AddWithValue("@TotalPrice", totalPrice)
                     cmd.Parameters.AddWithValue("@SalesID", iSaleID)
                     cmd.ExecuteNonQuery()
@@ -93,6 +92,27 @@ Public Class SalesDatabaseHelper
                     cmdDelete.Parameters.AddWithValue("@SalesID", saleID)
                     cmdDelete.ExecuteNonQuery()
                 End Using
+
+                ' Add the new sales services to SalesHistoryTable if needed
+                Dim insertSalesHistoryQuery = "INSERT INTO SalesHistoryTable (CustomerID, SaleDate, PaymentMethod, RegularSaleID, ServiceID, AddonServiceID, TotalPrice) VALUES (@CustomerID, @SaleDate, @PaymentMethod, @RegularSaleID, @ServiceID, @AddonServiceID, @TotalPrice)"
+                For Each item As SalesService In allSaleItems
+                    Dim baseServiceID As Integer = GetServiceIdByName(item.Service)
+                    Dim addonID As Integer? = GetAddonIdByName(item.Addon)
+                    Using cmdHistory As New SqlCommand(insertSalesHistoryQuery, con, transaction)
+                        cmdHistory.Parameters.AddWithValue("@CustomerID", customerID)
+                        cmdHistory.Parameters.AddWithValue("@SaleDate", DateTime.Now)
+                        cmdHistory.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
+                        cmdHistory.Parameters.AddWithValue("@RegularSaleID", iSaleID)
+                        cmdHistory.Parameters.AddWithValue("@ServiceID", baseServiceID)
+                        If addonID.HasValue Then
+                            cmdHistory.Parameters.AddWithValue("@AddonServiceID", addonID.Value)
+                        Else
+                            cmdHistory.Parameters.AddWithValue("@AddonServiceID", DBNull.Value)
+                        End If
+                        cmdHistory.Parameters.AddWithValue("@TotalPrice", item.ServicePrice)
+                        cmdHistory.ExecuteNonQuery()
+                    End Using
+                Next
                 ' Step 3: Insert new entries into SalesServiceTable
                 Dim insertServiceQuery = "INSERT INTO SalesServiceTable (SalesID, ServiceID, AddonServiceID, Subtotal) VALUES (@SalesID, @ServiceID, @AddonServiceID, @Subtotal)"
                 For Each item As SalesService In allSaleItems
@@ -153,7 +173,6 @@ Public Class SalesDatabaseHelper
 
         Return serviceID
     End Function
-
     ' --- ADDON SERVICE ID LOOKUP ---
     Public Shared Function GetAddonIdByName(addonName As String) As Integer?
         If String.IsNullOrWhiteSpace(addonName) OrElse addonName.Equals("None", StringComparison.OrdinalIgnoreCase) Then
@@ -181,8 +200,6 @@ Public Class SalesDatabaseHelper
         End Using
         Return addonID
     End Function
-
-
     Public Shared Function ViewSales() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -206,7 +223,7 @@ Public Class SalesDatabaseHelper
                 Dim selectQuery =
             "SELECT " &
                 "s.SalesID, " &
-                "c.Name AS CustomerName, " &
+                "c.Name + ' ' + c.LastName AS CustomerName, " &
                 "agg.AllServices AS BaseServiceName, " &
                 "agg.AllAddonServices AS AddonServiceName, " &
                 "s.SaleDate, " &
@@ -229,13 +246,13 @@ Public Class SalesDatabaseHelper
         End Using
         Return dt
     End Function
-
-    Public Function GetCustomerID(customerName As String) As Integer
+    Public Shared Function GetCustomerID(customerName As String) As Integer
         Using con As New SqlConnection(constr)
             Dim customerID As Integer = 0
             Try
                 con.Open()
-                Dim selectQuery = "SELECT CustomerID FROM CustomersTable WHERE Name = @Name"
+                Dim selectQuery = "SELECT CustomerID FROM CustomersTable WHERE Name + ' ' + LastName = @Name"
+                Dim reversedQuery = "SELECT CustomerID FROM CustomersTable WHERE LastName + ', ' + Name = @Name"
                 Using cmd As New SqlCommand(selectQuery, con)
                     cmd.Parameters.AddWithValue("@Name", customerName)
                     Dim result = cmd.ExecuteScalar()
@@ -243,9 +260,20 @@ Public Class SalesDatabaseHelper
                         customerID = CType(result, Integer)
                     End If
                 End Using
+                If customerID = 0 Then
+                    Using cmd As New SqlCommand(reversedQuery, con)
+                        cmd.Parameters.AddWithValue("@Name", customerName)
+                        Dim result = cmd.ExecuteScalar()
+                        If Not IsDBNull(result) AndAlso result IsNot Nothing Then
+                            customerID = CType(result, Integer)
+                        End If
+                    End Using
+                End If
+
             Catch ex As Exception
                 MessageBox.Show("Error retrieving customer ID: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
+
             Return customerID
         End Using
     End Function
@@ -331,7 +359,6 @@ Public Class SalesDatabaseHelper
 
         Return items
     End Function
-
     Public Shared Function GetSalesServiceList(salesID As Integer) As List(Of SalesService)
         Dim serviceList As New List(Of SalesService)
         Dim selectQuery As String = "SELECT " &
@@ -394,7 +421,6 @@ Public Class SalesDatabaseHelper
             End Try
         End Using
     End Sub
-
     Public Sub PopulateAddonServicesForUI(targetComboBox As ComboBox)
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -415,18 +441,26 @@ Public Class SalesDatabaseHelper
             End Try
         End Using
     End Sub
-
-    Public Sub PopulateCustomerNames()
+    Public Sub PopulateCustomerNames(textBoxCustomerName As TextBox)
         Dim customerNames As New AutoCompleteStringCollection()
         Using con As New SqlConnection(constr)
-            Dim sql As String = "SELECT Name FROM CustomersTable"
+            Dim sql As String = "SELECT Name, LastName FROM CustomersTable"
             Using cmd As New SqlCommand(sql, con)
                 Try
                     con.Open()
                     Dim reader As SqlDataReader = cmd.ExecuteReader()
                     While reader.Read()
-                        If Not reader.IsDBNull(0) Then
-                            customerNames.Add(reader.GetString(0))
+                        If Not reader.IsDBNull(0) AndAlso Not reader.IsDBNull(1) Then
+                            Dim firstName As String = reader.GetString(0).Trim()
+                            Dim lastName As String = reader.GetString(1).Trim()
+
+                            ' 1. Add the standard "First Last" format (e.g., "JM De Torres")
+                            customerNames.Add(firstName & " " & lastName)
+
+                            ' 2. Add the reverse "Last, First" format (e.g., "De Torres, JM") - THE KEY FIX
+                            ' When the user types "De Torres," this guarantees a prefix match.
+                            customerNames.Add(lastName & ", " & firstName)
+
                         End If
                     End While
                 Catch ex As Exception
@@ -435,39 +469,16 @@ Public Class SalesDatabaseHelper
             End Using
         End Using
 
-        Me.textBoxCustomerName.AutoCompleteMode = AutoCompleteMode.SuggestAppend
-        Me.textBoxCustomerName.AutoCompleteSource = AutoCompleteSource.CustomSource
-        Me.textBoxCustomerName.AutoCompleteCustomSource = customerNames
-    End Sub
-    Public Sub PopulateCustomerServices()
-        Dim customerServices As New AutoCompleteStringCollection()
+        textBoxCustomerName.AutoCompleteMode = AutoCompleteMode.SuggestAppend
 
-        Using con As New SqlConnection(constr)
-            Dim sql As String = "SELECT Name FROM ServiceTable"
-            Using cmd As New SqlCommand(sql, con)
-                Try
-                    con.Open()
-                    Dim reader As SqlDataReader = cmd.ExecuteReader()
-                    While reader.Read()
-                        If Not reader.IsDBNull(0) Then
-                            customerServices.Add(reader.GetString(0))
-                        End If
-                    End While
-                Catch ex As Exception
-                    MessageBox.Show("Error fetching customer names for autocomplete: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End Using
-        End Using
-
-        Me.textBoxCustomerName.AutoCompleteMode = AutoCompleteMode.SuggestAppend
-        Me.textBoxCustomerName.AutoCompleteSource = AutoCompleteSource.CustomSource
-        Me.textBoxCustomerName.AutoCompleteCustomSource = customerServices
+        textBoxCustomerName.AutoCompleteSource = AutoCompleteSource.CustomSource
+        textBoxCustomerName.AutoCompleteCustomSource = customerNames
     End Sub
-    Public Sub PopulatePaymentMethod()
-        Me.comboBoxPaymentMethod.Items.Add("Cash")
-        Me.comboBoxPaymentMethod.Items.Add("Gcash")
-        Me.comboBoxPaymentMethod.Items.Add("Cheque")
-        Me.comboBoxPaymentMethod.SelectedIndex = 0
+    Public Sub PopulatePaymentMethod(comboBoxPaymentMethod As ComboBox)
+        comboBoxPaymentMethod.Items.Add("Cash")
+        comboBoxPaymentMethod.Items.Add("Gcash")
+        comboBoxPaymentMethod.Items.Add("Cheque")
+        comboBoxPaymentMethod.SelectedIndex = 0
     End Sub
 
 End Class

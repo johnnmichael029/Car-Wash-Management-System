@@ -24,17 +24,21 @@ Partial Class Contracts
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Contracts))
         Panel3 = New Panel()
+        Label14 = New Label()
+        TextBoxCheque = New TextBox()
+        PanelServiceInfo = New Panel()
+        ListViewServices = New ListView()
+        FullScreenServiceBtn = New Button()
         TextBoxReferenceID = New TextBox()
         Label13 = New Label()
         RemoveServiceBtn = New Button()
         AddServiceBtn = New Button()
-        ListViewServices = New ListView()
         PrintBillBtn = New Button()
         Label12 = New Label()
         TextBoxTotalPrice = New TextBox()
         Label11 = New Label()
         ComboBoxPaymentMethod = New ComboBox()
-        ComboBoxAddon = New ComboBox()
+        ComboBoxAddons = New ComboBox()
         Label10 = New Label()
         ComboBoxServices = New ComboBox()
         LabelContractID = New Label()
@@ -62,6 +66,7 @@ Partial Class Contracts
         DataGridViewContract = New DataGridView()
         PrintDocumentBill = New Printing.PrintDocument()
         Panel3.SuspendLayout()
+        PanelServiceInfo.SuspendLayout()
         Panel1.SuspendLayout()
         CType(DataGridViewContract, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -69,17 +74,20 @@ Partial Class Contracts
         ' Panel3
         ' 
         Panel3.BackColor = Color.White
+        Panel3.Controls.Add(Label14)
+        Panel3.Controls.Add(TextBoxCheque)
+        Panel3.Controls.Add(PanelServiceInfo)
+        Panel3.Controls.Add(FullScreenServiceBtn)
         Panel3.Controls.Add(TextBoxReferenceID)
         Panel3.Controls.Add(Label13)
         Panel3.Controls.Add(RemoveServiceBtn)
         Panel3.Controls.Add(AddServiceBtn)
-        Panel3.Controls.Add(ListViewServices)
         Panel3.Controls.Add(PrintBillBtn)
         Panel3.Controls.Add(Label12)
         Panel3.Controls.Add(TextBoxTotalPrice)
         Panel3.Controls.Add(Label11)
         Panel3.Controls.Add(ComboBoxPaymentMethod)
-        Panel3.Controls.Add(ComboBoxAddon)
+        Panel3.Controls.Add(ComboBoxAddons)
         Panel3.Controls.Add(Label10)
         Panel3.Controls.Add(ComboBoxServices)
         Panel3.Controls.Add(LabelContractID)
@@ -109,13 +117,64 @@ Partial Class Contracts
         Panel3.Size = New Size(305, 758)
         Panel3.TabIndex = 2
         ' 
+        ' Label14
+        ' 
+        Label14.AutoSize = True
+        Label14.Font = New Font("Century Gothic", 9F)
+        Label14.Location = New Point(146, 410)
+        Label14.Name = "Label14"
+        Label14.Size = New Size(78, 17)
+        Label14.TabIndex = 138
+        Label14.Text = "Cheque No."
+        ' 
+        ' TextBoxCheque
+        ' 
+        TextBoxCheque.Font = New Font("Century Gothic", 9F)
+        TextBoxCheque.Location = New Point(148, 428)
+        TextBoxCheque.Name = "TextBoxCheque"
+        TextBoxCheque.ReadOnly = True
+        TextBoxCheque.Size = New Size(129, 22)
+        TextBoxCheque.TabIndex = 137
+        ' 
+        ' PanelServiceInfo
+        ' 
+        PanelServiceInfo.Controls.Add(ListViewServices)
+        PanelServiceInfo.Location = New Point(16, 173)
+        PanelServiceInfo.Name = "PanelServiceInfo"
+        PanelServiceInfo.Size = New Size(260, 102)
+        PanelServiceInfo.TabIndex = 133
+        ' 
+        ' ListViewServices
+        ' 
+        ListViewServices.Dock = DockStyle.Fill
+        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        ListViewServices.FullRowSelect = True
+        ListViewServices.GridLines = True
+        ListViewServices.Location = New Point(0, 0)
+        ListViewServices.Name = "ListViewServices"
+        ListViewServices.Size = New Size(260, 102)
+        ListViewServices.TabIndex = 100
+        ListViewServices.UseCompatibleStateImageBehavior = False
+        ' 
+        ' FullScreenServiceBtn
+        ' 
+        FullScreenServiceBtn.FlatAppearance.BorderSize = 0
+        FullScreenServiceBtn.FlatStyle = FlatStyle.Flat
+        FullScreenServiceBtn.Image = My.Resources.Resources.expand1
+        FullScreenServiceBtn.Location = New Point(127, 139)
+        FullScreenServiceBtn.Name = "FullScreenServiceBtn"
+        FullScreenServiceBtn.Size = New Size(37, 33)
+        FullScreenServiceBtn.TabIndex = 132
+        FullScreenServiceBtn.UseVisualStyleBackColor = True
+        ' 
         ' TextBoxReferenceID
         ' 
         TextBoxReferenceID.Font = New Font("Century Gothic", 9F)
         TextBoxReferenceID.Location = New Point(16, 428)
         TextBoxReferenceID.Name = "TextBoxReferenceID"
         TextBoxReferenceID.ReadOnly = True
-        TextBoxReferenceID.Size = New Size(261, 22)
+        TextBoxReferenceID.Size = New Size(129, 22)
         TextBoxReferenceID.TabIndex = 97
         ' 
         ' Label13
@@ -124,9 +183,9 @@ Partial Class Contracts
         Label13.Font = New Font("Century Gothic", 9F)
         Label13.Location = New Point(16, 410)
         Label13.Name = "Label13"
-        Label13.Size = New Size(85, 17)
+        Label13.Size = New Size(71, 17)
         Label13.TabIndex = 96
-        Label13.Text = "Reference ID"
+        Label13.Text = "Gcash Ref."
         ' 
         ' RemoveServiceBtn
         ' 
@@ -155,18 +214,6 @@ Partial Class Contracts
         AddServiceBtn.TabIndex = 94
         AddServiceBtn.Text = "Add"
         AddServiceBtn.UseVisualStyleBackColor = False
-        ' 
-        ' ListViewServices
-        ' 
-        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
-        ListViewServices.FullRowSelect = True
-        ListViewServices.GridLines = True
-        ListViewServices.Location = New Point(16, 173)
-        ListViewServices.Name = "ListViewServices"
-        ListViewServices.Size = New Size(260, 102)
-        ListViewServices.TabIndex = 93
-        ListViewServices.UseCompatibleStateImageBehavior = False
         ' 
         ' PrintBillBtn
         ' 
@@ -224,13 +271,13 @@ Partial Class Contracts
         ComboBoxPaymentMethod.Size = New Size(262, 23)
         ComboBoxPaymentMethod.TabIndex = 27
         ' 
-        ' ComboBoxAddon
+        ' ComboBoxAddons
         ' 
-        ComboBoxAddon.FormattingEnabled = True
-        ComboBoxAddon.Location = New Point(148, 115)
-        ComboBoxAddon.Name = "ComboBoxAddon"
-        ComboBoxAddon.Size = New Size(129, 23)
-        ComboBoxAddon.TabIndex = 26
+        ComboBoxAddons.FormattingEnabled = True
+        ComboBoxAddons.Location = New Point(148, 115)
+        ComboBoxAddons.Name = "ComboBoxAddons"
+        ComboBoxAddons.Size = New Size(129, 23)
+        ComboBoxAddons.TabIndex = 26
         ' 
         ' Label10
         ' 
@@ -507,6 +554,7 @@ Partial Class Contracts
         Text = "BillingContracts"
         Panel3.ResumeLayout(False)
         Panel3.PerformLayout()
+        PanelServiceInfo.ResumeLayout(False)
         Panel1.ResumeLayout(False)
         CType(DataGridViewContract, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
@@ -536,7 +584,7 @@ Partial Class Contracts
     Friend WithEvents ComboBoxBillingFrequency As ComboBox
     Friend WithEvents LabelContractID As Label
     Friend WithEvents Label9 As Label
-    Friend WithEvents ComboBoxAddon As ComboBox
+    Friend WithEvents ComboBoxAddons As ComboBox
     Friend WithEvents Label10 As Label
     Friend WithEvents ComboBoxServices As ComboBox
     Friend WithEvents Label11 As Label
@@ -547,7 +595,11 @@ Partial Class Contracts
     Friend WithEvents PrintBillBtn As Button
     Friend WithEvents RemoveServiceBtn As Button
     Friend WithEvents AddServiceBtn As Button
-    Friend WithEvents ListViewServices As ListView
     Friend WithEvents TextBoxReferenceID As TextBox
     Friend WithEvents Label13 As Label
+    Friend WithEvents FullScreenServiceBtn As Button
+    Friend WithEvents PanelServiceInfo As Panel
+    Friend WithEvents ListViewServices As ListView
+    Friend WithEvents Label14 As Label
+    Friend WithEvents TextBoxCheque As TextBox
 End Class

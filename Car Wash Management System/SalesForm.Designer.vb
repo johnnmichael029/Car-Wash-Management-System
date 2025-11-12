@@ -27,12 +27,16 @@ Partial Class SalesForm
         Panel2 = New Panel()
         Panel3 = New Panel()
         Panel1 = New Panel()
+        Label13 = New Label()
+        TextBoxCheque = New TextBox()
+        PanelServiceInfo = New Panel()
+        ListViewServices = New ListView()
+        FullScreenServiceBtn = New Button()
         UpdateBtn = New Button()
         Label8 = New Label()
         TextBoxTotalPrice = New TextBox()
         RemoveServiceBtn = New Button()
         AddServiceBtn = New Button()
-        ListViewServices = New ListView()
         TextBoxReferenceID = New TextBox()
         Label7 = New Label()
         LabelSalesID = New Label()
@@ -57,6 +61,7 @@ Partial Class SalesForm
         Panel2.SuspendLayout()
         Panel3.SuspendLayout()
         Panel1.SuspendLayout()
+        PanelServiceInfo.SuspendLayout()
         SuspendLayout()
         ' 
         ' DataGridViewSales
@@ -96,12 +101,15 @@ Partial Class SalesForm
         ' Panel1
         ' 
         Panel1.BackColor = Color.White
+        Panel1.Controls.Add(Label13)
+        Panel1.Controls.Add(TextBoxCheque)
+        Panel1.Controls.Add(PanelServiceInfo)
+        Panel1.Controls.Add(FullScreenServiceBtn)
         Panel1.Controls.Add(UpdateBtn)
         Panel1.Controls.Add(Label8)
         Panel1.Controls.Add(TextBoxTotalPrice)
         Panel1.Controls.Add(RemoveServiceBtn)
         Panel1.Controls.Add(AddServiceBtn)
-        Panel1.Controls.Add(ListViewServices)
         Panel1.Controls.Add(TextBoxReferenceID)
         Panel1.Controls.Add(Label7)
         Panel1.Controls.Add(LabelSalesID)
@@ -126,6 +134,57 @@ Partial Class SalesForm
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(305, 758)
         Panel1.TabIndex = 18
+        ' 
+        ' Label13
+        ' 
+        Label13.AutoSize = True
+        Label13.Font = New Font("Century Gothic", 9F)
+        Label13.Location = New Point(148, 370)
+        Label13.Name = "Label13"
+        Label13.Size = New Size(78, 17)
+        Label13.TabIndex = 138
+        Label13.Text = "Cheque No."
+        ' 
+        ' TextBoxCheque
+        ' 
+        TextBoxCheque.Font = New Font("Century Gothic", 9F)
+        TextBoxCheque.Location = New Point(150, 388)
+        TextBoxCheque.Name = "TextBoxCheque"
+        TextBoxCheque.ReadOnly = True
+        TextBoxCheque.Size = New Size(129, 22)
+        TextBoxCheque.TabIndex = 137
+        ' 
+        ' PanelServiceInfo
+        ' 
+        PanelServiceInfo.Controls.Add(ListViewServices)
+        PanelServiceInfo.Location = New Point(16, 219)
+        PanelServiceInfo.Name = "PanelServiceInfo"
+        PanelServiceInfo.Size = New Size(260, 102)
+        PanelServiceInfo.TabIndex = 132
+        ' 
+        ' ListViewServices
+        ' 
+        ListViewServices.Dock = DockStyle.Fill
+        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        ListViewServices.FullRowSelect = True
+        ListViewServices.GridLines = True
+        ListViewServices.Location = New Point(0, 0)
+        ListViewServices.Name = "ListViewServices"
+        ListViewServices.Size = New Size(260, 102)
+        ListViewServices.TabIndex = 100
+        ListViewServices.UseCompatibleStateImageBehavior = False
+        ' 
+        ' FullScreenServiceBtn
+        ' 
+        FullScreenServiceBtn.FlatAppearance.BorderSize = 0
+        FullScreenServiceBtn.FlatStyle = FlatStyle.Flat
+        FullScreenServiceBtn.Image = My.Resources.Resources.expand1
+        FullScreenServiceBtn.Location = New Point(128, 186)
+        FullScreenServiceBtn.Name = "FullScreenServiceBtn"
+        FullScreenServiceBtn.Size = New Size(37, 33)
+        FullScreenServiceBtn.TabIndex = 131
+        FullScreenServiceBtn.UseVisualStyleBackColor = True
         ' 
         ' UpdateBtn
         ' 
@@ -190,25 +249,13 @@ Partial Class SalesForm
         AddServiceBtn.Text = "Add"
         AddServiceBtn.UseVisualStyleBackColor = False
         ' 
-        ' ListViewServices
-        ' 
-        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
-        ListViewServices.FullRowSelect = True
-        ListViewServices.GridLines = True
-        ListViewServices.Location = New Point(16, 219)
-        ListViewServices.Name = "ListViewServices"
-        ListViewServices.Size = New Size(260, 102)
-        ListViewServices.TabIndex = 83
-        ListViewServices.UseCompatibleStateImageBehavior = False
-        ' 
         ' TextBoxReferenceID
         ' 
         TextBoxReferenceID.Font = New Font("Century Gothic", 9F)
         TextBoxReferenceID.Location = New Point(16, 388)
         TextBoxReferenceID.Name = "TextBoxReferenceID"
         TextBoxReferenceID.ReadOnly = True
-        TextBoxReferenceID.Size = New Size(261, 22)
+        TextBoxReferenceID.Size = New Size(130, 22)
         TextBoxReferenceID.TabIndex = 35
         ' 
         ' Label7
@@ -217,9 +264,9 @@ Partial Class SalesForm
         Label7.Font = New Font("Century Gothic", 9F)
         Label7.Location = New Point(16, 370)
         Label7.Name = "Label7"
-        Label7.Size = New Size(85, 17)
+        Label7.Size = New Size(71, 17)
         Label7.TabIndex = 34
-        Label7.Text = "Reference ID"
+        Label7.Text = "Gcash Ref."
         ' 
         ' LabelSalesID
         ' 
@@ -424,6 +471,7 @@ Partial Class SalesForm
         Panel3.ResumeLayout(False)
         Panel1.ResumeLayout(False)
         Panel1.PerformLayout()
+        PanelServiceInfo.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -453,8 +501,12 @@ Partial Class SalesForm
     Friend WithEvents Label7 As Label
     Friend WithEvents RemoveServiceBtn As Button
     Friend WithEvents AddServiceBtn As Button
-    Friend WithEvents ListViewServices As ListView
     Friend WithEvents Label8 As Label
     Friend WithEvents TextBoxTotalPrice As TextBox
     Friend WithEvents UpdateBtn As Button
+    Friend WithEvents FullScreenServiceBtn As Button
+    Friend WithEvents PanelServiceInfo As Panel
+    Friend WithEvents ListViewServices As ListView
+    Friend WithEvents Label13 As Label
+    Friend WithEvents TextBoxCheque As TextBox
 End Class

@@ -1,9 +1,9 @@
 ﻿Imports Microsoft.Data.SqlClient
 
 Public Class ReservationDatabaseHelper
-    Private ReadOnly constr
+    Private Shared constr
     Public Sub New(connectionString As String)
-        Me.constr = connectionString
+        constr = connectionString
 
     End Sub
     Public Function ViewListOfReserved() As DataTable
@@ -12,7 +12,7 @@ Public Class ReservationDatabaseHelper
             Dim viewListQuery As String =
             "SELECT " &
                 "AST.AppointmentID As ReservationID, " &
-                "c.Name As CustomerName, " &
+                "c.Name + ' ' + c.LastName As CustomerName, " &
                 "sv_base.ServiceName As BaseService, " &
                 "sv_addon.ServiceName As AddonService, " &
                 "a.AppointmentDateTime As DateTime, " &
@@ -32,6 +32,48 @@ Public Class ReservationDatabaseHelper
             End Using
         End Using
         Return dt
+    End Function
+
+    Public Shared Function UpdateStatusOfAppointment()
+        Dim rowsAffected As Integer = 0
+        Dim query As String = "UPDATE AppointmentsTable SET AppointmentStatus = 'Completed' WHERE AppointmentDateTime <= GETDATE() AND AppointmentStatus = 'Confirmed'"
+        Using con As New SqlConnection(constr)
+            Using cmd As New SqlCommand(query, con)
+                Try
+                    con.Open()
+                    rowsAffected = cmd.ExecuteNonQuery()
+                Catch ex As Exception
+                    MessageBox.Show("Error updating expired contracts: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    rowsAffected = -1
+                End Try
+            End Using
+        End Using
+        Return rowsAffected
+    End Function
+    Public Shared Function UpdateStatusOfAppointmentServiceTable() As Integer
+        Dim rowsAffected As Integer = 0
+
+        ' Correct SQL Server UPDATE...FROM syntax:
+        Dim query As String = "UPDATE ast " &
+                              "SET ast.AppointmentStatus = 'Completed' " &
+                              "FROM AppointmentServiceTable ast " & ' Alias 'ast' for the table being updated
+                              "INNER JOIN AppointmentsTable a ON ast.AppointmentID = a.AppointmentID " &
+                              "WHERE a.AppointmentDateTime <= GETDATE() " &
+                              "AND ast.AppointmentStatus = 'Confirmed'"
+
+        Using con As New SqlConnection(constr)
+            Using cmd As New SqlCommand(query, con)
+                Try
+                    con.Open()
+                    rowsAffected = cmd.ExecuteNonQuery()
+                Catch ex As Exception
+                    ' Log the error and notify the user
+                    MessageBox.Show("Error updating expired contracts: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    rowsAffected = -1
+                End Try
+            End Using
+        End Using
+        Return rowsAffected
     End Function
 
 End Class

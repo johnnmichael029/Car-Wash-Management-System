@@ -28,6 +28,9 @@ Partial Class CustomerInformation
         Panel14 = New Panel()
         TextBoxSearchBar = New TextBox()
         Panel2 = New Panel()
+        PanelVehicleInfo = New Panel()
+        ListViewVehicles = New ListView()
+        FullScreenBtn = New Button()
         Label5 = New Label()
         Label3 = New Label()
         Label2 = New Label()
@@ -38,7 +41,6 @@ Partial Class CustomerInformation
         customerIDLabel = New Label()
         AddVehicleBtn = New Button()
         UpdateBtn = New Button()
-        ListViewVehicles = New ListView()
         ViewBtn = New Button()
         TextBoxVehicle = New TextBox()
         Label67 = New Label()
@@ -57,10 +59,10 @@ Partial Class CustomerInformation
         DataGridViewCustomerInformation = New DataGridView()
         SqlConnection1 = New Microsoft.Data.SqlClient.SqlConnection()
         NameTimer = New Timer(components)
-        Button1 = New Button()
         Panel1.SuspendLayout()
         Panel14.SuspendLayout()
         Panel2.SuspendLayout()
+        PanelVehicleInfo.SuspendLayout()
         CType(DataGridViewCustomerInformation, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -99,7 +101,8 @@ Partial Class CustomerInformation
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
-        Panel2.Controls.Add(Button1)
+        Panel2.Controls.Add(PanelVehicleInfo)
+        Panel2.Controls.Add(FullScreenBtn)
         Panel2.Controls.Add(Label5)
         Panel2.Controls.Add(Label3)
         Panel2.Controls.Add(Label2)
@@ -110,7 +113,6 @@ Partial Class CustomerInformation
         Panel2.Controls.Add(customerIDLabel)
         Panel2.Controls.Add(AddVehicleBtn)
         Panel2.Controls.Add(UpdateBtn)
-        Panel2.Controls.Add(ListViewVehicles)
         Panel2.Controls.Add(ViewBtn)
         Panel2.Controls.Add(TextBoxVehicle)
         Panel2.Controls.Add(Label67)
@@ -131,6 +133,38 @@ Partial Class CustomerInformation
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(305, 758)
         Panel2.TabIndex = 1
+        ' 
+        ' PanelVehicleInfo
+        ' 
+        PanelVehicleInfo.Controls.Add(ListViewVehicles)
+        PanelVehicleInfo.Location = New Point(16, 299)
+        PanelVehicleInfo.Name = "PanelVehicleInfo"
+        PanelVehicleInfo.Size = New Size(260, 102)
+        PanelVehicleInfo.TabIndex = 111
+        ' 
+        ' ListViewVehicles
+        ' 
+        ListViewVehicles.Dock = DockStyle.Fill
+        ListViewVehicles.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewVehicles.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        ListViewVehicles.FullRowSelect = True
+        ListViewVehicles.GridLines = True
+        ListViewVehicles.Location = New Point(0, 0)
+        ListViewVehicles.Name = "ListViewVehicles"
+        ListViewVehicles.Size = New Size(260, 102)
+        ListViewVehicles.TabIndex = 100
+        ListViewVehicles.UseCompatibleStateImageBehavior = False
+        ' 
+        ' FullScreenBtn
+        ' 
+        FullScreenBtn.FlatAppearance.BorderSize = 0
+        FullScreenBtn.FlatStyle = FlatStyle.Flat
+        FullScreenBtn.Image = My.Resources.Resources.expand1
+        FullScreenBtn.Location = New Point(127, 265)
+        FullScreenBtn.Name = "FullScreenBtn"
+        FullScreenBtn.Size = New Size(37, 33)
+        FullScreenBtn.TabIndex = 110
+        FullScreenBtn.UseVisualStyleBackColor = True
         ' 
         ' Label5
         ' 
@@ -246,18 +280,6 @@ Partial Class CustomerInformation
         UpdateBtn.Text = "Read"
         UpdateBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         UpdateBtn.UseVisualStyleBackColor = False
-        ' 
-        ' ListViewVehicles
-        ' 
-        ListViewVehicles.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ListViewVehicles.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
-        ListViewVehicles.FullRowSelect = True
-        ListViewVehicles.GridLines = True
-        ListViewVehicles.Location = New Point(16, 299)
-        ListViewVehicles.Name = "ListViewVehicles"
-        ListViewVehicles.Size = New Size(260, 102)
-        ListViewVehicles.TabIndex = 100
-        ListViewVehicles.UseCompatibleStateImageBehavior = False
         ' 
         ' ViewBtn
         ' 
@@ -444,17 +466,6 @@ Partial Class CustomerInformation
         ' 
         NameTimer.Interval = 15
         ' 
-        ' Button1
-        ' 
-        Button1.FlatAppearance.BorderSize = 0
-        Button1.FlatStyle = FlatStyle.Flat
-        Button1.Image = My.Resources.Resources.expand1
-        Button1.Location = New Point(127, 265)
-        Button1.Name = "Button1"
-        Button1.Size = New Size(37, 33)
-        Button1.TabIndex = 110
-        Button1.UseVisualStyleBackColor = True
-        ' 
         ' CustomerInformation
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -469,6 +480,7 @@ Partial Class CustomerInformation
         Panel14.PerformLayout()
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
+        PanelVehicleInfo.ResumeLayout(False)
         CType(DataGridViewCustomerInformation, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
     End Sub
@@ -506,5 +518,6 @@ Partial Class CustomerInformation
     Friend WithEvents Label13 As Label
     Friend WithEvents TextBoxAddress As TextBox
     Friend WithEvents TextBoxEmail As TextBox
-    Friend WithEvents Button1 As Button
+    Friend WithEvents FullScreenBtn As Button
+    Friend WithEvents PanelVehicleInfo As Panel
 End Class

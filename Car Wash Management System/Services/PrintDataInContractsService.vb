@@ -16,6 +16,6 @@
     Public Property SaleDate As DateTime
     Public Property BillingFrequency As String
     Public Property StartDate As DateTime
-    Public Property EndDate As DateTime?
+    Public Property EndDate As DateTime
     Public Property ContractStatus As String
 End Class

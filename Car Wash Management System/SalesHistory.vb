@@ -70,7 +70,7 @@ Public Class SalesHistory
                 Dim selectQuery =
             "SELECT " &
                 "s.SalesID, " &
-                "c.Name AS CustomerName, " &
+                "c.Name + ' ' + c.LastName AS CustomerName, " &
                 "sv_base.ServiceName, " &
                 "sv_addon.ServiceName," &
                 "s.SaleDate, " &

@@ -17,13 +17,14 @@ Public Class Dashboard
     Private currentSearchTerm As String = String.Empty
     Private VehicleList As New List(Of VehicleService)
     Private SaleServiceList As New List(Of SalesService)
+    Private nextServiceID As Integer = 1
     Public Sub New()
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.\
         dashboardDatabaseHelper = New DashboardDatabaseHelper(constr, TextBoxCustomerName)
         listofActivityLogInDashboardDatabaseHelper = New ListofActivityLogInDashboardDatabaseHelper(constr)
-        salesDatabaseHelper = New SalesDatabaseHelper(constr, ComboBoxPaymentMethod, TextBoxCustomerName, TextBoxCustomerID)
+        salesDatabaseHelper = New SalesDatabaseHelper(constr)
         customerInformationDatabaseHelper = New CustomerInformationDatabaseHelper(constr)
         activityLogService = New ActivityLogInDashboardService(constr)
     End Sub
@@ -40,9 +41,9 @@ Public Class Dashboard
     End Sub
 
     Private Sub LoadAllPopulateUI()
-        dashboardDatabaseHelper.PopulateCustomerNames()
-        dashboardDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
-        dashboardDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
+        salesDatabaseHelper.PopulateCustomerNames(TextBoxCustomerName)
+        salesDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
+        salesDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
 
     End Sub
     Private Sub LoadSalesChart()
@@ -135,7 +136,7 @@ Public Class Dashboard
         DataGridViewLatestTransaction.Columns(3).HeaderText = "Addon Service"
         DataGridViewLatestTransaction.Columns(4).HeaderText = "Sale Date"
         DataGridViewLatestTransaction.Columns(5).HeaderText = "Payment Method"
-        DataGridViewLatestTransaction.Columns(6).HeaderText = "Reference ID"
+        DataGridViewLatestTransaction.Columns(6).HeaderText = "Payment Reference"
         DataGridViewLatestTransaction.Columns(7).HeaderText = "Total Price (₱)"
     End Sub
 
@@ -342,8 +343,12 @@ Public Class Dashboard
             End If
 
             'Validate that a Reference ID is provided for certain payment methods.
-            If (ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" Or ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque") AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
+            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
                 MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque" AndAlso String.IsNullOrWhiteSpace(TextBoxCheque.Text) Then
+                MessageBox.Show("Please enter a Cheque Number for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
 
@@ -352,6 +357,7 @@ Public Class Dashboard
                 SaleServiceList,
                 ComboBoxPaymentMethod.SelectedItem.ToString(),
                 TextBoxReferenceID.Text,
+                TextBoxCheque.Text,
                 totalPrice
                 )
             Carwash.PopulateAllTotal()
@@ -374,9 +380,11 @@ Public Class Dashboard
         TextBoxPrice.Text = 0.00D.ToString("N2")
         ComboBoxPaymentMethod.SelectedIndex = -1
         TextBoxReferenceID.Clear()
+        TextBoxCheque.Clear()
         SaleServiceList.Clear()
         ListViewServices.Items.Clear()
         TextBoxTotalPrice.Text = "0.00"
+        nextServiceID = 1
     End Sub
     Public Sub ShowPrintPreview()
         ShowPrintPreviewService.ShowPrintPreview(PrintDocumentBill)
@@ -415,34 +423,14 @@ Public Class Dashboard
         activityLogService.RecordSale(customerName, amount)
     End Sub
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
-        CalculateTotalPrice()
+        salesForm.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, TextBoxPrice)
     End Sub
 
     Private Sub ComboBoxAddons_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxAddons.SelectedIndexChanged
-        CalculateTotalPrice()
-    End Sub
-    Private Sub CalculateTotalPrice()
-        Dim totalPrice As Decimal = 0.0D
-
-        If ComboBoxServices.SelectedIndex <> -1 Then
-            Dim baseServiceDetails As SalesInDashboardService = dashboardDatabaseHelper.GetServiceID(ComboBoxServices.Text)
-            totalPrice += baseServiceDetails.Price
-        End If
-
-        If ComboBoxAddons.SelectedIndex <> -1 Then
-            Dim addonServiceDetails As SalesInDashboardService = dashboardDatabaseHelper.GetServiceID(ComboBoxAddons.Text)
-            totalPrice += addonServiceDetails.Price
-        End If
-
-        TextBoxPrice.Text = totalPrice.ToString("N2") ' Format to 2 decimal places
+        salesForm.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, TextBoxPrice)
     End Sub
     Private Sub TextBoxCustomerName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCustomerName.TextChanged
-        Dim customerID As Integer = dashboardDatabaseHelper.GetCustomerID(TextBoxCustomerName.Text)
-        If customerID > 0 Then
-            TextBoxCustomerID.Text = customerID.ToString()
-        Else
-            TextBoxCustomerID.Text = String.Empty
-        End If
+        CustomerNameTextChangedService.CustomerNameTextChanged(TextBoxCustomerID, TextBoxCustomerName)
     End Sub
     Private Sub ClearFieldsBtn_Click(sender As Object, e As EventArgs) Handles ClearFieldsBtn.Click
         ClearFieldsOfCustomer()
@@ -524,8 +512,9 @@ Public Class Dashboard
         ListViewServices.View = View.Details
         ListViewServices.HeaderStyle = ColumnHeaderStyle.Nonclickable
         ListViewServices.Columns.Clear()
-        ListViewServices.Columns.Add("Service", 100, HorizontalAlignment.Left)
-        ListViewServices.Columns.Add("Addon", 100, HorizontalAlignment.Left)
+        ListViewServices.Columns.Add("ID", 30, HorizontalAlignment.Left)
+        ListViewServices.Columns.Add("Service", 85, HorizontalAlignment.Left)
+        ListViewServices.Columns.Add("Addon", 85, HorizontalAlignment.Left)
         ListViewServices.Columns.Add("Price", 50, HorizontalAlignment.Left)
         ListViewServices.GridLines = True
         ListViewServices.FullRowSelect = True
@@ -586,15 +575,32 @@ Public Class Dashboard
             Return
         End If
 
+        ' 1. Get the current ID and prepare the next one
+        Dim currentID As Integer = nextServiceID
+        nextServiceID += 1 ' Increment the counter for the next line item
+
         Dim services As String = ComboBoxServices.Text.Trim()
         Dim addons As String = ComboBoxAddons.Text.Trim()
-        Dim price As Decimal = Decimal.Parse(TextBoxPrice.Text)
-        Dim newService As New SalesService(services, addons, price)
+
+        ' Use TryParse for safer decimal conversion
+        Dim price As Decimal
+        If Not Decimal.TryParse(TextBoxPrice.Text, price) Then
+            MessageBox.Show("Invalid price value.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+
+        ' 2. Create the new service, passing the current ID
+        Dim newService As New SalesService(currentID, services, addons, price)
 
         Me.SaleServiceList.Add(newService)
-        Dim lvi As New ListViewItem(newService.Service)
-        lvi.SubItems.Add(newService.Addon)
-        lvi.SubItems.Add(newService.ServicePrice.ToString("N2"))
+
+        ' 3. Add the ID as the FIRST column in the ListView
+        Dim lvi As New ListViewItem(newService.ServiceID.ToString()) ' ID is the main item text
+
+        ' Add the rest of the columns as sub-items
+        lvi.SubItems.Add(newService.Service)        ' Service
+        lvi.SubItems.Add(newService.Addon)          ' Addon
+        lvi.SubItems.Add(newService.ServicePrice.ToString("N2")) ' Price
         ListViewServices.Items.Add(lvi)
 
         ComboBoxServices.SelectedIndex = -1
@@ -602,11 +608,19 @@ Public Class Dashboard
         TextBoxPrice.Text = "0.00"
     End Sub
     Private Sub ComboBoxPaymentMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPaymentMethod.SelectedIndexChanged
-        If ComboBoxPaymentMethod.SelectedItem = "Gcash" Or ComboBoxPaymentMethod.SelectedItem = "Cheque" Then
+        If ComboBoxPaymentMethod.SelectedItem = "Gcash" Then
             TextBoxReferenceID.ReadOnly = False
-        Else
+            TextBoxCheque.ReadOnly = True
+            TextBoxCheque.Clear()
+        ElseIf ComboBoxPaymentMethod.SelectedItem = "Cheque" Then
+            TextBoxCheque.ReadOnly = False
             TextBoxReferenceID.ReadOnly = True
             TextBoxReferenceID.Clear()
+        Else
+            TextBoxReferenceID.ReadOnly = True
+            TextBoxCheque.ReadOnly = True
+            TextBoxReferenceID.Clear()
+            TextBoxCheque.Clear()
         End If
     End Sub
     Private Sub ViewLatestSales()
@@ -649,8 +663,16 @@ Public Class Dashboard
         End If
     End Sub
 
-    Private Sub DataGridViewLatestTransaction_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewLatestTransaction.CellContentClick
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
 
+    End Sub
+
+    Private Sub FullScreenVehicleBtn_Click(sender As Object, e As EventArgs) Handles FullScreenVehicleBtn.Click
+        ShowPanelDocked.ShowVehiclePanelDocked(PanelVehicleInfo, ListViewVehicles)
+    End Sub
+
+    Private Sub FullScreenServiceBtn_Click(sender As Object, e As EventArgs) Handles FullScreenServiceBtn.Click
+        ShowPanelDocked.ShowServicesPanelDocked(PanelServiceInfo, ListViewServices)
     End Sub
 
 End Class

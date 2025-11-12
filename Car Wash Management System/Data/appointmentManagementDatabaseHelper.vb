@@ -10,7 +10,7 @@ Public Class AppointmentManagementDatabaseHelper
         Me.constr = connectionString
     End Sub
 
-    Public Sub AddAppointment(customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As DateTime, paymentMethod As String, referenceID As String, price As Decimal, appointmentStatus As String, notes As String)
+    Public Sub AddAppointment(customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As DateTime, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, appointmentStatus As String, notes As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
@@ -27,7 +27,11 @@ Public Class AppointmentManagementDatabaseHelper
                     cmd.Parameters.AddWithValue("@CustomerID", customerID)
                     cmd.Parameters.AddWithValue("@AppointmentDateTime", appointmentDateTime)
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
-                    cmd.Parameters.AddWithValue("@ReferenceID", If(String.IsNullOrEmpty(referenceID), CType(DBNull.Value, Object), referenceID)) ' Handle null/empty referenceID
+                    If paymentMethod = "Cheque" Then
+                        cmd.Parameters.AddWithValue("@ReferenceID", cheque)
+                    Else
+                        cmd.Parameters.AddWithValue("@ReferenceID", If(String.IsNullOrEmpty(referenceID), CType(DBNull.Value, Object), referenceID))
+                    End If
                     cmd.Parameters.AddWithValue("@Price", price)
                     cmd.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus)
                     cmd.Parameters.AddWithValue("@Notes", notes)
@@ -54,7 +58,7 @@ Public Class AppointmentManagementDatabaseHelper
                     Dim baseServiceID As Integer = SalesDatabaseHelper.GetServiceIdByName(item.Service)
                     Dim addonID As Integer? = SalesDatabaseHelper.GetAddonIdByName(item.Addon)
 
-                    Using cmdService As New SqlCommand(insertServiceQuery, con, transaction) ' <-- FIX 2: Added transaction to cmdService
+                    Using cmdService As New SqlCommand(insertServiceQuery, con, transaction)
                         cmdService.Parameters.AddWithValue("@CustomerID", customerID)
                         cmdService.Parameters.AddWithValue("@AppointmentID", newAppointmentID) ' Use the new ID
                         cmdService.Parameters.AddWithValue("@ServiceID", baseServiceID)
@@ -85,8 +89,6 @@ Public Class AppointmentManagementDatabaseHelper
             End Try
         End Using
     End Sub
-
-
     Public Function ViewAppointment() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -105,7 +107,7 @@ Public Class AppointmentManagementDatabaseHelper
 
             Dim selectQuery As String = "SELECT " &
                 "a.AppointmentID, " &
-                "c.Name AS CustomerName, " &
+                "c.Name + ' ' + LastName AS CustomerName, " &
                 "agg.Allservices AS BaseServiceName, " &
                 "agg.AllAddonServices AS AddonServiceName, " &
                 "a.AppointmentDateTime, " &
@@ -127,8 +129,7 @@ Public Class AppointmentManagementDatabaseHelper
         End Using
         Return dt
     End Function
-
-    Public Sub UpdateAppointment(appointmentID As Integer, customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As Date, paymentMethod As String, referenceID As String, price As Decimal, appointmentStatus As String, notes As String)
+    Public Sub UpdateAppointment(appointmentID As Integer, customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As Date, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, appointmentStatus As String, notes As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
@@ -140,7 +141,11 @@ Public Class AppointmentManagementDatabaseHelper
                     cmd.Parameters.AddWithValue("@CustomerID", customerID)
                     cmd.Parameters.AddWithValue("@AppointmentDateTime", appointmentDateTime)
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
-                    cmd.Parameters.AddWithValue("@ReferenceID", referenceID)
+                    If paymentMethod = "Cheque" Then
+                        cmd.Parameters.AddWithValue("@ReferenceID", cheque)
+                    Else
+                        cmd.Parameters.AddWithValue("@ReferenceID", If(String.IsNullOrEmpty(referenceID), CType(DBNull.Value, Object), referenceID))
+                    End If
                     cmd.Parameters.AddWithValue("@Price", price)
                     cmd.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus)
                     cmd.Parameters.AddWithValue("@Notes", notes)
@@ -159,6 +164,26 @@ Public Class AppointmentManagementDatabaseHelper
                     cmdDelete.ExecuteNonQuery()
                 End Using
 
+                ' Add the new sales services to SalesHistoryTable if needed
+                Dim insertSalesHistoryQuery = "INSERT INTO SalesHistoryTable (CustomerID, SaleDate, PaymentMethod, AppointmentID, ServiceID, AddonServiceID, TotalPrice) VALUES (@CustomerID, @SaleDate, @PaymentMethod, @AppointmentID, @ServiceID, @AddonServiceID, @TotalPrice)"
+                For Each item As AppointmentService In allSaleItems
+                    Dim baseServiceID As Integer = SalesDatabaseHelper.GetServiceIdByName(item.Service)
+                    Dim addonID As Integer? = SalesDatabaseHelper.GetAddonIdByName(item.Addon)
+                    Using cmdHistory As New SqlCommand(insertSalesHistoryQuery, con, transaction)
+                        cmdHistory.Parameters.AddWithValue("@CustomerID", customerID)
+                        cmdHistory.Parameters.AddWithValue("@SaleDate", DateTime.Now)
+                        cmdHistory.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
+                        cmdHistory.Parameters.AddWithValue("@AppointmentID", appointmentID)
+                        cmdHistory.Parameters.AddWithValue("@ServiceID", baseServiceID)
+                        If addonID.HasValue Then
+                            cmdHistory.Parameters.AddWithValue("@AddonServiceID", addonID.Value)
+                        Else
+                            cmdHistory.Parameters.AddWithValue("@AddonServiceID", DBNull.Value)
+                        End If
+                        cmdHistory.Parameters.AddWithValue("@TotalPrice", item.ServicePrice)
+                        cmdHistory.ExecuteNonQuery()
+                    End Using
+                Next
                 ' Step 3: Insert new entries into AppointmentServiceTable
                 Dim insertAppointmentServiceQuery = "INSERT INTO AppointmentServiceTable (AppointmentID, CustomerID, ServiceID, AddonServiceID, Subtotal, AppointmentStatus) VALUES (@AppointmentID, @CustomerID, @ServiceID, @AddonServiceID, @Subtotal, @AppointmentStatus)"
                 For Each item As AppointmentService In allSaleItems
@@ -187,110 +212,6 @@ Public Class AppointmentManagementDatabaseHelper
             End Try
         End Using
     End Sub
-
-
-    'Public Sub DeleteAppointment(appointmentID As String)
-    '    If String.IsNullOrEmpty(appointmentID) Then
-    '        MessageBox.Show("Please select appointment from the table to delete", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '        Return
-    '    End If
-    '    Dim DialogResult = MessageBox.Show("Are you sure you want to delete this appointment?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-    '    If DialogResult = DialogResult.Yes Then
-
-    '        Using con As New SqlConnection(constr)
-    '            Try
-    '                con.Open()
-    '                ' SQL query to delete a contract.
-    '                Dim deleteQuery As String = "DELETE FROM AppointmentsTable WHERE AppointmentID = @AppointmentID"
-    '                Using cmd As New SqlCommand(deleteQuery, con)
-    '                    cmd.Parameters.AddWithValue("@AppointmentID", appointmentID)
-    '                    cmd.ExecuteNonQuery()
-    '                    MessageBox.Show("Contract deleted successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-    '                End Using
-    '            Catch ex As Exception
-    '                MessageBox.Show("An error occurred while deleting contract" & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '            Finally
-    '                con.Close()
-    '            End Try
-    '        End Using
-    '    End If
-    'End Sub
-
-    ''' <summary>
-    ''' Gets all customer names from the database.
-    ''' </summary>
-    Public Function GetAllCustomerNames() As DataTable
-        Dim dt As New DataTable()
-        Using con As New SqlConnection(constr)
-            Dim sql As String = "SELECT Name FROM CustomersTable ORDER BY Name"
-            Using cmd As New SqlCommand(sql, con)
-                con.Open()
-                Using reader As SqlDataReader = cmd.ExecuteReader()
-                    dt.Load(reader)
-
-                End Using
-            End Using
-        End Using
-        Return dt
-    End Function
-
-    ''' <summary>
-    ''' Gets a customer ID by name.
-    ''' </summary>
-    Public Function GetCustomerID(customerName As String) As Integer
-        Using con As New SqlConnection(constr)
-            Dim customerID As Integer = 0
-            con.Open()
-            Dim selectQuery As String = "SELECT CustomerID FROM CustomersTable WHERE Name = @Name"
-            Using cmd As New SqlCommand(selectQuery, con)
-                cmd.Parameters.AddWithValue("@Name", customerName)
-                Dim result = cmd.ExecuteScalar()
-                If Not IsDBNull(result) AndAlso result IsNot Nothing Then
-                    customerID = CType(result, Integer)
-                End If
-            End Using
-            Return customerID
-        End Using
-    End Function
-
-    ''' <summary>
-    ''' Gets service details (ID and Price) by service name.
-    ''' </summary>
-    Public Function GetServiceDetails(serviceName As String) As AppointmentService
-        Using con As New SqlConnection(constr)
-            Dim details As New AppointmentService()
-            con.Open()
-            Dim selectQuery As String = "SELECT ServiceID, Price FROM ServicesTable WHERE ServiceName = @Name"
-            Using cmd As New SqlCommand(selectQuery, con)
-                cmd.Parameters.AddWithValue("@Name", serviceName)
-                Using reader As SqlDataReader = cmd.ExecuteReader()
-                    If reader.Read() Then
-                        details.ServiceID = reader.GetInt32(0)
-                        details.Price = reader.GetDecimal(1)
-                    End If
-                End Using
-            End Using
-            Return details
-        End Using
-    End Function
-
-    ''' <summary>
-    ''' Gets all non-addon services.
-    ''' </summary>
-    Public Function GetBaseServices() As DataTable
-        Dim dt As New DataTable()
-        Using con As New SqlConnection(constr)
-            con.Open()
-            Dim selectQuery As String = "SELECT ServiceID, ServiceName FROM ServicesTable WHERE Addon = 0 ORDER BY ServiceName"
-            Using cmd As New SqlCommand(selectQuery, con)
-                Using adapter As New SqlDataAdapter(cmd)
-                    adapter.Fill(dt)
-                End Using
-            End Using
-        End Using
-        Return dt
-    End Function
-
     ''' <summary>
     ''' Gets all Sale line items.
     ''' </summary>
@@ -358,9 +279,6 @@ Public Class AppointmentManagementDatabaseHelper
 
         Return items
     End Function
-
-
-
     ''' <summary>
     ''' Gets all Service List from AppointmentServiceTable
     ''' </summary>
@@ -406,31 +324,5 @@ Public Class AppointmentManagementDatabaseHelper
 
         Return serviceList
     End Function
-    ''' <summary>
-    ''' Gets all addon services.
-    ''' </summary>
-    Public Function GetAddonServices() As DataTable
-        Dim dt As New DataTable()
-        Using con As New SqlConnection(constr)
-            con.Open()
-            Dim selectQuery As String = "SELECT ServiceID, ServiceName FROM ServicesTable WHERE Addon = 1 ORDER BY ServiceName"
-            Using cmd As New SqlCommand(selectQuery, con)
-                Using adapter As New SqlDataAdapter(cmd)
-                    adapter.Fill(dt)
-                End Using
-            End Using
-        End Using
-        Return dt
-    End Function
-
-    ''' <summary>
-    ''' Show Print Preview
-    ''' </summary>
-    Public Shared Sub ShowPrintPreview(doc As PrintDocument)
-        doc.PrinterSettings = New PrinterSettings()
-        doc.DefaultPageSettings.Margins = New Margins(10, 10, 0, 0)
-        doc.DefaultPageSettings.PaperSize = New PaperSize("Custom", 300, 500)
-    End Sub
-
 End Class
 

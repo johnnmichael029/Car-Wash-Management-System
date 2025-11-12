@@ -187,7 +187,7 @@ Partial Class Carwash
         ' PictureBoxUpEarnings
         ' 
         PictureBoxUpEarnings.Image = My.Resources.Resources.triangle1
-        PictureBoxUpEarnings.Location = New Point(120, 21)
+        PictureBoxUpEarnings.Location = New Point(116, 21)
         PictureBoxUpEarnings.Name = "PictureBoxUpEarnings"
         PictureBoxUpEarnings.Size = New Size(21, 19)
         PictureBoxUpEarnings.TabIndex = 23
@@ -228,7 +228,7 @@ Partial Class Carwash
         ' PictureBoxDownEarnings
         ' 
         PictureBoxDownEarnings.Image = My.Resources.Resources.down
-        PictureBoxDownEarnings.Location = New Point(120, 21)
+        PictureBoxDownEarnings.Location = New Point(116, 21)
         PictureBoxDownEarnings.Name = "PictureBoxDownEarnings"
         PictureBoxDownEarnings.Size = New Size(21, 19)
         PictureBoxDownEarnings.TabIndex = 27

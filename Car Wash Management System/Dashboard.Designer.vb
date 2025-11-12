@@ -35,9 +35,13 @@ Partial Class Dashboard
         Panel13 = New Panel()
         DataGridViewLatestTransaction = New DataGridView()
         Panel2 = New Panel()
+        Label22 = New Label()
+        TextBoxCheque = New TextBox()
+        PanelServiceInfo = New Panel()
+        ListViewServices = New ListView()
+        FullScreenServiceBtn = New Button()
         RemoveServiceBtn = New Button()
         AddServiceBtn = New Button()
-        ListViewServices = New ListView()
         TextBoxReferenceID = New TextBox()
         Label17 = New Label()
         Label16 = New Label()
@@ -60,13 +64,15 @@ Partial Class Dashboard
         Label7 = New Label()
         Panel3 = New Panel()
         Panel1 = New Panel()
+        PanelVehicleInfo = New Panel()
+        ListViewVehicles = New ListView()
+        FullScreenVehicleBtn = New Button()
         Label8 = New Label()
         RemoveVehicleBtn = New Button()
         Label11 = New Label()
         Label12 = New Label()
         AddVehicleBtn = New Button()
         TextBoxBarangay = New TextBox()
-        ListViewVehicles = New ListView()
         Label13 = New Label()
         customerIDLabel = New Label()
         TextBoxLastName = New TextBox()
@@ -93,8 +99,10 @@ Partial Class Dashboard
         Panel13.SuspendLayout()
         CType(DataGridViewLatestTransaction, ComponentModel.ISupportInitialize).BeginInit()
         Panel2.SuspendLayout()
+        PanelServiceInfo.SuspendLayout()
         Panel3.SuspendLayout()
         Panel1.SuspendLayout()
+        PanelVehicleInfo.SuspendLayout()
         Panel4.SuspendLayout()
         SuspendLayout()
         ' 
@@ -225,9 +233,12 @@ Partial Class Dashboard
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
+        Panel2.Controls.Add(Label22)
+        Panel2.Controls.Add(TextBoxCheque)
+        Panel2.Controls.Add(PanelServiceInfo)
+        Panel2.Controls.Add(FullScreenServiceBtn)
         Panel2.Controls.Add(RemoveServiceBtn)
         Panel2.Controls.Add(AddServiceBtn)
-        Panel2.Controls.Add(ListViewServices)
         Panel2.Controls.Add(TextBoxReferenceID)
         Panel2.Controls.Add(Label17)
         Panel2.Controls.Add(Label16)
@@ -253,6 +264,57 @@ Partial Class Dashboard
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(292, 680)
         Panel2.TabIndex = 19
+        ' 
+        ' Label22
+        ' 
+        Label22.AutoSize = True
+        Label22.Font = New Font("Century Gothic", 9F)
+        Label22.Location = New Point(147, 326)
+        Label22.Name = "Label22"
+        Label22.Size = New Size(78, 17)
+        Label22.TabIndex = 140
+        Label22.Text = "Cheque No."
+        ' 
+        ' TextBoxCheque
+        ' 
+        TextBoxCheque.Font = New Font("Century Gothic", 9F)
+        TextBoxCheque.Location = New Point(147, 344)
+        TextBoxCheque.Name = "TextBoxCheque"
+        TextBoxCheque.ReadOnly = True
+        TextBoxCheque.Size = New Size(129, 22)
+        TextBoxCheque.TabIndex = 139
+        ' 
+        ' PanelServiceInfo
+        ' 
+        PanelServiceInfo.Controls.Add(ListViewServices)
+        PanelServiceInfo.Location = New Point(16, 175)
+        PanelServiceInfo.Name = "PanelServiceInfo"
+        PanelServiceInfo.Size = New Size(260, 102)
+        PanelServiceInfo.TabIndex = 130
+        ' 
+        ' ListViewServices
+        ' 
+        ListViewServices.Dock = DockStyle.Fill
+        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        ListViewServices.FullRowSelect = True
+        ListViewServices.GridLines = True
+        ListViewServices.Location = New Point(0, 0)
+        ListViewServices.Name = "ListViewServices"
+        ListViewServices.Size = New Size(260, 102)
+        ListViewServices.TabIndex = 100
+        ListViewServices.UseCompatibleStateImageBehavior = False
+        ' 
+        ' FullScreenServiceBtn
+        ' 
+        FullScreenServiceBtn.FlatAppearance.BorderSize = 0
+        FullScreenServiceBtn.FlatStyle = FlatStyle.Flat
+        FullScreenServiceBtn.Image = My.Resources.Resources.expand1
+        FullScreenServiceBtn.Location = New Point(126, 141)
+        FullScreenServiceBtn.Name = "FullScreenServiceBtn"
+        FullScreenServiceBtn.Size = New Size(37, 33)
+        FullScreenServiceBtn.TabIndex = 130
+        FullScreenServiceBtn.UseVisualStyleBackColor = True
         ' 
         ' RemoveServiceBtn
         ' 
@@ -282,25 +344,13 @@ Partial Class Dashboard
         AddServiceBtn.Text = "Add"
         AddServiceBtn.UseVisualStyleBackColor = False
         ' 
-        ' ListViewServices
-        ' 
-        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
-        ListViewServices.FullRowSelect = True
-        ListViewServices.GridLines = True
-        ListViewServices.Location = New Point(16, 175)
-        ListViewServices.Name = "ListViewServices"
-        ListViewServices.Size = New Size(260, 102)
-        ListViewServices.TabIndex = 92
-        ListViewServices.UseCompatibleStateImageBehavior = False
-        ' 
         ' TextBoxReferenceID
         ' 
         TextBoxReferenceID.Font = New Font("Century Gothic", 9F)
         TextBoxReferenceID.Location = New Point(16, 344)
         TextBoxReferenceID.Name = "TextBoxReferenceID"
         TextBoxReferenceID.ReadOnly = True
-        TextBoxReferenceID.Size = New Size(261, 22)
+        TextBoxReferenceID.Size = New Size(129, 22)
         TextBoxReferenceID.TabIndex = 91
         ' 
         ' Label17
@@ -309,9 +359,9 @@ Partial Class Dashboard
         Label17.Font = New Font("Century Gothic", 9F)
         Label17.Location = New Point(16, 326)
         Label17.Name = "Label17"
-        Label17.Size = New Size(85, 17)
+        Label17.Size = New Size(71, 17)
         Label17.TabIndex = 90
-        Label17.Text = "Reference ID"
+        Label17.Text = "Gcash Ref."
         ' 
         ' Label16
         ' 
@@ -514,13 +564,14 @@ Partial Class Dashboard
         ' Panel1
         ' 
         Panel1.BackColor = Color.White
+        Panel1.Controls.Add(PanelVehicleInfo)
+        Panel1.Controls.Add(FullScreenVehicleBtn)
         Panel1.Controls.Add(Label8)
         Panel1.Controls.Add(RemoveVehicleBtn)
         Panel1.Controls.Add(Label11)
         Panel1.Controls.Add(Label12)
         Panel1.Controls.Add(AddVehicleBtn)
         Panel1.Controls.Add(TextBoxBarangay)
-        Panel1.Controls.Add(ListViewVehicles)
         Panel1.Controls.Add(Label13)
         Panel1.Controls.Add(customerIDLabel)
         Panel1.Controls.Add(TextBoxLastName)
@@ -544,6 +595,38 @@ Partial Class Dashboard
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(292, 680)
         Panel1.TabIndex = 2
+        ' 
+        ' PanelVehicleInfo
+        ' 
+        PanelVehicleInfo.Controls.Add(ListViewVehicles)
+        PanelVehicleInfo.Location = New Point(16, 343)
+        PanelVehicleInfo.Name = "PanelVehicleInfo"
+        PanelVehicleInfo.Size = New Size(260, 102)
+        PanelVehicleInfo.TabIndex = 129
+        ' 
+        ' ListViewVehicles
+        ' 
+        ListViewVehicles.Dock = DockStyle.Fill
+        ListViewVehicles.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewVehicles.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
+        ListViewVehicles.FullRowSelect = True
+        ListViewVehicles.GridLines = True
+        ListViewVehicles.Location = New Point(0, 0)
+        ListViewVehicles.Name = "ListViewVehicles"
+        ListViewVehicles.Size = New Size(260, 102)
+        ListViewVehicles.TabIndex = 100
+        ListViewVehicles.UseCompatibleStateImageBehavior = False
+        ' 
+        ' FullScreenVehicleBtn
+        ' 
+        FullScreenVehicleBtn.FlatAppearance.BorderSize = 0
+        FullScreenVehicleBtn.FlatStyle = FlatStyle.Flat
+        FullScreenVehicleBtn.Image = My.Resources.Resources.expand1
+        FullScreenVehicleBtn.Location = New Point(126, 309)
+        FullScreenVehicleBtn.Name = "FullScreenVehicleBtn"
+        FullScreenVehicleBtn.Size = New Size(37, 33)
+        FullScreenVehicleBtn.TabIndex = 128
+        FullScreenVehicleBtn.UseVisualStyleBackColor = True
         ' 
         ' Label8
         ' 
@@ -614,18 +697,6 @@ Partial Class Dashboard
         TextBoxBarangay.Name = "TextBoxBarangay"
         TextBoxBarangay.Size = New Size(129, 22)
         TextBoxBarangay.TabIndex = 124
-        ' 
-        ' ListViewVehicles
-        ' 
-        ListViewVehicles.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ListViewVehicles.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
-        ListViewVehicles.FullRowSelect = True
-        ListViewVehicles.GridLines = True
-        ListViewVehicles.Location = New Point(16, 343)
-        ListViewVehicles.Name = "ListViewVehicles"
-        ListViewVehicles.Size = New Size(260, 102)
-        ListViewVehicles.TabIndex = 83
-        ListViewVehicles.UseCompatibleStateImageBehavior = False
         ' 
         ' Label13
         ' 
@@ -850,9 +921,11 @@ Partial Class Dashboard
         CType(DataGridViewLatestTransaction, ComponentModel.ISupportInitialize).EndInit()
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
+        PanelServiceInfo.ResumeLayout(False)
         Panel3.ResumeLayout(False)
         Panel1.ResumeLayout(False)
         Panel1.PerformLayout()
+        PanelVehicleInfo.ResumeLayout(False)
         Panel4.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
@@ -894,14 +967,12 @@ Partial Class Dashboard
     Friend WithEvents ComboBoxFilter As ComboBox
     Friend WithEvents RemoveVehicleBtn As Button
     Friend WithEvents AddVehicleBtn As Button
-    Friend WithEvents ListViewVehicles As ListView
     Friend WithEvents Label16 As Label
     Friend WithEvents TextBoxTotalPrice As TextBox
     Friend WithEvents TextBoxReferenceID As TextBox
     Friend WithEvents Label17 As Label
     Friend WithEvents RemoveServiceBtn As Button
     Friend WithEvents AddServiceBtn As Button
-    Friend WithEvents ListViewServices As ListView
     Friend WithEvents Label8 As Label
     Friend WithEvents Label11 As Label
     Friend WithEvents Label12 As Label
@@ -920,4 +991,12 @@ Partial Class Dashboard
     Friend WithEvents Label20 As Label
     Friend WithEvents TextBoxPlateNumber As TextBox
     Friend WithEvents TextBoxNumber As TextBox
+    Friend WithEvents FullScreenVehicleBtn As Button
+    Friend WithEvents PanelVehicleInfo As Panel
+    Friend WithEvents ListViewVehicles As ListView
+    Friend WithEvents FullScreenServiceBtn As Button
+    Friend WithEvents PanelServiceInfo As Panel
+    Friend WithEvents ListViewServices As ListView
+    Friend WithEvents Label22 As Label
+    Friend WithEvents TextBoxCheque As TextBox
 End Class

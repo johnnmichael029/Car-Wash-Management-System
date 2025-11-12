@@ -329,4 +329,26 @@ Public Class CustomerInformationDatabaseHelper
         End Using
         Return totalAmount
     End Function
+    Public Function GetCustomerContractStatus(customerID As Integer) As String
+        Dim contractStatus As String = "None"
+        Dim query As String = "SELECT TOP 1 ContractStatus FROM ContractsTable WHERE CustomerID = @CustomerID AND ContractStatus = 'Active'"
+        Using con As New SqlConnection(constr)
+            Using cmd As New SqlCommand(query, con)
+                cmd.Parameters.AddWithValue("@CustomerID", customerID)
+                Try
+                    con.Open()
+                    Dim result As Object = cmd.ExecuteScalar()
+                    If result IsNot Nothing AndAlso Not Convert.IsDBNull(result) Then
+                        contractStatus = Convert.ToString(result)
+                    End If
+
+                Catch ex As Exception
+                    ' Log the error or show a message box in a real application
+                    Console.WriteLine("Error checking contract status: " & ex.Message)
+                End Try
+            End Using
+        End Using
+
+        Return contractStatus
+    End Function
 End Class

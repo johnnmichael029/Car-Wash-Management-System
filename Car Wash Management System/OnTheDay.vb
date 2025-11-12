@@ -29,7 +29,7 @@ Public Class OnTheDay
 
             ' Check the status and apply the correct formatting to the entire row.
             Select Case status
-                Case "Confirmed"
+                Case "Confirmed".Trim
                     ' Blue for confirmed appointments.
                     e.CellStyle.BackColor = Color.LightSkyBlue
                     e.CellStyle.ForeColor = Color.Black
@@ -37,7 +37,7 @@ Public Class OnTheDay
                     ' Gold for appointments that are pending.
                     e.CellStyle.BackColor = Color.Gold
                     e.CellStyle.ForeColor = Color.Black
-                Case "In-progress"
+                Case "In-Progress"
                     ' Light blue for in-progress appointments. (Using Cornflower Blue for better visibility)
                     e.CellStyle.BackColor = Color.CornflowerBlue ' Used a distinct color to confirm it's working
                     e.CellStyle.ForeColor = Color.White ' Changed to White for better contrast
@@ -67,8 +67,8 @@ Public Class OnTheDay
                         ' Confirmed is the start point, moves to Queued if not already there
                         nextStatus = "Queued"
                     Case "Queued"
-                        nextStatus = "In-progress"
-                    Case "In-progress"
+                        nextStatus = "In-Progress"
+                    Case "In-Progress"
                         nextStatus = "Completed"
                     Case Else
                         ' Handle unknown or initial states by defaulting to Queued
@@ -133,4 +133,7 @@ Public Class OnTheDay
 
     End Sub
 
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
+    End Sub
 End Class

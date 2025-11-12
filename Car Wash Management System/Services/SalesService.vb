@@ -1,5 +1,6 @@
 ﻿Public Class SalesService
     Public Property ServiceID As Integer
+    Public Property ID As Integer
     Public Property Price As Decimal
     Public Property Addon As String
     Public Property Service As String
@@ -11,10 +12,11 @@
 
     ' --- Corrected Parameterized Constructor ---
     ' NOTE: I swapped the assignments below to match the intent (plateNum goes to PlateNumber property).
-    Public Sub New(service As String, addon As String, servicePrice As Decimal)
+    Public Sub New(id As Integer, service As String, addon As String, servicePrice As Decimal)
         Me.Addon = addon       ' Corrected assignment
         Me.Service = service    ' Corrected assignment
         Me.ServicePrice = servicePrice
+        Me.ID = id
     End Sub
 
     ' Optional: Override ToString for easy debugging or displaying in simple ListBoxes
