@@ -74,9 +74,9 @@ Partial Class SalesMadeAnalyticsvb
         Panel10.Controls.Add(Panel4)
         Panel10.Controls.Add(Panel1)
         Panel10.Controls.Add(PanelSales)
-        Panel10.Location = New Point(12, 6)
+        Panel10.Location = New Point(0, 0)
         Panel10.Name = "Panel10"
-        Panel10.Size = New Size(1168, 668)
+        Panel10.Size = New Size(1192, 680)
         Panel10.TabIndex = 8
         ' 
         ' Panel2
@@ -90,7 +90,7 @@ Partial Class SalesMadeAnalyticsvb
         Panel2.Controls.Add(LabelServiceValue)
         Panel2.Controls.Add(Label2)
         Panel2.Controls.Add(PictureBoxDownService)
-        Panel2.Location = New Point(1433, 128)
+        Panel2.Location = New Point(1445, 128)
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(221, 167)
         Panel2.TabIndex = 1
@@ -170,9 +170,9 @@ Partial Class SalesMadeAnalyticsvb
         ' 
         PanelChartCustomers.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom
         PanelChartCustomers.BackColor = Color.White
-        PanelChartCustomers.Location = New Point(1197, 407)
+        PanelChartCustomers.Location = New Point(1209, 407)
         PanelChartCustomers.Name = "PanelChartCustomers"
-        PanelChartCustomers.Size = New Size(219, 816)
+        PanelChartCustomers.Size = New Size(219, 828)
         PanelChartCustomers.TabIndex = 6
         ' 
         ' Panel3
@@ -186,7 +186,7 @@ Partial Class SalesMadeAnalyticsvb
         Panel3.Controls.Add(LabelCustomersPeriod)
         Panel3.Controls.Add(LabelCustomers)
         Panel3.Controls.Add(Label6)
-        Panel3.Location = New Point(1433, 314)
+        Panel3.Location = New Point(1445, 314)
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(221, 167)
         Panel3.TabIndex = 2
@@ -273,7 +273,7 @@ Partial Class SalesMadeAnalyticsvb
         Panel4.Controls.Add(Label9)
         Panel4.Controls.Add(LabelEarnings)
         Panel4.Controls.Add(PictureBoxDownArrow)
-        Panel4.Location = New Point(1431, 501)
+        Panel4.Location = New Point(1443, 501)
         Panel4.Name = "Panel4"
         Panel4.Size = New Size(221, 167)
         Panel4.TabIndex = 2
@@ -357,7 +357,7 @@ Partial Class SalesMadeAnalyticsvb
         Panel1.Dock = DockStyle.Top
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(1168, 111)
+        Panel1.Size = New Size(1192, 111)
         Panel1.TabIndex = 0
         ' 
         ' ButtonToggleChart
@@ -390,7 +390,7 @@ Partial Class SalesMadeAnalyticsvb
         PanelSales.BackColor = Color.White
         PanelSales.Location = New Point(0, 128)
         PanelSales.Name = "PanelSales"
-        PanelSales.Size = New Size(1168, 540)
+        PanelSales.Size = New Size(1192, 552)
         PanelSales.TabIndex = 4
         ' 
         ' SalesMadeAnalyticsvb

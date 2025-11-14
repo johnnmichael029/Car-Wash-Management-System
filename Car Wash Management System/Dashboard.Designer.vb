@@ -35,6 +35,8 @@ Partial Class Dashboard
         Panel13 = New Panel()
         DataGridViewLatestTransaction = New DataGridView()
         Panel2 = New Panel()
+        ComboBoxDiscount = New ComboBox()
+        Label23 = New Label()
         Label22 = New Label()
         TextBoxCheque = New TextBox()
         PanelServiceInfo = New Panel()
@@ -233,6 +235,8 @@ Partial Class Dashboard
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
+        Panel2.Controls.Add(ComboBoxDiscount)
+        Panel2.Controls.Add(Label23)
         Panel2.Controls.Add(Label22)
         Panel2.Controls.Add(TextBoxCheque)
         Panel2.Controls.Add(PanelServiceInfo)
@@ -264,6 +268,29 @@ Partial Class Dashboard
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(292, 680)
         Panel2.TabIndex = 19
+        ' 
+        ' ComboBoxDiscount
+        ' 
+        ComboBoxDiscount.AutoCompleteCustomSource.AddRange(New String() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
+        ComboBoxDiscount.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxDiscount.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBoxDiscount.Font = New Font("Century Gothic", 9F)
+        ComboBoxDiscount.FormattingEnabled = True
+        ComboBoxDiscount.Items.AddRange(New Object() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
+        ComboBoxDiscount.Location = New Point(147, 298)
+        ComboBoxDiscount.Name = "ComboBoxDiscount"
+        ComboBoxDiscount.Size = New Size(130, 25)
+        ComboBoxDiscount.TabIndex = 142
+        ' 
+        ' Label23
+        ' 
+        Label23.AutoSize = True
+        Label23.Font = New Font("Century Gothic", 9F)
+        Label23.Location = New Point(147, 280)
+        Label23.Name = "Label23"
+        Label23.Size = New Size(72, 17)
+        Label23.TabIndex = 141
+        Label23.Text = "Discount %"
         ' 
         ' Label22
         ' 
@@ -436,7 +463,7 @@ Partial Class Dashboard
         ComboBoxPaymentMethod.Items.AddRange(New Object() {"Cash", "Gcash", "Cheque"})
         ComboBoxPaymentMethod.Location = New Point(16, 298)
         ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod"
-        ComboBoxPaymentMethod.Size = New Size(261, 25)
+        ComboBoxPaymentMethod.Size = New Size(129, 25)
         ComboBoxPaymentMethod.TabIndex = 30
         ' 
         ' ComboBoxAddons
@@ -999,4 +1026,6 @@ Partial Class Dashboard
     Friend WithEvents ListViewServices As ListView
     Friend WithEvents Label22 As Label
     Friend WithEvents TextBoxCheque As TextBox
+    Friend WithEvents ComboBoxDiscount As ComboBox
+    Friend WithEvents Label23 As Label
 End Class

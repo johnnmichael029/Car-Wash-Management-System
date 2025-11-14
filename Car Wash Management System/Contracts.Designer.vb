@@ -24,6 +24,8 @@ Partial Class Contracts
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Contracts))
         Panel3 = New Panel()
+        ComboBoxDiscount = New ComboBox()
+        Label15 = New Label()
         Label14 = New Label()
         TextBoxCheque = New TextBox()
         PanelServiceInfo = New Panel()
@@ -74,6 +76,8 @@ Partial Class Contracts
         ' Panel3
         ' 
         Panel3.BackColor = Color.White
+        Panel3.Controls.Add(ComboBoxDiscount)
+        Panel3.Controls.Add(Label15)
         Panel3.Controls.Add(Label14)
         Panel3.Controls.Add(TextBoxCheque)
         Panel3.Controls.Add(PanelServiceInfo)
@@ -116,6 +120,29 @@ Partial Class Contracts
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(305, 758)
         Panel3.TabIndex = 2
+        ' 
+        ' ComboBoxDiscount
+        ' 
+        ComboBoxDiscount.AutoCompleteCustomSource.AddRange(New String() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
+        ComboBoxDiscount.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxDiscount.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBoxDiscount.Font = New Font("Century Gothic", 9F)
+        ComboBoxDiscount.FormattingEnabled = True
+        ComboBoxDiscount.Items.AddRange(New Object() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
+        ComboBoxDiscount.Location = New Point(148, 384)
+        ComboBoxDiscount.Name = "ComboBoxDiscount"
+        ComboBoxDiscount.Size = New Size(130, 25)
+        ComboBoxDiscount.TabIndex = 142
+        ' 
+        ' Label15
+        ' 
+        Label15.AutoSize = True
+        Label15.Font = New Font("Century Gothic", 9F)
+        Label15.Location = New Point(148, 366)
+        Label15.Name = "Label15"
+        Label15.Size = New Size(72, 17)
+        Label15.TabIndex = 141
+        Label15.Text = "Discount %"
         ' 
         ' Label14
         ' 
@@ -268,7 +295,7 @@ Partial Class Contracts
         ComboBoxPaymentMethod.FormattingEnabled = True
         ComboBoxPaymentMethod.Location = New Point(17, 384)
         ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod"
-        ComboBoxPaymentMethod.Size = New Size(262, 23)
+        ComboBoxPaymentMethod.Size = New Size(128, 23)
         ComboBoxPaymentMethod.TabIndex = 27
         ' 
         ' ComboBoxAddons
@@ -602,4 +629,6 @@ Partial Class Contracts
     Friend WithEvents ListViewServices As ListView
     Friend WithEvents Label14 As Label
     Friend WithEvents TextBoxCheque As TextBox
+    Friend WithEvents ComboBoxDiscount As ComboBox
+    Friend WithEvents Label15 As Label
 End Class

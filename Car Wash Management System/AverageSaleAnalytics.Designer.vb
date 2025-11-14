@@ -23,6 +23,7 @@ Partial Class AverageSaleAnalytics
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Panel10 = New Panel()
+        PanelBarGraphAverage = New Panel()
         Panel2 = New Panel()
         PictureBoxUpService = New PictureBox()
         LabelServicePeriod = New Label()
@@ -51,7 +52,6 @@ Partial Class AverageSaleAnalytics
         Panel1 = New Panel()
         ButtonToggleChart = New Button()
         Label1 = New Label()
-        PanelBarGraphAverage = New Panel()
         Panel10.SuspendLayout()
         Panel2.SuspendLayout()
         CType(PictureBoxUpService, ComponentModel.ISupportInitialize).BeginInit()
@@ -74,10 +74,19 @@ Partial Class AverageSaleAnalytics
         Panel10.Controls.Add(Panel3)
         Panel10.Controls.Add(Panel4)
         Panel10.Controls.Add(Panel1)
-        Panel10.Location = New Point(12, 6)
+        Panel10.Location = New Point(0, 0)
         Panel10.Name = "Panel10"
-        Panel10.Size = New Size(1168, 668)
+        Panel10.Size = New Size(1192, 680)
         Panel10.TabIndex = 9
+        ' 
+        ' PanelBarGraphAverage
+        ' 
+        PanelBarGraphAverage.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        PanelBarGraphAverage.BackColor = Color.White
+        PanelBarGraphAverage.Location = New Point(0, 128)
+        PanelBarGraphAverage.Name = "PanelBarGraphAverage"
+        PanelBarGraphAverage.Size = New Size(1192, 552)
+        PanelBarGraphAverage.TabIndex = 7
         ' 
         ' Panel2
         ' 
@@ -90,7 +99,7 @@ Partial Class AverageSaleAnalytics
         Panel2.Controls.Add(LabelServiceValue)
         Panel2.Controls.Add(Label2)
         Panel2.Controls.Add(PictureBoxDownService)
-        Panel2.Location = New Point(1917, 128)
+        Panel2.Location = New Point(1929, 128)
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(221, 167)
         Panel2.TabIndex = 1
@@ -170,9 +179,9 @@ Partial Class AverageSaleAnalytics
         ' 
         PanelChartCustomers.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom
         PanelChartCustomers.BackColor = Color.White
-        PanelChartCustomers.Location = New Point(1681, 407)
+        PanelChartCustomers.Location = New Point(1693, 407)
         PanelChartCustomers.Name = "PanelChartCustomers"
-        PanelChartCustomers.Size = New Size(219, 1384)
+        PanelChartCustomers.Size = New Size(219, 1396)
         PanelChartCustomers.TabIndex = 6
         ' 
         ' Panel3
@@ -186,7 +195,7 @@ Partial Class AverageSaleAnalytics
         Panel3.Controls.Add(LabelCustomersPeriod)
         Panel3.Controls.Add(LabelCustomers)
         Panel3.Controls.Add(Label6)
-        Panel3.Location = New Point(1917, 314)
+        Panel3.Location = New Point(1929, 314)
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(221, 167)
         Panel3.TabIndex = 2
@@ -273,7 +282,7 @@ Partial Class AverageSaleAnalytics
         Panel4.Controls.Add(Label9)
         Panel4.Controls.Add(LabelEarnings)
         Panel4.Controls.Add(PictureBoxDownArrow)
-        Panel4.Location = New Point(1915, 501)
+        Panel4.Location = New Point(1927, 501)
         Panel4.Name = "Panel4"
         Panel4.Size = New Size(221, 167)
         Panel4.TabIndex = 2
@@ -357,7 +366,7 @@ Partial Class AverageSaleAnalytics
         Panel1.Dock = DockStyle.Top
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(1168, 111)
+        Panel1.Size = New Size(1192, 111)
         Panel1.TabIndex = 0
         ' 
         ' ButtonToggleChart
@@ -383,15 +392,6 @@ Partial Class AverageSaleAnalytics
         Label1.Size = New Size(367, 41)
         Label1.TabIndex = 7
         Label1.Text = "Analytics Dashboard"
-        ' 
-        ' PanelBarGraphAverage
-        ' 
-        PanelBarGraphAverage.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        PanelBarGraphAverage.BackColor = Color.White
-        PanelBarGraphAverage.Location = New Point(0, 128)
-        PanelBarGraphAverage.Name = "PanelBarGraphAverage"
-        PanelBarGraphAverage.Size = New Size(1168, 540)
-        PanelBarGraphAverage.TabIndex = 7
         ' 
         ' AverageSaleAnalytics
         ' 

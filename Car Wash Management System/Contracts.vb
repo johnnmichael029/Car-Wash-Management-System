@@ -10,7 +10,6 @@ Public Class Contracts
     Dim activityLogInDashboardService As ActivityLogInDashboardService
     Private contractServiceList As List(Of ContractsService)
     Private ReadOnly salesDatabaseHelper As SalesDatabaseHelper
-    Private nextServiceID As Integer = 1
 
     Public Sub New()
         ' This call is required by the designer.
@@ -26,7 +25,7 @@ Public Class Contracts
         PopulateUIForContract()
         DataGridViewFontStyle()
         ChangeHeaderOfDataGridViewContracts()
-        SetupListView()
+        SetupListViewService.SetupListViewForServices(ListViewServices, 30, 85, 85, 50)
         contractsDatabaseHelper.UpdateTheStatusOfContractWhenExpired()
     End Sub
     Private Sub AddContractBtn_Click(sender As Object, e As EventArgs) Handles AddContractBtn.Click
@@ -60,7 +59,7 @@ Public Class Contracts
                 MessageBox.Show("Customer not found. Please select a valid customer.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
-            If contractServiceList.Count = 0 Then
+            If AddSaleToListView.SaleServiceList.Count = 0 Then
                 MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
@@ -132,7 +131,7 @@ Public Class Contracts
 
             contractsDatabaseHelper.AddContract(
                 customerID,
-                contractServiceList,
+                AddSaleToListView.SaleServiceList,
                 DateTimePickerEndDate.Text,
                 ComboBoxBillingFrequency.Text,
                 ComboBoxPaymentMethod.Text,
@@ -173,11 +172,11 @@ Public Class Contracts
 
     End Sub
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
-        SalesForm.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, TextBoxPrice)
+        CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
     End Sub
 
     Private Sub ComboBoxAddon_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxAddons.SelectedIndexChanged
-        SalesForm.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, TextBoxPrice)
+        CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
     End Sub
 
     Private Sub TextBoxCustomerName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCustomerName.TextChanged
@@ -310,10 +309,11 @@ Public Class Contracts
         LabelContractID.Text = String.Empty
         TextBoxReferenceID.Clear()
         TextBoxCheque.Clear()
-        contractServiceList.Clear()
-        ListViewServices.Items.Clear()
         TextBoxTotalPrice.Text = "0.00"
-        nextServiceID = 1
+
+        ListViewServices.Items.Clear()
+        AddSaleToListView.SaleServiceList.Clear()
+        AddSaleToListView.nextServiceID = 1
     End Sub
 
     Private Sub DataGridViewContract_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewContract.CellContentClick
@@ -353,7 +353,8 @@ Public Class Contracts
             ' 2. Load Services into ListView
             Dim contractID As Integer
             If Integer.TryParse(contractIDValue, contractID) Then
-                LoadServicesIntoListView(contractID)
+                LoadService.LoadServicesIntoListViewContractForm(contractID, ListViewServices)
+
             Else
                 MessageBox.Show("Invalid Sales ID format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
@@ -363,27 +364,6 @@ Public Class Contracts
             MessageBox.Show("Error loading sale details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             TextBoxTotalPrice.Text = "0.00"
         End Try
-    End Sub
-    Private Sub LoadServicesIntoListView(salesID As Integer)
-        ListViewServices.Items.Clear()
-        Me.contractServiceList.Clear()
-        Dim serviceList As List(Of ContractsService) = ContractsDatabaseHelper.GetSalesServiceList(salesID)
-        Dim listItemIDCounter As Integer = 1
-
-        For Each service As ContractsService In serviceList
-
-            Me.contractServiceList.Add(service)
-            Dim lvi As New ListViewItem(listItemIDCounter.ToString())
-
-            lvi.SubItems.Add(service.Service)
-            lvi.SubItems.Add(service.Addon)
-            lvi.SubItems.Add(service.ServicePrice.ToString("N2"))
-
-            ListViewServices.Items.Add(lvi)
-            listItemIDCounter += 1
-
-        Next
-        Me.nextServiceID = listItemIDCounter
     End Sub
 
     Private Sub DataGridViewContract_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewContract.CellFormatting
@@ -467,144 +447,15 @@ Public Class Contracts
            .ContractStatus = ComboBoxContractStatus.Text
        })
     End Sub
-
-
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
-        AddSaleService()
-        CalculateTotalPriceInService()
-    End Sub
-    Private Sub CalculateTotalPriceInService()
-        Dim totalPrice As Decimal = 0D
-        If ListViewServices Is Nothing OrElse ListViewServices.Items.Count = 0 Then
-            TextBoxTotalPrice.Text = "0.00"
-            Return
-        End If
-
-        For Each item As ListViewItem In ListViewServices.Items
-            If item.SubItems.Count > 2 Then
-                Dim priceText As String = item.SubItems(3).Text
-
-                Dim itemPrice As Decimal
-                If Decimal.TryParse(priceText, itemPrice) Then
-                    totalPrice += itemPrice
-                Else
-                    MessageBox.Show($"Invalid price format: {priceText}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End If
-            End If
-        Next
-        TextBoxTotalPrice.Text = totalPrice.ToString("N2")
-    End Sub
-    Private Sub AddSaleService()
-        If String.IsNullOrWhiteSpace(ComboBoxServices.Text) Then
-            MessageBox.Show("Please enter service.", "Missing Service Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        ' 1. Get the current ID and prepare the next one
-        Dim currentID As Integer = nextServiceID
-        nextServiceID += 1 ' Increment the counter for the next line item
-
-        Dim services As String = ComboBoxServices.Text.Trim()
-        Dim addons As String = ComboBoxAddons.Text.Trim()
-
-        ' Use TryParse for safer decimal conversion
-        Dim price As Decimal
-        If Not Decimal.TryParse(TextBoxPrice.Text, price) Then
-            MessageBox.Show("Invalid price value.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
-
-        ' 2. Create the new service, passing the current ID
-        Dim newService As New ContractsService(currentID, services, addons, price)
-
-        Me.contractServiceList.Add(newService)
-
-        ' 3. Add the ID as the FIRST column in the ListView
-        Dim lvi As New ListViewItem(newService.ID.ToString()) ' ID is the main item text
-
-        ' Add the rest of the columns as sub-items
-        lvi.SubItems.Add(newService.Service)        ' Service
-        lvi.SubItems.Add(newService.Addon)          ' Addon
-        lvi.SubItems.Add(newService.ServicePrice.ToString("N2")) ' Price
-        ListViewServices.Items.Add(lvi)
-
-        ComboBoxServices.SelectedIndex = -1
-        ComboBoxAddons.SelectedIndex = -1
-        TextBoxPrice.Text = "0.00"
-    End Sub
-
-    Private Sub SetupListView()
-        ListViewServices.View = View.Details
-        ListViewServices.HeaderStyle = ColumnHeaderStyle.Nonclickable
-        ListViewServices.Columns.Clear()
-        ListViewServices.Columns.Add("ID", 30, HorizontalAlignment.Left)
-        ListViewServices.Columns.Add("Service", 85, HorizontalAlignment.Left)
-        ListViewServices.Columns.Add("Addon", 85, HorizontalAlignment.Left)
-        ListViewServices.Columns.Add("Price", 50, HorizontalAlignment.Left)
-        ListViewServices.GridLines = True
-        ListViewServices.FullRowSelect = True
+        AddSaleToListView.AddSaleService(ComboBoxServices, ComboBoxAddons, TextBoxPrice, ListViewServices)
+        UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
 
     Private Sub RemoveServiceBtn_Click(sender As Object, e As EventArgs) Handles RemoveServiceBtn.Click
-        RemoveSelectedService()
-        CalculateTotalPriceInService()
+        AddSaleToListView.RemoveSelectedService(ListViewServices)
+        UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
-    Private Sub RemoveSelectedService()
-        If ListViewServices.SelectedItems.Count = 0 Then
-            MessageBox.Show("Please select a service from the list to remove.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        Dim selectedItem As ListViewItem = ListViewServices.SelectedItems(0)
-
-        ' Get the 0-based index of the selected item in the ListView
-        Dim selectedIndex As Integer = selectedItem.Index
-
-        ' 1. Check if the index is valid for our tracking list
-        If selectedIndex >= 0 AndAlso selectedIndex < Me.contractServiceList.Count Then
-
-            ' 2. Remove the service object from the internal list based on index
-            Me.contractServiceList.RemoveAt(selectedIndex)
-
-            ' 3. Remove the item from the visual ListView control
-            ' (This step is technically optional since we clear and re-add below, but good practice)
-            ListViewServices.Items.Remove(selectedItem)
-
-            ' 4. After removing, we must re-load and re-number the entire list
-            ' This ensures the IDs (1, 2, 3...) remain sequential without gaps.
-
-            ' Get the current list of remaining services
-            ' Using ToList() creates a copy, so we can manipulate the original SaleServiceList safely below.
-            Dim remainingServices As List(Of ContractsService) = Me.contractServiceList.ToList()
-
-            ' Clear the UI and internal list (before re-adding)
-            ListViewServices.Items.Clear()
-            Me.contractServiceList.Clear() ' Clear the internal list so we can rebuild it with the same items
-
-            ' Now, iterate through the remaining items and re-add them with new sequential IDs
-            Dim listItemIDCounter As Integer = 1
-            For Each service As ContractsService In remainingServices
-                Me.contractServiceList.Add(service) ' Re-add to the internal list
-
-                ' Create the ListView item with the new sequential ID
-                Dim lvi As New ListViewItem(listItemIDCounter.ToString())
-                lvi.SubItems.Add(service.Service)
-                lvi.SubItems.Add(service.Addon)
-                lvi.SubItems.Add(service.ServicePrice.ToString("N2"))
-                ListViewServices.Items.Add(lvi)
-
-                listItemIDCounter += 1
-            Next
-
-            ' 5. Update the global counter for new additions
-            Me.nextServiceID = listItemIDCounter
-
-            MessageBox.Show($"Service (ID: {selectedItem.Text}) was removed successfully and the list was renumbered.", "Removed", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        Else
-            MessageBox.Show("Could not find the selected service in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End If
-    End Sub
-
     Private Sub ComboBoxPaymentMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPaymentMethod.SelectedIndexChanged
         If ComboBoxPaymentMethod.SelectedItem = "Gcash" Then
             TextBoxReferenceID.ReadOnly = False
@@ -622,13 +473,12 @@ Public Class Contracts
         End If
     End Sub
 
-    Private Sub Label9_Click(sender As Object, e As EventArgs)
-
-    End Sub
-
     Private Sub FullScreenServiceBtn_Click(sender As Object, e As EventArgs) Handles FullScreenServiceBtn.Click
         ShowPanelDocked.ShowServicesPanelDocked(PanelServiceInfo, ListViewServices)
     End Sub
 
+    Private Sub ComboBoxDiscount_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDiscount.SelectedIndexChanged
+        CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
+    End Sub
 End Class
 

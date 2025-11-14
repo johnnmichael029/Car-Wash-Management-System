@@ -16,8 +16,6 @@ Public Class Dashboard
     Private isYearlyView As Boolean = False
     Private currentSearchTerm As String = String.Empty
     Private VehicleList As New List(Of VehicleService)
-    Private SaleServiceList As New List(Of SalesService)
-    Private nextServiceID As Integer = 1
     Public Sub New()
         ' This call is required by the designer.
         InitializeComponent()
@@ -36,7 +34,8 @@ Public Class Dashboard
         LoadAllPopulateUI()
         ClearFieldsOfSales()
         PopulateAllListInComboBoxFilter()
-        SetupListView()
+        SetupListViewService.SetupListViewForServices(ListViewServices, 30, 85, 85, 50)
+        SetupListViewService.SetupListViewForVehicles(ListViewVehicles, 30, 135, 85)
         DisplayNextSalesID()
     End Sub
 
@@ -258,11 +257,11 @@ Public Class Dashboard
     Public Sub AddCustomerInformation()
 
         If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Then
-            MessageBox.Show("Please fill in all required customer fields (Name, Phone, Email, Plate Number and Vehicle Type).", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Please fill in all required customer fields (Name, Phone, Email, Plate Number and Vehicle Type).", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        If VehicleList.Count = 0 Then
+        If AddVehicleToListView.VehicleList.Count = 0 Then
             MessageBox.Show("Please add at least one vehicle before saving the customer.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
@@ -275,11 +274,8 @@ Public Class Dashboard
             TextBoxEmail.Text.Trim(),
             TextBoxAddress.Text.Trim(),
             TextBoxBarangay.Text.Trim(),
-            VehicleList
+            AddVehicleToListView.VehicleList
             )
-            VehicleList.Clear()
-            ListViewVehicles.Items.Clear()
-            ListViewVehicles.Items.Clear()
 
         Catch ex As Exception
             MessageBox.Show("Error saving data: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -302,7 +298,8 @@ Public Class Dashboard
         TextBoxPlateNumber.Clear()
         VehicleList.Clear()
         ListViewVehicles.Items.Clear()
-
+        AddSaleToListView.SaleServiceList.Clear()
+        AddSaleToListView.nextServiceID = 1
     End Sub
 
     Private Sub AddSalesBtn_Click(sender As Object, e As EventArgs) Handles AddSalesBtn.Click
@@ -331,7 +328,7 @@ Public Class Dashboard
 
 
             ' Guard clause: Ensure there are items to sell
-            If SaleServiceList.Count = 0 Then
+            If AddSaleToListView.SaleServiceList.Count = 0 Then
                 MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
@@ -354,7 +351,7 @@ Public Class Dashboard
 
             SalesDatabaseHelper.AddSale(
                 customerID,
-                SaleServiceList,
+                AddSaleToListView.SaleServiceList,
                 ComboBoxPaymentMethod.SelectedItem.ToString(),
                 TextBoxReferenceID.Text,
                 TextBoxCheque.Text,
@@ -381,10 +378,10 @@ Public Class Dashboard
         ComboBoxPaymentMethod.SelectedIndex = -1
         TextBoxReferenceID.Clear()
         TextBoxCheque.Clear()
-        SaleServiceList.Clear()
+        AddSaleToListView.SaleServiceList.Clear()
         ListViewServices.Items.Clear()
         TextBoxTotalPrice.Text = "0.00"
-        nextServiceID = 1
+        AddSaleToListView.nextServiceID = 1
     End Sub
     Public Sub ShowPrintPreview()
         ShowPrintPreviewService.ShowPrintPreview(PrintDocumentBill)
@@ -423,11 +420,11 @@ Public Class Dashboard
         activityLogService.RecordSale(customerName, amount)
     End Sub
     Private Sub ComboBoxServices_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxServices.SelectedIndexChanged
-        salesForm.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, TextBoxPrice)
+        CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
     End Sub
 
     Private Sub ComboBoxAddons_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxAddons.SelectedIndexChanged
-        salesForm.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, TextBoxPrice)
+        CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
     End Sub
     Private Sub TextBoxCustomerName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCustomerName.TextChanged
         CustomerNameTextChangedService.CustomerNameTextChanged(TextBoxCustomerID, TextBoxCustomerName)
@@ -449,30 +446,12 @@ Public Class Dashboard
         ComboBoxFilter.SelectedIndex = 0
     End Sub
     Private Sub AddVehicleBtn_Click(sender As Object, e As EventArgs) Handles AddVehicleBtn.Click
-        AddVehicleFunction()
+        AddVehicleToListView.AddVehicleFunction(ListViewVehicles, TextBoxPlateNumber, TextBoxVehicle)
     End Sub
-    Private Sub AddVehicleFunction()
-        If String.IsNullOrWhiteSpace(TextBoxVehicle.Text) OrElse String.IsNullOrWhiteSpace(TextBoxPlateNumber.Text) Then
-            MessageBox.Show("Please enter both the Vehicle Type and the Plate Number.", "Missing Vehicle Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
 
-        Dim vehicleType As String = TextBoxVehicle.Text.Trim()
-        Dim plateNumber As String = TextBoxPlateNumber.Text.Trim().ToUpper()
-        Dim newVehicle As New VehicleService(vehicleType, plateNumber)
-
-        Me.VehicleList.Add(newVehicle)
-        Dim lvi As New ListViewItem(newVehicle.VehicleType)
-        lvi.SubItems.Add(newVehicle.PlateNumber)
-        ListViewVehicles.Items.Add(lvi)
-
-        TextBoxVehicle.Clear()
-        TextBoxPlateNumber.Clear()
-        TextBoxVehicle.Focus()
-    End Sub
 
     Private Sub RemoveVehicleBtn_Click(sender As Object, e As EventArgs) Handles RemoveVehicleBtn.Click
-        RemoveSelectedVehicle()
+        AddVehicleToListView.RemoveSelectedVehicle(ListViewVehicles)
     End Sub
     Private Sub RemoveSelectedVehicle()
         If ListViewVehicles.SelectedItems.Count = 0 Then
@@ -499,113 +478,14 @@ Public Class Dashboard
             MessageBox.Show("Could not find the selected vehicle in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
-
-    Private Sub SetupListView()
-        ListViewVehicles.View = View.Details
-        ListViewVehicles.HeaderStyle = ColumnHeaderStyle.Nonclickable
-        ListViewVehicles.Columns.Clear()
-        ListViewVehicles.Columns.Add("Plate Number", 150, HorizontalAlignment.Left)
-        ListViewVehicles.Columns.Add("Vehicle Type", 100, HorizontalAlignment.Left)
-        ListViewVehicles.GridLines = True
-        ListViewVehicles.FullRowSelect = True
-
-        ListViewServices.View = View.Details
-        ListViewServices.HeaderStyle = ColumnHeaderStyle.Nonclickable
-        ListViewServices.Columns.Clear()
-        ListViewServices.Columns.Add("ID", 30, HorizontalAlignment.Left)
-        ListViewServices.Columns.Add("Service", 85, HorizontalAlignment.Left)
-        ListViewServices.Columns.Add("Addon", 85, HorizontalAlignment.Left)
-        ListViewServices.Columns.Add("Price", 50, HorizontalAlignment.Left)
-        ListViewServices.GridLines = True
-        ListViewServices.FullRowSelect = True
-
-    End Sub
     Private Sub RemoveServiceBtn_Click(sender As Object, e As EventArgs) Handles RemoveServiceBtn.Click
-        RemoveSelectedService()
-        CalculateTotalPriceInService()
+        AddSaleToListView.RemoveSelectedService(ListViewServices)
+        UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
-    Private Sub CalculateTotalPriceInService()
-        Dim totalPrice As Decimal = 0D
-        If ListViewServices Is Nothing OrElse ListViewServices.Items.Count = 0 Then
-            TextBoxTotalPrice.Text = "0.00"
-            Return
-        End If
 
-        For Each item As ListViewItem In ListViewServices.Items
-            If item.SubItems.Count > 2 Then
-                Dim priceText As String = item.SubItems(2).Text
-
-                Dim itemPrice As Decimal
-                If Decimal.TryParse(priceText, itemPrice) Then
-                    totalPrice += itemPrice
-                Else
-                    MessageBox.Show($"Invalid price format: {priceText}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End If
-            End If
-        Next
-        TextBoxTotalPrice.Text = totalPrice.ToString("N2")
-    End Sub
-    Private Sub RemoveSelectedService()
-        If ListViewServices.SelectedItems.Count = 0 Then
-            MessageBox.Show("Please select a services from the list to remove.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        Dim selectedItem As ListViewItem = ListViewServices.SelectedItems(0)
-        Dim serviceToRemove As String = selectedItem.Text
-        Dim addonServiceToRemove As String = selectedItem.Text
-        Dim subtotalRemovedCount As Integer = Me.SaleServiceList.RemoveAll(Function(v)
-                                                                               Return v.Service.Equals(serviceToRemove, StringComparison.OrdinalIgnoreCase)
-                                                                           End Function)
-        If subtotalRemovedCount > 0 Then
-            ' 2. Remove the item from the visual ListView control
-            ListViewServices.Items.Remove(selectedItem)
-            MessageBox.Show($"Service was removed successfully from the list.", "Removed", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        Else
-            MessageBox.Show("Could not find the selected vehicle in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End If
-    End Sub
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
-        AddSaleService()
-        CalculateTotalPriceInService()
-    End Sub
-    Private Sub AddSaleService()
-        If String.IsNullOrWhiteSpace(ComboBoxServices.Text) Then
-            MessageBox.Show("Please enter service.", "Missing Service Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        ' 1. Get the current ID and prepare the next one
-        Dim currentID As Integer = nextServiceID
-        nextServiceID += 1 ' Increment the counter for the next line item
-
-        Dim services As String = ComboBoxServices.Text.Trim()
-        Dim addons As String = ComboBoxAddons.Text.Trim()
-
-        ' Use TryParse for safer decimal conversion
-        Dim price As Decimal
-        If Not Decimal.TryParse(TextBoxPrice.Text, price) Then
-            MessageBox.Show("Invalid price value.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
-
-        ' 2. Create the new service, passing the current ID
-        Dim newService As New SalesService(currentID, services, addons, price)
-
-        Me.SaleServiceList.Add(newService)
-
-        ' 3. Add the ID as the FIRST column in the ListView
-        Dim lvi As New ListViewItem(newService.ServiceID.ToString()) ' ID is the main item text
-
-        ' Add the rest of the columns as sub-items
-        lvi.SubItems.Add(newService.Service)        ' Service
-        lvi.SubItems.Add(newService.Addon)          ' Addon
-        lvi.SubItems.Add(newService.ServicePrice.ToString("N2")) ' Price
-        ListViewServices.Items.Add(lvi)
-
-        ComboBoxServices.SelectedIndex = -1
-        ComboBoxAddons.SelectedIndex = -1
-        TextBoxPrice.Text = "0.00"
+        AddSaleToListView.AddSaleService(ComboBoxServices, ComboBoxAddons, TextBoxPrice, ListViewServices)
+        UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
     Private Sub ComboBoxPaymentMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPaymentMethod.SelectedIndexChanged
         If ComboBoxPaymentMethod.SelectedItem = "Gcash" Then
@@ -663,10 +543,6 @@ Public Class Dashboard
         End If
     End Sub
 
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-
-    End Sub
-
     Private Sub FullScreenVehicleBtn_Click(sender As Object, e As EventArgs) Handles FullScreenVehicleBtn.Click
         ShowPanelDocked.ShowVehiclePanelDocked(PanelVehicleInfo, ListViewVehicles)
     End Sub
@@ -675,6 +551,13 @@ Public Class Dashboard
         ShowPanelDocked.ShowServicesPanelDocked(PanelServiceInfo, ListViewServices)
     End Sub
 
+    Private Sub PanelMontlySales_Paint(sender As Object, e As PaintEventArgs) Handles PanelMontlySales.Paint
+
+    End Sub
+
+    Private Sub ComboBoxDiscount_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDiscount.SelectedIndexChanged
+        CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
+    End Sub
 End Class
 
 

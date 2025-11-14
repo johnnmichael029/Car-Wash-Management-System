@@ -278,7 +278,7 @@ Public Class SalesDatabaseHelper
         End Using
     End Function
 
-    Public Function GetServiceID(serviceName As String) As SalesService
+    Public Shared Function GetServiceID(serviceName As String) As SalesService
         Using con As New SqlConnection(constr)
             Dim details As New SalesService()
             con.Open()

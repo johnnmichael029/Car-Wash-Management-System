@@ -81,7 +81,7 @@ Partial Class SalesAnalytics
         Panel1.Dock = DockStyle.Top
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(1168, 111)
+        Panel1.Size = New Size(1192, 111)
         Panel1.TabIndex = 0
         ' 
         ' ButtonToggleChart
@@ -114,7 +114,7 @@ Partial Class SalesAnalytics
         PanelSales.BackColor = Color.White
         PanelSales.Location = New Point(0, 128)
         PanelSales.Name = "PanelSales"
-        PanelSales.Size = New Size(456, 261)
+        PanelSales.Size = New Size(468, 261)
         PanelSales.TabIndex = 4
         ' 
         ' Panel7
@@ -124,7 +124,7 @@ Partial Class SalesAnalytics
         Panel7.Controls.Add(Label3)
         Panel7.Controls.Add(TextBoxSearchBar)
         Panel7.Controls.Add(DataGridViewSalesSummary)
-        Panel7.Location = New Point(476, 128)
+        Panel7.Location = New Point(488, 128)
         Panel7.Name = "Panel7"
         Panel7.Size = New Size(456, 261)
         Panel7.TabIndex = 6
@@ -174,9 +174,9 @@ Partial Class SalesAnalytics
         Panel3.Controls.Add(LabelCustomersPeriod)
         Panel3.Controls.Add(LabelCustomers)
         Panel3.Controls.Add(Label6)
-        Panel3.Location = New Point(949, 314)
+        Panel3.Location = New Point(961, 314)
         Panel3.Name = "Panel3"
-        Panel3.Size = New Size(221, 167)
+        Panel3.Size = New Size(231, 167)
         Panel3.TabIndex = 2
         ' 
         ' PictureBoxUpCustomers
@@ -234,7 +234,7 @@ Partial Class SalesAnalytics
         LabelCustomers.AutoSize = True
         LabelCustomers.Font = New Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelCustomers.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
-        LabelCustomers.Location = New Point(18, 51)
+        LabelCustomers.Location = New Point(23, 51)
         LabelCustomers.Name = "LabelCustomers"
         LabelCustomers.Size = New Size(83, 29)
         LabelCustomers.TabIndex = 7
@@ -261,9 +261,9 @@ Partial Class SalesAnalytics
         Panel2.Controls.Add(LabelServiceValue)
         Panel2.Controls.Add(Label2)
         Panel2.Controls.Add(PictureBoxDownService)
-        Panel2.Location = New Point(949, 128)
+        Panel2.Location = New Point(961, 128)
         Panel2.Name = "Panel2"
-        Panel2.Size = New Size(221, 167)
+        Panel2.Size = New Size(231, 167)
         Panel2.TabIndex = 1
         ' 
         ' PictureBoxUpService
@@ -301,7 +301,7 @@ Partial Class SalesAnalytics
         LabelOrders.AutoSize = True
         LabelOrders.Font = New Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelOrders.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
-        LabelOrders.Location = New Point(18, 51)
+        LabelOrders.Location = New Point(23, 51)
         LabelOrders.Name = "LabelOrders"
         LabelOrders.Size = New Size(83, 29)
         LabelOrders.TabIndex = 4
@@ -348,9 +348,9 @@ Partial Class SalesAnalytics
         Panel4.Controls.Add(Label9)
         Panel4.Controls.Add(LabelEarnings)
         Panel4.Controls.Add(PictureBoxDownArrow)
-        Panel4.Location = New Point(947, 501)
+        Panel4.Location = New Point(959, 501)
         Panel4.Name = "Panel4"
-        Panel4.Size = New Size(221, 167)
+        Panel4.Size = New Size(233, 179)
         Panel4.TabIndex = 2
         ' 
         ' LabelPercentage
@@ -409,7 +409,7 @@ Partial Class SalesAnalytics
         LabelEarnings.AutoSize = True
         LabelEarnings.Font = New Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelEarnings.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
-        LabelEarnings.Location = New Point(18, 51)
+        LabelEarnings.Location = New Point(24, 57)
         LabelEarnings.Name = "LabelEarnings"
         LabelEarnings.Size = New Size(83, 29)
         LabelEarnings.TabIndex = 10
@@ -436,18 +436,18 @@ Partial Class SalesAnalytics
         Panel10.Controls.Add(Panel1)
         Panel10.Controls.Add(PanelSales)
         Panel10.Controls.Add(PanelChartAverage)
-        Panel10.Location = New Point(10, 0)
+        Panel10.Location = New Point(0, 0)
         Panel10.Name = "Panel10"
-        Panel10.Size = New Size(1168, 668)
+        Panel10.Size = New Size(1192, 680)
         Panel10.TabIndex = 7
         ' 
         ' PanelChartCustomers
         ' 
         PanelChartCustomers.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom
         PanelChartCustomers.BackColor = Color.White
-        PanelChartCustomers.Location = New Point(713, 407)
+        PanelChartCustomers.Location = New Point(725, 407)
         PanelChartCustomers.Name = "PanelChartCustomers"
-        PanelChartCustomers.Size = New Size(219, 248)
+        PanelChartCustomers.Size = New Size(219, 260)
         PanelChartCustomers.TabIndex = 6
         ' 
         ' PanelBarGraphAverage
@@ -456,16 +456,16 @@ Partial Class SalesAnalytics
         PanelBarGraphAverage.BackColor = Color.White
         PanelBarGraphAverage.Location = New Point(0, 407)
         PanelBarGraphAverage.Name = "PanelBarGraphAverage"
-        PanelBarGraphAverage.Size = New Size(456, 248)
+        PanelBarGraphAverage.Size = New Size(468, 260)
         PanelBarGraphAverage.TabIndex = 5
         ' 
         ' PanelChartAverage
         ' 
         PanelChartAverage.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom
         PanelChartAverage.BackColor = Color.White
-        PanelChartAverage.Location = New Point(476, 407)
+        PanelChartAverage.Location = New Point(488, 407)
         PanelChartAverage.Name = "PanelChartAverage"
-        PanelChartAverage.Size = New Size(219, 248)
+        PanelChartAverage.Size = New Size(219, 260)
         PanelChartAverage.TabIndex = 5
         ' 
         ' SalesAnalytics

@@ -27,6 +27,8 @@ Partial Class SalesForm
         Panel2 = New Panel()
         Panel3 = New Panel()
         Panel1 = New Panel()
+        ComboBoxDiscount = New ComboBox()
+        Label10 = New Label()
         Label13 = New Label()
         TextBoxCheque = New TextBox()
         PanelServiceInfo = New Panel()
@@ -101,6 +103,8 @@ Partial Class SalesForm
         ' Panel1
         ' 
         Panel1.BackColor = Color.White
+        Panel1.Controls.Add(ComboBoxDiscount)
+        Panel1.Controls.Add(Label10)
         Panel1.Controls.Add(Label13)
         Panel1.Controls.Add(TextBoxCheque)
         Panel1.Controls.Add(PanelServiceInfo)
@@ -134,6 +138,29 @@ Partial Class SalesForm
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(305, 758)
         Panel1.TabIndex = 18
+        ' 
+        ' ComboBoxDiscount
+        ' 
+        ComboBoxDiscount.AutoCompleteCustomSource.AddRange(New String() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
+        ComboBoxDiscount.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxDiscount.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBoxDiscount.Font = New Font("Century Gothic", 9F)
+        ComboBoxDiscount.FormattingEnabled = True
+        ComboBoxDiscount.Items.AddRange(New Object() {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
+        ComboBoxDiscount.Location = New Point(150, 342)
+        ComboBoxDiscount.Name = "ComboBoxDiscount"
+        ComboBoxDiscount.Size = New Size(130, 25)
+        ComboBoxDiscount.TabIndex = 140
+        ' 
+        ' Label10
+        ' 
+        Label10.AutoSize = True
+        Label10.Font = New Font("Century Gothic", 9F)
+        Label10.Location = New Point(150, 324)
+        Label10.Name = "Label10"
+        Label10.Size = New Size(72, 17)
+        Label10.TabIndex = 139
+        Label10.Text = "Discount %"
         ' 
         ' Label13
         ' 
@@ -338,7 +365,7 @@ Partial Class SalesForm
         ComboBoxPaymentMethod.FormattingEnabled = True
         ComboBoxPaymentMethod.Location = New Point(16, 342)
         ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod"
-        ComboBoxPaymentMethod.Size = New Size(261, 25)
+        ComboBoxPaymentMethod.Size = New Size(130, 25)
         ComboBoxPaymentMethod.TabIndex = 30
         ' 
         ' ComboBoxAddons
@@ -509,4 +536,6 @@ Partial Class SalesForm
     Friend WithEvents ListViewServices As ListView
     Friend WithEvents Label13 As Label
     Friend WithEvents TextBoxCheque As TextBox
+    Friend WithEvents ComboBoxDiscount As ComboBox
+    Friend WithEvents Label10 As Label
 End Class

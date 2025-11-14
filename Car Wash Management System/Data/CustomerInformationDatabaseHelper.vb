@@ -2,9 +2,9 @@
 Imports Windows.Win32.System
 
 Public Class CustomerInformationDatabaseHelper
-    ReadOnly constr As String
+    Shared constr As String
     Public Sub New(connectionString As String)
-        Me.constr = connectionString
+        constr = connectionString
     End Sub
     Public Sub DeleteCustomer(dataGridView As DataGridView)
         If dataGridView.SelectedRows.Count = 0 Then
@@ -55,7 +55,7 @@ Public Class CustomerInformationDatabaseHelper
             Dim newCustomerID As Integer = 0
 
             Try
-                Dim insertCustomerQuery As String = "INSERT INTO CustomersTable (Name, LastName, PhoneNumber, Email, Address, Barangay, RegistrationDate) VALUES (@Name, @LastName @PhoneNumber, @Email, @Address, @Barangay, @RegistrationDate); SELECT SCOPE_IDENTITY();"
+                Dim insertCustomerQuery As String = "INSERT INTO CustomersTable (Name, LastName, PhoneNumber, Email, Address, Barangay, RegistrationDate) VALUES (@Name, @LastName, @PhoneNumber, @Email, @Address, @Barangay, @RegistrationDate); SELECT SCOPE_IDENTITY();"
 
                 Using cmd As New SqlCommand(insertCustomerQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@Name", firstName)
@@ -147,7 +147,7 @@ Public Class CustomerInformationDatabaseHelper
                         End Using
                     Next
                 Else
-                    MessageBox.Show("No vehicles to update for this customer.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show($"No vehicles to update for this customer. Customer ID is: {iCustomerID} Vehicle count is: {vehicleList.Count}", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Return
                 End If
 
@@ -238,7 +238,7 @@ Public Class CustomerInformationDatabaseHelper
         Return dt
     End Function
 
-    Public Function GetCustomerVehicles(customerID As Integer) As List(Of VehicleService)
+    Public Shared Function GetCustomerVehicles(customerID As Integer) As List(Of VehicleService)
         Dim vehicles As New List(Of VehicleService)
         Dim selectQuery As String = "SELECT PlateNumber, VehicleType FROM CustomerVehicleTable WHERE CustomerID = @CustomerID"
 

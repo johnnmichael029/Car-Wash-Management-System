@@ -26,6 +26,8 @@ Partial Class Appointment
         Panel1 = New Panel()
         DataGridViewAppointment = New DataGridView()
         Panel3 = New Panel()
+        ComboBoxDiscount = New ComboBox()
+        Label14 = New Label()
         Label13 = New Label()
         TextBoxCheque = New TextBox()
         PanelServiceInfo = New Panel()
@@ -98,6 +100,8 @@ Partial Class Appointment
         ' Panel3
         ' 
         Panel3.BackColor = Color.White
+        Panel3.Controls.Add(ComboBoxDiscount)
+        Panel3.Controls.Add(Label14)
         Panel3.Controls.Add(Label13)
         Panel3.Controls.Add(TextBoxCheque)
         Panel3.Controls.Add(PanelServiceInfo)
@@ -139,6 +143,29 @@ Partial Class Appointment
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(305, 758)
         Panel3.TabIndex = 2
+        ' 
+        ' ComboBoxDiscount
+        ' 
+        ComboBoxDiscount.AutoCompleteCustomSource.AddRange(New String() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
+        ComboBoxDiscount.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxDiscount.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBoxDiscount.Font = New Font("Century Gothic", 9F)
+        ComboBoxDiscount.FormattingEnabled = True
+        ComboBoxDiscount.Items.AddRange(New Object() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
+        ComboBoxDiscount.Location = New Point(148, 339)
+        ComboBoxDiscount.Name = "ComboBoxDiscount"
+        ComboBoxDiscount.Size = New Size(130, 25)
+        ComboBoxDiscount.TabIndex = 142
+        ' 
+        ' Label14
+        ' 
+        Label14.AutoSize = True
+        Label14.Font = New Font("Century Gothic", 9F)
+        Label14.Location = New Point(148, 321)
+        Label14.Name = "Label14"
+        Label14.Size = New Size(72, 17)
+        Label14.TabIndex = 141
+        Label14.Text = "Discount %"
         ' 
         ' Label13
         ' 
@@ -330,7 +357,7 @@ Partial Class Appointment
         ComboBoxPaymentMethod.Items.AddRange(New Object() {"Cash", "Gcash", "Cheque"})
         ComboBoxPaymentMethod.Location = New Point(16, 339)
         ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod"
-        ComboBoxPaymentMethod.Size = New Size(262, 23)
+        ComboBoxPaymentMethod.Size = New Size(129, 23)
         ComboBoxPaymentMethod.TabIndex = 27
         ' 
         ' ComboBoxAddons
@@ -589,4 +616,6 @@ Partial Class Appointment
     Friend WithEvents ListViewServices As ListView
     Friend WithEvents Label13 As Label
     Friend WithEvents TextBoxCheque As TextBox
+    Friend WithEvents ComboBoxDiscount As ComboBox
+    Friend WithEvents Label14 As Label
 End Class
