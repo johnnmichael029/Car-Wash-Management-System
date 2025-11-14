@@ -3,8 +3,6 @@ Imports System.Drawing.Printing
 
 
 Public Class Contracts
-
-
     Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
     Private ReadOnly contractsDatabaseHelper As ContractsDatabaseHelper
     Dim activityLogInDashboardService As ActivityLogInDashboardService
@@ -59,7 +57,7 @@ Public Class Contracts
                 MessageBox.Show("Customer not found. Please select a valid customer.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
-            If AddSaleToListView.SaleServiceList.Count = 0 Then
+            If AddSaleToListView.ContractServiceList.Count = 0 Then
                 MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
@@ -131,7 +129,7 @@ Public Class Contracts
 
             contractsDatabaseHelper.AddContract(
                 customerID,
-                AddSaleToListView.SaleServiceList,
+                AddSaleToListView.ContractServiceList,
                 DateTimePickerEndDate.Text,
                 ComboBoxBillingFrequency.Text,
                 ComboBoxPaymentMethod.Text,
@@ -195,7 +193,7 @@ Public Class Contracts
                 MessageBox.Show("Customer not found. Please select a valid customer.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
-            If contractServiceList.Count = 0 Then
+            If AddSaleToListView.ContractServiceList.Count = 0 Then
                 MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
@@ -268,7 +266,7 @@ Public Class Contracts
             contractsDatabaseHelper.UpdateContract(
                 LabelContractID.Text,
                 customerID,
-                contractServiceList,
+                AddSaleToListView.ContractServiceList,
                 DateTimePickerStartDate.Value,
                 DateTimePickerEndDate.Value,
                 ComboBoxBillingFrequency.Text,
@@ -278,7 +276,7 @@ Public Class Contracts
                 totalPrice,
                 ComboBoxContractStatus.Text
             )
-            Carwash.PopulateAllTotal
+            Carwash.PopulateAllTotal()
             Carwash.NotificationLabel.Text = "Contract Updated"
             Carwash.ShowNotification()
             MessageBox.Show("Contract updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -312,7 +310,7 @@ Public Class Contracts
         TextBoxTotalPrice.Text = "0.00"
 
         ListViewServices.Items.Clear()
-        AddSaleToListView.SaleServiceList.Clear()
+        AddSaleToListView.ContractServiceList.Clear()
         AddSaleToListView.nextServiceID = 1
     End Sub
 
@@ -448,12 +446,12 @@ Public Class Contracts
        })
     End Sub
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
-        AddSaleToListView.AddSaleService(ComboBoxServices, ComboBoxAddons, TextBoxPrice, ListViewServices)
+        AddSaleToListView.AddSaleServiceInContractForm(ComboBoxServices, ComboBoxAddons, TextBoxPrice, ListViewServices)
         UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
 
     Private Sub RemoveServiceBtn_Click(sender As Object, e As EventArgs) Handles RemoveServiceBtn.Click
-        AddSaleToListView.RemoveSelectedService(ListViewServices)
+        AddSaleToListView.RemoveSelectedServiceInContractForm(ListViewServices)
         UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
     Private Sub ComboBoxPaymentMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPaymentMethod.SelectedIndexChanged

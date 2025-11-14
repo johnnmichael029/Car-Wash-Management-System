@@ -152,7 +152,7 @@ Public Class Appointment
             Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
             Dim addonServiceName As String = If(ComboBoxAddons.SelectedIndex <> -1, ComboBoxAddons.Text, String.Empty)
 
-            If AddSaleToListView.SaleServiceList.Count = 0 Then
+            If AddSaleToListView.AppointmentServiceList.Count = 0 Then
                 MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
@@ -187,7 +187,7 @@ Public Class Appointment
 
             appointmentManagementDatabaseHelper.AddAppointment(
                 customerID,
-                AddSaleToListView.SaleServiceList,
+                AddSaleToListView.AppointmentServiceList,
                 DateTimePickerStartDate.Value,
                 ComboBoxPaymentMethod.Text,
                 TextBoxReferenceID.Text,
@@ -250,7 +250,7 @@ Public Class Appointment
         TextBoxTotalPrice.Text = "0.00"
 
         ListViewServices.Items.Clear()
-        AddSaleToListView.SaleServiceList.Clear()
+        AddSaleToListView.AppointmentServiceList.Clear()
         AddSaleToListView.nextServiceID = 1
     End Sub
 
@@ -298,7 +298,7 @@ Public Class Appointment
             Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
             Dim addonServiceName As String = If(ComboBoxAddons.SelectedIndex <> -1, ComboBoxAddons.Text, String.Empty)
 
-            If appointmentServiceList.Count = 0 Then
+            If AddSaleToListView.AppointmentServiceList.Count = 0 Then
                 MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
@@ -329,7 +329,7 @@ Public Class Appointment
             appointmentManagementDatabaseHelper.UpdateAppointment(
                 appointmentID,
                 customerID,
-                appointmentServiceList,
+                AddSaleToListView.AppointmentServiceList,
                 DateTimePickerStartDate.Value,
                 ComboBoxPaymentMethod.Text,
                 TextBoxReferenceID.Text,
@@ -418,7 +418,7 @@ Public Class Appointment
     End Sub
 
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
-        AddSaleToListView.AddSaleService(ComboBoxServices, ComboBoxAddons, TextBoxPrice, ListViewServices)
+        AddSaleToListView.AddSaleServiceInAppointmentForm(ComboBoxServices, ComboBoxAddons, TextBoxPrice, ListViewServices)
         UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
 
@@ -440,7 +440,7 @@ Public Class Appointment
     End Sub
 
     Private Sub RemoveServiceBtn_Click(sender As Object, e As EventArgs) Handles RemoveServiceBtn.Click
-        AddSaleToListView.RemoveSelectedService(ListViewServices)
+        AddSaleToListView.RemoveSelectedServiceInAppointmentForm(ListViewServices)
         UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
     Private Sub FullScreenServiceBtn_Click(sender As Object, e As EventArgs) Handles FullScreenServiceBtn.Click

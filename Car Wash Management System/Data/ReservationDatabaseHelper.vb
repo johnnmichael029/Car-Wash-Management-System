@@ -54,7 +54,7 @@ Public Class ReservationDatabaseHelper
         Dim rowsAffected As Integer = 0
 
         ' Correct SQL Server UPDATE...FROM syntax:
-        Dim query As String = "UPDATE    " &
+        Dim query As String = "UPDATE  ast  " &
                               "SET ast.AppointmentStatus = 'Completed' " &
                               "FROM AppointmentServiceTable ast " & ' Alias 'ast' for the table being updated
                               "INNER JOIN AppointmentsTable a ON ast.AppointmentID = a.AppointmentID " &

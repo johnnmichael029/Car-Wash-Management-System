@@ -7,7 +7,7 @@ Public Class ContractsDatabaseHelper
     Public Sub New(connectionString As String)
         constr = connectionString
     End Sub
-    Public Sub AddContract(customerID As Integer, allSaleItems As List(Of SalesService), endDate As Date, billingFrequency As String, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, contractStatus As String)
+    Public Sub AddContract(customerID As Integer, allSaleItems As List(Of ContractsService), endDate As Date, billingFrequency As String, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, contractStatus As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
@@ -50,7 +50,7 @@ Public Class ContractsDatabaseHelper
 
                 Dim insertServiceQuery = "INSERT INTO ContractServiceTable (ContractID, ServiceID, AddonServiceID, Subtotal) VALUES (@ContractID, @ServiceID, @AddonServiceID, @Subtotal)"
 
-                For Each item As SalesService In allSaleItems
+                For Each item As ContractsService In allSaleItems
                     Dim baseServiceID As Integer = SalesDatabaseHelper.GetServiceIdByName(item.Service)
                     Dim addonID As Integer? = SalesDatabaseHelper.GetAddonIdByName(item.Addon)
 

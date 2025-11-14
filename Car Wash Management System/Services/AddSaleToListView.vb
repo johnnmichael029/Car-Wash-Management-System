@@ -97,4 +97,140 @@
             MessageBox.Show("Could not find the selected service in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
+
+    Public Shared Sub AddSaleServiceInContractForm(comboBoxServices As ComboBox, comboBoxAddons As ComboBox, textBoxPrice As TextBox, listViewServices As ListView)
+        If String.IsNullOrWhiteSpace(comboBoxServices.Text) Then
+            MessageBox.Show("Please enter service.", "Missing Service Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Dim currentID As Integer = nextServiceID
+        nextServiceID += 1
+
+        Dim services As String = comboBoxServices.Text.Trim()
+        Dim addons As String = comboBoxAddons.Text.Trim()
+        Dim price As Decimal
+        If Not Decimal.TryParse(textBoxPrice.Text, price) Then
+            MessageBox.Show("Invalid price value.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+        Dim newService As New ContractsService(currentID, services, addons, price)
+
+        ContractServiceList.Add(newService)
+        Dim lvi As New ListViewItem(newService.ID.ToString())
+
+        lvi.SubItems.Add(newService.Service)
+        lvi.SubItems.Add(newService.Addon)
+        lvi.SubItems.Add(newService.ServicePrice.ToString("N2"))
+        listViewServices.Items.Add(lvi)
+
+        comboBoxServices.SelectedIndex = -1
+        comboBoxAddons.SelectedIndex = -1
+        textBoxPrice.Text = "0.00"
+    End Sub
+
+    Public Shared Sub RemoveSelectedServiceInContractForm(listViewServices As ListView)
+        If listViewServices.SelectedItems.Count = 0 Then
+            MessageBox.Show("Please select a service from the list to remove.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Dim selectedItem As ListViewItem = listViewServices.SelectedItems(0)
+        Dim selectedIndex As Integer = selectedItem.Index
+
+        If selectedIndex >= 0 AndAlso selectedIndex < ContractServiceList.Count Then
+
+            ContractServiceList.RemoveAt(selectedIndex)
+
+            listViewServices.Items.Remove(selectedItem)
+            Dim remainingServices As List(Of ContractsService) = ContractServiceList.ToList()
+            listViewServices.Items.Clear()
+            ContractServiceList.Clear()
+            Dim listItemIDCounter As Integer = 1
+            For Each service As ContractsService In remainingServices
+                ContractServiceList.Add(service)
+                Dim lvi As New ListViewItem(listItemIDCounter.ToString())
+                lvi.SubItems.Add(service.Service)
+                lvi.SubItems.Add(service.Addon)
+                lvi.SubItems.Add(service.ServicePrice.ToString("N2"))
+                listViewServices.Items.Add(lvi)
+
+                listItemIDCounter += 1
+            Next
+
+            nextServiceID = listItemIDCounter
+
+            MessageBox.Show($"Service (ID: {selectedItem.Text}) was removed successfully and the list was renumbered.", "Removed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Else
+            MessageBox.Show("Could not find the selected service in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+    End Sub
+
+    Public Shared Sub AddSaleServiceInAppointmentForm(comboBoxServices As ComboBox, comboBoxAddons As ComboBox, textBoxPrice As TextBox, listViewServices As ListView)
+        If String.IsNullOrWhiteSpace(comboBoxServices.Text) Then
+            MessageBox.Show("Please enter service.", "Missing Service Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Dim currentID As Integer = nextServiceID
+        nextServiceID += 1
+
+        Dim services As String = comboBoxServices.Text.Trim()
+        Dim addons As String = comboBoxAddons.Text.Trim()
+        Dim price As Decimal
+        If Not Decimal.TryParse(textBoxPrice.Text, price) Then
+            MessageBox.Show("Invalid price value.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+        Dim newService As New AppointmentService(currentID, services, addons, price)
+
+        AppointmentServiceList.Add(newService)
+        Dim lvi As New ListViewItem(newService.ID.ToString())
+
+        lvi.SubItems.Add(newService.Service)
+        lvi.SubItems.Add(newService.Addon)
+        lvi.SubItems.Add(newService.ServicePrice.ToString("N2"))
+        listViewServices.Items.Add(lvi)
+
+        comboBoxServices.SelectedIndex = -1
+        comboBoxAddons.SelectedIndex = -1
+        textBoxPrice.Text = "0.00"
+    End Sub
+
+    Public Shared Sub RemoveSelectedServiceInAppointmentForm(listViewServices As ListView)
+        If listViewServices.SelectedItems.Count = 0 Then
+            MessageBox.Show("Please select a service from the list to remove.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Dim selectedItem As ListViewItem = listViewServices.SelectedItems(0)
+        Dim selectedIndex As Integer = selectedItem.Index
+
+        If selectedIndex >= 0 AndAlso selectedIndex < AppointmentServiceList.Count Then
+
+            AppointmentServiceList.RemoveAt(selectedIndex)
+
+            listViewServices.Items.Remove(selectedItem)
+            Dim remainingServices As List(Of AppointmentService) = AppointmentServiceList.ToList()
+            listViewServices.Items.Clear()
+            AppointmentServiceList.Clear()
+            Dim listItemIDCounter As Integer = 1
+            For Each service As AppointmentService In remainingServices
+                AppointmentServiceList.Add(service)
+                Dim lvi As New ListViewItem(listItemIDCounter.ToString())
+                lvi.SubItems.Add(service.Service)
+                lvi.SubItems.Add(service.Addon)
+                lvi.SubItems.Add(service.ServicePrice.ToString("N2"))
+                listViewServices.Items.Add(lvi)
+
+                listItemIDCounter += 1
+            Next
+
+            nextServiceID = listItemIDCounter
+
+            MessageBox.Show($"Service (ID: {selectedItem.Text}) was removed successfully and the list was renumbered.", "Removed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Else
+            MessageBox.Show("Could not find the selected service in the internal list. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+    End Sub
 End Class

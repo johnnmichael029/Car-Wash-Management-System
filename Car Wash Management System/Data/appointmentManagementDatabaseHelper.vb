@@ -10,7 +10,7 @@ Public Class AppointmentManagementDatabaseHelper
         constr = connectionString
     End Sub
 
-    Public Sub AddAppointment(customerID As Integer, allSaleItems As List(Of SalesService), appointmentDateTime As DateTime, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, appointmentStatus As String, notes As String)
+    Public Sub AddAppointment(customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As DateTime, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, appointmentStatus As String, notes As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
@@ -53,7 +53,7 @@ Public Class AppointmentManagementDatabaseHelper
                 ' Assuming SalesServiceTable is now AppointmentServiceTable or related
                 Dim insertServiceQuery = "INSERT INTO AppointmentServiceTable (AppointmentID, CustomerID, ServiceID, AddonServiceID, Subtotal, AppointmentStatus) VALUES (@AppointmentID, @CustomerID, @ServiceID, @AddonServiceID, @Subtotal, @AppointmentStatus)"
 
-                For Each item As SalesService In allSaleItems
+                For Each item As AppointmentService In allSaleItems
                     ' Assuming these helper functions are available in SalesDatabaseHelper
                     Dim baseServiceID As Integer = SalesDatabaseHelper.GetServiceIdByName(item.Service)
                     Dim addonID As Integer? = SalesDatabaseHelper.GetAddonIdByName(item.Addon)
