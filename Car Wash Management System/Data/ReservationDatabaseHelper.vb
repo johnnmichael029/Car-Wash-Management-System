@@ -36,7 +36,10 @@ Public Class ReservationDatabaseHelper
 
     Public Shared Function UpdateStatusOfAppointment()
         Dim rowsAffected As Integer = 0
-        Dim query As String = "UPDATE AppointmentsTable SET AppointmentStatus = 'Completed' WHERE AppointmentDateTime <= GETDATE() AND AppointmentStatus = 'Confirmed'"
+        Dim query As String = "UPDATE AppointmentsTable " &
+                              "SET AppointmentStatus = 'Completed' " &
+                              "WHERE AppointmentDateTime < CONVERT(DATE, GETDATE()) " & ' <-- 12:00 AM of current day
+                              "AND AppointmentStatus IN ('Confirmed' , 'In-Progress')"
         Using con As New SqlConnection(constr)
             Using cmd As New SqlCommand(query, con)
                 Try
@@ -58,7 +61,7 @@ Public Class ReservationDatabaseHelper
                               "SET ast.AppointmentStatus = 'Completed' " &
                               "FROM AppointmentServiceTable ast " & ' Alias 'ast' for the table being updated
                               "INNER JOIN AppointmentsTable a ON ast.AppointmentID = a.AppointmentID " &
-                              "WHERE a.AppointmentDateTime <= GETDATE() " &
+                              "WHERE a.AppointmentDateTime < CONVERT(DATE, GETDATE()) " &
                               "AND ast.AppointmentStatus = 'Confirmed'"
 
         Using con As New SqlConnection(constr)

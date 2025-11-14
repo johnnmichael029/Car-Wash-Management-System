@@ -162,7 +162,7 @@ Public Class CustomerInformationDatabaseHelper
             End Try
         End Using
     End Sub
-    Public Function ViewCustomer() As DataTable
+    Public Shared Function ViewCustomer() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
             Try
@@ -350,5 +350,43 @@ Public Class CustomerInformationDatabaseHelper
         End Using
 
         Return contractStatus
+    End Function
+
+    Public Shared Function GetSearchCustomerResults(searchTerm As String) As DataTable
+        Dim dt As New DataTable()
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Dim aggregateVehiclesQuery =
+                "SELECT " &
+                    "CustomerID, " &
+                    "STRING_AGG(PlateNumber, ', ') AS AllPlateNumbers, " &
+                    "STRING_AGG(VehicleType, ', ') AS AllVehicleTypes " &
+                "FROM CustomerVehicleTable " &
+                "GROUP BY CustomerID"
+                Dim selectQuery =
+                "SELECT " &
+                    "c.CustomerID, c.Name, c.LastName, c.PhoneNumber, c.Email, c.Address, c.Barangay, c.RegistrationDate AS RegisteredDate, " &
+                    "v.AllPlateNumbers AS VehiclePlateNumber, " &
+                    "v.AllVehicleTypes AS RegisteredVehicleType " &
+                "FROM CustomersTable c " &
+                "LEFT JOIN (" & aggregateVehiclesQuery & ") v ON c.CustomerID = v.CustomerID " &
+                "WHERE c.Name LIKE @SearchTerm 
+                OR c.LastName LIKE @SearchTerm 
+                OR c.customerID LIKE @SearchTerm
+                ORDER BY c.CustomerID DESC"
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@SearchTerm", "%" & searchTerm & "%")
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error searching customers: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+        Return dt
     End Function
 End Class

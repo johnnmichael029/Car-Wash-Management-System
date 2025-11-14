@@ -353,6 +353,7 @@ Partial Class Appointment
         ComboBoxPaymentMethod.AutoCompleteCustomSource.AddRange(New String() {"Gcash", "Cheque", "Cash"})
         ComboBoxPaymentMethod.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxPaymentMethod.AutoCompleteSource = AutoCompleteSource.ListItems
+        ComboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList
         ComboBoxPaymentMethod.FormattingEnabled = True
         ComboBoxPaymentMethod.Items.AddRange(New Object() {"Cash", "Gcash", "Cheque"})
         ComboBoxPaymentMethod.Location = New Point(16, 339)
@@ -409,8 +410,8 @@ Partial Class Appointment
         ' ComboBoxAppointmentStatus
         ' 
         ComboBoxAppointmentStatus.AutoCompleteCustomSource.AddRange(New String() {"Pending", "Confirmed", "Cancelled", "No-Show"})
-        ComboBoxAppointmentStatus.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxAppointmentStatus.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxAppointmentStatus.DropDownStyle = ComboBoxStyle.DropDownList
         ComboBoxAppointmentStatus.FormattingEnabled = True
         ComboBoxAppointmentStatus.Items.AddRange(New Object() {"Pending", "Confirmed", "Cancelled", "No-Show"})
         ComboBoxAppointmentStatus.Location = New Point(16, 470)

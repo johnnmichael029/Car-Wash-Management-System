@@ -292,6 +292,7 @@ Partial Class Contracts
         ComboBoxPaymentMethod.AutoCompleteCustomSource.AddRange(New String() {"Gcash", "Cheque", "Cash"})
         ComboBoxPaymentMethod.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxPaymentMethod.AutoCompleteSource = AutoCompleteSource.ListItems
+        ComboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList
         ComboBoxPaymentMethod.FormattingEnabled = True
         ComboBoxPaymentMethod.Location = New Point(17, 384)
         ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod"
@@ -357,8 +358,8 @@ Partial Class Contracts
         ' ComboBoxContractStatus
         ' 
         ComboBoxContractStatus.AutoCompleteCustomSource.AddRange(New String() {"Active", "Expired", "Cancelled"})
-        ComboBoxContractStatus.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxContractStatus.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxContractStatus.DropDownStyle = ComboBoxStyle.DropDownList
         ComboBoxContractStatus.FormattingEnabled = True
         ComboBoxContractStatus.Items.AddRange(New Object() {"Active", "Expired", "Cancelled"})
         ComboBoxContractStatus.Location = New Point(16, 515)
@@ -377,8 +378,8 @@ Partial Class Contracts
         ' ComboBoxBillingFrequency
         ' 
         ComboBoxBillingFrequency.AutoCompleteCustomSource.AddRange(New String() {"Monthly", "Quarterly ", "Yearly"})
-        ComboBoxBillingFrequency.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxBillingFrequency.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxBillingFrequency.DropDownStyle = ComboBoxStyle.DropDownList
         ComboBoxBillingFrequency.FormattingEnabled = True
         ComboBoxBillingFrequency.Items.AddRange(New Object() {"Monthly", "Quarterly", "Yearly"})
         ComboBoxBillingFrequency.Location = New Point(16, 340)

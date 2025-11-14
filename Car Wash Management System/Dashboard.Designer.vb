@@ -456,8 +456,8 @@ Partial Class Dashboard
         ' ComboBoxPaymentMethod
         ' 
         ComboBoxPaymentMethod.AutoCompleteCustomSource.AddRange(New String() {"Cash", "Gcash", "Cheque"})
-        ComboBoxPaymentMethod.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ComboBoxPaymentMethod.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList
         ComboBoxPaymentMethod.Font = New Font("Century Gothic", 9F)
         ComboBoxPaymentMethod.FormattingEnabled = True
         ComboBoxPaymentMethod.Items.AddRange(New Object() {"Cash", "Gcash", "Cheque"})
