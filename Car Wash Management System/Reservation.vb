@@ -1,14 +1,15 @@
 ﻿Imports Microsoft.Data.SqlClient
-Public Class Reservation
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Private ReadOnly reservationDatabaseHelper As ReservationDatabaseHelper
-    Public Sub New()
 
+Public Class Reservation
+    Inherits BaseForm
+
+    Public Sub New()
+        MyBase.New()
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        reservationDatabaseHelper = New ReservationDatabaseHelper(constr)
+
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
         LoadListOfReserved()
@@ -22,7 +23,7 @@ Public Class Reservation
         DataGridViewListOfReservation.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
     Private Sub LoadListOfReserved()
-        DataGridViewListOfReservation.DataSource = reservationDatabaseHelper.ViewListOfReserved()
+        DataGridViewListOfReservation.DataSource = ReservationDatabaseHelper.ViewListOfReserved()
     End Sub
     Private Sub DataGridViewListOfReserved_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewListOfReservation.CellFormatting
         ' Check if this is the column we care about ("AppointmentStatus") and

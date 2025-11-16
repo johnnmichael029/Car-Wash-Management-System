@@ -5,26 +5,21 @@ Imports Microsoft.Data.SqlClient
 
 
 Public Class Dashboard
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Private ReadOnly dashboardDatabaseHelper As New DashboardDatabaseHelper(constr, TextBoxCustomerName)
-    Private ReadOnly customerInformationDatabaseHelper As CustomerInformationDatabaseHelper
-    Private ReadOnly listofActivityLogInDashboardDatabaseHelper As ListofActivityLogInDashboardDatabaseHelper
-    Private ReadOnly salesDatabaseHelper As SalesDatabaseHelper
-    Private ReadOnly salesForm As New SalesForm
-    Private ReadOnly activityLogService As ActivityLogInDashboardService
+    Inherits BaseForm
+
     Private isMonthlyView As Boolean = False
     Private isYearlyView As Boolean = False
     Private currentSearchTerm As String = String.Empty
-    Private VehicleList As New List(Of VehicleService)
+
     Public Sub New()
+        MyBase.New()
+
         ' This call is required by the designer.
         InitializeComponent()
-        ' Add any initialization after the InitializeComponent() call.\
-        dashboardDatabaseHelper = New DashboardDatabaseHelper(constr, TextBoxCustomerName)
-        listofActivityLogInDashboardDatabaseHelper = New ListofActivityLogInDashboardDatabaseHelper(constr)
-        salesDatabaseHelper = New SalesDatabaseHelper(constr)
-        customerInformationDatabaseHelper = New CustomerInformationDatabaseHelper(constr)
-        activityLogService = New ActivityLogInDashboardService(constr)
+        ' Add any initialization after the InitializeComponent() call.
+
+
+
     End Sub
     Public Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadSalesChart()
@@ -40,9 +35,9 @@ Public Class Dashboard
     End Sub
 
     Private Sub LoadAllPopulateUI()
-        salesDatabaseHelper.PopulateCustomerNames(TextBoxCustomerName)
-        salesDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
-        salesDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
+        SalesDatabaseHelper.PopulateCustomerNames(TextBoxCustomerName)
+        SalesDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
+        SalesDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
 
     End Sub
     Private Sub LoadSalesChart()
@@ -51,15 +46,15 @@ Public Class Dashboard
         Dim xAxisTitle As String
 
         If isYearlyView Then
-            chartData = dashboardDatabaseHelper.GetYearlySales()
+            chartData = DashboardDatabaseHelper.GetYearlySales()
             chartTitle = "Yearly Sales"
             xAxisTitle = "Year"
         ElseIf isMonthlyView Then
-            chartData = dashboardDatabaseHelper.GetMonthlySales()
+            chartData = DashboardDatabaseHelper.GetMonthlySales()
             chartTitle = "Monthly Sales"
             xAxisTitle = "Month"
         Else
-            chartData = dashboardDatabaseHelper.GetDailySales()
+            chartData = DashboardDatabaseHelper.GetDailySales()
             chartTitle = "Daily Sales"
             xAxisTitle = "Day"
         End If
@@ -267,7 +262,7 @@ Public Class Dashboard
         End If
 
         Try
-            customerInformationDatabaseHelper.AddCustomer(
+            CustomerInformationDatabaseHelper.AddCustomer(
             TextBoxName.Text.Trim(),
             TextBoxLastName.Text.Trim(),
             TextBoxNumber.Text,
@@ -296,9 +291,8 @@ Public Class Dashboard
         TextBoxEmail.Clear()
         TextBoxAddress.Clear()
         TextBoxPlateNumber.Clear()
-        VehicleList.Clear()
         ListViewVehicles.Items.Clear()
-        AddSaleToListView.SaleServiceList.Clear()
+        AddVehicleToListView.VehicleList.Clear()
         AddSaleToListView.nextServiceID = 1
     End Sub
 
@@ -394,7 +388,7 @@ Public Class Dashboard
         Dim currentSaleID = Convert.ToInt32(LabelSalesID.Text)
         Dim saleDate = Convert.ToDateTime(DataGridViewLatestTransaction.CurrentRow.Cells(4).Value)
         Dim serviceLineItems As New List(Of ServiceLineItem)()
-        If currentSaleID > 0 AndAlso salesDatabaseHelper IsNot Nothing Then
+        If currentSaleID > 0 AndAlso SalesDatabaseHelper IsNot Nothing Then
             ' *** FIX: Now passing the connection string (Me.constr) to the Shared function ***
             serviceLineItems = SalesDatabaseHelper.GetSaleLineItems(currentSaleID, Me.constr)
         End If
@@ -466,9 +460,9 @@ Public Class Dashboard
         Dim plateNumberToRemove As String = selectedItem.Text
 
         ' 1. Remove the vehicle from the local tracking list (VehicleList)
-        Dim vehiclesRemovedCount As Integer = Me.VehicleList.RemoveAll(Function(v)
-                                                                           Return v.PlateNumber.Equals(plateNumberToRemove, StringComparison.OrdinalIgnoreCase)
-                                                                       End Function)
+        Dim vehiclesRemovedCount As Integer = AddVehicleToListView.VehicleList.RemoveAll(Function(v)
+                                                                                             Return v.PlateNumber.Equals(plateNumberToRemove, StringComparison.OrdinalIgnoreCase)
+                                                                                         End Function)
 
         If vehiclesRemovedCount > 0 Then
             ' 2. Remove the item from the visual ListView control
@@ -504,7 +498,7 @@ Public Class Dashboard
         End If
     End Sub
     Private Sub ViewLatestSales()
-        DataGridViewLatestTransaction.DataSource = salesDatabaseHelper.ViewSales()
+        DataGridViewLatestTransaction.DataSource = SalesDatabaseHelper.ViewSales()
     End Sub
     Public Function GetNextSalesID() As Integer
         Dim nextId As Integer = 1

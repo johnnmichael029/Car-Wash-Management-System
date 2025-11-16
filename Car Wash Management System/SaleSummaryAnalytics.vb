@@ -6,14 +6,14 @@
     End Sub
 
     Private Sub TextBoxSearchBar_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearchBar.TextChanged
-        SalesAnalytics.SearchBarFunction(TextBoxSearchBar, DataGridViewSalesSummary)
+        SalesAnalyticsService.SearchBarFunction(TextBoxSearchBar, DataGridViewSalesSummary)
     End Sub
     Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
         TextBoxSearchBar.Text = ""
     End Sub
     Private Sub DataGridViewSalesSummary_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridViewSalesSummary.CellPainting
         ' Only proceed if we are in a data row, not the header, and we have a search term
-        If e.RowIndex < 0 OrElse String.IsNullOrWhiteSpace(SalesAnalytics.currentSearchTerm) Then
+        If e.RowIndex < 0 OrElse String.IsNullOrWhiteSpace(SalesAnalyticsService.currentSearchTerm) Then
             Exit Sub
         End If
 
@@ -25,7 +25,7 @@
         End If
 
         ' 1. Check if the cell text contains the search term (case-insensitive)
-        Dim searchIndex As Integer = cellValue.IndexOf(SalesAnalytics.currentSearchTerm, StringComparison.OrdinalIgnoreCase)
+        Dim searchIndex As Integer = cellValue.IndexOf(SalesAnalyticsService.currentSearchTerm, StringComparison.OrdinalIgnoreCase)
 
         If searchIndex >= 0 Then
             ' A match was found!
@@ -52,7 +52,7 @@
             Dim sizeBefore As SizeF = e.Graphics.MeasureString(textBefore, baseFont)
 
             ' 2. The matching search term
-            Dim textMatch As String = cellValue.Substring(searchIndex, SalesAnalytics.currentSearchTerm.Length)
+            Dim textMatch As String = cellValue.Substring(searchIndex, SalesAnalyticsService.currentSearchTerm.Length)
             Dim sizeMatch As SizeF = e.Graphics.MeasureString(textMatch, baseFont)
 
             ' --- Draw the three parts of the text ---
@@ -74,7 +74,7 @@
             e.Graphics.DrawString(textMatch, baseFont, highlightTextBrush, CInt(textX + sizeBefore.Width), textY)
 
             ' Part 3: Text after the match
-            Dim textAfter As String = cellValue.Substring(searchIndex + SalesAnalytics.currentSearchTerm.Length)
+            Dim textAfter As String = cellValue.Substring(searchIndex + SalesAnalyticsService.currentSearchTerm.Length)
             e.Graphics.DrawString(textAfter, baseFont, New SolidBrush(e.CellStyle.ForeColor), CInt(textX + sizeBefore.Width + sizeMatch.Width), textY)
 
             ' Indicate that we have manually drawn the cell contents

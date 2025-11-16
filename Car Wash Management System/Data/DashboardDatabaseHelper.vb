@@ -3,11 +3,8 @@ Imports Microsoft.Data.SqlClient
 
 Public Class DashboardDatabaseHelper
     Private Shared constr As String
-    Private ReadOnly textBoxCustomerName As TextBox
-
-    Public Sub New(connectionString As String, customerNameTextBox As TextBox)
+    Public Sub New(connectionString As String)
         constr = connectionString
-        Me.textBoxCustomerName = customerNameTextBox
     End Sub
     ''' <summary>
     ''' View Sales Data from the SalesHistoryTable along with Customer and Service details.

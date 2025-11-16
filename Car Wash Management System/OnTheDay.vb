@@ -1,16 +1,11 @@
 ﻿Imports Microsoft.Data.SqlClient
 
 Public Class OnTheDay
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Dim activityLogInDashboardService As New ActivityLogInDashboardService(constr)
-    Private ReadOnly onTheDayDatabaseHelper As OnTheDayDatabaseHelper
+    Inherits BaseForm
     Public Sub New()
-
+        MyBase.New()
         ' This call is required by the designer.
         InitializeComponent()
-
-        ' Add any initialization after the InitializeComponent() call.
-        onTheDayDatabaseHelper = New OnTheDayDatabaseHelper(constr)
 
     End Sub
     Private Sub OnTheDay_Load(sender As Object, e As EventArgs) Handles MyBase.Load

@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class CustomerInformation
-    Inherits System.Windows.Forms.Form
+    Inherits BaseForm
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class CustomerInformation
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CustomerInformation))
@@ -145,7 +145,7 @@ Partial Class CustomerInformation
         ' ListViewVehicles
         ' 
         ListViewVehicles.Dock = DockStyle.Fill
-        ListViewVehicles.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewVehicles.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ListViewVehicles.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         ListViewVehicles.FullRowSelect = True
         ListViewVehicles.GridLines = True
@@ -169,7 +169,7 @@ Partial Class CustomerInformation
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Font = New Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label5.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label5.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label5.Location = New Point(16, 207)
         Label5.Name = "Label5"
@@ -180,7 +180,7 @@ Partial Class CustomerInformation
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label3.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label3.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label3.Location = New Point(16, 9)
         Label3.Name = "Label3"
@@ -191,7 +191,7 @@ Partial Class CustomerInformation
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Font = New Font("Century Gothic", 9F)
+        Label2.Font = New Font("Century Gothic", 9.0F)
         Label2.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label2.Location = New Point(147, 154)
         Label2.Name = "Label2"
@@ -201,7 +201,7 @@ Partial Class CustomerInformation
         ' 
         ' TextBoxBarangay
         ' 
-        TextBoxBarangay.Font = New Font("Century Gothic", 9F)
+        TextBoxBarangay.Font = New Font("Century Gothic", 9.0F)
         TextBoxBarangay.Location = New Point(147, 172)
         TextBoxBarangay.Multiline = True
         TextBoxBarangay.Name = "TextBoxBarangay"
@@ -211,7 +211,7 @@ Partial Class CustomerInformation
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Font = New Font("Century Gothic", 9F)
+        Label1.Font = New Font("Century Gothic", 9.0F)
         Label1.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label1.Location = New Point(148, 25)
         Label1.Name = "Label1"
@@ -221,7 +221,7 @@ Partial Class CustomerInformation
         ' 
         ' TextBoxLastName
         ' 
-        TextBoxLastName.Font = New Font("Century Gothic", 9F)
+        TextBoxLastName.Font = New Font("Century Gothic", 9.0F)
         TextBoxLastName.Location = New Point(148, 43)
         TextBoxLastName.Name = "TextBoxLastName"
         TextBoxLastName.Size = New Size(129, 22)
@@ -232,7 +232,7 @@ Partial Class CustomerInformation
         RemoveVehicleBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
         RemoveVehicleBtn.FlatAppearance.BorderSize = 0
         RemoveVehicleBtn.FlatStyle = FlatStyle.Flat
-        RemoveVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveVehicleBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         RemoveVehicleBtn.ForeColor = Color.White
         RemoveVehicleBtn.Location = New Point(201, 270)
         RemoveVehicleBtn.Name = "RemoveVehicleBtn"
@@ -244,7 +244,7 @@ Partial Class CustomerInformation
         ' customerIDLabel
         ' 
         customerIDLabel.AutoSize = True
-        customerIDLabel.Font = New Font("Century Gothic", 9F, FontStyle.Underline, GraphicsUnit.Point, CByte(0))
+        customerIDLabel.Font = New Font("Century Gothic", 9.0F, FontStyle.Underline, GraphicsUnit.Point, CByte(0))
         customerIDLabel.ForeColor = Color.Red
         customerIDLabel.Location = New Point(91, 414)
         customerIDLabel.Name = "customerIDLabel"
@@ -256,7 +256,7 @@ Partial Class CustomerInformation
         AddVehicleBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
         AddVehicleBtn.FlatAppearance.BorderSize = 0
         AddVehicleBtn.FlatStyle = FlatStyle.Flat
-        AddVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddVehicleBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         AddVehicleBtn.ForeColor = Color.White
         AddVehicleBtn.Location = New Point(16, 270)
         AddVehicleBtn.Name = "AddVehicleBtn"
@@ -301,7 +301,7 @@ Partial Class CustomerInformation
         ' 
         ' TextBoxVehicle
         ' 
-        TextBoxVehicle.Font = New Font("Century Gothic", 9F)
+        TextBoxVehicle.Font = New Font("Century Gothic", 9.0F)
         TextBoxVehicle.Location = New Point(148, 241)
         TextBoxVehicle.Name = "TextBoxVehicle"
         TextBoxVehicle.Size = New Size(129, 22)
@@ -310,7 +310,7 @@ Partial Class CustomerInformation
         ' Label67
         ' 
         Label67.AutoSize = True
-        Label67.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label67.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label67.Location = New Point(16, 414)
         Label67.Name = "Label67"
         Label67.Size = New Size(80, 17)
@@ -320,7 +320,7 @@ Partial Class CustomerInformation
         ' Label15
         ' 
         Label15.AutoSize = True
-        Label15.Font = New Font("Century Gothic", 9F)
+        Label15.Font = New Font("Century Gothic", 9.0F)
         Label15.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label15.Location = New Point(147, 223)
         Label15.Name = "Label15"
@@ -349,7 +349,7 @@ Partial Class CustomerInformation
         ' Label8
         ' 
         Label8.AutoSize = True
-        Label8.Font = New Font("Century Gothic", 9F)
+        Label8.Font = New Font("Century Gothic", 9.0F)
         Label8.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label8.Location = New Point(16, 25)
         Label8.Name = "Label8"
@@ -359,7 +359,7 @@ Partial Class CustomerInformation
         ' 
         ' TextBoxName
         ' 
-        TextBoxName.Font = New Font("Century Gothic", 9F)
+        TextBoxName.Font = New Font("Century Gothic", 9.0F)
         TextBoxName.Location = New Point(16, 43)
         TextBoxName.Name = "TextBoxName"
         TextBoxName.Size = New Size(129, 22)
@@ -368,7 +368,7 @@ Partial Class CustomerInformation
         ' Label11
         ' 
         Label11.AutoSize = True
-        Label11.Font = New Font("Century Gothic", 9F)
+        Label11.Font = New Font("Century Gothic", 9.0F)
         Label11.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label11.Location = New Point(16, 68)
         Label11.Name = "Label11"
@@ -379,7 +379,7 @@ Partial Class CustomerInformation
         ' Label14
         ' 
         Label14.AutoSize = True
-        Label14.Font = New Font("Century Gothic", 9F)
+        Label14.Font = New Font("Century Gothic", 9.0F)
         Label14.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label14.Location = New Point(16, 223)
         Label14.Name = "Label14"
@@ -389,7 +389,7 @@ Partial Class CustomerInformation
         ' 
         ' TextBoxPlateNumber
         ' 
-        TextBoxPlateNumber.Font = New Font("Century Gothic", 9F)
+        TextBoxPlateNumber.Font = New Font("Century Gothic", 9.0F)
         TextBoxPlateNumber.Location = New Point(16, 241)
         TextBoxPlateNumber.Name = "TextBoxPlateNumber"
         TextBoxPlateNumber.Size = New Size(129, 22)
@@ -397,7 +397,7 @@ Partial Class CustomerInformation
         ' 
         ' TextBoxNumber
         ' 
-        TextBoxNumber.Font = New Font("Century Gothic", 9F)
+        TextBoxNumber.Font = New Font("Century Gothic", 9.0F)
         TextBoxNumber.Location = New Point(16, 86)
         TextBoxNumber.Name = "TextBoxNumber"
         TextBoxNumber.Size = New Size(120, 22)
@@ -406,7 +406,7 @@ Partial Class CustomerInformation
         ' Label12
         ' 
         Label12.AutoSize = True
-        Label12.Font = New Font("Century Gothic", 9F)
+        Label12.Font = New Font("Century Gothic", 9.0F)
         Label12.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label12.Location = New Point(16, 111)
         Label12.Name = "Label12"
@@ -417,7 +417,7 @@ Partial Class CustomerInformation
         ' Label13
         ' 
         Label13.AutoSize = True
-        Label13.Font = New Font("Century Gothic", 9F)
+        Label13.Font = New Font("Century Gothic", 9.0F)
         Label13.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label13.Location = New Point(16, 154)
         Label13.Name = "Label13"
@@ -427,7 +427,7 @@ Partial Class CustomerInformation
         ' 
         ' TextBoxAddress
         ' 
-        TextBoxAddress.Font = New Font("Century Gothic", 9F)
+        TextBoxAddress.Font = New Font("Century Gothic", 9.0F)
         TextBoxAddress.Location = New Point(16, 172)
         TextBoxAddress.Multiline = True
         TextBoxAddress.Name = "TextBoxAddress"
@@ -436,7 +436,7 @@ Partial Class CustomerInformation
         ' 
         ' TextBoxEmail
         ' 
-        TextBoxEmail.Font = New Font("Century Gothic", 9F)
+        TextBoxEmail.Font = New Font("Century Gothic", 9.0F)
         TextBoxEmail.Location = New Point(16, 129)
         TextBoxEmail.Name = "TextBoxEmail"
         TextBoxEmail.Size = New Size(261, 22)
@@ -468,7 +468,7 @@ Partial Class CustomerInformation
         ' 
         ' CustomerInformation
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(911, 758)
         Controls.Add(Panel1)

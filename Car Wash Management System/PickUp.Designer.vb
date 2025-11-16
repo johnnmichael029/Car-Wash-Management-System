@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class PickUp
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class PickUp
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         PrintDocumentBill = New Printing.PrintDocument()
         Label7 = New Label()
@@ -70,7 +70,7 @@ Partial Class PickUp
         ' 
         ' PrintBillBtn
         ' 
-        PrintBillBtn.Font = New Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        PrintBillBtn.Font = New Font("Microsoft Sans Serif", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         PrintBillBtn.Location = New Point(15, 577)
         PrintBillBtn.Name = "PrintBillBtn"
         PrintBillBtn.Size = New Size(75, 23)
@@ -90,7 +90,7 @@ Partial Class PickUp
         ' LabelAppointmentID
         ' 
         LabelAppointmentID.AutoSize = True
-        LabelAppointmentID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
+        LabelAppointmentID.Font = New Font("Segoe UI", 9.0F, FontStyle.Underline)
         LabelAppointmentID.ForeColor = Color.Red
         LabelAppointmentID.Location = New Point(104, 457)
         LabelAppointmentID.Name = "LabelAppointmentID"
@@ -108,7 +108,7 @@ Partial Class PickUp
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Microsoft Sans Serif", 9F)
+        Label3.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label3.Location = New Point(15, 364)
         Label3.Name = "Label3"
         Label3.Size = New Size(39, 15)
@@ -118,7 +118,7 @@ Partial Class PickUp
         ' Label11
         ' 
         Label11.AutoSize = True
-        Label11.Font = New Font("Microsoft Sans Serif", 9F)
+        Label11.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label11.Location = New Point(15, 232)
         Label11.Name = "Label11"
         Label11.Size = New Size(100, 15)
@@ -148,7 +148,7 @@ Partial Class PickUp
         ' Label10
         ' 
         Label10.AutoSize = True
-        Label10.Font = New Font("Microsoft Sans Serif", 9F)
+        Label10.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label10.Location = New Point(15, 141)
         Label10.Name = "Label10"
         Label10.Size = New Size(42, 15)
@@ -166,7 +166,7 @@ Partial Class PickUp
         ' Label9
         ' 
         Label9.AutoSize = True
-        Label9.Font = New Font("Microsoft Sans Serif", 9F)
+        Label9.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label9.Location = New Point(15, 457)
         Label9.Name = "Label9"
         Label9.Size = New Size(91, 15)
@@ -176,7 +176,7 @@ Partial Class PickUp
         ' Label8
         ' 
         Label8.AutoSize = True
-        Label8.Font = New Font("Microsoft Sans Serif", 9F)
+        Label8.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label8.Location = New Point(16, 320)
         Label8.Name = "Label8"
         Label8.Size = New Size(113, 15)
@@ -231,7 +231,7 @@ Partial Class PickUp
         ' Label6
         ' 
         Label6.AutoSize = True
-        Label6.Font = New Font("Microsoft Sans Serif", 9F)
+        Label6.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label6.Location = New Point(16, 188)
         Label6.Name = "Label6"
         Label6.Size = New Size(105, 15)
@@ -241,7 +241,7 @@ Partial Class PickUp
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Font = New Font("Microsoft Sans Serif", 9F)
+        Label5.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label5.Location = New Point(16, 97)
         Label5.Name = "Label5"
         Label5.Size = New Size(53, 15)
@@ -259,7 +259,7 @@ Partial Class PickUp
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Font = New Font("Microsoft Sans Serif", 9F)
+        Label4.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label4.Location = New Point(16, 276)
         Label4.Name = "Label4"
         Label4.Size = New Size(35, 15)
@@ -268,7 +268,7 @@ Partial Class PickUp
         ' 
         ' UpdateAppointmentBtn
         ' 
-        UpdateAppointmentBtn.Font = New Font("Microsoft Sans Serif", 12F, FontStyle.Bold)
+        UpdateAppointmentBtn.Font = New Font("Microsoft Sans Serif", 12.0F, FontStyle.Bold)
         UpdateAppointmentBtn.Location = New Point(16, 541)
         UpdateAppointmentBtn.Name = "UpdateAppointmentBtn"
         UpdateAppointmentBtn.Size = New Size(260, 30)
@@ -278,7 +278,7 @@ Partial Class PickUp
         ' 
         ' ClearFieldsBtn
         ' 
-        ClearFieldsBtn.Font = New Font("Microsoft Sans Serif", 12F, FontStyle.Bold)
+        ClearFieldsBtn.Font = New Font("Microsoft Sans Serif", 12.0F, FontStyle.Bold)
         ClearFieldsBtn.Image = My.Resources.Resources.clean
         ClearFieldsBtn.Location = New Point(16, 508)
         ClearFieldsBtn.Name = "ClearFieldsBtn"
@@ -291,7 +291,7 @@ Partial Class PickUp
         ' 
         ' AddAppointmentBtn
         ' 
-        AddAppointmentBtn.Font = New Font("Microsoft Sans Serif", 12F, FontStyle.Bold)
+        AddAppointmentBtn.Font = New Font("Microsoft Sans Serif", 12.0F, FontStyle.Bold)
         AddAppointmentBtn.Location = New Point(16, 475)
         AddAppointmentBtn.Name = "AddAppointmentBtn"
         AddAppointmentBtn.Size = New Size(260, 30)
@@ -310,7 +310,7 @@ Partial Class PickUp
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Font = New Font("Microsoft Sans Serif", 9F)
+        Label2.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label2.Location = New Point(16, 53)
         Label2.Name = "Label2"
         Label2.Size = New Size(75, 15)
@@ -327,7 +327,7 @@ Partial Class PickUp
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Font = New Font("Microsoft Sans Serif", 9F)
+        Label1.Font = New Font("Microsoft Sans Serif", 9.0F)
         Label1.Location = New Point(16, 9)
         Label1.Name = "Label1"
         Label1.Size = New Size(97, 15)
@@ -381,7 +381,7 @@ Partial Class PickUp
         ' 
         ' PickUp
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(911, 687)
         Controls.Add(Label7)

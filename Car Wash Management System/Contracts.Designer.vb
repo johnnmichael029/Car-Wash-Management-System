@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Contracts
-    Inherits System.Windows.Forms.Form
+    Inherits BaseForm
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Contracts
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Contracts))
         Panel3 = New Panel()
@@ -126,7 +126,7 @@ Partial Class Contracts
         ComboBoxDiscount.AutoCompleteCustomSource.AddRange(New String() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
         ComboBoxDiscount.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxDiscount.DropDownStyle = ComboBoxStyle.DropDownList
-        ComboBoxDiscount.Font = New Font("Century Gothic", 9F)
+        ComboBoxDiscount.Font = New Font("Century Gothic", 9.0F)
         ComboBoxDiscount.FormattingEnabled = True
         ComboBoxDiscount.Items.AddRange(New Object() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
         ComboBoxDiscount.Location = New Point(148, 384)
@@ -137,7 +137,7 @@ Partial Class Contracts
         ' Label15
         ' 
         Label15.AutoSize = True
-        Label15.Font = New Font("Century Gothic", 9F)
+        Label15.Font = New Font("Century Gothic", 9.0F)
         Label15.Location = New Point(148, 366)
         Label15.Name = "Label15"
         Label15.Size = New Size(72, 17)
@@ -147,7 +147,7 @@ Partial Class Contracts
         ' Label14
         ' 
         Label14.AutoSize = True
-        Label14.Font = New Font("Century Gothic", 9F)
+        Label14.Font = New Font("Century Gothic", 9.0F)
         Label14.Location = New Point(146, 410)
         Label14.Name = "Label14"
         Label14.Size = New Size(78, 17)
@@ -156,7 +156,7 @@ Partial Class Contracts
         ' 
         ' TextBoxCheque
         ' 
-        TextBoxCheque.Font = New Font("Century Gothic", 9F)
+        TextBoxCheque.Font = New Font("Century Gothic", 9.0F)
         TextBoxCheque.Location = New Point(148, 428)
         TextBoxCheque.Name = "TextBoxCheque"
         TextBoxCheque.ReadOnly = True
@@ -174,7 +174,7 @@ Partial Class Contracts
         ' ListViewServices
         ' 
         ListViewServices.Dock = DockStyle.Fill
-        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         ListViewServices.FullRowSelect = True
         ListViewServices.GridLines = True
@@ -197,7 +197,7 @@ Partial Class Contracts
         ' 
         ' TextBoxReferenceID
         ' 
-        TextBoxReferenceID.Font = New Font("Century Gothic", 9F)
+        TextBoxReferenceID.Font = New Font("Century Gothic", 9.0F)
         TextBoxReferenceID.Location = New Point(16, 428)
         TextBoxReferenceID.Name = "TextBoxReferenceID"
         TextBoxReferenceID.ReadOnly = True
@@ -207,7 +207,7 @@ Partial Class Contracts
         ' Label13
         ' 
         Label13.AutoSize = True
-        Label13.Font = New Font("Century Gothic", 9F)
+        Label13.Font = New Font("Century Gothic", 9.0F)
         Label13.Location = New Point(16, 410)
         Label13.Name = "Label13"
         Label13.Size = New Size(71, 17)
@@ -219,7 +219,7 @@ Partial Class Contracts
         RemoveServiceBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
         RemoveServiceBtn.FlatAppearance.BorderSize = 0
         RemoveServiceBtn.FlatStyle = FlatStyle.Flat
-        RemoveServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         RemoveServiceBtn.ForeColor = Color.White
         RemoveServiceBtn.Location = New Point(202, 144)
         RemoveServiceBtn.Name = "RemoveServiceBtn"
@@ -233,7 +233,7 @@ Partial Class Contracts
         AddServiceBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
         AddServiceBtn.FlatAppearance.BorderSize = 0
         AddServiceBtn.FlatStyle = FlatStyle.Flat
-        AddServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         AddServiceBtn.ForeColor = Color.White
         AddServiceBtn.Location = New Point(16, 144)
         AddServiceBtn.Name = "AddServiceBtn"
@@ -247,7 +247,7 @@ Partial Class Contracts
         PrintBillBtn.BackColor = Color.FromArgb(CByte(92), CByte(81), CByte(224))
         PrintBillBtn.FlatAppearance.BorderSize = 0
         PrintBillBtn.FlatStyle = FlatStyle.Flat
-        PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        PrintBillBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         PrintBillBtn.ForeColor = Color.White
         PrintBillBtn.Image = CType(resources.GetObject("PrintBillBtn.Image"), Image)
         PrintBillBtn.Location = New Point(189, 542)
@@ -262,7 +262,7 @@ Partial Class Contracts
         ' Label12
         ' 
         Label12.AutoSize = True
-        Label12.Font = New Font("Century Gothic", 9F)
+        Label12.Font = New Font("Century Gothic", 9.0F)
         Label12.Location = New Point(146, 453)
         Label12.Name = "Label12"
         Label12.Size = New Size(70, 17)
@@ -271,7 +271,7 @@ Partial Class Contracts
         ' 
         ' TextBoxTotalPrice
         ' 
-        TextBoxTotalPrice.Font = New Font("Century Gothic", 9F)
+        TextBoxTotalPrice.Font = New Font("Century Gothic", 9.0F)
         TextBoxTotalPrice.Location = New Point(146, 471)
         TextBoxTotalPrice.Name = "TextBoxTotalPrice"
         TextBoxTotalPrice.Size = New Size(129, 22)
@@ -280,7 +280,7 @@ Partial Class Contracts
         ' Label11
         ' 
         Label11.AutoSize = True
-        Label11.Font = New Font("Century Gothic", 9F)
+        Label11.Font = New Font("Century Gothic", 9.0F)
         Label11.Location = New Point(16, 366)
         Label11.Name = "Label11"
         Label11.Size = New Size(110, 17)
@@ -310,7 +310,7 @@ Partial Class Contracts
         ' Label10
         ' 
         Label10.AutoSize = True
-        Label10.Font = New Font("Century Gothic", 9F)
+        Label10.Font = New Font("Century Gothic", 9.0F)
         Label10.Location = New Point(148, 97)
         Label10.Name = "Label10"
         Label10.Size = New Size(48, 17)
@@ -328,7 +328,7 @@ Partial Class Contracts
         ' LabelContractID
         ' 
         LabelContractID.AutoSize = True
-        LabelContractID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
+        LabelContractID.Font = New Font("Segoe UI", 9.0F, FontStyle.Underline)
         LabelContractID.ForeColor = Color.Red
         LabelContractID.Location = New Point(87, 555)
         LabelContractID.Name = "LabelContractID"
@@ -338,7 +338,7 @@ Partial Class Contracts
         ' Label9
         ' 
         Label9.AutoSize = True
-        Label9.Font = New Font("Century Gothic", 9F)
+        Label9.Font = New Font("Century Gothic", 9.0F)
         Label9.Location = New Point(16, 555)
         Label9.Name = "Label9"
         Label9.Size = New Size(77, 17)
@@ -348,7 +348,7 @@ Partial Class Contracts
         ' Label8
         ' 
         Label8.AutoSize = True
-        Label8.Font = New Font("Century Gothic", 9F)
+        Label8.Font = New Font("Century Gothic", 9.0F)
         Label8.Location = New Point(16, 497)
         Label8.Name = "Label8"
         Label8.Size = New Size(102, 17)
@@ -399,7 +399,7 @@ Partial Class Contracts
         ' Label7
         ' 
         Label7.AutoSize = True
-        Label7.Font = New Font("Century Gothic", 9F)
+        Label7.Font = New Font("Century Gothic", 9.0F)
         Label7.Location = New Point(147, 278)
         Label7.Name = "Label7"
         Label7.Size = New Size(62, 17)
@@ -418,7 +418,7 @@ Partial Class Contracts
         ' Label6
         ' 
         Label6.AutoSize = True
-        Label6.Font = New Font("Century Gothic", 9F)
+        Label6.Font = New Font("Century Gothic", 9.0F)
         Label6.Location = New Point(16, 278)
         Label6.Name = "Label6"
         Label6.Size = New Size(70, 17)
@@ -428,7 +428,7 @@ Partial Class Contracts
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Font = New Font("Century Gothic", 9F)
+        Label5.Font = New Font("Century Gothic", 9.0F)
         Label5.Location = New Point(16, 97)
         Label5.Name = "Label5"
         Label5.Size = New Size(59, 17)
@@ -446,7 +446,7 @@ Partial Class Contracts
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Font = New Font("Century Gothic", 9F)
+        Label4.Font = New Font("Century Gothic", 9.0F)
         Label4.Location = New Point(16, 453)
         Label4.Name = "Label4"
         Label4.Size = New Size(59, 17)
@@ -458,7 +458,7 @@ Partial Class Contracts
         UpdateContractBtn.BackColor = Color.FromArgb(CByte(84), CByte(98), CByte(161))
         UpdateContractBtn.FlatAppearance.BorderSize = 0
         UpdateContractBtn.FlatStyle = FlatStyle.Flat
-        UpdateContractBtn.Font = New Font("Century Gothic", 9F)
+        UpdateContractBtn.Font = New Font("Century Gothic", 9.0F)
         UpdateContractBtn.ForeColor = Color.White
         UpdateContractBtn.Location = New Point(146, 627)
         UpdateContractBtn.Name = "UpdateContractBtn"
@@ -472,7 +472,7 @@ Partial Class Contracts
         ClearFieldsBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
         ClearFieldsBtn.FlatAppearance.BorderSize = 0
         ClearFieldsBtn.FlatStyle = FlatStyle.Flat
-        ClearFieldsBtn.Font = New Font("Century Gothic", 9F)
+        ClearFieldsBtn.Font = New Font("Century Gothic", 9.0F)
         ClearFieldsBtn.ForeColor = Color.White
         ClearFieldsBtn.Image = My.Resources.Resources.clean1
         ClearFieldsBtn.Location = New Point(16, 627)
@@ -501,7 +501,7 @@ Partial Class Contracts
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Century Gothic", 9F)
+        Label3.Font = New Font("Century Gothic", 9.0F)
         Label3.Location = New Point(16, 322)
         Label3.Name = "Label3"
         Label3.Size = New Size(107, 17)
@@ -519,7 +519,7 @@ Partial Class Contracts
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Font = New Font("Century Gothic", 9F)
+        Label2.Font = New Font("Century Gothic", 9.0F)
         Label2.Location = New Point(16, 53)
         Label2.Name = "Label2"
         Label2.Size = New Size(80, 17)
@@ -536,7 +536,7 @@ Partial Class Contracts
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Font = New Font("Century Gothic", 9F)
+        Label1.Font = New Font("Century Gothic", 9.0F)
         Label1.Location = New Point(16, 9)
         Label1.Name = "Label1"
         Label1.Size = New Size(104, 17)
@@ -573,7 +573,7 @@ Partial Class Contracts
         ' 
         ' Contracts
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(911, 758)
         Controls.Add(Panel1)

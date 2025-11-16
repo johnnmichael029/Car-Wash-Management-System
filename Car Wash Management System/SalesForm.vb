@@ -3,17 +3,13 @@ Imports System.Drawing.Printing
 Imports System.Linq.Expressions
 Imports Microsoft.Data.SqlClient
 Public Class SalesForm
-    ' The connection string to your database.
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-
-    ' Pass the UI controls to the management class.
-    Private ReadOnly salesDatabaseHelper As SalesDatabaseHelper
-    Private ReadOnly activityLogInDashboardService As New ActivityLogInDashboardService(constr)
+    Inherits BaseForm
     Public Sub New()
+
+        MyBase.New()
+
         InitializeComponent()
 
-        ' Pass the UI controls to the management class, including the new TextBoxCustomerID.
-        salesDatabaseHelper = New SalesDatabaseHelper(constr)
     End Sub
 
     Private Sub SalesForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load

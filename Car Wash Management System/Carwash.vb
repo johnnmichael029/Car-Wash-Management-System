@@ -4,17 +4,12 @@ Imports System.Runtime.InteropServices
 Imports Microsoft.Data.SqlClient
 
 Public Class Carwash
-
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Dim activityLogInDashboardService As New ActivityLogInDashboardService(constr)
-    Private ReadOnly carwashDatabaseHelper As CarwashDatabaseHelper
-    'Private isFullScreen As Boolean = False
-    'Private originalIcon As Icon
+    Inherits BaseForm
     Public Sub New()
+        MyBase.New()
         ' This call is required by the designer.
         InitializeComponent()
-        ' Add any initialization after the InitializeComponent() call.
-        carwashDatabaseHelper = New CarwashDatabaseHelper(constr)
+
     End Sub
 
     Private PrivateFonts As New PrivateFontCollection()
@@ -503,4 +498,7 @@ Public Class Carwash
         RevenueServiceAnalyticsShowForm()
     End Sub
 
+    Private Sub Panel4_Paint(sender As Object, e As PaintEventArgs) Handles Panel4.Paint
+
+    End Sub
 End Class

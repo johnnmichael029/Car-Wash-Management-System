@@ -1,17 +1,14 @@
 ﻿Public Class ViewCustomerInfo
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Private ReadOnly customerInformationDatabaseHelper As CustomerInformationDatabaseHelper
+    Inherits BaseForm
     Private ReadOnly _parentCustomerForm As Object
 
     Public Sub New(parentForm As Object)
-
+        MyBase.New()
         ' This call is required by the designer.
         InitializeComponent()
 
         _parentCustomerForm = parentForm
 
-        ' Add any initialization after the InitializeComponent() call.
-        customerInformationDatabaseHelper = New CustomerInformationDatabaseHelper(constr)
     End Sub
     Private Sub ViewCustomerInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.CenterToScreen()
@@ -45,7 +42,7 @@
         TextBoxVehicle.Clear()
         customerIDLabel.Text = ""
         TextBoxPlateNumber.Clear()
-        CustomerInformation.VehicleList.Clear()
+        AddVehicleToListView.VehicleList.Clear()
         ListViewVehicles.Items.Clear()
     End Sub
 

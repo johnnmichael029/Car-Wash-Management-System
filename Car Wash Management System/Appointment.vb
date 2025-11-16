@@ -6,22 +6,14 @@ Imports Microsoft.Data.SqlClient
 Imports Windows.Win32.System
 
 Public Class Appointment
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Private ReadOnly appointmentManagementDatabaseHelper As AppointmentManagementDatabaseHelper
-    Private ReadOnly activityLogInDashboardService As ActivityLogInDashboardService
-    Private ReadOnly salesDatabaseHelper As SalesDatabaseHelper
-    Private appointmentServiceList As List(Of AppointmentService)
+    Inherits BaseForm
 
     Public Sub New()
+        MyBase.New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
-        ' Add any initialization after the InitializeComponent() call.
-        appointmentManagementDatabaseHelper = New AppointmentManagementDatabaseHelper(constr)
-        salesDatabaseHelper = New SalesDatabaseHelper(constr)
-        appointmentServiceList = New List(Of AppointmentService)()
-        activityLogInDashboardService = New ActivityLogInDashboardService(constr)
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
         PopulateUIForAppointment()
@@ -87,6 +79,7 @@ Public Class Appointment
             End Select
         End If
     End Sub
+
     Private Sub DataGridViewAppointment_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewAppointment.CellContentClick
 
         If e.RowIndex >= 0 Then
@@ -133,6 +126,7 @@ Public Class Appointment
         AddAppointmentBtnFunction()
 
     End Sub
+
     Public Sub AddAppointmentBtnFunction()
         Try
             ' The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
@@ -185,7 +179,7 @@ Public Class Appointment
                 Return
             End If
 
-            appointmentManagementDatabaseHelper.AddAppointment(
+            AppointmentManagementDatabaseHelper.AddAppointment(
                 customerID,
                 AddSaleToListView.AppointmentServiceList,
                 DateTimePickerStartDate.Value,
@@ -208,14 +202,16 @@ Public Class Appointment
             MessageBox.Show("An error occurred while adding the appointment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub ViewAppointments()
-        DataGridViewAppointment.DataSource = appointmentManagementDatabaseHelper.ViewAppointment()
+        DataGridViewAppointment.DataSource = AppointmentManagementDatabaseHelper.ViewAppointment()
     End Sub
+
     Public Sub AddAppointmentActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim appointmentDate As Date = DateTimePickerStartDate.Value
         Dim appointmentStatus As String = ComboBoxAppointmentStatus.Text
-        activityLogInDashboardService.ScheduleAppointment(customerName, appointmentDate, appointmentStatus)
+        ActivityLogInDashboardService.ScheduleAppointment(customerName, appointmentDate, appointmentStatus)
     End Sub
 
     Public Sub PopulateUIForAppointment()
@@ -230,10 +226,12 @@ Public Class Appointment
         End Try
 
     End Sub
+
     Private Sub DataGridViewFontStyle()
         DataGridViewAppointment.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
         DataGridViewAppointment.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
+
     Public Sub ClearFields()
         TextBoxCustomerID.Clear()
         TextBoxCustomerName.Clear()
@@ -326,7 +324,7 @@ Public Class Appointment
                 MessageBox.Show("Please select an appointment status.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
-            appointmentManagementDatabaseHelper.UpdateAppointment(
+            AppointmentManagementDatabaseHelper.UpdateAppointment(
                 appointmentID,
                 customerID,
                 AddSaleToListView.AppointmentServiceList,
@@ -353,7 +351,7 @@ Public Class Appointment
     Public Sub UpdateAppointmentStatusActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim newtStatus As String = ComboBoxAppointmentStatus.Text
-        activityLogInDashboardService.UpdateAppointmentStatus(customerName, newtStatus)
+        ActivityLogInDashboardService.UpdateAppointmentStatus(customerName, newtStatus)
     End Sub
     Private Sub ChangeHeaderOfDataGridViewAppointment()
         DataGridViewAppointment.Columns(0).HeaderText = "Appointment ID"
@@ -400,7 +398,7 @@ Public Class Appointment
 
         ' 2. Retrieve the list of all services (Base and Add-ons) associated with this sale ID.
         Dim serviceLineItems As New List(Of ServiceLineItem)()
-        If currentAppointmentID > 0 AndAlso appointmentManagementDatabaseHelper IsNot Nothing Then
+        If currentAppointmentID > 0 AndAlso AppointmentManagementDatabaseHelper IsNot Nothing Then
             ' *** FIX: Now passing the connection string (Me.constr) to the Shared function ***
             serviceLineItems = AppointmentManagementDatabaseHelper.GetSaleLineItems(currentAppointmentID, Me.constr)
         End If
@@ -416,12 +414,10 @@ Public Class Appointment
            .AppointmentStatus = ComboBoxAppointmentStatus.Text
        })
     End Sub
-
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
         AddSaleToListView.AddSaleServiceInAppointmentForm(ComboBoxServices, ComboBoxAddons, TextBoxPrice, ListViewServices)
         UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
-
     Private Sub ComboBoxPaymentMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPaymentMethod.SelectedIndexChanged
         If ComboBoxPaymentMethod.SelectedItem = "Gcash" Then
             TextBoxReferenceID.ReadOnly = False
@@ -443,6 +439,7 @@ Public Class Appointment
         AddSaleToListView.RemoveSelectedServiceInAppointmentForm(ListViewServices)
         UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
+
     Private Sub FullScreenServiceBtn_Click(sender As Object, e As EventArgs) Handles FullScreenServiceBtn.Click
         ShowPanelDocked.ShowServicesPanelDocked(PanelServiceInfo, ListViewServices)
     End Sub

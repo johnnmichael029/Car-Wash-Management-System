@@ -1,15 +1,13 @@
 ﻿Imports Microsoft.Data.SqlClient
 
 Public Class Admin
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Private ReadOnly adminDatabaseHelper As AdminDatabaseHelper
+    Inherits BaseForm
     Public Sub New()
-
+        MyBase.New()
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        adminDatabaseHelper = New AdminDatabaseHelper(constr)
     End Sub
     Private Sub AddUserBtn_Click(sender As Object, e As EventArgs) Handles AddUserBtn.Click
         AddUsersFunction()
@@ -22,7 +20,7 @@ Public Class Admin
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs)
-        Application.Exit
+        Application.Exit()
     End Sub
     Private Sub ViewUsersFromDataGridView()
         DataGridViewUsers.DataSource = AdminDatabaseHelper.ViewUsers()

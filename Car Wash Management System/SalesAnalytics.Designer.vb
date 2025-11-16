@@ -1,6 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SalesAnalytics
-    Inherits System.Windows.Forms.Form
+    Inherits BaseForm
 
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
@@ -95,7 +95,7 @@ Partial Class SalesAnalytics
         ButtonToggleChart.Name = "ButtonToggleChart"
         ButtonToggleChart.Size = New Size(140, 27)
         ButtonToggleChart.TabIndex = 10
-        ButtonToggleChart.Text = "Daily"
+        ButtonToggleChart.Text = "Day"
         ButtonToggleChart.UseVisualStyleBackColor = False
         ' 
         ' Label1
@@ -409,7 +409,7 @@ Partial Class SalesAnalytics
         LabelEarnings.AutoSize = True
         LabelEarnings.Font = New Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelEarnings.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(6))
-        LabelEarnings.Location = New Point(24, 57)
+        LabelEarnings.Location = New Point(23, 51)
         LabelEarnings.Name = "LabelEarnings"
         LabelEarnings.Size = New Size(83, 29)
         LabelEarnings.TabIndex = 10

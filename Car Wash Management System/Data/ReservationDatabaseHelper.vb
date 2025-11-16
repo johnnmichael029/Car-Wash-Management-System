@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.Data.SqlClient
 
 Public Class ReservationDatabaseHelper
+
     Private Shared constr
     Public Sub New(connectionString As String)
         constr = connectionString
@@ -34,7 +35,7 @@ Public Class ReservationDatabaseHelper
         Return dt
     End Function
 
-    Public Shared Function UpdateStatusOfAppointment()
+    Public Function UpdateStatusOfAppointment()
         Dim rowsAffected As Integer = 0
         Dim query As String = "UPDATE AppointmentsTable " &
                               "SET AppointmentStatus = 'Completed' " &
@@ -53,7 +54,7 @@ Public Class ReservationDatabaseHelper
         End Using
         Return rowsAffected
     End Function
-    Public Shared Function UpdateStatusOfAppointmentServiceTable() As Integer
+    Public Function UpdateStatusOfAppointmentServiceTable() As Integer
         Dim rowsAffected As Integer = 0
 
         ' Correct SQL Server UPDATE...FROM syntax:

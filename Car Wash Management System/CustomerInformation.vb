@@ -2,21 +2,18 @@
 Imports System.Runtime.InteropServices.JavaScript.JSType
 Imports Microsoft.Data.SqlClient
 Public Class CustomerInformation
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-
-    Public VehicleList As New List(Of VehicleService)
-    Private ReadOnly customerInformationDatabaseHelper As CustomerInformationDatabaseHelper
-    Dim activityLogInDashboardService As New ActivityLogInDashboardService(constr)
-    Private viewCustomerInfo As New ViewCustomerInfo(Me)
+    Inherits BaseForm
+    Private ReadOnly viewCustomerInfo As ViewCustomerInfo
     Public customerIDValue As String
     Public nextServiceID As Integer = 1
 
     Public Sub New()
+        MyBase.New()
         ' This call is required by the designer.
         InitializeComponent()
+        viewCustomerInfo = New ViewCustomerInfo(Me)
 
         ' Add any initialization after the InitializeComponent() call
-        customerInformationDatabaseHelper = New CustomerInformationDatabaseHelper(constr)
     End Sub
     Private Sub CustomerInformation_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadListOfCustomerInformation()
@@ -234,7 +231,6 @@ Public Class CustomerInformation
         TextBoxVehicle.Clear()
         customerIDLabel.Text = ""
         TextBoxPlateNumber.Clear()
-        VehicleList.Clear()
         ListViewVehicles.Items.Clear()
         AddVehicleToListView.nextServiceID = 1
         AddVehicleToListView.VehicleList.Clear()
@@ -273,7 +269,7 @@ Public Class CustomerInformation
         ' 2. Create the new service, passing the current ID
         Dim newVehicle As New VehicleService(currentID, plateNumber, vehicleType)
 
-        Me.VehicleList.Add(newVehicle)
+        AddVehicleToListView.VehicleList.Add(newVehicle)
 
         ' 3. Add the ID as the FIRST column in the ListView
         Dim lvi As New ListViewItem(newVehicle.ID.ToString())
@@ -299,10 +295,10 @@ Public Class CustomerInformation
         ' Get the Plate Number, which is used as the unique key to match the object in VehicleList
         Dim selectedIndex As Integer = selectedItem.Index
 
-        If selectedIndex >= 0 AndAlso selectedIndex < Me.VehicleList.Count Then
+        If selectedIndex >= 0 AndAlso selectedIndex < AddVehicleToListView.VehicleList.Count Then
 
             ' 2. Remove the service object from the internal list based on index
-            Me.VehicleList.RemoveAt(selectedIndex)
+            AddVehicleToListView.VehicleList.RemoveAt(selectedIndex)
 
             ' 3. Remove the item from the visual ListView control
             ' (This step is technically optional since we clear and re-add below, but good practice)
@@ -313,16 +309,16 @@ Public Class CustomerInformation
 
             ' Get the current list of remaining services
             ' Using ToList() creates a copy, so we can manipulate the original SaleServiceList safely below.
-            Dim remainingServices As List(Of VehicleService) = Me.VehicleList.ToList()
+            Dim remainingServices As List(Of VehicleService) = AddVehicleToListView.VehicleList.ToList()
 
             ' Clear the UI and internal list (before re-adding)
             listView.Items.Clear()
-            Me.VehicleList.Clear() ' Clear the internal list so we can rebuild it with the same items
+            AddVehicleToListView.VehicleList.Clear() ' Clear the internal list so we can rebuild it with the same items
 
             ' Now, iterate through the remaining items and re-add them with new sequential IDs
             Dim listItemIDCounter As Integer = 1
             For Each vehicle As VehicleService In remainingServices
-                Me.VehicleList.Add(vehicle) ' Re-add to the internal list
+                AddVehicleToListView.VehicleList.Add(vehicle) ' Re-add to the internal list
 
                 ' Create the ListView item with the new sequential ID
                 Dim lvi As New ListViewItem(listItemIDCounter.ToString())

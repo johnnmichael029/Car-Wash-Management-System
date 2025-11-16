@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class SalesForm
-    Inherits System.Windows.Forms.Form
+    Inherits BaseForm
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class SalesForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SalesForm))
         DataGridViewSales = New DataGridView()
@@ -144,7 +144,7 @@ Partial Class SalesForm
         ComboBoxDiscount.AutoCompleteCustomSource.AddRange(New String() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
         ComboBoxDiscount.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxDiscount.DropDownStyle = ComboBoxStyle.DropDownList
-        ComboBoxDiscount.Font = New Font("Century Gothic", 9F)
+        ComboBoxDiscount.Font = New Font("Century Gothic", 9.0F)
         ComboBoxDiscount.FormattingEnabled = True
         ComboBoxDiscount.Items.AddRange(New Object() {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
         ComboBoxDiscount.Location = New Point(150, 342)
@@ -155,7 +155,7 @@ Partial Class SalesForm
         ' Label10
         ' 
         Label10.AutoSize = True
-        Label10.Font = New Font("Century Gothic", 9F)
+        Label10.Font = New Font("Century Gothic", 9.0F)
         Label10.Location = New Point(150, 324)
         Label10.Name = "Label10"
         Label10.Size = New Size(72, 17)
@@ -165,7 +165,7 @@ Partial Class SalesForm
         ' Label13
         ' 
         Label13.AutoSize = True
-        Label13.Font = New Font("Century Gothic", 9F)
+        Label13.Font = New Font("Century Gothic", 9.0F)
         Label13.Location = New Point(148, 370)
         Label13.Name = "Label13"
         Label13.Size = New Size(78, 17)
@@ -174,7 +174,7 @@ Partial Class SalesForm
         ' 
         ' TextBoxCheque
         ' 
-        TextBoxCheque.Font = New Font("Century Gothic", 9F)
+        TextBoxCheque.Font = New Font("Century Gothic", 9.0F)
         TextBoxCheque.Location = New Point(150, 388)
         TextBoxCheque.Name = "TextBoxCheque"
         TextBoxCheque.ReadOnly = True
@@ -192,7 +192,7 @@ Partial Class SalesForm
         ' ListViewServices
         ' 
         ListViewServices.Dock = DockStyle.Fill
-        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         ListViewServices.FullRowSelect = True
         ListViewServices.GridLines = True
@@ -232,7 +232,7 @@ Partial Class SalesForm
         ' Label8
         ' 
         Label8.AutoSize = True
-        Label8.Font = New Font("Century Gothic", 9F)
+        Label8.Font = New Font("Century Gothic", 9.0F)
         Label8.Location = New Point(148, 413)
         Label8.Name = "Label8"
         Label8.Size = New Size(70, 17)
@@ -241,7 +241,7 @@ Partial Class SalesForm
         ' 
         ' TextBoxTotalPrice
         ' 
-        TextBoxTotalPrice.Font = New Font("Century Gothic", 9F)
+        TextBoxTotalPrice.Font = New Font("Century Gothic", 9.0F)
         TextBoxTotalPrice.Location = New Point(148, 431)
         TextBoxTotalPrice.Name = "TextBoxTotalPrice"
         TextBoxTotalPrice.ReadOnly = True
@@ -253,7 +253,7 @@ Partial Class SalesForm
         RemoveServiceBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
         RemoveServiceBtn.FlatAppearance.BorderSize = 0
         RemoveServiceBtn.FlatStyle = FlatStyle.Flat
-        RemoveServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         RemoveServiceBtn.ForeColor = Color.White
         RemoveServiceBtn.Location = New Point(202, 190)
         RemoveServiceBtn.Name = "RemoveServiceBtn"
@@ -267,7 +267,7 @@ Partial Class SalesForm
         AddServiceBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
         AddServiceBtn.FlatAppearance.BorderSize = 0
         AddServiceBtn.FlatStyle = FlatStyle.Flat
-        AddServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         AddServiceBtn.ForeColor = Color.White
         AddServiceBtn.Location = New Point(16, 190)
         AddServiceBtn.Name = "AddServiceBtn"
@@ -278,7 +278,7 @@ Partial Class SalesForm
         ' 
         ' TextBoxReferenceID
         ' 
-        TextBoxReferenceID.Font = New Font("Century Gothic", 9F)
+        TextBoxReferenceID.Font = New Font("Century Gothic", 9.0F)
         TextBoxReferenceID.Location = New Point(16, 388)
         TextBoxReferenceID.Name = "TextBoxReferenceID"
         TextBoxReferenceID.ReadOnly = True
@@ -288,7 +288,7 @@ Partial Class SalesForm
         ' Label7
         ' 
         Label7.AutoSize = True
-        Label7.Font = New Font("Century Gothic", 9F)
+        Label7.Font = New Font("Century Gothic", 9.0F)
         Label7.Location = New Point(16, 370)
         Label7.Name = "Label7"
         Label7.Size = New Size(71, 17)
@@ -298,7 +298,7 @@ Partial Class SalesForm
         ' LabelSalesID
         ' 
         LabelSalesID.AutoSize = True
-        LabelSalesID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
+        LabelSalesID.Font = New Font("Segoe UI", 9.0F, FontStyle.Underline)
         LabelSalesID.ForeColor = Color.Red
         LabelSalesID.Location = New Point(69, 472)
         LabelSalesID.Name = "LabelSalesID"
@@ -325,7 +325,7 @@ Partial Class SalesForm
         ' Label9
         ' 
         Label9.AutoSize = True
-        Label9.Font = New Font("Century Gothic", 9F)
+        Label9.Font = New Font("Century Gothic", 9.0F)
         Label9.Location = New Point(16, 472)
         Label9.Name = "Label9"
         Label9.Size = New Size(54, 17)
@@ -349,7 +349,7 @@ Partial Class SalesForm
         ' 
         ' TextBoxPrice
         ' 
-        TextBoxPrice.Font = New Font("Century Gothic", 9F)
+        TextBoxPrice.Font = New Font("Century Gothic", 9.0F)
         TextBoxPrice.Location = New Point(17, 431)
         TextBoxPrice.Name = "TextBoxPrice"
         TextBoxPrice.ReadOnly = True
@@ -361,7 +361,7 @@ Partial Class SalesForm
         ComboBoxPaymentMethod.AutoCompleteCustomSource.AddRange(New String() {"Cash", "Gcash", "Cheque"})
         ComboBoxPaymentMethod.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList
-        ComboBoxPaymentMethod.Font = New Font("Century Gothic", 9F)
+        ComboBoxPaymentMethod.Font = New Font("Century Gothic", 9.0F)
         ComboBoxPaymentMethod.FormattingEnabled = True
         ComboBoxPaymentMethod.Location = New Point(16, 342)
         ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod"
@@ -370,7 +370,7 @@ Partial Class SalesForm
         ' 
         ' ComboBoxAddons
         ' 
-        ComboBoxAddons.Font = New Font("Century Gothic", 9F)
+        ComboBoxAddons.Font = New Font("Century Gothic", 9.0F)
         ComboBoxAddons.FormattingEnabled = True
         ComboBoxAddons.Location = New Point(16, 159)
         ComboBoxAddons.Name = "ComboBoxAddons"
@@ -379,7 +379,7 @@ Partial Class SalesForm
         ' 
         ' ComboBoxServices
         ' 
-        ComboBoxServices.Font = New Font("Century Gothic", 9F)
+        ComboBoxServices.Font = New Font("Century Gothic", 9.0F)
         ComboBoxServices.FormattingEnabled = True
         ComboBoxServices.Location = New Point(16, 113)
         ComboBoxServices.Name = "ComboBoxServices"
@@ -388,7 +388,7 @@ Partial Class SalesForm
         ' 
         ' TextBoxCustomerID
         ' 
-        TextBoxCustomerID.Font = New Font("Century Gothic", 9F)
+        TextBoxCustomerID.Font = New Font("Century Gothic", 9.0F)
         TextBoxCustomerID.Location = New Point(16, 70)
         TextBoxCustomerID.Name = "TextBoxCustomerID"
         TextBoxCustomerID.ReadOnly = True
@@ -397,7 +397,7 @@ Partial Class SalesForm
         ' 
         ' TextBoxCustomerName
         ' 
-        TextBoxCustomerName.Font = New Font("Century Gothic", 9F)
+        TextBoxCustomerName.Font = New Font("Century Gothic", 9.0F)
         TextBoxCustomerName.Location = New Point(16, 27)
         TextBoxCustomerName.Name = "TextBoxCustomerName"
         TextBoxCustomerName.Size = New Size(261, 22)
@@ -406,7 +406,7 @@ Partial Class SalesForm
         ' Label6
         ' 
         Label6.AutoSize = True
-        Label6.Font = New Font("Century Gothic", 9F)
+        Label6.Font = New Font("Century Gothic", 9.0F)
         Label6.Location = New Point(16, 141)
         Label6.Name = "Label6"
         Label6.Size = New Size(53, 17)
@@ -416,7 +416,7 @@ Partial Class SalesForm
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Font = New Font("Century Gothic", 9F)
+        Label5.Font = New Font("Century Gothic", 9.0F)
         Label5.Location = New Point(16, 9)
         Label5.Name = "Label5"
         Label5.Size = New Size(104, 17)
@@ -426,7 +426,7 @@ Partial Class SalesForm
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Font = New Font("Century Gothic", 9F)
+        Label1.Font = New Font("Century Gothic", 9.0F)
         Label1.Location = New Point(16, 52)
         Label1.Name = "Label1"
         Label1.Size = New Size(80, 17)
@@ -454,7 +454,7 @@ Partial Class SalesForm
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Font = New Font("Century Gothic", 9F)
+        Label4.Font = New Font("Century Gothic", 9.0F)
         Label4.Location = New Point(16, 324)
         Label4.Name = "Label4"
         Label4.Size = New Size(105, 17)
@@ -464,7 +464,7 @@ Partial Class SalesForm
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Font = New Font("Century Gothic", 9F)
+        Label2.Font = New Font("Century Gothic", 9.0F)
         Label2.Location = New Point(16, 95)
         Label2.Name = "Label2"
         Label2.Size = New Size(54, 17)
@@ -474,7 +474,7 @@ Partial Class SalesForm
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Century Gothic", 9F)
+        Label3.Font = New Font("Century Gothic", 9.0F)
         Label3.Location = New Point(16, 413)
         Label3.Name = "Label3"
         Label3.Size = New Size(59, 17)
@@ -486,7 +486,7 @@ Partial Class SalesForm
         ' 
         ' SalesForm
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(911, 758)
         Controls.Add(Panel2)

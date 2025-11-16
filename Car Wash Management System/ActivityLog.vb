@@ -1,12 +1,11 @@
 ﻿Imports Microsoft.Data.SqlClient
 Public Class ActivityLog
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Private ReadOnly activityLogManagement As ActivityLogManagement
+    Inherits BaseForm
     Public Sub New()
+        MyBase.New()
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
-        activityLogManagement = New ActivityLogManagement(constr)
     End Sub
     Private Sub ActivityLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadDataActivtyLog()
@@ -15,7 +14,7 @@ Public Class ActivityLog
         LoadActivityLog()
     End Sub
     Private Sub LoadDataActivtyLog()
-        DataGridViewActivityLog.DataSource = activityLogManagement.ViewActivityLog()
+        DataGridViewActivityLog.DataSource = ActivityLogManagement.ViewActivityLog()
     End Sub
     Private Sub ChangeHeaderOfActivityLog()
         DataGridViewActivityLog.Columns(0).HeaderText = "Log ID"
@@ -32,7 +31,7 @@ Public Class ActivityLog
         DataGridViewActivityLog.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
     Public Sub LoadActivityLog()
-        DataGridViewActivityLog.DataSource = activityLogManagement.ViewActivityLog()
+        DataGridViewActivityLog.DataSource = ActivityLogManagement.ViewActivityLog()
         DataGridViewActivityLog.Columns("ActionType").HeaderText = "Action Type"
         DataGridViewActivityLog.Columns("Timestamp").HeaderText = "Timestamp"
     End Sub

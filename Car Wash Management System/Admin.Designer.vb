@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Admin
-    Inherits System.Windows.Forms.Form
+    Inherits BaseForm
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Admin
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         TextBoxUsername = New TextBox()
         Label1 = New Label()
@@ -53,7 +53,7 @@ Partial Class Admin
         ' 
         Label1.Anchor = AnchorStyles.None
         Label1.AutoSize = True
-        Label1.Font = New Font("Century Gothic", 9F)
+        Label1.Font = New Font("Century Gothic", 9.0F)
         Label1.Location = New Point(43, 286)
         Label1.Name = "Label1"
         Label1.Size = New Size(67, 17)
@@ -83,7 +83,7 @@ Partial Class Admin
         ' 
         Label3.Anchor = AnchorStyles.None
         Label3.AutoSize = True
-        Label3.Font = New Font("Century Gothic", 9F)
+        Label3.Font = New Font("Century Gothic", 9.0F)
         Label3.Location = New Point(43, 343)
         Label3.Name = "Label3"
         Label3.Size = New Size(63, 17)
@@ -114,7 +114,7 @@ Partial Class Admin
         DeleteUserBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         DeleteUserBtn.FlatAppearance.BorderSize = 0
         DeleteUserBtn.FlatStyle = FlatStyle.Flat
-        DeleteUserBtn.Font = New Font("Century Gothic", 9F)
+        DeleteUserBtn.Font = New Font("Century Gothic", 9.0F)
         DeleteUserBtn.ForeColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         DeleteUserBtn.Location = New Point(43, 554)
         DeleteUserBtn.Name = "DeleteUserBtn"
@@ -141,7 +141,7 @@ Partial Class Admin
         ChangePasswordBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         ChangePasswordBtn.FlatAppearance.BorderSize = 0
         ChangePasswordBtn.FlatStyle = FlatStyle.Flat
-        ChangePasswordBtn.Font = New Font("Century Gothic", 9F)
+        ChangePasswordBtn.Font = New Font("Century Gothic", 9.0F)
         ChangePasswordBtn.ForeColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         ChangePasswordBtn.Location = New Point(43, 491)
         ChangePasswordBtn.Name = "ChangePasswordBtn"
@@ -157,7 +157,7 @@ Partial Class Admin
         AddUserBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         AddUserBtn.FlatAppearance.BorderSize = 0
         AddUserBtn.FlatStyle = FlatStyle.Flat
-        AddUserBtn.Font = New Font("Century Gothic", 9F)
+        AddUserBtn.Font = New Font("Century Gothic", 9.0F)
         AddUserBtn.ForeColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         AddUserBtn.Location = New Point(43, 429)
         AddUserBtn.Name = "AddUserBtn"
@@ -202,7 +202,7 @@ Partial Class Admin
         ' 
         ' Admin
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         ClientSize = New Size(1369, 749)

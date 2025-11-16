@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Carwash
-    Inherits System.Windows.Forms.Form
+    Inherits BaseForm
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Carwash
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Carwash))
@@ -130,7 +130,7 @@ Partial Class Carwash
         ' LabelWelcome
         ' 
         LabelWelcome.AutoSize = True
-        LabelWelcome.Font = New Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelWelcome.Font = New Font("Microsoft Sans Serif", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelWelcome.Location = New Point(131, 0)
         LabelWelcome.Name = "LabelWelcome"
         LabelWelcome.RightToLeft = RightToLeft.No
@@ -217,7 +217,7 @@ Partial Class Carwash
         ' LabelEarningsValue
         ' 
         LabelEarningsValue.AutoSize = True
-        LabelEarningsValue.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        LabelEarningsValue.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         LabelEarningsValue.ForeColor = Color.Green
         LabelEarningsValue.Location = New Point(41, 21)
         LabelEarningsValue.Name = "LabelEarningsValue"
@@ -256,7 +256,7 @@ Partial Class Carwash
         ' NotificationLabel
         ' 
         NotificationLabel.Dock = DockStyle.Right
-        NotificationLabel.Font = New Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        NotificationLabel.Font = New Font("Microsoft Sans Serif", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         NotificationLabel.ForeColor = SystemColors.ControlText
         NotificationLabel.Location = New Point(0, 0)
         NotificationLabel.Name = "NotificationLabel"
@@ -427,7 +427,7 @@ Partial Class Carwash
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label3.Font = New Font("Microsoft Sans Serif", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label3.Location = New Point(49, 1)
         Label3.Name = "Label3"
         Label3.RightToLeft = RightToLeft.No
@@ -470,7 +470,7 @@ Partial Class Carwash
         ' 
         revenueCustomerBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         revenueCustomerBtn.FlatStyle = FlatStyle.Flat
-        revenueCustomerBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        revenueCustomerBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         revenueCustomerBtn.ImageAlign = ContentAlignment.MiddleLeft
         revenueCustomerBtn.Location = New Point(0, 431)
         revenueCustomerBtn.Name = "revenueCustomerBtn"
@@ -485,7 +485,7 @@ Partial Class Carwash
         ' 
         revenueServiceBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         revenueServiceBtn.FlatStyle = FlatStyle.Flat
-        revenueServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
+        revenueServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold)
         revenueServiceBtn.ImageAlign = ContentAlignment.MiddleLeft
         revenueServiceBtn.Location = New Point(0, 404)
         revenueServiceBtn.Name = "revenueServiceBtn"
@@ -500,7 +500,7 @@ Partial Class Carwash
         ' 
         salesSummaryBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         salesSummaryBtn.FlatStyle = FlatStyle.Flat
-        salesSummaryBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
+        salesSummaryBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold)
         salesSummaryBtn.ImageAlign = ContentAlignment.MiddleLeft
         salesSummaryBtn.Location = New Point(0, 377)
         salesSummaryBtn.Name = "salesSummaryBtn"
@@ -515,7 +515,7 @@ Partial Class Carwash
         ' 
         averageSaleBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         averageSaleBtn.FlatStyle = FlatStyle.Flat
-        averageSaleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
+        averageSaleBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold)
         averageSaleBtn.ImageAlign = ContentAlignment.MiddleLeft
         averageSaleBtn.Location = New Point(0, 350)
         averageSaleBtn.Name = "averageSaleBtn"
@@ -530,7 +530,7 @@ Partial Class Carwash
         ' 
         salesBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         salesBtn.FlatStyle = FlatStyle.Flat
-        salesBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
+        salesBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold)
         salesBtn.ImageAlign = ContentAlignment.MiddleLeft
         salesBtn.Location = New Point(0, 323)
         salesBtn.Name = "salesBtn"
@@ -555,7 +555,7 @@ Partial Class Carwash
         LogoutBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         LogoutBtn.FlatAppearance.BorderSize = 0
         LogoutBtn.FlatStyle = FlatStyle.Flat
-        LogoutBtn.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
+        LogoutBtn.Font = New Font("Segoe UI", 9.0F, FontStyle.Underline)
         LogoutBtn.Image = My.Resources.Resources.logout
         LogoutBtn.ImageAlign = ContentAlignment.MiddleLeft
         LogoutBtn.Location = New Point(0, 49)
@@ -792,7 +792,7 @@ Partial Class Carwash
         ' 
         ' Carwash
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         ClientSize = New Size(1385, 788)

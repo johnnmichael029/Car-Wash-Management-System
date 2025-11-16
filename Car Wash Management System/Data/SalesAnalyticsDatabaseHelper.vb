@@ -3,7 +3,7 @@
 
 
 Public Class SalesAnalyticsDatabaseHelper
-    Private Shared constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
+    Private Shared constr As String
     Public Property CurrentMonthEarnings As Decimal
     Public Property PreviousMonthEarnings As Decimal
     Public Property PercentageChangeEarnings As Decimal
@@ -87,7 +87,6 @@ Public Class SalesAnalyticsDatabaseHelper
             Case Else
                 Throw New ArgumentException("Invalid time period specified for GetEarnings: " & timePeriod)
         End Select
-
 
         Using con As New SqlConnection(constr)
             Dim query As String = "SELECT 
@@ -620,7 +619,6 @@ Public Class SalesAnalyticsDatabaseHelper
             ORDER BY {1};
         ", timePeriod.ToUpper(), dateGroupingColumn)
     End Function
-
     Public Shared Function GetSalesSummaryData() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -649,7 +647,6 @@ Public Class SalesAnalyticsDatabaseHelper
         End Using
         Return dt
     End Function
-
     Public Shared Function SearchInSalesSummary(searchInBar As String) As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -683,4 +680,5 @@ Public Class SalesAnalyticsDatabaseHelper
         End Using
         Return dt
     End Function
+
 End Class

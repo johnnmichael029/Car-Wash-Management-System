@@ -2,7 +2,17 @@
 Imports Microsoft.Data.SqlClient
 
 Public Class SalesHistory
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
+    Inherits BaseForm
+
+    Public Sub New()
+        MyBase.New()
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+    End Sub
+
 
     Private Sub SalesHistory_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ViewSalesHistory()
@@ -59,40 +69,6 @@ Public Class SalesHistory
         DataGridViewSalesHIstory.Columns(7).HeaderText = "Total Price"
     End Sub
     Private Sub ViewSalesHistory()
-        DataGridViewSalesHIstory.DataSource = ViewHistorySales()
+        DataGridViewSalesHIstory.DataSource = HistoryDatabaseHelper.ViewHistorySales()
     End Sub
-
-    Private Function ViewHistorySales() As DataTable
-        Dim dt As New DataTable()
-        Using con As New SqlConnection(constr)
-            Try
-                con.Open()
-                Dim selectQuery =
-            "SELECT " &
-                "s.SalesID, " &
-                "c.Name + ' ' + c.LastName AS CustomerName, " &
-                "sv_base.ServiceName, " &
-                "sv_addon.ServiceName," &
-                "s.SaleDate, " &
-                "s.PaymentMethod, " &
-                "s.ReferenceID, " &
-                "s.TotalPrice " &
-            "FROM SalesHistoryTable s " &
-            "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
-            "INNER JOIN ServicesTable sv_base ON s.ServiceID = sv_base.ServiceID " &
-            "LEFT JOIN ServicesTable sv_addon ON s.AddonServiceID = sv_addon.ServiceID " &
-            "ORDER BY s.SalesID DESC"
-
-                Using cmd As New SqlCommand(selectQuery, con)
-                    Using adapter As New SqlDataAdapter(cmd)
-                        adapter.Fill(dt)
-                    End Using
-                End Using
-            Catch ex As Exception
-                MessageBox.Show("Error viewing sales history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        End Using
-        Return dt
-
-    End Function
 End Class
