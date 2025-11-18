@@ -27,35 +27,11 @@ Public Class ActivityLog
 
     End Sub
     Private Sub DataGridViewActivityLogFontStyle()
-        DataGridViewActivityLog.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridViewActivityLog.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+        DataGridFontStyleService.DataGridFontStyle(DataGridViewActivityLog)
     End Sub
     Public Sub LoadActivityLog()
         DataGridViewActivityLog.DataSource = ActivityLogManagement.ViewActivityLog()
         DataGridViewActivityLog.Columns("ActionType").HeaderText = "Action Type"
         DataGridViewActivityLog.Columns("Timestamp").HeaderText = "Timestamp"
     End Sub
-
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-
-    End Sub
-End Class
-Public Class ActivityLogManagement
-    Private ReadOnly constr
-    Public Sub New(connectionString As String)
-        Me.constr = connectionString
-    End Sub
-    Public Function ViewActivityLog() As DataTable
-        Dim dt As New DataTable()
-        Using con As New SqlConnection(constr)
-            Dim viewActivityLogQuery As String = "SELECT * FROM ActivityLogTable ORDER BY LogID DESC"
-            Using cmd As New SqlCommand(viewActivityLogQuery, con)
-                con.Open()
-                Using reader As SqlDataReader = cmd.ExecuteReader()
-                    dt.Load(reader)
-                End Using
-            End Using
-        End Using
-        Return dt
-    End Function
 End Class

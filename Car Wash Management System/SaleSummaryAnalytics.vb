@@ -86,4 +86,7 @@
         End If
     End Sub
 
+    Private Sub DataGridViewSalesSummary_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewSalesSummary.CellContentClick
+
+    End Sub
 End Class

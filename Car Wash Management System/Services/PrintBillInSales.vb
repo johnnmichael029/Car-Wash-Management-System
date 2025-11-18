@@ -1,6 +1,14 @@
 ﻿Imports System.Drawing.Printing
 
-Public Class ShowPrintPreviewService
+Public Class PrintBillInSales
+
+    Public Shared Sub ShowPrint(PrintDocumentBill As PrintDocument)
+        ShowPrintPreview(PrintDocumentBill)
+        Dim printPreviewDialog As New PrintPreviewDialog With {
+            .Document = PrintDocumentBill
+        }
+        printPreviewDialog.ShowDialog()
+    End Sub
     Public Shared Sub ShowPrintPreview(doc As PrintDocument)
         doc.PrinterSettings = New PrinterSettings()
         doc.DefaultPageSettings.Margins = New Margins(10, 10, 0, 0)

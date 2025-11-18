@@ -149,7 +149,7 @@ Partial Class Appointment
         ComboBoxDiscount.AutoCompleteCustomSource.AddRange(New String() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
         ComboBoxDiscount.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxDiscount.DropDownStyle = ComboBoxStyle.DropDownList
-        ComboBoxDiscount.Font = New Font("Century Gothic", 9.0F)
+        ComboBoxDiscount.Font = New Font("Century Gothic", 9F)
         ComboBoxDiscount.FormattingEnabled = True
         ComboBoxDiscount.Items.AddRange(New Object() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
         ComboBoxDiscount.Location = New Point(148, 339)
@@ -160,7 +160,7 @@ Partial Class Appointment
         ' Label14
         ' 
         Label14.AutoSize = True
-        Label14.Font = New Font("Century Gothic", 9.0F)
+        Label14.Font = New Font("Century Gothic", 9F)
         Label14.Location = New Point(148, 321)
         Label14.Name = "Label14"
         Label14.Size = New Size(72, 17)
@@ -170,7 +170,7 @@ Partial Class Appointment
         ' Label13
         ' 
         Label13.AutoSize = True
-        Label13.Font = New Font("Century Gothic", 9.0F)
+        Label13.Font = New Font("Century Gothic", 9F)
         Label13.Location = New Point(146, 365)
         Label13.Name = "Label13"
         Label13.Size = New Size(78, 17)
@@ -179,7 +179,7 @@ Partial Class Appointment
         ' 
         ' TextBoxCheque
         ' 
-        TextBoxCheque.Font = New Font("Century Gothic", 9.0F)
+        TextBoxCheque.Font = New Font("Century Gothic", 9F)
         TextBoxCheque.Location = New Point(148, 383)
         TextBoxCheque.Name = "TextBoxCheque"
         TextBoxCheque.ReadOnly = True
@@ -197,7 +197,7 @@ Partial Class Appointment
         ' ListViewServices
         ' 
         ListViewServices.Dock = DockStyle.Fill
-        ListViewServices.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         ListViewServices.FullRowSelect = True
         ListViewServices.GridLines = True
@@ -223,7 +223,7 @@ Partial Class Appointment
         RemoveServiceBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
         RemoveServiceBtn.FlatAppearance.BorderSize = 0
         RemoveServiceBtn.FlatStyle = FlatStyle.Flat
-        RemoveServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         RemoveServiceBtn.ForeColor = Color.White
         RemoveServiceBtn.Location = New Point(202, 144)
         RemoveServiceBtn.Name = "RemoveServiceBtn"
@@ -237,7 +237,7 @@ Partial Class Appointment
         AddServiceBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
         AddServiceBtn.FlatAppearance.BorderSize = 0
         AddServiceBtn.FlatStyle = FlatStyle.Flat
-        AddServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         AddServiceBtn.ForeColor = Color.White
         AddServiceBtn.Location = New Point(16, 144)
         AddServiceBtn.Name = "AddServiceBtn"
@@ -249,7 +249,7 @@ Partial Class Appointment
         ' Label12
         ' 
         Label12.AutoSize = True
-        Label12.Font = New Font("Century Gothic", 9.0F)
+        Label12.Font = New Font("Century Gothic", 9F)
         Label12.Location = New Point(148, 408)
         Label12.Name = "Label12"
         Label12.Size = New Size(70, 17)
@@ -258,7 +258,7 @@ Partial Class Appointment
         ' 
         ' TextBoxTotalPrice
         ' 
-        TextBoxTotalPrice.Font = New Font("Century Gothic", 9.0F)
+        TextBoxTotalPrice.Font = New Font("Century Gothic", 9F)
         TextBoxTotalPrice.Location = New Point(148, 426)
         TextBoxTotalPrice.Name = "TextBoxTotalPrice"
         TextBoxTotalPrice.ReadOnly = True
@@ -267,7 +267,7 @@ Partial Class Appointment
         ' 
         ' TextBoxReferenceID
         ' 
-        TextBoxReferenceID.Font = New Font("Century Gothic", 9.0F)
+        TextBoxReferenceID.Font = New Font("Century Gothic", 9F)
         TextBoxReferenceID.Location = New Point(16, 383)
         TextBoxReferenceID.Name = "TextBoxReferenceID"
         TextBoxReferenceID.ReadOnly = True
@@ -277,7 +277,7 @@ Partial Class Appointment
         ' Label7
         ' 
         Label7.AutoSize = True
-        Label7.Font = New Font("Century Gothic", 9.0F)
+        Label7.Font = New Font("Century Gothic", 9F)
         Label7.Location = New Point(16, 365)
         Label7.Name = "Label7"
         Label7.Size = New Size(71, 17)
@@ -289,7 +289,7 @@ Partial Class Appointment
         PrintBillBtn.BackColor = Color.FromArgb(CByte(92), CByte(81), CByte(224))
         PrintBillBtn.FlatAppearance.BorderSize = 0
         PrintBillBtn.FlatStyle = FlatStyle.Flat
-        PrintBillBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         PrintBillBtn.ForeColor = Color.White
         PrintBillBtn.Image = CType(resources.GetObject("PrintBillBtn.Image"), Image)
         PrintBillBtn.Location = New Point(189, 566)
@@ -313,9 +313,9 @@ Partial Class Appointment
         ' LabelAppointmentID
         ' 
         LabelAppointmentID.AutoSize = True
-        LabelAppointmentID.Font = New Font("Segoe UI", 9.0F, FontStyle.Underline)
+        LabelAppointmentID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         LabelAppointmentID.ForeColor = Color.Red
-        LabelAppointmentID.Location = New Point(104, 581)
+        LabelAppointmentID.Location = New Point(112, 581)
         LabelAppointmentID.Name = "LabelAppointmentID"
         LabelAppointmentID.Size = New Size(0, 15)
         LabelAppointmentID.TabIndex = 31
@@ -331,7 +331,7 @@ Partial Class Appointment
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Century Gothic", 9.0F)
+        Label3.Font = New Font("Century Gothic", 9F)
         Label3.Location = New Point(15, 496)
         Label3.Name = "Label3"
         Label3.Size = New Size(43, 17)
@@ -341,7 +341,7 @@ Partial Class Appointment
         ' Label11
         ' 
         Label11.AutoSize = True
-        Label11.Font = New Font("Century Gothic", 9.0F)
+        Label11.Font = New Font("Century Gothic", 9F)
         Label11.Location = New Point(15, 321)
         Label11.Name = "Label11"
         Label11.Size = New Size(110, 17)
@@ -372,7 +372,7 @@ Partial Class Appointment
         ' Label10
         ' 
         Label10.AutoSize = True
-        Label10.Font = New Font("Century Gothic", 9.0F)
+        Label10.Font = New Font("Century Gothic", 9F)
         Label10.Location = New Point(148, 97)
         Label10.Name = "Label10"
         Label10.Size = New Size(48, 17)
@@ -390,8 +390,8 @@ Partial Class Appointment
         ' Label9
         ' 
         Label9.AutoSize = True
-        Label9.Font = New Font("Century Gothic", 9.0F)
-        Label9.Location = New Point(15, 581)
+        Label9.Font = New Font("Century Gothic", 9F)
+        Label9.Location = New Point(16, 581)
         Label9.Name = "Label9"
         Label9.Size = New Size(102, 17)
         Label9.TabIndex = 22
@@ -400,7 +400,7 @@ Partial Class Appointment
         ' Label8
         ' 
         Label8.AutoSize = True
-        Label8.Font = New Font("Century Gothic", 9.0F)
+        Label8.Font = New Font("Century Gothic", 9F)
         Label8.Location = New Point(16, 452)
         Label8.Name = "Label8"
         Label8.Size = New Size(127, 17)
@@ -440,7 +440,7 @@ Partial Class Appointment
         ' Label6
         ' 
         Label6.AutoSize = True
-        Label6.Font = New Font("Century Gothic", 9.0F)
+        Label6.Font = New Font("Century Gothic", 9F)
         Label6.Location = New Point(16, 277)
         Label6.Name = "Label6"
         Label6.Size = New Size(120, 17)
@@ -450,7 +450,7 @@ Partial Class Appointment
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Font = New Font("Century Gothic", 9.0F)
+        Label5.Font = New Font("Century Gothic", 9F)
         Label5.Location = New Point(16, 97)
         Label5.Name = "Label5"
         Label5.Size = New Size(59, 17)
@@ -468,7 +468,7 @@ Partial Class Appointment
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Font = New Font("Century Gothic", 9.0F)
+        Label4.Font = New Font("Century Gothic", 9F)
         Label4.Location = New Point(16, 408)
         Label4.Name = "Label4"
         Label4.Size = New Size(59, 17)
@@ -480,7 +480,7 @@ Partial Class Appointment
         UpdateAppointmentBtn.BackColor = Color.FromArgb(CByte(84), CByte(98), CByte(161))
         UpdateAppointmentBtn.FlatAppearance.BorderSize = 0
         UpdateAppointmentBtn.FlatStyle = FlatStyle.Flat
-        UpdateAppointmentBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        UpdateAppointmentBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         UpdateAppointmentBtn.ForeColor = Color.White
         UpdateAppointmentBtn.Location = New Point(146, 651)
         UpdateAppointmentBtn.Name = "UpdateAppointmentBtn"
@@ -494,7 +494,7 @@ Partial Class Appointment
         ClearFieldsBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
         ClearFieldsBtn.FlatAppearance.BorderSize = 0
         ClearFieldsBtn.FlatStyle = FlatStyle.Flat
-        ClearFieldsBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ClearFieldsBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ClearFieldsBtn.ForeColor = Color.White
         ClearFieldsBtn.Image = CType(resources.GetObject("ClearFieldsBtn.Image"), Image)
         ClearFieldsBtn.Location = New Point(16, 651)
@@ -531,7 +531,7 @@ Partial Class Appointment
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Font = New Font("Century Gothic", 9.0F)
+        Label2.Font = New Font("Century Gothic", 9F)
         Label2.Location = New Point(16, 53)
         Label2.Name = "Label2"
         Label2.Size = New Size(80, 17)
@@ -548,7 +548,7 @@ Partial Class Appointment
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Font = New Font("Century Gothic", 9.0F)
+        Label1.Font = New Font("Century Gothic", 9F)
         Label1.Location = New Point(16, 9)
         Label1.Name = "Label1"
         Label1.Size = New Size(104, 17)
@@ -560,7 +560,7 @@ Partial Class Appointment
         ' 
         ' Appointment
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         ClientSize = New Size(911, 758)

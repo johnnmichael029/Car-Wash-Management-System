@@ -72,7 +72,6 @@ Public Class SalesAnalytics
         ChangePeriodView(nextPeriod)
     End Sub
 
-    '--- UPDATE EARNINGS, CUSTOMERS, SERVICE DISPLAY ---'
 
     Public Sub ViewSalesSummary(gridView As DataGridView)
         gridView.DataSource = SalesAnalyticsDatabaseHelper.GetSalesSummaryData()
@@ -174,6 +173,10 @@ Public Class SalesAnalytics
             e.Paint(e.ClipBounds, DataGridViewPaintParts.All)
             e.Handled = True
         End If
+    End Sub
+
+    Private Sub DataGridViewSalesSummary_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewSalesSummary.CellContentClick
+
     End Sub
 End Class
 

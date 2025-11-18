@@ -27,8 +27,25 @@
             Return
         End If
 
-        customerInformationDatabaseHelper.UpdateCustomer(customerIDLabel.Text, TextBoxName.Text, TextBoxLastName.Text, TextBoxNumber.Text, TextBoxEmail.Text, TextBoxAddress.Text, TextBoxBarangay.Text, AddVehicleToListView.VehicleList)
-        CType(_parentCustomerForm, CustomerInformation).ViewCustomerInformation()
+        Dim localErrorHandler As Action(Of String) = Sub(message)
+                                                         MessageBox.Show(message, "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                                     End Sub
+        Dim success As Boolean = UpdateButtonFunctiion.UpdateDataToDatabase(
+        customerIDLabel,
+        TextBoxName,
+        TextBoxLastName,
+        TextBoxNumber,
+        TextBoxEmail,
+        TextBoxAddress,
+        TextBoxBarangay,
+        customerInformationDatabaseHelper,
+        localErrorHandler
+    )
+
+        If success Then
+            CType(_parentCustomerForm, CustomerInformation).ViewCustomerInformation()
+        End If
+
     End Sub
 
     Private Sub UpdateBtn_Click(sender As Object, e As EventArgs) Handles UpdateBtn.Click
@@ -57,4 +74,10 @@
         DataGridViewCustomerHistory.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
     End Sub
 
+    Private Sub DataGridViewCustomerHistory_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCustomerHistory.CellContentClick
+
+    End Sub
+    Private Sub DataGridViewCustomerHistory_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewCustomerHistory.CellFormatting
+        DataGridFormattingService.DataGridCellFormattingPaymentMethod(e, "PaymentMethod", DataGridViewCustomerHistory)
+    End Sub
 End Class

@@ -210,36 +210,11 @@ Public Class Dashboard
     End Sub
 
     Private Sub DataGridViewLatestTransaction_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewLatestTransaction.CellFormatting
-        If e.ColumnIndex = Me.DataGridViewLatestTransaction.Columns("PaymentMethod").Index AndAlso e.RowIndex >= 0 Then
-
-            ' Get the value from the current cell.
-            Dim status As String = e.Value?.ToString().Trim()
-
-            ' Check the status and apply the correct formatting to the entire row.
-            Select Case status
-                Case "Gcash"
-                    ' Blue for confirmed appointments.
-                    e.CellStyle.BackColor = Color.LightSkyBlue
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Cheque"
-                    ' Gold for appointments that are pending.
-                    e.CellStyle.BackColor = Color.Gold
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Billing Contract"
-                    ' Gray for appointments that were a no-show.
-                    e.CellStyle.BackColor = Color.LightGray
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Cash"
-                    ' Green for completed appointments.
-                    e.CellStyle.BackColor = Color.LightGreen
-                    e.CellStyle.ForeColor = Color.Black
-            End Select
-        End If
+        DataGridFormattingService.DataGridCellFormattingPaymentMethod(e, "PaymentMethod", DataGridViewLatestTransaction)
 
     End Sub
     Private Sub DataGridViewLatestTransactionFontStyle()
-        DataGridViewLatestTransaction.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridViewLatestTransaction.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+        DataGridFontStyleService.DataGridFontStyle(DataGridViewLatestTransaction)
     End Sub
     Private Sub LoadLatestTransaction()
         Dim salesData As DataTable = dashboardDatabaseHelper.ViewSalesData()
@@ -251,35 +226,28 @@ Public Class Dashboard
     End Sub
     Public Sub AddCustomerInformation()
 
-        If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Then
-            MessageBox.Show("Please fill in all required customer fields (Name, Phone, Email, Plate Number and Vehicle Type).", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
+        Dim localErrorHandler As Action(Of String) = Sub(message)
+                                                         MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                     End Sub
+
+        Dim success As Boolean = AddButtonFunction.AddDataToDatabase(
+        TextBoxName,
+        TextBoxLastName,
+        TextBoxNumber,
+        TextBoxEmail,
+        TextBoxAddress,
+        TextBoxBarangay,
+        customerInformationDatabaseHelper,
+        localErrorHandler
+    )
+
+        If success Then
+            Carwash.PopulateAllTotal()
+
+            NewCustomerActivityLog()
+            ClearFieldsOfCustomer()
         End If
 
-        If AddVehicleToListView.VehicleList.Count = 0 Then
-            MessageBox.Show("Please add at least one vehicle before saving the customer.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
-
-        Try
-            CustomerInformationDatabaseHelper.AddCustomer(
-            TextBoxName.Text.Trim(),
-            TextBoxLastName.Text.Trim(),
-            TextBoxNumber.Text,
-            TextBoxEmail.Text.Trim(),
-            TextBoxAddress.Text.Trim(),
-            TextBoxBarangay.Text.Trim(),
-            AddVehicleToListView.VehicleList
-            )
-
-        Catch ex As Exception
-            MessageBox.Show("Error saving data: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-        Carwash.PopulateAllTotal()
-        MessageBox.Show("Customer added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        NewCustomerActivityLog()
-        ClearFieldsOfCustomer()
     End Sub
     Private Sub NewCustomerActivityLog()
         Dim customerName As String = TextBoxName.Text
@@ -300,67 +268,28 @@ Public Class Dashboard
         AddBtnFunction()
     End Sub
     Private Sub AddBtnFunction()
-        Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
-        Dim addonServiceName As String = If(ComboBoxAddons.SelectedIndex <> -1, ComboBoxAddons.Text, String.Empty)
-        Dim totalPrice As Decimal = TextBoxTotalPrice.Text
-        Try
-            'The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
-            ' Get the separate Service IDs for the base service and the addon.
-            Dim baseServiceDetails As SalesService = SalesDatabaseHelper.GetServiceID(baseServiceName)
-            Dim addonServiceID As Integer? = Nothing ' Use a nullable integer for the addon service ID
-            If Not String.IsNullOrWhiteSpace(addonServiceName) Then
-                Dim addonServiceDetails As SalesService = SalesDatabaseHelper.GetServiceID(addonServiceName)
-                If addonServiceDetails IsNot Nothing Then
-                    addonServiceID = addonServiceDetails.ServiceID
-                End If
-            End If
-            Dim customerID As Integer
-            If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) OrElse customerID <= 0 Then
-                MessageBox.Show("Please select a valid customer from the list.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-
-
-            ' Guard clause: Ensure there are items to sell
-            If AddSaleToListView.SaleServiceList.Count = 0 Then
-                MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-
-            'Validate that a payment method is selected.
-            If ComboBoxPaymentMethod.SelectedIndex = -1 Then
-                MessageBox.Show("Please select a payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-
-            'Validate that a Reference ID is provided for certain payment methods.
-            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
-                MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque" AndAlso String.IsNullOrWhiteSpace(TextBoxCheque.Text) Then
-                MessageBox.Show("Please enter a Cheque Number for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-
-            SalesDatabaseHelper.AddSale(
-                customerID,
-                AddSaleToListView.SaleServiceList,
-                ComboBoxPaymentMethod.SelectedItem.ToString(),
-                TextBoxReferenceID.Text,
-                TextBoxCheque.Text,
-                totalPrice
-                )
+        Dim errorHandler As Action(Of String) = Sub(message)
+                                                    ' This is the custom error logic: display the message in a modal.
+                                                    MessageBox.Show(message, "Appointment Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                End Sub
+        Dim success As Boolean = AddButtonFunction.AddDataToDatabase(
+            TextBoxCustomerID,
+            ComboBoxPaymentMethod,
+            TextBoxReferenceID,
+            TextBoxCheque,
+            TextBoxTotalPrice,
+            errorHandler
+        )
+        If success Then
             Carwash.PopulateAllTotal()
             LoadLatestTransaction()
-            MessageBox.Show("Sale added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
             AddSalesActivityLog()
             ShowPrintPreview()
             DisplayNextSalesID()
             ClearFieldsOfSales()
-        Catch ex As Exception
-            MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        End If
+
 
     End Sub
     Private Sub ClearFieldsOfSales()
@@ -378,7 +307,7 @@ Public Class Dashboard
         AddSaleToListView.nextServiceID = 1
     End Sub
     Public Sub ShowPrintPreview()
-        ShowPrintPreviewService.ShowPrintPreview(PrintDocumentBill)
+        PrintBillInSales.ShowPrintPreview(PrintDocumentBill)
         Dim printPreviewDialog As New PrintPreviewDialog With {
             .Document = PrintDocumentBill
         }
@@ -400,7 +329,7 @@ Public Class Dashboard
             totalPriceDecimal = 0D
         End If
 
-        ShowPrintPreviewService.PrintBillInSales(e, New PrintDataInSales With {
+        PrintBillInSales.PrintBillInSales(e, New PrintDataInSales With {
         .SalesID = currentSaleID,
         .CustomerName = TextBoxCustomerName.Text,
         .ServiceLineItems = serviceLineItems,
@@ -482,20 +411,7 @@ Public Class Dashboard
         UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
     Private Sub ComboBoxPaymentMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPaymentMethod.SelectedIndexChanged
-        If ComboBoxPaymentMethod.SelectedItem = "Gcash" Then
-            TextBoxReferenceID.ReadOnly = False
-            TextBoxCheque.ReadOnly = True
-            TextBoxCheque.Clear()
-        ElseIf ComboBoxPaymentMethod.SelectedItem = "Cheque" Then
-            TextBoxCheque.ReadOnly = False
-            TextBoxReferenceID.ReadOnly = True
-            TextBoxReferenceID.Clear()
-        Else
-            TextBoxReferenceID.ReadOnly = True
-            TextBoxCheque.ReadOnly = True
-            TextBoxReferenceID.Clear()
-            TextBoxCheque.Clear()
-        End If
+        PaymentMethodSelectedService.PaymentMethodChange(ComboBoxPaymentMethod, TextBoxReferenceID, TextBoxCheque)
     End Sub
     Private Sub ViewLatestSales()
         DataGridViewLatestTransaction.DataSource = SalesDatabaseHelper.ViewSales()
@@ -552,6 +468,7 @@ Public Class Dashboard
     Private Sub ComboBoxDiscount_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDiscount.SelectedIndexChanged
         CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
     End Sub
+
 End Class
 
 

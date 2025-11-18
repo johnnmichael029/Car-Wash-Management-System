@@ -43,8 +43,7 @@ Public Class CustomerInformation
     End Sub
 
     Private Sub DataGridViewCustomerInformationFontStyle()
-        DataGridViewCustomerInformation.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridViewCustomerInformation.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+        DataGridFontStyleService.DataGridFontStyle(DataGridViewCustomerInformation)
     End Sub
 
     Private sub DataGridViewCustomerInformation_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridViewCustomerInformation.CellPainting
@@ -122,39 +121,35 @@ Public Class CustomerInformation
         End If
     End Sub
     Private Sub DataGridViewCustomerInformation_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCustomerInformation.CellContentClick
+
+        DataGridCellContentClick.HighlightSelectedRow(e, DataGridViewCustomerInformation)
+
+        Dim errorHandler As Action(Of String) = Sub(message)
+                                                    ' This is the custom error logic: display the message in a modal.
+                                                    MessageBox.Show(message, "Appointment Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                End Sub
+
         If e.ColumnIndex = DataGridViewCustomerInformation.Columns("actionsColumn").Index AndAlso e.RowIndex >= 0 Then
-            ViewCustomerInfo.Show()
+            viewCustomerInfo.Show()
+            viewCustomerInfo.TextBoxPlateNumber.Clear()
+            viewCustomerInfo.TextBoxVehicle.Clear()
         End If
-        If e.RowIndex >= 0 Then
-            DataGridViewCustomerInformation.Rows(e.RowIndex).Selected = True
-        End If
-
-        ViewCustomerInfo.TextBoxName.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Name").Value.ToString()
-        ViewCustomerInfo.TextBoxLastName.Text = DataGridViewCustomerInformation.CurrentRow.Cells("LastName").Value.ToString()
-        ViewCustomerInfo.TextBoxNumber.Text = DataGridViewCustomerInformation.CurrentRow.Cells("PhoneNumber").Value.ToString()
-        ViewCustomerInfo.TextBoxEmail.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Email").Value.ToString()
-        ViewCustomerInfo.TextBoxAddress.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Address").Value.ToString()
-        ViewCustomerInfo.TextBoxBarangay.Text = DataGridViewCustomerInformation.CurrentRow.Cells("Barangay").Value.ToString()
-
-        customerIDValue = DataGridViewCustomerInformation.CurrentRow.Cells("CustomerID").Value.ToString()
-        viewCustomerInfo.customerIDLabel.Text = customerIDValue
-
-        viewCustomerInfo.DataGridViewCustomerHistory.DataSource = customerInformationDatabaseHelper.GetCustomerTransactionHistory(customerIDValue)
-        viewCustomerInfo.LabelContractStatus.Text = customerInformationDatabaseHelper.GetCustomerContractStatus(customerIDValue)
-        viewCustomerInfo.LabelTotalSaleMade.Text = customerInformationDatabaseHelper.GetCustomerSalesCount(customerIDValue)
-        viewCustomerInfo.LabelRevenue.Text = "₱" & customerInformationDatabaseHelper.GetTotalSalesAmountByCustomer(customerIDValue).ToString("N2")
-        Try
-            If e.ColumnIndex = DataGridViewCustomerInformation.Columns("actionsColumn").Index Then
-                If String.IsNullOrEmpty(ViewCustomerInfo.customerIDLabel.Text) Then
-                    MessageBox.Show("Please select a valid customer to edit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Return
-                End If
-
-                LoadService.LoadVehiclesIntoListViewCustomerFOrm(customerIDValue, viewCustomerInfo.ListViewVehicles)
-            End If
-        Catch ex As Exception
-            MessageBox.Show("An error occurred during data selection: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        DataGridCellContentClick.GetSelectedRowData(
+                DataGridViewCustomerInformation,
+                viewCustomerInfo.TextBoxName,
+                viewCustomerInfo.TextBoxLastName,
+                viewCustomerInfo.TextBoxNumber,
+                viewCustomerInfo.TextBoxEmail,
+                viewCustomerInfo.TextBoxAddress,
+                viewCustomerInfo.TextBoxBarangay,
+                viewCustomerInfo.customerIDLabel,
+                viewCustomerInfo.ListViewVehicles,
+                viewCustomerInfo.DataGridViewCustomerHistory,
+                viewCustomerInfo.LabelContractStatus,
+                viewCustomerInfo.LabelTotalSaleMade,
+                viewCustomerInfo.LabelRevenue,
+                customerInformationDatabaseHelper,
+                errorHandler)
 
     End Sub
 
@@ -169,36 +164,28 @@ Public Class CustomerInformation
 
     Public Sub AddCustomerInformation()
 
-        If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Or String.IsNullOrEmpty(TextBoxLastName.Text) Then
-            MessageBox.Show("Please fill in all required customer fields (First Name,Last Name, Phone, Email).", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
+        Dim localErrorHandler As Action(Of String) = Sub(message)
+                                                         MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                     End Sub
+
+        Dim success As Boolean = AddButtonFunction.AddDataToDatabase(
+        TextBoxName,
+        TextBoxLastName,
+        TextBoxNumber,
+        TextBoxEmail,
+        TextBoxAddress,
+        TextBoxBarangay,
+        customerInformationDatabaseHelper,
+        localErrorHandler
+    )
+
+        If success Then
+            Carwash.PopulateAllTotal()
+            LoadDataGridViewCustomerInformation()
+
+            NewCustomerActivityLog()
+            ClearFields()
         End If
-
-        If AddVehicleToListView.VehicleList.Count = 0 Then
-            MessageBox.Show("Please add at least one vehicle before saving the customer.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
-
-        Try
-            customerInformationDatabaseHelper.AddCustomer(
-            TextBoxName.Text.Trim(),
-            TextBoxLastName.Text.Trim(),
-            TextBoxNumber.Text,
-            TextBoxEmail.Text.Trim(),
-            TextBoxAddress.Text.Trim(),
-            TextBoxBarangay.Text.Trim(),
-            AddVehicleToListView.VehicleList
-            )
-
-        Catch ex As Exception
-            MessageBox.Show("Error saving data: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-        Carwash.PopulateAllTotal()
-        LoadDataGridViewCustomerInformation()
-        MessageBox.Show("Customer added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        NewCustomerActivityLog()
-        ClearFields()
     End Sub
 
     Public Sub LoadDataGridViewCustomerInformation()

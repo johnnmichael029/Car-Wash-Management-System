@@ -4,18 +4,15 @@ Imports Microsoft.Data.SqlClient
 Imports Windows.Win32.System
 
 Public Class Service
-    Dim constr As String = "Data Source=JM\SQLEXPRESS;Initial Catalog=CarwashDB;Integrated Security=True;Trust Server Certificate=True"
-    Dim activityLogInDashboardService As ActivityLogInDashboardService
-    Private ReadOnly serviceDatabaseHelper As ServiceDatabaseHelper
+    Inherits BaseForm
     Public Sub New()
+        MyBase.New()
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
-        serviceDatabaseHelper = New ServiceDatabaseHelper(constr)
-        activityLogInDashboardService = New ActivityLogInDashboardService(constr)
     End Sub
     Private Sub Service_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        LoadListOfService()
+        LoadListOfServiceFromDataGridViewService()
         DataGridViewServiceFontStyle()
         ChangeHeaderOfDataGridViewService()
         CheckIfAdmin()
@@ -28,20 +25,22 @@ Public Class Service
         DataGridViewService.Columns(3).HeaderText = "Description"
         DataGridViewService.Columns(4).HeaderText = "Price"
     End Sub
-    Private Sub LoadListOfService()
-        DataGridViewService.DataSource = serviceDatabaseHelper.ViewService()
-    End Sub
+
     Private Sub DataGridViewService_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewService.CellContentClick
-        TextBoxServiceName.Text = DataGridViewService.CurrentRow.Cells("ServiceName").Value.ToString()
-        TextBoxDescription.Text = DataGridViewService.CurrentRow.Cells("Description").Value.ToString()
-        TextBoxPrice.Text = DataGridViewService.CurrentRow.Cells("Price").Value.ToString()
-        LabelServiceID.Text = DataGridViewService.CurrentRow.Cells("ServiceID").Value.ToString()
+        DataGridCellContentClick.HighlightSelectedRow(e, DataGridViewService)
+        DataGridCellContentClick.GetSelectedRowData(
+            TextBoxServiceName,
+            CheckBoxAddon,
+            TextBoxDescription,
+            TextBoxPrice,
+            LabelServiceID,
+            DataGridViewService)
     End Sub
 
     Private Sub DataGridViewServiceFontStyle()
-        DataGridViewService.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridViewService.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+        DataGridFontStyleService.DataGridFontStyle(DataGridViewService)
     End Sub
+
     Public Sub ClearFields()
         TextBoxServiceName.Clear()
         TextBoxDescription.Clear()
@@ -54,26 +53,60 @@ Public Class Service
         AddService()
         LoadListOfServiceFromDataGridViewService()
     End Sub
+
     Private Sub AddService()
-        If String.IsNullOrEmpty(TextBoxServiceName.Text) Or String.IsNullOrEmpty(TextBoxPrice.Text) Then
-            MessageBox.Show("Please fill in all fields.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
+        Dim errorHandler As Action(Of String) = Sub(message)
+                                                    ' This is the custom error logic: display the message in a modal.
+                                                    MessageBox.Show(message, "Service Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                End Sub
+        Dim success As Boolean = AddButtonFunction.AddDataToDatabase(
+                TextBoxServiceName,
+                TextBoxDescription,
+                TextBoxPrice,
+                LabelServiceID,
+                CheckBoxAddon,
+                serviceDatabaseHelper,
+                errorHandler
+            )
+        If success Then
+            MessageBox.Show("Service added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            AddNewServiceFromActivityLog()
+            ClearFields()
         End If
-        serviceDatabaseHelper.AddService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
-        MessageBox.Show("Service added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        AddNewServiceFromActivityLog()
-        ClearFields()
+
     End Sub
+
     Private Sub LoadListOfServiceFromDataGridViewService()
         DataGridViewService.DataSource = serviceDatabaseHelper.ViewService()
     End Sub
+
     Public Sub AddNewServiceFromActivityLog()
         activityLogInDashboardService.AddNewService(TextBoxServiceName.Text)
     End Sub
+
     Private Sub UpdateServiceBtn_Click(sender As Object, e As EventArgs) Handles UpdateServiceBtn.Click
-        serviceDatabaseHelper.UpdateService(TextBoxServiceName.Text, TextBoxDescription.Text, TextBoxPrice.Text, LabelServiceID.Text, CheckBoxAddon.Checked)
-        DataGridViewService.DataSource = serviceDatabaseHelper.ViewService()
-        ClearFields()
+        UpdateService()
+    End Sub
+
+    Private Sub UpdateService()
+        Dim localErrorHandler As Action(Of String) = Sub(message)
+                                                         MessageBox.Show(message, "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                                     End Sub
+
+        Dim success As Boolean = UpdateButtonFunctiion.UpdateDataToDatabase(
+            TextBoxServiceName,
+            TextBoxDescription,
+            TextBoxPrice,
+            LabelServiceID,
+            CheckBoxAddon,
+            serviceDatabaseHelper,
+            localErrorHandler
+        )
+
+        If success Then
+            LoadListOfServiceFromDataGridViewService()
+            ClearFields() ' Assuming this is a local function to clear form controls
+        End If
     End Sub
 
     Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
@@ -83,9 +116,6 @@ Public Class Service
 
     End Sub
 
-    Private Sub Panel3_Paint(sender As Object, e As PaintEventArgs) Handles Panel3.Paint
-
-    End Sub
     Private Sub CheckIfAdmin()
         Dim username As String = Login.LabelWelcomeUsers(Carwash.Label3.Text)
         If Not serviceDatabaseHelper.CheckIfAdmin(username) Then

@@ -157,7 +157,7 @@ Partial Class Dashboard
         ' Label10
         ' 
         Label10.AutoSize = True
-        Label10.Font = New Font("Century Gothic", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label10.Font = New Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label10.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label10.Location = New Point(28, 11)
         Label10.Name = "Label10"
@@ -274,7 +274,7 @@ Partial Class Dashboard
         ComboBoxDiscount.AutoCompleteCustomSource.AddRange(New String() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
         ComboBoxDiscount.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxDiscount.DropDownStyle = ComboBoxStyle.DropDownList
-        ComboBoxDiscount.Font = New Font("Century Gothic", 9.0F)
+        ComboBoxDiscount.Font = New Font("Century Gothic", 9F)
         ComboBoxDiscount.FormattingEnabled = True
         ComboBoxDiscount.Items.AddRange(New Object() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"})
         ComboBoxDiscount.Location = New Point(147, 298)
@@ -285,7 +285,7 @@ Partial Class Dashboard
         ' Label23
         ' 
         Label23.AutoSize = True
-        Label23.Font = New Font("Century Gothic", 9.0F)
+        Label23.Font = New Font("Century Gothic", 9F)
         Label23.Location = New Point(147, 280)
         Label23.Name = "Label23"
         Label23.Size = New Size(72, 17)
@@ -295,7 +295,7 @@ Partial Class Dashboard
         ' Label22
         ' 
         Label22.AutoSize = True
-        Label22.Font = New Font("Century Gothic", 9.0F)
+        Label22.Font = New Font("Century Gothic", 9F)
         Label22.Location = New Point(147, 326)
         Label22.Name = "Label22"
         Label22.Size = New Size(78, 17)
@@ -304,7 +304,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxCheque
         ' 
-        TextBoxCheque.Font = New Font("Century Gothic", 9.0F)
+        TextBoxCheque.Font = New Font("Century Gothic", 9F)
         TextBoxCheque.Location = New Point(147, 344)
         TextBoxCheque.Name = "TextBoxCheque"
         TextBoxCheque.ReadOnly = True
@@ -322,7 +322,7 @@ Partial Class Dashboard
         ' ListViewServices
         ' 
         ListViewServices.Dock = DockStyle.Fill
-        ListViewServices.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewServices.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ListViewServices.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         ListViewServices.FullRowSelect = True
         ListViewServices.GridLines = True
@@ -348,7 +348,7 @@ Partial Class Dashboard
         RemoveServiceBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
         RemoveServiceBtn.FlatAppearance.BorderSize = 0
         RemoveServiceBtn.FlatStyle = FlatStyle.Flat
-        RemoveServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         RemoveServiceBtn.ForeColor = Color.White
         RemoveServiceBtn.Location = New Point(202, 146)
         RemoveServiceBtn.Name = "RemoveServiceBtn"
@@ -362,7 +362,7 @@ Partial Class Dashboard
         AddServiceBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
         AddServiceBtn.FlatAppearance.BorderSize = 0
         AddServiceBtn.FlatStyle = FlatStyle.Flat
-        AddServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         AddServiceBtn.ForeColor = Color.White
         AddServiceBtn.Location = New Point(16, 146)
         AddServiceBtn.Name = "AddServiceBtn"
@@ -373,7 +373,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxReferenceID
         ' 
-        TextBoxReferenceID.Font = New Font("Century Gothic", 9.0F)
+        TextBoxReferenceID.Font = New Font("Century Gothic", 9F)
         TextBoxReferenceID.Location = New Point(16, 344)
         TextBoxReferenceID.Name = "TextBoxReferenceID"
         TextBoxReferenceID.ReadOnly = True
@@ -383,7 +383,7 @@ Partial Class Dashboard
         ' Label17
         ' 
         Label17.AutoSize = True
-        Label17.Font = New Font("Century Gothic", 9.0F)
+        Label17.Font = New Font("Century Gothic", 9F)
         Label17.Location = New Point(16, 326)
         Label17.Name = "Label17"
         Label17.Size = New Size(71, 17)
@@ -393,7 +393,7 @@ Partial Class Dashboard
         ' Label16
         ' 
         Label16.AutoSize = True
-        Label16.Font = New Font("Century Gothic", 9.0F)
+        Label16.Font = New Font("Century Gothic", 9F)
         Label16.Location = New Point(147, 372)
         Label16.Name = "Label16"
         Label16.Size = New Size(70, 17)
@@ -402,7 +402,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxTotalPrice
         ' 
-        TextBoxTotalPrice.Font = New Font("Century Gothic", 9.0F)
+        TextBoxTotalPrice.Font = New Font("Century Gothic", 9F)
         TextBoxTotalPrice.Location = New Point(147, 390)
         TextBoxTotalPrice.Name = "TextBoxTotalPrice"
         TextBoxTotalPrice.ReadOnly = True
@@ -412,7 +412,7 @@ Partial Class Dashboard
         ' LabelSalesID
         ' 
         LabelSalesID.AutoSize = True
-        LabelSalesID.Font = New Font("Segoe UI", 9.0F, FontStyle.Underline)
+        LabelSalesID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         LabelSalesID.ForeColor = Color.Red
         LabelSalesID.Location = New Point(69, 449)
         LabelSalesID.Name = "LabelSalesID"
@@ -422,7 +422,7 @@ Partial Class Dashboard
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Font = New Font("Century Gothic", 9.0F)
+        Label1.Font = New Font("Century Gothic", 9F)
         Label1.Location = New Point(16, 449)
         Label1.Name = "Label1"
         Label1.Size = New Size(54, 17)
@@ -446,7 +446,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxPrice
         ' 
-        TextBoxPrice.Font = New Font("Century Gothic", 9.0F)
+        TextBoxPrice.Font = New Font("Century Gothic", 9F)
         TextBoxPrice.Location = New Point(16, 390)
         TextBoxPrice.Name = "TextBoxPrice"
         TextBoxPrice.ReadOnly = True
@@ -458,7 +458,7 @@ Partial Class Dashboard
         ComboBoxPaymentMethod.AutoCompleteCustomSource.AddRange(New String() {"Cash", "Gcash", "Cheque"})
         ComboBoxPaymentMethod.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList
-        ComboBoxPaymentMethod.Font = New Font("Century Gothic", 9.0F)
+        ComboBoxPaymentMethod.Font = New Font("Century Gothic", 9F)
         ComboBoxPaymentMethod.FormattingEnabled = True
         ComboBoxPaymentMethod.Items.AddRange(New Object() {"Cash", "Gcash", "Cheque"})
         ComboBoxPaymentMethod.Location = New Point(16, 298)
@@ -468,7 +468,7 @@ Partial Class Dashboard
         ' 
         ' ComboBoxAddons
         ' 
-        ComboBoxAddons.Font = New Font("Century Gothic", 9.0F)
+        ComboBoxAddons.Font = New Font("Century Gothic", 9F)
         ComboBoxAddons.FormattingEnabled = True
         ComboBoxAddons.Location = New Point(147, 115)
         ComboBoxAddons.Name = "ComboBoxAddons"
@@ -477,7 +477,7 @@ Partial Class Dashboard
         ' 
         ' ComboBoxServices
         ' 
-        ComboBoxServices.Font = New Font("Century Gothic", 9.0F)
+        ComboBoxServices.Font = New Font("Century Gothic", 9F)
         ComboBoxServices.FormattingEnabled = True
         ComboBoxServices.Location = New Point(16, 115)
         ComboBoxServices.Name = "ComboBoxServices"
@@ -486,7 +486,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxCustomerID
         ' 
-        TextBoxCustomerID.Font = New Font("Century Gothic", 9.0F)
+        TextBoxCustomerID.Font = New Font("Century Gothic", 9F)
         TextBoxCustomerID.Location = New Point(16, 70)
         TextBoxCustomerID.Name = "TextBoxCustomerID"
         TextBoxCustomerID.ReadOnly = True
@@ -495,7 +495,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxCustomerName
         ' 
-        TextBoxCustomerName.Font = New Font("Century Gothic", 9.0F)
+        TextBoxCustomerName.Font = New Font("Century Gothic", 9F)
         TextBoxCustomerName.Location = New Point(16, 27)
         TextBoxCustomerName.Name = "TextBoxCustomerName"
         TextBoxCustomerName.Size = New Size(261, 22)
@@ -504,7 +504,7 @@ Partial Class Dashboard
         ' Label6
         ' 
         Label6.AutoSize = True
-        Label6.Font = New Font("Century Gothic", 9.0F)
+        Label6.Font = New Font("Century Gothic", 9F)
         Label6.Location = New Point(147, 97)
         Label6.Name = "Label6"
         Label6.Size = New Size(53, 17)
@@ -514,7 +514,7 @@ Partial Class Dashboard
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Font = New Font("Century Gothic", 9.0F)
+        Label5.Font = New Font("Century Gothic", 9F)
         Label5.Location = New Point(16, 9)
         Label5.Name = "Label5"
         Label5.Size = New Size(104, 17)
@@ -524,7 +524,7 @@ Partial Class Dashboard
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Font = New Font("Century Gothic", 9.0F)
+        Label2.Font = New Font("Century Gothic", 9F)
         Label2.Location = New Point(16, 52)
         Label2.Name = "Label2"
         Label2.Size = New Size(80, 17)
@@ -552,7 +552,7 @@ Partial Class Dashboard
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Font = New Font("Century Gothic", 9.0F)
+        Label4.Font = New Font("Century Gothic", 9F)
         Label4.Location = New Point(16, 280)
         Label4.Name = "Label4"
         Label4.Size = New Size(105, 17)
@@ -562,7 +562,7 @@ Partial Class Dashboard
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Century Gothic", 9.0F)
+        Label3.Font = New Font("Century Gothic", 9F)
         Label3.Location = New Point(16, 97)
         Label3.Name = "Label3"
         Label3.Size = New Size(54, 17)
@@ -572,7 +572,7 @@ Partial Class Dashboard
         ' Label7
         ' 
         Label7.AutoSize = True
-        Label7.Font = New Font("Century Gothic", 9.0F)
+        Label7.Font = New Font("Century Gothic", 9F)
         Label7.Location = New Point(16, 372)
         Label7.Name = "Label7"
         Label7.Size = New Size(59, 17)
@@ -634,7 +634,7 @@ Partial Class Dashboard
         ' ListViewVehicles
         ' 
         ListViewVehicles.Dock = DockStyle.Fill
-        ListViewVehicles.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ListViewVehicles.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ListViewVehicles.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
         ListViewVehicles.FullRowSelect = True
         ListViewVehicles.GridLines = True
@@ -658,7 +658,7 @@ Partial Class Dashboard
         ' Label8
         ' 
         Label8.AutoSize = True
-        Label8.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label8.Font = New Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label8.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label8.Location = New Point(16, 252)
         Label8.Name = "Label8"
@@ -671,7 +671,7 @@ Partial Class Dashboard
         RemoveVehicleBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
         RemoveVehicleBtn.FlatAppearance.BorderSize = 0
         RemoveVehicleBtn.FlatStyle = FlatStyle.Flat
-        RemoveVehicleBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        RemoveVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         RemoveVehicleBtn.ForeColor = Color.White
         RemoveVehicleBtn.Location = New Point(201, 314)
         RemoveVehicleBtn.Name = "RemoveVehicleBtn"
@@ -683,7 +683,7 @@ Partial Class Dashboard
         ' Label11
         ' 
         Label11.AutoSize = True
-        Label11.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label11.Font = New Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label11.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label11.Location = New Point(16, 14)
         Label11.Name = "Label11"
@@ -694,7 +694,7 @@ Partial Class Dashboard
         ' Label12
         ' 
         Label12.AutoSize = True
-        Label12.Font = New Font("Century Gothic", 9.0F)
+        Label12.Font = New Font("Century Gothic", 9F)
         Label12.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label12.Location = New Point(147, 159)
         Label12.Name = "Label12"
@@ -707,7 +707,7 @@ Partial Class Dashboard
         AddVehicleBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
         AddVehicleBtn.FlatAppearance.BorderSize = 0
         AddVehicleBtn.FlatStyle = FlatStyle.Flat
-        AddVehicleBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        AddVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         AddVehicleBtn.ForeColor = Color.White
         AddVehicleBtn.Location = New Point(16, 314)
         AddVehicleBtn.Name = "AddVehicleBtn"
@@ -718,7 +718,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxBarangay
         ' 
-        TextBoxBarangay.Font = New Font("Century Gothic", 9.0F)
+        TextBoxBarangay.Font = New Font("Century Gothic", 9F)
         TextBoxBarangay.Location = New Point(147, 177)
         TextBoxBarangay.Multiline = True
         TextBoxBarangay.Name = "TextBoxBarangay"
@@ -728,7 +728,7 @@ Partial Class Dashboard
         ' Label13
         ' 
         Label13.AutoSize = True
-        Label13.Font = New Font("Century Gothic", 9.0F)
+        Label13.Font = New Font("Century Gothic", 9F)
         Label13.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label13.Location = New Point(148, 30)
         Label13.Name = "Label13"
@@ -739,7 +739,7 @@ Partial Class Dashboard
         ' customerIDLabel
         ' 
         customerIDLabel.AutoSize = True
-        customerIDLabel.Font = New Font("Segoe UI", 9.0F, FontStyle.Underline)
+        customerIDLabel.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         customerIDLabel.ForeColor = Color.Red
         customerIDLabel.Location = New Point(85, 449)
         customerIDLabel.Name = "customerIDLabel"
@@ -748,7 +748,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxLastName
         ' 
-        TextBoxLastName.Font = New Font("Century Gothic", 9.0F)
+        TextBoxLastName.Font = New Font("Century Gothic", 9F)
         TextBoxLastName.Location = New Point(148, 48)
         TextBoxLastName.Name = "TextBoxLastName"
         TextBoxLastName.Size = New Size(129, 22)
@@ -774,7 +774,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxVehicle
         ' 
-        TextBoxVehicle.Font = New Font("Century Gothic", 9.0F)
+        TextBoxVehicle.Font = New Font("Century Gothic", 9F)
         TextBoxVehicle.Location = New Point(148, 286)
         TextBoxVehicle.Name = "TextBoxVehicle"
         TextBoxVehicle.Size = New Size(129, 22)
@@ -783,7 +783,7 @@ Partial Class Dashboard
         ' Label67
         ' 
         Label67.AutoSize = True
-        Label67.Font = New Font("Century Gothic", 9.0F)
+        Label67.Font = New Font("Century Gothic", 9F)
         Label67.Location = New Point(16, 449)
         Label67.Name = "Label67"
         Label67.Size = New Size(80, 17)
@@ -793,7 +793,7 @@ Partial Class Dashboard
         ' Label15
         ' 
         Label15.AutoSize = True
-        Label15.Font = New Font("Century Gothic", 9.0F)
+        Label15.Font = New Font("Century Gothic", 9F)
         Label15.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label15.Location = New Point(147, 268)
         Label15.Name = "Label15"
@@ -822,7 +822,7 @@ Partial Class Dashboard
         ' Label14
         ' 
         Label14.AutoSize = True
-        Label14.Font = New Font("Century Gothic", 9.0F)
+        Label14.Font = New Font("Century Gothic", 9F)
         Label14.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label14.Location = New Point(16, 30)
         Label14.Name = "Label14"
@@ -832,7 +832,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxEmail
         ' 
-        TextBoxEmail.Font = New Font("Century Gothic", 9.0F)
+        TextBoxEmail.Font = New Font("Century Gothic", 9F)
         TextBoxEmail.Location = New Point(16, 134)
         TextBoxEmail.Name = "TextBoxEmail"
         TextBoxEmail.Size = New Size(261, 22)
@@ -840,7 +840,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxName
         ' 
-        TextBoxName.Font = New Font("Century Gothic", 9.0F)
+        TextBoxName.Font = New Font("Century Gothic", 9F)
         TextBoxName.Location = New Point(16, 48)
         TextBoxName.Name = "TextBoxName"
         TextBoxName.Size = New Size(129, 22)
@@ -848,7 +848,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxAddress
         ' 
-        TextBoxAddress.Font = New Font("Century Gothic", 9.0F)
+        TextBoxAddress.Font = New Font("Century Gothic", 9F)
         TextBoxAddress.Location = New Point(16, 177)
         TextBoxAddress.Multiline = True
         TextBoxAddress.Name = "TextBoxAddress"
@@ -858,7 +858,7 @@ Partial Class Dashboard
         ' Label18
         ' 
         Label18.AutoSize = True
-        Label18.Font = New Font("Century Gothic", 9.0F)
+        Label18.Font = New Font("Century Gothic", 9F)
         Label18.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label18.Location = New Point(16, 73)
         Label18.Name = "Label18"
@@ -869,7 +869,7 @@ Partial Class Dashboard
         ' Label21
         ' 
         Label21.AutoSize = True
-        Label21.Font = New Font("Century Gothic", 9.0F)
+        Label21.Font = New Font("Century Gothic", 9F)
         Label21.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label21.Location = New Point(16, 159)
         Label21.Name = "Label21"
@@ -880,7 +880,7 @@ Partial Class Dashboard
         ' Label19
         ' 
         Label19.AutoSize = True
-        Label19.Font = New Font("Century Gothic", 9.0F)
+        Label19.Font = New Font("Century Gothic", 9F)
         Label19.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label19.Location = New Point(16, 268)
         Label19.Name = "Label19"
@@ -891,7 +891,7 @@ Partial Class Dashboard
         ' Label20
         ' 
         Label20.AutoSize = True
-        Label20.Font = New Font("Century Gothic", 9.0F)
+        Label20.Font = New Font("Century Gothic", 9F)
         Label20.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
         Label20.Location = New Point(16, 116)
         Label20.Name = "Label20"
@@ -901,7 +901,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxPlateNumber
         ' 
-        TextBoxPlateNumber.Font = New Font("Century Gothic", 9.0F)
+        TextBoxPlateNumber.Font = New Font("Century Gothic", 9F)
         TextBoxPlateNumber.Location = New Point(16, 286)
         TextBoxPlateNumber.Name = "TextBoxPlateNumber"
         TextBoxPlateNumber.Size = New Size(129, 22)
@@ -909,7 +909,7 @@ Partial Class Dashboard
         ' 
         ' TextBoxNumber
         ' 
-        TextBoxNumber.Font = New Font("Century Gothic", 9.0F)
+        TextBoxNumber.Font = New Font("Century Gothic", 9F)
         TextBoxNumber.Location = New Point(16, 91)
         TextBoxNumber.Name = "TextBoxNumber"
         TextBoxNumber.Size = New Size(120, 22)
@@ -930,7 +930,7 @@ Partial Class Dashboard
         ' 
         ' Dashboard
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         ClientSize = New Size(1192, 680)

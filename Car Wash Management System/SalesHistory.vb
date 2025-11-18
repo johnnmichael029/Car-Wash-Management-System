@@ -25,37 +25,12 @@ Public Class SalesHistory
     End Sub
 
     Private Sub DataGridViewSalesHIstory_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewSalesHIstory.CellFormatting
-        If e.ColumnIndex = Me.DataGridViewSalesHIstory.Columns("PaymentMethod").Index AndAlso e.RowIndex >= 0 Then
 
-            ' Get the value from the current cell.
-            Dim status As String = e.Value?.ToString().Trim()
-
-            ' Check the status and apply the correct formatting to the entire row.
-            Select Case status
-                Case "Gcash"
-                    ' Blue for confirmed appointments.
-                    e.CellStyle.BackColor = Color.LightSkyBlue
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Cheque"
-                    ' Gold for appointments that are pending.
-                    e.CellStyle.BackColor = Color.Gold
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Billing Contract"
-                    ' Gray for appointments that were a no-show.
-                    e.CellStyle.BackColor = Color.LightGray
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Cash"
-                    ' Green for completed appointments.
-                    e.CellStyle.BackColor = Color.LightGreen
-                    e.CellStyle.ForeColor = Color.Black
-            End Select
-        End If
-
+        DataGridFormattingService.DataGridCellFormattingPaymentMethod(e, "PaymentMethod", DataGridViewSalesHIstory)
     End Sub
 
     Private Sub DataGridViewSalesFontStyle()
-        DataGridViewSalesHIstory.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridViewSalesHIstory.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+        DataGridFontStyleService.DataGridFontStyle(DataGridViewSalesHIstory)
     End Sub
 
     Private Sub ChangeHeaderOfDataGridViewSales()

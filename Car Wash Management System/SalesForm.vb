@@ -20,6 +20,7 @@ Public Class SalesForm
         SetupListViewService.SetupListViewForServices(ListViewServices, 30, 85, 85, 50)
         ClearFields()
     End Sub
+
     Private Sub ChangeHeaderOfDataGridViewSales()
         DataGridViewSales.Columns(0).HeaderText = "Sales ID"
         DataGridViewSales.Columns(1).HeaderText = "Customer Name"
@@ -30,6 +31,7 @@ Public Class SalesForm
         DataGridViewSales.Columns(6).HeaderText = "Reference ID"
         DataGridViewSales.Columns(7).HeaderText = "Total Price"
     End Sub
+
     Private Sub LoadAllPopulateUI()
         Try
             salesDatabaseHelper.PopulateCustomerNames(TextBoxCustomerName)
@@ -43,77 +45,44 @@ Public Class SalesForm
         End Try
 
     End Sub
+
     Private Sub AddBtn_Click(sender As Object, e As EventArgs) Handles AddBtn.Click
         AddBtnFunction()
     End Sub
+
     Private Sub AddBtnFunction()
-        Dim baseServiceName As String = If(ComboBoxServices.SelectedIndex <> -1, ComboBoxServices.Text, String.Empty)
-        Dim addonServiceName As String = If(ComboBoxAddons.SelectedIndex <> -1, ComboBoxAddons.Text, String.Empty)
-        Dim totalPrice As Decimal = TextBoxTotalPrice.Text
-        Try
-            'The CustomerID is now retrieved directly from the textbox, which is updated via the TextChanged event.
-            ' Get the separate Service IDs for the base service and the addon.
-            Dim baseServiceDetails As SalesService = salesDatabaseHelper.GetServiceID(baseServiceName)
-            Dim addonServiceID As Integer? = Nothing ' Use a nullable integer for the addon service ID
-            If Not String.IsNullOrWhiteSpace(addonServiceName) Then
-                Dim addonServiceDetails As SalesService = salesDatabaseHelper.GetServiceID(addonServiceName)
-                If addonServiceDetails IsNot Nothing Then
-                    addonServiceID = addonServiceDetails.ServiceID
-                End If
-            End If
-            Dim customerID As Integer
-            If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) OrElse customerID <= 0 Then
-                MessageBox.Show("Please select a valid customer from the list.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
 
-
-            ' Guard clause: Ensure there are items to sell
-            If AddSaleToListView.SaleServiceList.Count = 0 Then
-                MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-
-            'Validate that a payment method is selected.
-            If ComboBoxPaymentMethod.SelectedIndex = -1 Then
-                MessageBox.Show("Please select a payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-
-            'Validate that a Reference ID is provided for certain payment methods.
-            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
-                MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque" AndAlso String.IsNullOrWhiteSpace(TextBoxCheque.Text) Then
-                MessageBox.Show("Please enter a Cheque Number for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-
-            SalesDatabaseHelper.AddSale(
-                customerID,
-                AddSaleToListView.SaleServiceList,
-                ComboBoxPaymentMethod.SelectedItem.ToString(),
-                TextBoxReferenceID.Text,
-                TextBoxCheque.Text,
-                totalPrice
-                )
+        Dim errorHandler As Action(Of String) = Sub(message)
+                                                    ' This is the custom error logic: display the message in a modal.
+                                                    MessageBox.Show(message, "Appointment Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                End Sub
+        Dim success As Boolean = AddButtonFunction.AddDataToDatabase(
+            TextBoxCustomerID,
+            ComboBoxPaymentMethod,
+            TextBoxReferenceID,
+            TextBoxCheque,
+            TextBoxTotalPrice,
+            errorHandler
+        )
+        If success Then
             Carwash.PopulateAllTotal()
-            ViewSales()
-            MessageBox.Show("Sale added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Carwash.ShowNotification()
+            Carwash.NotificationLabel.Text = "New Sale Added"
+
             AddSalesActivityLog()
-            ShowPrintPreview()
+            ViewSales()
+            PrintBillInSales.ShowPrint(PrintDocumentBill)
             ClearFields()
-        Catch ex As Exception
-            MessageBox.Show("An error occurred while adding the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        End If
 
     End Sub
+
     Private Sub AddSalesActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         Dim amount As Decimal = Decimal.Parse(TextBoxTotalPrice.Text)
         activityLogInDashboardService.RecordSale(customerName, amount)
     End Sub
+
     Private Sub UpdateSalesActivityLog()
         Dim customerName As String = TextBoxCustomerName.Text
         activityLogInDashboardService.UpdateSale(customerName)
@@ -134,6 +103,7 @@ Public Class SalesForm
     Private Sub ClearBtn_Click(sender As Object, e As EventArgs) Handles ClearBtn.Click
         ClearFields()
     End Sub
+
     Public Sub ClearFields()
         TextBoxCustomerName.Clear()
         TextBoxCustomerID.Clear()
@@ -147,81 +117,33 @@ Public Class SalesForm
         AddSaleToListView.SaleServiceList.Clear()
         AddSaleToListView.nextServiceID = 1
     End Sub
+
     Private Sub DataGridViewSalesFontStyle()
-        DataGridViewSales.DefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Regular)
-        DataGridViewSales.ColumnHeadersDefaultCellStyle.Font = New Font("Century Gothic", 9, FontStyle.Bold)
+        DataGridFontStyleService.DataGridFontStyle(DataGridViewSales)
     End Sub
+
     Private Sub DataGridViewSales_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewSales.CellContentClick
-        ' This event is not strictly needed since SelectionChanged handles data loading
-        ' but sometimes helps ensure a selection is made on cell click.
-        If e.RowIndex >= 0 Then
-            DataGridViewSales.Rows(e.RowIndex).Selected = True
-        End If
+        DataGridCellContentClick.HighlightSelectedRow(e, DataGridViewSales)
 
-        If DataGridViewSales.CurrentRow Is Nothing Then Return
-
-        Dim currentRow As DataGridViewRow = DataGridViewSales.CurrentRow
-
-        ' 1. Populate TextBoxes/ComboBoxes
-        Try
-            TextBoxCustomerName.Text = currentRow.Cells("CustomerName").Value?.ToString()
-            ComboBoxPaymentMethod.SelectedItem = currentRow.Cells(5).Value?.ToString()
-            If ComboBoxPaymentMethod.SelectedItem = "Gcash" Then
-                TextBoxReferenceID.Text = currentRow.Cells(6).Value?.ToString()
-                TextBoxCheque.Clear()
-            ElseIf ComboBoxPaymentMethod.SelectedItem = "Cheque".Trim Then
-                TextBoxCheque.Text = currentRow.Cells(6).Value?.ToString()
-                TextBoxReferenceID.Clear()
-            End If
-            TextBoxTotalPrice.Text = currentRow.Cells("TotalPrice").Value?.ToString()
-
-            ' Set the ID for persistence
-            Dim saleIDValue As String = currentRow.Cells("SalesID").Value?.ToString()
-            LabelSalesID.Text = saleIDValue
-
-            If String.IsNullOrEmpty(saleIDValue) Then Return
-
-            ' 2. Load Services into ListView
-            Dim saleID As Integer
-            If Integer.TryParse(saleIDValue, saleID) Then
-                LoadService.LoadServicesIntoListViewSalesForm(saleID, ListViewServices)
-            Else
-                MessageBox.Show("Invalid Sales ID format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End If
-
-        Catch ex As Exception
-            ' Log or handle error during population
-            MessageBox.Show("Error loading sale details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            TextBoxTotalPrice.Text = "0.00"
-        End Try
+        Dim errorHandler As Action(Of String) = Sub(message)
+                                                    ' This is the custom error logic: display the message in a modal.
+                                                    MessageBox.Show(message, "Appointment Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                End Sub
+        DataGridCellContentClick.GetSelectedRowData(
+           TextBoxCustomerName,
+           DataGridViewSales,
+           ComboBoxPaymentMethod,
+           TextBoxReferenceID,
+           TextBoxCheque,
+           TextBoxTotalPrice,
+           LabelSalesID,
+           ListViewServices,
+           errorHandler)
 
     End Sub
+
     Private Sub DataGridViewSales_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewSales.CellFormatting
-        If e.ColumnIndex = Me.DataGridViewSales.Columns("PaymentMethod").Index AndAlso e.RowIndex >= 0 Then
-
-            ' Get the value from the current cell.
-            Dim status As String = e.Value?.ToString()
-
-            ' Check the status and apply the correct formatting to the entire row.
-            Select Case status
-                Case "Gcash"
-                    ' Blue for confirmed appointments.
-                    e.CellStyle.BackColor = Color.LightSkyBlue
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Cheque"
-                    ' Gold for appointments that are pending.
-                    e.CellStyle.BackColor = Color.Gold
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Billing Contract"
-                    ' Gray for appointments that were a no-show.
-                    e.CellStyle.BackColor = Color.LightGray
-                    e.CellStyle.ForeColor = Color.Black
-                Case "Cash"
-                    ' Green for completed appointments.
-                    e.CellStyle.BackColor = Color.LightGreen
-                    e.CellStyle.ForeColor = Color.Black
-            End Select
-        End If
+        DataGridFormattingService.DataGridCellFormattingPaymentMethod(e, "PaymentMethod", DataGridViewSales)
 
     End Sub
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
@@ -248,7 +170,7 @@ Public Class SalesForm
         End If
 
         ' 3. Populate PrintDataInSales using the comprehensive list.
-        ShowPrintPreviewService.PrintBillInSales(e, New PrintDataInSales With {
+        PrintBillInSales.PrintBillInSales(e, New PrintDataInSales With {
         .SalesID = currentSaleID,
         .CustomerName = TextBoxCustomerName.Text,
         .ServiceLineItems = serviceLineItems,
@@ -256,90 +178,54 @@ Public Class SalesForm
         .SaleDate = saleDate
 })
     End Sub
+
     Private Sub ValidatePrint()
         If String.IsNullOrEmpty(LabelSalesID.Text) Then
             MessageBox.Show("Please select sales from the table or add new sales to print", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Else
-            ShowPrintPreview()
+            PrintBillInSales.ShowPrint(PrintDocumentBill)
         End If
     End Sub
+
     Private Sub PrintBillBtn_Click(sender As Object, e As EventArgs) Handles PrintBillBtn.Click
         ValidatePrint()
     End Sub
-    Public Sub ShowPrintPreview()
-        ShowPrintPreviewService.ShowPrintPreview(PrintDocumentBill)
-        Dim printPreviewDialog As New PrintPreviewDialog With {
-            .Document = PrintDocumentBill
-        }
-        printPreviewDialog.ShowDialog()
-    End Sub
+
     Private Sub ComboBoxPaymentMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPaymentMethod.SelectedIndexChanged
-        If ComboBoxPaymentMethod.SelectedItem = "Gcash" Then
-            TextBoxReferenceID.ReadOnly = False
-            TextBoxCheque.ReadOnly = True
-            TextBoxCheque.Clear
-        ElseIf ComboBoxPaymentMethod.SelectedItem = "Cheque" Then
-            TextBoxCheque.ReadOnly = False
-            TextBoxReferenceID.ReadOnly = True
-            TextBoxReferenceID.Clear
-        Else
-            TextBoxReferenceID.ReadOnly = True
-            TextBoxCheque.ReadOnly = True
-            TextBoxReferenceID.Clear
-            TextBoxCheque.Clear
-        End If
+        PaymentMethodSelectedService.PaymentMethodChange(ComboBoxPaymentMethod, TextBoxReferenceID, TextBoxCheque)
     End Sub
+
     Private Sub AddServiceBtn_Click(sender As Object, e As EventArgs) Handles AddServiceBtn.Click
         AddSaleToListView.AddSaleService(ComboBoxServices, ComboBoxAddons, TextBoxPrice, ListViewServices)
         UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
+
     Private Sub RemoveServiceBtn_Click(sender As Object, e As EventArgs) Handles RemoveServiceBtn.Click
         AddSaleToListView.RemoveSelectedService(ListViewServices)
         UpdateTotalPriceService.CalculateTotalPriceInService(ListViewServices, TextBoxTotalPrice)
     End Sub
+
     Private Sub UpdateBtn_Click(sender As Object, e As EventArgs) Handles UpdateBtn.Click
         UpdateSales()
     End Sub
+
     Private Sub UpdateSales()
 
-        Try
-            Dim customerID As Integer
-            If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) OrElse customerID <= 0 Then
-                MessageBox.Show("Please select a valid customer from the list.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
+        Dim localErrorHandler As Action(Of String) = Sub(message)
+                                                         MessageBox.Show(message, "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                                     End Sub
 
+        Dim success As Boolean = UpdateButtonFunctiion.UpdateDataToDatabase(
+        TextBoxCustomerID,
+        LabelSalesID,
+        ComboBoxPaymentMethod,
+        TextBoxReferenceID,
+        TextBoxCheque,
+        TextBoxTotalPrice,
+        localErrorHandler
+    )
 
-            ' Guard clause: Ensure there are items to sell
-            If AddSaleToListView.SaleServiceList.Count = 0 Then
-                MessageBox.Show("Please add at least one service to the sale.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-
-            'Validate that a payment method is selected.
-            If ComboBoxPaymentMethod.SelectedIndex = -1 Then
-                MessageBox.Show("Please select a payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-
-            'Validate that a Reference ID is provided for certain payment methods.
-            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Gcash" AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
-                MessageBox.Show("Please enter a Reference ID for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-            If ComboBoxPaymentMethod.SelectedItem.ToString() = "Cheque" AndAlso String.IsNullOrWhiteSpace(TextBoxCheque.Text) Then
-                MessageBox.Show("Please enter a Cheque Number for the selected payment method.", "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-            SalesDatabaseHelper.UpdateSale(
-                customerID,
-                LabelSalesID.Text,
-                AddSaleToListView.SaleServiceList,
-                ComboBoxPaymentMethod.Text,
-                TextBoxReferenceID.Text,
-                TextBoxCheque.Text,
-                TextBoxTotalPrice.Text
-                )
+        If success Then
             Carwash.PopulateAllTotal()
             Carwash.ShowNotification()
             Carwash.NotificationLabel.Text = "Sale Updated"
@@ -347,9 +233,7 @@ Public Class SalesForm
             MessageBox.Show("Sale updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ViewSales()
             ClearFields()
-        Catch ex As Exception
-            MessageBox.Show("An error occurred while updating the sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        End If
 
     End Sub
 

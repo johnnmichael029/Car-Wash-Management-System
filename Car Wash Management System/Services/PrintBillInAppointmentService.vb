@@ -5,6 +5,14 @@ Public Class PrintBillInAppointmentService
     ''' <summary>
     ''' Show Print Preview
     ''' </summary>
+    ''' 
+    Public Shared Sub ShowDocumentBill(printDocumentBill As PrintDocument)
+        ShowPrintPreview(printDocumentBill)
+        Dim printPreviewDialog As New PrintPreviewDialog With {
+            .Document = printDocumentBill
+        }
+        printPreviewDialog.ShowDialog()
+    End Sub
     Public Shared Sub ShowPrintPreview(doc As PrintDocument)
         doc.PrinterSettings = New PrinterSettings()
         doc.DefaultPageSettings.Margins = New Margins(10, 10, 0, 0)

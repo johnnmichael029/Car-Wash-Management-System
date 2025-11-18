@@ -8,7 +8,7 @@ Public Class BaseForm
     Protected ReadOnly activityLogInDashboardService As ActivityLogInDashboardService
     Protected ReadOnly appointmentManagementDatabaseHelper As AppointmentManagementDatabaseHelper
     Protected ReadOnly salesDatabaseHelper As SalesDatabaseHelper
-    Protected ReadOnly activityLogManagement As ActivityLogManagement
+    Protected ReadOnly activityLogManagement As ActivityLogManagementDatabaseHelper
     Protected ReadOnly adminDatabaseHelper As AdminDatabaseHelper
     Protected ReadOnly carwashDatabaseHelper As CarwashDatabaseHelper
     Protected ReadOnly contractsDatabaseHelper As ContractsDatabaseHelper
@@ -19,6 +19,9 @@ Public Class BaseForm
     Protected ReadOnly HistoryDatabaseHelper As HistoryDatabaseHelper
     Protected ReadOnly salesAnalyticsDatabaseHelper As SalesAnalyticsDatabaseHelper
     Protected ReadOnly chartDatabaseHelper As ChartDatabaseHelper
+    Protected ReadOnly serviceDatabaseHelper As ServiceDatabaseHelper
+    Protected ReadOnly dataGridFormattingService As DataGridFormattingService
+    Protected ReadOnly DataGridCellContentClick As DataGridCellContentClick
     Public Sub New()
         ' Add any initialization after the InitializeComponent() call.
         reservationDatabaseHelper = New ReservationDatabaseHelper(constr)
@@ -26,7 +29,7 @@ Public Class BaseForm
         activityLogInDashboardService = New ActivityLogInDashboardService(constr)
         appointmentManagementDatabaseHelper = New AppointmentManagementDatabaseHelper(constr)
         salesDatabaseHelper = New SalesDatabaseHelper(constr)
-        activityLogManagement = New ActivityLogManagement(constr)
+        activityLogManagement = New ActivityLogManagementDatabaseHelper(constr)
         adminDatabaseHelper = New AdminDatabaseHelper(constr)
         carwashDatabaseHelper = New CarwashDatabaseHelper(constr)
         contractsDatabaseHelper = New ContractsDatabaseHelper(constr)
@@ -37,6 +40,9 @@ Public Class BaseForm
         HistoryDatabaseHelper = New HistoryDatabaseHelper(constr)
         salesAnalyticsDatabaseHelper = New SalesAnalyticsDatabaseHelper(constr)
         chartDatabaseHelper = New ChartDatabaseHelper(constr)
+        serviceDatabaseHelper = New ServiceDatabaseHelper(constr)
+        dataGridFormattingService = New DataGridFormattingService()
+        DataGridCellContentClick = New DataGridCellContentClick()
 
     End Sub
 
