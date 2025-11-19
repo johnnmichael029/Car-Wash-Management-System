@@ -8,14 +8,14 @@ Public Class SalesDatabaseHelper
         constr = connectionString
     End Sub
 
-    Public Shared Sub AddSale(saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, cheque As String, totalPrice As Decimal)
+    Public Shared Sub AddSale(saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, cheque As String, detailer As String, totalPrice As Decimal)
         Dim iSaleID As Integer = CInt(saleID)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Try
                 Dim newSalesID As Integer
-                Dim insertHistoryQuery = "INSERT INTO RegularSaleTable (CustomerID, SaleDate, PaymentMethod, ReferenceID, TotalPrice) VALUES (@CustomerID, @SaleDate, @PaymentMethod, @ReferenceID, @TotalPrice); SELECT SCOPE_IDENTITY();"
+                Dim insertHistoryQuery = "INSERT INTO RegularSaleTable (CustomerID, SaleDate, PaymentMethod, ReferenceID, Detailer, TotalPrice) VALUES (@CustomerID, @SaleDate, @PaymentMethod, @ReferenceID, @Detailer, @TotalPrice); SELECT SCOPE_IDENTITY();"
                 Using cmd As New SqlCommand(insertHistoryQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@CustomerID", iSaleID)
                     cmd.Parameters.AddWithValue("@SaleDate", DateTime.Now)
@@ -26,6 +26,7 @@ Public Class SalesDatabaseHelper
                         cmd.Parameters.AddWithValue("@ReferenceID", If(String.IsNullOrEmpty(referenceID), CType(DBNull.Value, Object), referenceID))
                     End If
                     cmd.Parameters.AddWithValue("@TotalPrice", totalPrice)
+                    cmd.Parameters.AddWithValue("@Detailer", detailer)
                     newSalesID = Convert.ToInt32(cmd.ExecuteScalar())
                 End Using
                 Dim insertServiceQuery = "INSERT INTO SalesServiceTable (SalesID, ServiceID, AddonServiceID, Subtotal) VALUES (@SalesID, @ServiceID, @AddonServiceID, @Subtotal)"
@@ -61,14 +62,14 @@ Public Class SalesDatabaseHelper
             End Try
         End Using
     End Sub
-    Public Shared Sub UpdateSale(customerID As Integer, saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, cheque As String, totalPrice As Decimal)
+    Public Shared Sub UpdateSale(customerID As Integer, saleID As String, allSaleItems As List(Of SalesService), paymentMethod As String, referenceID As String, cheque As String, detailer As String, totalPrice As Decimal)
         Dim iSaleID As Integer = CInt(saleID)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Try
                 ' Step 1: Update SalesHistoryTable
-                Dim updateHistoryQuery = "UPDATE RegularSaleTable SET CustomerID = @CustomerID, PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, TotalPrice = @TotalPrice WHERE SalesID = @SalesID"
+                Dim updateHistoryQuery = "UPDATE RegularSaleTable SET CustomerID = @CustomerID, PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, Detailer = @Detailer, TotalPrice = @TotalPrice WHERE SalesID = @SalesID"
                 Using cmd As New SqlCommand(updateHistoryQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@CustomerID", customerID)
                     cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod)
@@ -78,6 +79,7 @@ Public Class SalesDatabaseHelper
                         cmd.Parameters.AddWithValue("@ReferenceID", If(String.IsNullOrEmpty(referenceID), CType(DBNull.Value, Object), referenceID))
                     End If
                     cmd.Parameters.AddWithValue("@TotalPrice", totalPrice)
+                    cmd.Parameters.AddWithValue("@Detailer", detailer)
                     cmd.Parameters.AddWithValue("@SalesID", iSaleID)
                     cmd.ExecuteNonQuery()
                 End Using
@@ -200,6 +202,7 @@ Public Class SalesDatabaseHelper
         End Using
         Return addonID
     End Function
+
     Public Shared Function ViewSales() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -229,6 +232,7 @@ Public Class SalesDatabaseHelper
                 "s.SaleDate, " &
                 "s.PaymentMethod, " &
                 "s.ReferenceID, " &
+                "s.Detailer, " &
                 "s.TotalPrice " &
             "FROM RegularSaleTable s " &
             "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &
@@ -246,6 +250,7 @@ Public Class SalesDatabaseHelper
         End Using
         Return dt
     End Function
+
     Public Shared Function GetCustomerID(customerName As String) As Integer
         Using con As New SqlConnection(constr)
             Dim customerID As Integer = 0
@@ -295,6 +300,7 @@ Public Class SalesDatabaseHelper
             Return details
         End Using
     End Function
+
     Public Shared Function GetSaleLineItems(saleId As Integer, constr As String) As List(Of ServiceLineItem)
         Dim items As New List(Of ServiceLineItem)()
 
@@ -359,6 +365,7 @@ Public Class SalesDatabaseHelper
 
         Return items
     End Function
+
     Public Shared Function GetSalesServiceList(salesID As Integer) As List(Of SalesService)
         Dim serviceList As New List(Of SalesService)
         Dim selectQuery As String = "SELECT " &
@@ -401,6 +408,7 @@ Public Class SalesDatabaseHelper
 
         Return serviceList
     End Function
+
     Public Sub PopulateBaseServicesForUI(targetComboBox As ComboBox)
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -421,6 +429,7 @@ Public Class SalesDatabaseHelper
             End Try
         End Using
     End Sub
+
     Public Sub PopulateAddonServicesForUI(targetComboBox As ComboBox)
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -441,6 +450,7 @@ Public Class SalesDatabaseHelper
             End Try
         End Using
     End Sub
+
     Public Sub PopulateCustomerNames(textBoxCustomerName As TextBox)
         Dim customerNames As New AutoCompleteStringCollection()
         Using con As New SqlConnection(constr)
@@ -474,11 +484,79 @@ Public Class SalesDatabaseHelper
         textBoxCustomerName.AutoCompleteSource = AutoCompleteSource.CustomSource
         textBoxCustomerName.AutoCompleteCustomSource = customerNames
     End Sub
+
     Public Sub PopulatePaymentMethod(comboBoxPaymentMethod As ComboBox)
         comboBoxPaymentMethod.Items.Add("Cash")
         comboBoxPaymentMethod.Items.Add("Gcash")
         comboBoxPaymentMethod.Items.Add("Cheque")
         comboBoxPaymentMethod.SelectedIndex = 0
     End Sub
+
+    Public Shared Function SearchInRegularSale(searchTerm As String) As DataTable
+        Dim dt As New DataTable()
+        ' Ensure constr is defined and accessible here
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+
+                ' --- 1. CTE: AGGREGATE SERVICES ---
+                ' We join SalesServiceTable to ServicesTable twice to look up the names.
+                ' Then we use STRING_AGG to combine all services (Base and Addon) linked to a single SalesID.
+                Dim aggregateServicesQuery =
+            "WITH AggregatedServices AS ( " &
+            "   SELECT " &
+            "       sst.SalesID, " &
+            "       STRING_AGG(sv_base.ServiceName, ', ') AS AllBaseServices, " &
+            "       STRING_AGG(sv_addon.ServiceName, ', ') AS AllAddonServices " &
+            "   FROM " &
+            "       SalesServiceTable sst " &
+            "       INNER JOIN ServicesTable sv_base ON sst.ServiceID = sv_base.ServiceID " &
+            "       LEFT JOIN ServicesTable sv_addon ON sst.AddonServiceID = sv_addon.ServiceID " &
+            "   GROUP BY sst.SalesID " &
+            ") "
+
+                ' --- 2. MAIN QUERY: SELECT AND JOIN ---
+                ' Now we join RegularSaleTable to the aggregated data and the CustomersTable.
+                Dim selectQuery =
+            aggregateServicesQuery &
+            "SELECT " &
+                "r.SalesID, " &
+                "ISNULL(c.Name, '') + ' ' + ISNULL(c.LastName, '') AS CustomerName, " &
+                "aggs.AllBaseServices AS BaseService, " &
+                "aggs.AllAddonServices AS AddonService, " &
+                "r.SaleDate, " &
+                "r.PaymentMethod, " &
+                "r.ReferenceID, " &
+                "r.Detailer, " &
+                "r.TotalPrice " &
+            "FROM " &
+                "RegularSaleTable r " &
+                "INNER JOIN CustomersTable c ON r.CustomerID = c.CustomerID " &
+                "INNER JOIN AggregatedServices aggs ON r.SalesID = aggs.SalesID " &
+            "WHERE " &
+                "r.SalesID LIKE @SearchTerm OR " &
+                "c.Name LIKE @SearchTerm OR " &
+                "c.LastName LIKE @SearchTerm OR " &
+                "c.Name + ' ' + c.LastName LIKE @SearchTerm OR " &
+                "aggs.AllBaseServices LIKE @SearchTerm OR " &
+                "aggs.AllAddonServices LIKE @SearchTerm OR " &
+                "r.PaymentMethod LIKE @SearchTerm OR " &
+                "r.Detailer LIKE @SearchTerm " &
+            "ORDER BY r.SalesID DESC"
+
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@SearchTerm", "%" & searchTerm & "%")
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error searching regular sales: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+        Return dt
+    End Function
 
 End Class

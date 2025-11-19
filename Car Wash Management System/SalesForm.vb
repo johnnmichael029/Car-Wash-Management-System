@@ -18,7 +18,6 @@ Public Class SalesForm
         DataGridViewSalesFontStyle()
         ChangeHeaderOfDataGridViewSales()
         SetupListViewService.SetupListViewForServices(ListViewServices, 30, 85, 85, 50)
-        ClearFields()
     End Sub
 
     Private Sub ChangeHeaderOfDataGridViewSales()
@@ -29,7 +28,8 @@ Public Class SalesForm
         DataGridViewSales.Columns(4).HeaderText = "Sale Date"
         DataGridViewSales.Columns(5).HeaderText = "Payment Method"
         DataGridViewSales.Columns(6).HeaderText = "Reference ID"
-        DataGridViewSales.Columns(7).HeaderText = "Total Price"
+        DataGridViewSales.Columns(7).HeaderText = "Detailer"
+        DataGridViewSales.Columns(8).HeaderText = "Total Price"
     End Sub
 
     Private Sub LoadAllPopulateUI()
@@ -37,6 +37,7 @@ Public Class SalesForm
             salesDatabaseHelper.PopulateCustomerNames(TextBoxCustomerName)
             salesDatabaseHelper.PopulatePaymentMethod(ComboBoxPaymentMethod)
             salesDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
+            employeeMangamentDatabaseHelper.PopulateDetailerForUI(ComboBoxDetailer)
             salesDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
             DataGridViewSales.DataSource = SalesDatabaseHelper.ViewSales()
             ClearFields()
@@ -61,6 +62,7 @@ Public Class SalesForm
             ComboBoxPaymentMethod,
             TextBoxReferenceID,
             TextBoxCheque,
+            ComboBoxDetailer,
             TextBoxTotalPrice,
             errorHandler
         )
@@ -111,6 +113,7 @@ Public Class SalesForm
         ComboBoxServices.SelectedIndex = -1
         ComboBoxAddons.SelectedIndex = -1
         ComboBoxPaymentMethod.SelectedIndex = -1
+        ComboBoxDetailer.SelectedIndex = -1
         TextBoxReferenceID.Clear()
         ListViewServices.Items.Clear()
         TextBoxTotalPrice.Text = "0.00"
@@ -136,6 +139,7 @@ Public Class SalesForm
            TextBoxReferenceID,
            TextBoxCheque,
            TextBoxTotalPrice,
+           ComboBoxDetailer,
            LabelSalesID,
            ListViewServices,
            errorHandler)
@@ -146,6 +150,11 @@ Public Class SalesForm
         DataGridFormattingService.DataGridCellFormattingPaymentMethod(e, "PaymentMethod", DataGridViewSales)
 
     End Sub
+
+    Private Sub DataGridViewSales_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridViewSales.CellPainting
+        DataGridTextHighlightService.DataGridViewTextHighlight(e)
+    End Sub
+
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
 
         ' 1. Get the Sales ID of the selected row
@@ -221,6 +230,7 @@ Public Class SalesForm
         ComboBoxPaymentMethod,
         TextBoxReferenceID,
         TextBoxCheque,
+        ComboBoxDetailer,
         TextBoxTotalPrice,
         localErrorHandler
     )
@@ -247,6 +257,14 @@ Public Class SalesForm
 
     Private Sub ComboBoxDiscount_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDiscount.SelectedIndexChanged
         CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
+    End Sub
+
+    Private Sub TextBoxSearchBar_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearchBar.TextChanged
+        SearchBarService.SearchBarFunctionForRegularSale(TextBoxSearchBar, DataGridViewSales)
+    End Sub
+
+    Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
+        SearchBarTextChangeService.TextBoxSearchBar(TextBoxSearchBar, e)
     End Sub
 End Class
 

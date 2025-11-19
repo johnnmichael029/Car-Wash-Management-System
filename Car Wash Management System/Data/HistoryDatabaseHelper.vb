@@ -19,6 +19,7 @@ Public Class HistoryDatabaseHelper
                 "s.SaleDate, " &
                 "s.PaymentMethod, " &
                 "s.ReferenceID, " &
+                "s.Detailer, " &
                 "s.TotalPrice " &
             "FROM SalesHistoryTable s " &
             "INNER JOIN CustomersTable c ON s.CustomerID = c.CustomerID " &

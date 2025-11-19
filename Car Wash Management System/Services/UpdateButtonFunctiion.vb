@@ -9,6 +9,7 @@
      TextBoxReferenceID As TextBox,
      TextBoxCheque As TextBox,
      ComboBoxAppointmentStatus As ComboBox,
+     ComboBoxDetailer As ComboBox,
      TextBoxNotes As TextBox,
      AppointmentManagementDatabaseHelper As AppointmentManagementDatabaseHelper,
      errorHandler As Action(Of String)
@@ -66,6 +67,10 @@
                 errorHandler.Invoke("Please select an appointment status.")
                 Return False
             End If
+            If ComboBoxDetailer.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please select a detailer for the appointment.")
+                Return False
+            End If
 
             AppointmentManagementDatabaseHelper.UpdateAppointment(
                 appointmentID,
@@ -77,6 +82,7 @@
                 TextBoxCheque.Text,
                 price,
                 ComboBoxAppointmentStatus.Text,
+                ComboBoxDetailer.Text,
                 TextBoxNotes.Text
             )
             MessageBox.Show("Appointment updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -135,6 +141,7 @@
         ComboBoxPaymentMethod As ComboBox,
         TextBoxReferenceID As TextBox,
         TextBoxCheque As TextBox,
+        ComboBoxDetailer As ComboBox,
         TextBoxTotalPrice As TextBox,
         errorHandler As Action(Of String)
     ) As Boolean
@@ -166,6 +173,10 @@
                 errorHandler.Invoke("Please enter a Cheque Number for the selected payment method (Cheque).")
                 Return False
             End If
+            If ComboBoxDetailer.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please select a detailer for the sale.")
+                Return False
+            End If
 
             SalesDatabaseHelper.UpdateSale(
                 customerID,
@@ -174,6 +185,7 @@
                 ComboBoxPaymentMethod.Text,
                 TextBoxReferenceID.Text,
                 TextBoxCheque.Text,
+                ComboBoxDetailer.Text,
                 TextBoxTotalPrice.Text
             )
 
@@ -245,6 +257,7 @@
         TextBoxReferenceID As TextBox,
         TextBoxCheque As TextBox,
         ComboBoxContractStatus As ComboBox,
+        ComboBoxDetailer As ComboBox,
         TextBoxTotalPrice As TextBox,
         contractsDatabaseHelper As ContractsDatabaseHelper,
         errorHandler As Action(Of String)
@@ -334,7 +347,10 @@
                 errorHandler.Invoke("Please select a contract status.")
                 Return False
             End If
-
+            If ComboBoxDetailer.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please select a detailer for the contract.")
+                Return False
+            End If
 
             ' If all validation passes, call the database helper
             contractsDatabaseHelper.UpdateContract(
@@ -348,7 +364,8 @@
                 TextBoxReferenceID.Text,
                 TextBoxCheque.Text,
                 totalPrice,
-                ComboBoxContractStatus.Text
+                ComboBoxContractStatus.Text,
+                ComboBoxDetailer.Text
             )
             MessageBox.Show("Contract updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Return True ' Success
@@ -359,4 +376,60 @@
         End Try
     End Function
 
+    ' Overload 6: Update Employee
+    Public Overloads Shared Function UpdateDataToDatabase(
+        LabelEmployeeID As Label,
+        TextBoxName As TextBox,
+        TextBoxLastName As TextBox,
+        TextBoxPhoneNumber As TextBox,
+        TextBoxAge As TextBox,
+        TextBoxEmail As TextBox,
+        TextBoxAddress As TextBox,
+        TextBoxBarangay As TextBox,
+        ComboBoxGender As ComboBox,
+        ComboBoxPosition As ComboBox,
+        employeeMangamentDatabaseHelper As EmployeeMangamentDatabaseHelper,
+        errorHandler As Action(Of String)
+        ) As Boolean
+
+        Try
+            ' Validation 1: Check for required fields
+            If String.IsNullOrEmpty(TextBoxName.Text) Or
+               String.IsNullOrEmpty(TextBoxLastName.Text) Or
+               String.IsNullOrEmpty(TextBoxPhoneNumber.Text) Or
+               String.IsNullOrEmpty(TextBoxAge.Text) Or
+               String.IsNullOrEmpty(TextBoxEmail.Text) Or
+               String.IsNullOrEmpty(TextBoxAddress.Text) Or
+               String.IsNullOrEmpty(TextBoxBarangay.Text) Or
+               ComboBoxGender.SelectedIndex = -1 Or
+               ComboBoxPosition.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please fill in all required employee fields.")
+                Return False
+            End If
+            ' Validation 2: Ensure age is a valid integer
+            Dim ageValue As Integer
+            If Not Integer.TryParse(TextBoxAge.Text, ageValue) Then
+                errorHandler.Invoke("Please enter a valid numeric age.")
+                Return False
+            End If
+            ' If all validation passes, call the database helper
+            employeeMangamentDatabaseHelper.UpdateEmployeeData(
+                LabelEmployeeID.Text,
+                TextBoxName.Text,
+                TextBoxLastName.Text,
+                TextBoxPhoneNumber.Text,
+                ageValue,
+                TextBoxEmail.Text,
+                TextBoxAddress.Text,
+                TextBoxBarangay.Text,
+                ComboBoxGender.Text,
+                ComboBoxPosition.Text
+            )
+            MessageBox.Show("Employee updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return True ' Success
+        Catch ex As Exception
+            errorHandler.Invoke("An error occurred while updating the employee: " & ex.Message)
+            Return False
+        End Try
+    End Function
 End Class

@@ -41,7 +41,7 @@ Public Class SalesHistory
         DataGridViewSalesHIstory.Columns(4).HeaderText = "Sale Date"
         DataGridViewSalesHIstory.Columns(5).HeaderText = "Payment Method"
         DataGridViewSalesHIstory.Columns(6).HeaderText = "Reference ID"
-        DataGridViewSalesHIstory.Columns(7).HeaderText = "Total Price"
+        DataGridViewSalesHIstory.Columns(8).HeaderText = "Total Price"
     End Sub
     Private Sub ViewSalesHistory()
         DataGridViewSalesHIstory.DataSource = HistoryDatabaseHelper.ViewHistorySales()

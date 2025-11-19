@@ -45,10 +45,15 @@ Public Class Appointment
          TextBoxCheque,
          TextBoxTotalPrice,
          ComboBoxAppointmentStatus,
+         ComboBoxDetailer,
          TextBoxNotes,
          LabelAppointmentID,
          ListViewServices,
          errorHandler)
+    End Sub
+
+    Private Sub DDataGridViewAppointment_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridViewAppointment.CellPainting
+        DataGridTextHighlightService.DataGridViewTextHighlight(e)
     End Sub
 
     Private Sub AddAppointmentBtn_Click(sender As Object, e As EventArgs) Handles AddAppointmentBtn.Click
@@ -68,6 +73,7 @@ Public Class Appointment
         TextBoxReferenceID,
         TextBoxCheque,
         ComboBoxAppointmentStatus,
+        ComboBoxDetailer,
         TextBoxNotes,
         errorHandler,
         appointmentManagementDatabaseHelper
@@ -103,6 +109,7 @@ Public Class Appointment
             salesDatabaseHelper.PopulateCustomerNames(TextBoxCustomerName)
             salesDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
             salesDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
+            employeeMangamentDatabaseHelper.PopulateDetailerForUI(ComboBoxDetailer)
             DataGridViewAppointment.DataSource = appointmentManagementDatabaseHelper.ViewAppointment()
             ClearFields()
         Catch ex As Exception
@@ -129,6 +136,7 @@ Public Class Appointment
         LabelSales.Text = String.Empty
         TextBoxReferenceID.Clear()
         TextBoxTotalPrice.Text = "0.00"
+        ComboBoxDetailer.SelectedIndex = -1
 
         ListViewServices.Items.Clear()
         AddSaleToListView.AppointmentServiceList.Clear()
@@ -169,6 +177,7 @@ Public Class Appointment
         TextBoxReferenceID,
         TextBoxCheque,
         ComboBoxAppointmentStatus,
+        ComboBoxDetailer,
         TextBoxNotes,
         appointmentManagementDatabaseHelper,
         localErrorHandler
@@ -202,7 +211,7 @@ Public Class Appointment
         DataGridViewAppointment.Columns(6).HeaderText = "Reference ID"
         DataGridViewAppointment.Columns(7).HeaderText = "Total Price"
         DataGridViewAppointment.Columns(8).HeaderText = "Appointment Status"
-        DataGridViewAppointment.Columns(9).HeaderText = "Notes"
+        DataGridViewAppointment.Columns(10).HeaderText = "Notes"
     End Sub
 
     Private Sub PrintBillBtn_Click(sender As Object, e As EventArgs) Handles PrintBillBtn.Click
@@ -270,6 +279,14 @@ Public Class Appointment
 
     Private Sub ComboBoxDiscount_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDiscount.SelectedIndexChanged
         CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
+    End Sub
+
+    Private Sub TextBoxSearchBar_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearchBar.TextChanged
+        SearchBarService.SearchBarFunctionForAppointment(TextBoxSearchBar, DataGridViewAppointment)
+    End Sub
+
+    Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
+        SearchBarTextChangeService.TextBoxSearchBar(TextBoxSearchBar, e)
     End Sub
 End Class
 

@@ -17,6 +17,7 @@
          TextBoxCheque As TextBox,
          TextBoxTotalPrice As TextBox,
          ComboBoxAppointmentStatus As ComboBox,
+         ComboBoxDetailer As ComboBox,
          TextBoxNotes As TextBox,
          LabelAppointmentID As Label,
          ListViewServices As ListView,
@@ -50,7 +51,8 @@
             End If
             TextBoxTotalPrice.Text = currentRow.Cells(7).Value.ToString()
             ComboBoxAppointmentStatus.Text = currentRow.Cells(8).Value.ToString()
-            TextBoxNotes.Text = currentRow.Cells(9).Value.ToString()
+            ComboBoxDetailer.Text = currentRow.Cells(9).Value.ToString()
+            TextBoxNotes.Text = currentRow.Cells(10).Value.ToString()
             Dim appointmentIDValue As String = currentRow.Cells("AppointmentID").Value.ToString()
             LabelAppointmentID.Text = appointmentIDValue
 
@@ -104,6 +106,7 @@
        TextBoxReferenceID As TextBox,
        TextBoxCheque As TextBox,
        TextBoxTotalPrice As TextBox,
+       ComboBoxDetailer As ComboBox,
        LabelSalesID As Label,
        ListViewServices As ListView,
        errorHandler As Action(Of String)
@@ -134,6 +137,7 @@
             End If
 
             TextBoxTotalPrice.Text = currentRow.Cells("TotalPrice").Value?.ToString()
+            ComboBoxDetailer.Text = currentRow.Cells("Detailer").Value?.ToString()
 
             Dim saleIDValue As String = currentRow.Cells("SalesID").Value?.ToString()
             LabelSalesID.Text = saleIDValue
@@ -223,6 +227,7 @@
        TextBoxCheque As TextBox,
        TextBoxTotalPrice As TextBox,
        ComboBoxContractStatus As ComboBox,
+       ComboBoxDetailer As ComboBox,
        LabelContractID As Label,
        ListViewServices As ListView,
        errorHandler As Action(Of String)
@@ -255,6 +260,7 @@
 
             TextBoxTotalPrice.Text = currentRow.Cells(9).Value?.ToString()
             ComboBoxContractStatus.Text = currentRow.Cells(10).Value?.ToString()
+            ComboBoxDetailer.Text = currentRow.Cells(11).Value?.ToString()
 
             ' Set the ID for persistence
             Dim contractIDValue As String = currentRow.Cells(0).Value?.ToString()
@@ -275,4 +281,43 @@
             TextBoxTotalPrice.Text = "0.00"
         End Try
     End Sub
+
+    Public Overloads Shared Sub GetSelectedRowData(
+       DataGridViewEmployee As DataGridView,
+       TextBoxName As TextBox,
+       TextBoxLastName As TextBox,
+       TextBoxPhoneNumber As TextBox,
+       TextBoxAge As TextBox,
+       TextBoxEmail As TextBox,
+       TextBoxAddress As TextBox,
+       TextBoxBarangay As TextBox,
+       ComboBoxGender As ComboBox,
+       ComboBoxPosition As ComboBox,
+       LabelEmployeeID As Label,
+       errorHandler As Action(Of String)
+       )
+        Try
+            Dim currentRow As DataGridViewRow = DataGridViewEmployee.CurrentRow
+
+            If currentRow Is Nothing Then
+                errorHandler.Invoke("No employee row is currently selected.")
+                Return
+            End If
+
+            TextBoxName.Text = currentRow.Cells("Name").Value.ToString()
+            TextBoxLastName.Text = currentRow.Cells("LastName").Value.ToString()
+            TextBoxPhoneNumber.Text = currentRow.Cells("PhoneNumber").Value.ToString()
+            TextBoxAge.Text = currentRow.Cells("Age").Value.ToString()
+            TextBoxEmail.Text = currentRow.Cells("Email").Value.ToString()
+            TextBoxAddress.Text = currentRow.Cells("Address").Value.ToString()
+            TextBoxBarangay.Text = currentRow.Cells("Barangay").Value.ToString()
+            ComboBoxGender.Text = currentRow.Cells("Gender").Value.ToString()
+            ComboBoxPosition.Text = currentRow.Cells(10).Value.ToString()
+            LabelEmployeeID.Text = currentRow.Cells("EmployeeID").Value.ToString()
+        Catch ex As Exception
+            errorHandler.Invoke("An error occurred during employee data retrieval: " & ex.Message)
+        End Try
+    End Sub
+
+
 End Class

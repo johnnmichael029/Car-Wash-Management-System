@@ -10,15 +10,15 @@ Public Class AppointmentManagementDatabaseHelper
         constr = connectionString
     End Sub
 
-    Public Sub AddAppointment(customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As DateTime, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, appointmentStatus As String, notes As String)
+    Public Sub AddAppointment(customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As DateTime, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, appointmentStatus As String, detailer As String, notes As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Try
                 ' 1. Fix SQL Syntax and retrieve the new ID using SCOPE_IDENTITY()
                 ' NOTE: Missing comma between @ReferenceID and @Price in the original SQL
-                Dim insertQuery As String = "INSERT INTO AppointmentsTable (CustomerID, AppointmentDateTime, PaymentMethod, ReferenceID, Price, AppointmentStatus, Notes) " &
-                                            "VALUES (@CustomerID, @AppointmentDateTime, @PaymentMethod, @ReferenceID, @Price, @AppointmentStatus, @Notes);" &
+                Dim insertQuery As String = "INSERT INTO AppointmentsTable (CustomerID, AppointmentDateTime, PaymentMethod, ReferenceID, Price, AppointmentStatus, Detailer, Notes) " &
+                                            "VALUES (@CustomerID, @AppointmentDateTime, @PaymentMethod, @ReferenceID, @Price, @AppointmentStatus, @Detailer, @Notes);" &
                                             "SELECT CAST(SCOPE_IDENTITY() AS INT);"
 
                 Dim newAppointmentID As Integer = 0
@@ -34,6 +34,7 @@ Public Class AppointmentManagementDatabaseHelper
                     End If
                     cmd.Parameters.AddWithValue("@Price", price)
                     cmd.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus)
+                    cmd.Parameters.AddWithValue("@Detailer", detailer)
                     cmd.Parameters.AddWithValue("@Notes", notes)
 
                     ' ExecuteScalar returns the ID of the newly inserted row (SCOPE_IDENTITY())
@@ -70,7 +71,7 @@ Public Class AppointmentManagementDatabaseHelper
                         End If
 
                         cmdService.Parameters.AddWithValue("@Subtotal", item.ServicePrice)
-                        cmdService.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus)
+                        cmdService.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus.Trim)
 
                         cmdService.ExecuteNonQuery()
                     End Using
@@ -89,7 +90,7 @@ Public Class AppointmentManagementDatabaseHelper
             End Try
         End Using
     End Sub
-    Public Function ViewAppointment() As DataTable
+    Public Shared Function ViewAppointment() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
             con.Open()
@@ -115,6 +116,7 @@ Public Class AppointmentManagementDatabaseHelper
                 "a.ReferenceID, " &
                 "a.Price, " &
                 "a.AppointmentStatus, " &
+                "a.Detailer, " &
                 "a.Notes " &
             "FROM AppointmentsTable a " &
             "INNER JOIN CustomersTable c ON a.CustomerID = c.CustomerID " &
@@ -129,13 +131,13 @@ Public Class AppointmentManagementDatabaseHelper
         End Using
         Return dt
     End Function
-    Public Sub UpdateAppointment(appointmentID As Integer, customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As Date, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, appointmentStatus As String, notes As String)
+    Public Sub UpdateAppointment(appointmentID As Integer, customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As Date, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, appointmentStatus As String, detailer As String, notes As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Try
                 ' SQL query to update a Appointment.
-                Dim updateAppointmentQuery As String = "UPDATE AppointmentsTable SET CustomerID = @CustomerID, AppointmentDateTime = @AppointmentDateTime, PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, Price = @Price, AppointmentStatus = @AppointmentStatus, Notes = @Notes WHERE AppointmentID = @AppointmentID"
+                Dim updateAppointmentQuery As String = "UPDATE AppointmentsTable SET CustomerID = @CustomerID, AppointmentDateTime = @AppointmentDateTime, PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, Price = @Price, AppointmentStatus = @AppointmentStatus, Detailer = @Detailer, Notes = @Notes WHERE AppointmentID = @AppointmentID"
                 Using cmd As New SqlCommand(updateAppointmentQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@AppointmentID", appointmentID)
                     cmd.Parameters.AddWithValue("@CustomerID", customerID)
@@ -148,6 +150,7 @@ Public Class AppointmentManagementDatabaseHelper
                     End If
                     cmd.Parameters.AddWithValue("@Price", price)
                     cmd.Parameters.AddWithValue("@AppointmentStatus", appointmentStatus)
+                    cmd.Parameters.AddWithValue("@Detailer", detailer)
                     cmd.Parameters.AddWithValue("@Notes", notes)
                     cmd.ExecuteNonQuery()
                 End Using
@@ -323,6 +326,69 @@ Public Class AppointmentManagementDatabaseHelper
 
 
         Return serviceList
+    End Function
+
+    Public Shared Function SearchInAppointment(searchTerm As String) As DataTable
+        Dim dt As New DataTable()
+        ' Ensure constr is defined and accessible here
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Dim aggregateServicesQuery =
+            "WITH AggregatedServices AS ( " &
+            "   SELECT " &
+            "       ast.AppointmentID, " &
+            "       STRING_AGG(sv_base.ServiceName, ', ') AS AllBaseServices, " &
+            "       STRING_AGG(sv_addon.ServiceName, ', ') AS AllAddonServices " &
+            "   FROM " &
+            "       AppointmentServiceTable ast " &
+            "       INNER JOIN ServicesTable sv_base ON ast.ServiceID = sv_base.ServiceID " &
+            "       LEFT JOIN ServicesTable sv_addon ON ast.AddonServiceID = sv_addon.ServiceID " &
+            "   GROUP BY ast.AppointmentID " &
+            ") "
+
+                Dim selectQuery =
+            aggregateServicesQuery &
+            "SELECT " &
+                "at.AppointmentID, " &
+                "ISNULL(c.Name, '') + ' ' + ISNULL(c.LastName, '') AS CustomerName, " &
+                "aggs.AllBaseServices AS BaseService, " &
+                "aggs.AllAddonServices AS AddonService, " &
+                "at.AppointmentDateTime, " &
+                "at.PaymentMethod, " &
+                "at.ReferenceID, " &
+                "at.Price, " &
+                "at.AppointmentStatus, " &
+                "at.Detailer, " &
+                "at.Notes " &
+            "FROM " &
+                "AppointmentsTable at " &
+                "INNER JOIN CustomersTable c ON at.CustomerID = c.CustomerID " &
+                "INNER JOIN AggregatedServices aggs ON at.AppointmentID = aggs.AppointmentID " &
+            "WHERE " &
+                "at.AppointmentID LIKE @SearchTerm OR " &
+                "c.Name LIKE @SearchTerm OR " &
+                "c.LastName LIKE @SearchTerm OR " &
+                "c.Name + ' ' + c.LastName LIKE @SearchTerm OR " &
+                "aggs.AllBaseServices LIKE @SearchTerm OR " &
+                "aggs.AllAddonServices LIKE @SearchTerm OR " &
+                "at.PaymentMethod LIKE @SearchTerm OR " &
+                "at.Detailer LIKE @SearchTerm " &
+            "ORDER BY at.AppointmentID DESC"
+
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@SearchTerm", "%" & searchTerm & "%")
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error searching regular sales: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+        Return dt
     End Function
 End Class
 

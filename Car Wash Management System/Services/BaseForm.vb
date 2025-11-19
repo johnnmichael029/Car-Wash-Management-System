@@ -22,6 +22,7 @@ Public Class BaseForm
     Protected ReadOnly serviceDatabaseHelper As ServiceDatabaseHelper
     Protected ReadOnly dataGridFormattingService As DataGridFormattingService
     Protected ReadOnly DataGridCellContentClick As DataGridCellContentClick
+    Protected ReadOnly employeeMangamentDatabaseHelper As EmployeeMangamentDatabaseHelper
     Public Sub New()
         ' Add any initialization after the InitializeComponent() call.
         reservationDatabaseHelper = New ReservationDatabaseHelper(constr)
@@ -43,6 +44,7 @@ Public Class BaseForm
         serviceDatabaseHelper = New ServiceDatabaseHelper(constr)
         dataGridFormattingService = New DataGridFormattingService()
         DataGridCellContentClick = New DataGridCellContentClick()
+        employeeMangamentDatabaseHelper = New EmployeeMangamentDatabaseHelper(constr)
 
     End Sub
 

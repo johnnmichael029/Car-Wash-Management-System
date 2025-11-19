@@ -10,6 +10,7 @@ Public Class AddButtonFunction
        TextBoxReferenceID As TextBox,
        TextBoxCheque As TextBox,
        ComboBoxAppointmentStatus As ComboBox,
+       ComboBoxDetailer As ComboBox,
        TextBoxNotes As TextBox,
        errorHandler As Action(Of String), ' Delegate for displaying error messages
        AppointmentManagementDatabaseHelper As AppointmentManagementDatabaseHelper
@@ -62,6 +63,10 @@ Public Class AddButtonFunction
                 errorHandler.Invoke("Please select an appointment status.")
                 Return False
             End If
+            If ComboBoxDetailer.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please select a detailer.")
+                Return False
+            End If
 
             AppointmentManagementDatabaseHelper.AddAppointment(
                 customerID,
@@ -72,6 +77,7 @@ Public Class AddButtonFunction
                 TextBoxCheque.Text,
                 totalPrice,
                 ComboBoxAppointmentStatus.Text.Trim(),
+                ComboBoxDetailer.Text,
                 TextBoxNotes.Text
             )
 
@@ -132,6 +138,7 @@ Public Class AddButtonFunction
         ComboBoxPaymentMethod As ComboBox,
         TextBoxReferenceID As TextBox,
         TextBoxCheque As TextBox,
+        ComboBoxDetailer As ComboBox,
         TextBoxTotalPrice As TextBox,
         errorHandler As Action(Of String)
     ) As Boolean
@@ -163,6 +170,10 @@ Public Class AddButtonFunction
                 errorHandler.Invoke("Please enter a Cheque Number for the selected payment method (Cheque).")
                 Return False
             End If
+            If ComboBoxDetailer.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please select a detailer.")
+                Return False
+            End If
 
             SalesDatabaseHelper.AddSale(
                 customerID,
@@ -170,6 +181,7 @@ Public Class AddButtonFunction
                 selectedPaymentMethod,
                 TextBoxReferenceID.Text,
                 TextBoxCheque.Text,
+                ComboBoxDetailer.Text,
                 TextBoxTotalPrice.Text
             )
 
@@ -237,6 +249,7 @@ Public Class AddButtonFunction
         TextBoxCheque As TextBox,
         TextBoxTotalPrice As TextBox,
         ComboBoxContractStatus As ComboBox,
+        ComboBoxDetailer As ComboBox,
         contractsDatabaseHelper As Object, ' Use Object as type is unknown (e.g., ContractsDatabaseHelper)
         errorHandler As Action(Of String)
     ) As Boolean
@@ -329,6 +342,10 @@ Public Class AddButtonFunction
                 errorHandler.Invoke("Please enter a valid price.")
                 Return False
             End If
+            If ComboBoxDetailer.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please select a detailer.")
+                Return False
+            End If
 
             ' --- 8. Database Insertion ---
             contractsDatabaseHelper.AddContract(
@@ -340,8 +357,9 @@ Public Class AddButtonFunction
                 TextBoxReferenceID.Text,
                 TextBoxCheque.Text,
                 totalPrice,
-                ComboBoxContractStatus.Text
-            )
+                ComboBoxContractStatus.Text,
+                ComboBoxDetailer.Text
+)
             MessageBox.Show("Contract added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Return True
 
@@ -349,5 +367,46 @@ Public Class AddButtonFunction
             errorHandler.Invoke("An error occurred while adding the contract: " & ex.Message)
             Return False
         End Try
+    End Function
+
+    ' Overload 6: For adding a new Employee
+    Public Overloads Shared Function AddDataToDatabase(
+           TextBoxName As TextBox,
+           TextBoxLastName As TextBox,
+           TextBoxPhoneNumber As TextBox,
+           TextBoxAge As TextBox,
+           TextBoxEmail As TextBox,
+           TextBoxAddress As TextBox,
+           TextBoxBarangay As TextBox,
+           ComboBoxGender As ComboBox,
+           ComboBoxPosition As ComboBox,
+           EmployeeMangamentDatabaseHelper As EmployeeMangamentDatabaseHelper, ' <<< ADDED MISSING PARAMETER
+           errorHandler As Action(Of String) ' <<< ADDED MISSING PARAMETER
+           ) As Boolean
+
+        Try
+            ' --- 1. Validation ---
+
+
+            ' --- 2. Database Insertion ---
+            EmployeeMangamentDatabaseHelper.AddEmployeeData(
+                TextBoxName.Text.Trim(),
+                TextBoxLastName.Text.Trim(),
+                TextBoxPhoneNumber.Text.Trim(),
+                TextBoxAge.Text.Trim(),
+                TextBoxEmail.Text.Trim(),
+                TextBoxAddress.Text.Trim(),
+                TextBoxBarangay.Text.Trim(),
+                ComboBoxGender.Text.Trim(),
+                ComboBoxPosition.Text
+            )
+
+            MessageBox.Show("Employee data added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return True
+        Catch ex As Exception
+            errorHandler.Invoke("Error saving data: " & ex.Message) ' <<< Changed MessageBox to errorHandler
+            Return False
+        End Try
+
     End Function
 End Class

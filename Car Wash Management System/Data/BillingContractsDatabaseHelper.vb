@@ -7,15 +7,15 @@ Public Class ContractsDatabaseHelper
     Public Sub New(connectionString As String)
         constr = connectionString
     End Sub
-    Public Sub AddContract(customerID As Integer, allSaleItems As List(Of ContractsService), endDate As Date, billingFrequency As String, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, contractStatus As String)
+    Public Sub AddContract(customerID As Integer, allSaleItems As List(Of ContractsService), endDate As Date, billingFrequency As String, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, contractStatus As String, detailer As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Try
                 ' 1. Fix SQL Syntax and retrieve the new ID using SCOPE_IDENTITY()
                 ' NOTE: Missing comma between @ReferenceID and @Price in the original SQL
-                Dim insertContractQuery As String = "INSERT INTO ContractsTable (CustomerID, StartDate, EndDate, BillingFrequency, PaymentMethod, ReferenceID, Price, ContractStatus) " &
-                                            "VALUES (@CustomerID, @StartDate, @EndDate, @BillingFrequency, @PaymentMethod, @ReferenceID, @Price, @ContractStatus);" &
+                Dim insertContractQuery As String = "INSERT INTO ContractsTable (CustomerID, StartDate, EndDate, BillingFrequency, PaymentMethod, ReferenceID, Price, ContractStatus, Detailer) " &
+                                            "VALUES (@CustomerID, @StartDate, @EndDate, @BillingFrequency, @PaymentMethod, @ReferenceID, @Price, @ContractStatus, @Detailer);" &
                                             "SELECT CAST(SCOPE_IDENTITY() AS INT);"
 
                 Dim newContractID As Integer = 0
@@ -33,19 +33,20 @@ Public Class ContractsDatabaseHelper
                     End If
                     cmd.Parameters.AddWithValue("@Price", price)
                     cmd.Parameters.AddWithValue("@ContractStatus", contractStatus)
+                    cmd.Parameters.AddWithValue("@Detailer", detailer)
 
                     ' ExecuteScalar returns the ID of the newly inserted row (SCOPE_IDENTITY())
                     Dim result As Object = cmd.ExecuteScalar()
                     If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
                         newContractID = Convert.ToInt32(result)
                     Else
-                        Throw New Exception("Failed to retrieve the new Contract ID.")
+                        Throw New Exception("Failed To retrieve the New Contract ID.")
                     End If
                 End Using
 
                 ' Ensure the ID was retrieved before proceeding to insert services
                 If newContractID = 0 Then
-                    Throw New Exception("Contract was inserted, but the new ID could not be retrieved.")
+                    Throw New Exception("Contract was inserted, but the New ID could Not be retrieved.")
                 End If
 
                 Dim insertServiceQuery = "INSERT INTO ContractServiceTable (ContractID, ServiceID, AddonServiceID, Subtotal) VALUES (@ContractID, @ServiceID, @AddonServiceID, @Subtotal)"
@@ -82,7 +83,7 @@ Public Class ContractsDatabaseHelper
     ''' <summary>
     ''' Retrieves all billing contracts from the database and returns them as a DataTable.
     ''' </summary>
-    Public Function ViewContracts() As DataTable
+    Public Shared Function ViewContracts() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
             con.Open()
@@ -108,7 +109,8 @@ Public Class ContractsDatabaseHelper
                 "b.PaymentMethod, " &
                 "b.ReferenceID, " &
                 "b.Price, " &
-                "b.ContractStatus " &
+                "b.ContractStatus, " &
+                "b.Detailer " &
             "FROM ContractsTable b " &
             "INNER JOIN CustomersTable c ON b.CustomerID = c.CustomerID " &
             "LEFT JOIN (" & aggregateServiceNamesQuery & ") agg ON b.ContractID = agg.ContractID " &
@@ -130,13 +132,13 @@ Public Class ContractsDatabaseHelper
     ''' <summary>
     ''' Updates an existing billing contract in the database.
     ''' </summary>
-    Public Sub UpdateContract(contractID As Integer, customerID As Integer, allSaleItems As List(Of ContractsService), startDate As Date, endDate As Date?, billingFrequency As String, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, contractStatus As String)
+    Public Sub UpdateContract(contractID As Integer, customerID As Integer, allSaleItems As List(Of ContractsService), startDate As Date, endDate As Date?, billingFrequency As String, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, contractStatus As String, detailer As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
             Try
                 ' SQL query to update a contract.
-                Dim updateQuery As String = "UPDATE ContractsTable SET CustomerID = @CustomerID, StartDate = @StartDate, EndDate = @EndDate, BillingFrequency = @BillingFrequency, PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, Price = @Price, ContractStatus = @ContractStatus WHERE ContractID = @ContractID"
+                Dim updateQuery As String = "UPDATE ContractsTable SET CustomerID = @CustomerID, StartDate = @StartDate, EndDate = @EndDate, BillingFrequency = @BillingFrequency, PaymentMethod = @PaymentMethod, ReferenceID = @ReferenceID, Price = @Price, ContractStatus = @ContractStatus, Detailer = @Detailer WHERE ContractID = @ContractID"
                 Using cmd As New SqlCommand(updateQuery, con, transaction)
                     cmd.Parameters.AddWithValue("@ContractID", contractID)
                     cmd.Parameters.AddWithValue("@CustomerID", customerID)
@@ -157,6 +159,7 @@ Public Class ContractsDatabaseHelper
                     End If
                     cmd.Parameters.AddWithValue("@Price", price)
                     cmd.Parameters.AddWithValue("@ContractStatus", contractStatus)
+                    cmd.Parameters.AddWithValue("@Detailer", detailer)
                     cmd.ExecuteNonQuery()
                 End Using
                 Dim deleteServicesQuery = "DELETE FROM ContractServiceTable WHERE ContractID = @ContractID"
@@ -215,6 +218,7 @@ Public Class ContractsDatabaseHelper
             End Try
         End Using
     End Sub
+
     Public Shared Function GetSaleLineItems(appointmentID As Integer, constr As String) As List(Of ServiceLineItem)
         Dim items As New List(Of ServiceLineItem)()
 
@@ -279,6 +283,7 @@ Public Class ContractsDatabaseHelper
 
         Return items
     End Function
+
     Public Shared Function GetSalesServiceList(contractID As Integer) As List(Of ContractsService)
         Dim serviceList As New List(Of ContractsService)
         Dim selectQuery As String = "SELECT " &
@@ -321,6 +326,7 @@ Public Class ContractsDatabaseHelper
 
         Return serviceList
     End Function
+
     Public Function UpdateTheStatusOfContractWhenExpired() As Integer
         Dim rowsAffected As Integer = 0
         Dim query As String = "UPDATE ContractsTable SET ContractStatus = 'Expired' WHERE EndDate <= GETDATE() AND ContractStatus = 'Active'"
@@ -337,4 +343,75 @@ Public Class ContractsDatabaseHelper
         End Using
         Return rowsAffected
     End Function
+
+    Public Shared Function SearchInContract(searchTerm As String) As DataTable
+        Dim dt As New DataTable()
+        ' Ensure constr is defined and accessible here
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+
+                ' --- 1. CTE: AGGREGATE SERVICES ---
+                ' We join SalesServiceTable to ServicesTable twice to look up the names.
+                ' Then we use STRING_AGG to combine all services (Base and Addon) linked to a single SalesID.
+                Dim aggregateServicesQuery =
+            "WITH AggregatedServices AS ( " &
+            "   SELECT " &
+            "       cst.ContractID, " &
+            "       STRING_AGG(sv_base.ServiceName, ', ') AS AllBaseServices, " &
+            "       STRING_AGG(sv_addon.ServiceName, ', ') AS AllAddonServices " &
+            "   FROM " &
+            "       ContractServiceTable cst " &
+            "       INNER JOIN ServicesTable sv_base ON cst.ServiceID = sv_base.ServiceID " &
+            "       LEFT JOIN ServicesTable sv_addon ON cst.AddonServiceID = sv_addon.ServiceID " &
+            "   GROUP BY cst.ContractID " &
+            ") "
+
+                ' --- 2. MAIN QUERY: SELECT AND JOIN ---
+                ' Now we join RegularSaleTable to the aggregated data and the CustomersTable.
+                Dim selectQuery =
+            aggregateServicesQuery &
+            "SELECT " &
+                "ct.ContractID, " &
+                "ISNULL(c.Name, '') + ' ' + ISNULL(c.LastName, '') AS CustomerName, " &
+                "aggs.AllBaseServices AS BaseService, " &
+                "aggs.AllAddonServices AS AddonService, " &
+                "ct.StartDate, " &
+                "ct.EndDate, " &
+                "ct.BillingFrequency, " &
+                "ct.PaymentMethod, " &
+                "ct.ReferenceID, " &
+                "ct.Price, " &
+                "ct.ContractStatus, " &
+                "ct.Detailer " &
+            "FROM " &
+                "ContractsTable ct " &
+                "INNER JOIN CustomersTable c ON ct.CustomerID = c.CustomerID " &
+                "INNER JOIN AggregatedServices aggs ON ct.ContractID = aggs.ContractID " &
+            "WHERE " &
+                "ct.ContractID LIKE @SearchTerm OR " &
+                "c.Name LIKE @SearchTerm OR " &
+                "c.LastName LIKE @SearchTerm OR " &
+                "c.Name + ' ' + c.LastName LIKE @SearchTerm OR " &
+                "aggs.AllBaseServices LIKE @SearchTerm OR " &
+                "aggs.AllAddonServices LIKE @SearchTerm OR " &
+                "ct.PaymentMethod LIKE @SearchTerm OR " &
+                "ct.Detailer LIKE @SearchTerm " &
+            "ORDER BY ct.ContractID DESC"
+
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@SearchTerm", "%" & searchTerm & "%")
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error searching regular sales: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+        Return dt
+    End Function
+
 End Class

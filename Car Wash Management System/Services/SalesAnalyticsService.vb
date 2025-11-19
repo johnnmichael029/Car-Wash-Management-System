@@ -192,19 +192,7 @@
         salesChartForm.Show()
 
     End Sub
-    Public Shared Sub SearchBarFunction(searchBar As TextBox, gridView As DataGridView)
-        currentSearchTerm = Trim(searchBar.Text)
-        Dim salesData As DataTable
 
-        If String.IsNullOrWhiteSpace(currentSearchTerm) Then
-            salesData = SalesAnalyticsDatabaseHelper.GetSalesSummaryData()
-        Else
-            salesData = SalesAnalyticsDatabaseHelper.SearchInSalesSummary(currentSearchTerm)
-        End If
-
-        gridView.DataSource = salesData
-        gridView.Refresh()
-    End Sub
     Public Shared Sub PopulateAllTotal(analyticsData As SalesAnalyticsDatabaseHelper, labelOrders As Label, labelCustomers As Label, labelEarnings As Label, labelEarningsPeriod As Label, labelServicePeriod As Label, labelCustomersPeriod As Label)
 
         Dim periodText As String

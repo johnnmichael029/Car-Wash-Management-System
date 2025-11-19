@@ -294,8 +294,7 @@ Public Class Carwash
         pickUp.Show()
     End Sub
     Private Sub AdminToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdminToolStripMenuItem.Click
-        AdminShowForm()
-        HideButtons()
+
     End Sub
     Private Sub AdminShowForm()
         Panel4.Controls.Clear()
@@ -500,5 +499,34 @@ Public Class Carwash
 
     Private Sub Panel4_Paint(sender As Object, e As PaintEventArgs) Handles Panel4.Paint
 
+    End Sub
+
+    Private Sub AddUserToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddUserToolStripMenuItem.Click
+        AdminShowForm()
+        HideButtons()
+    End Sub
+
+    Private Sub EmployeeInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EmployeeInformationToolStripMenuItem.Click
+        EmployeeInformationShowForm()
+    End Sub
+    Private Sub EmployeeInformationShowForm()
+        Panel4.Controls.Clear()
+        Dim EmployeeInformation As New EmployeeInformation With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(EmployeeInformation)
+        EmployeeInformation.Dock = DockStyle.Fill
+        EmployeeInformation.Show()
+        DashboardBtn.BackColor = Color.White
+        ActivityLogBtn.BackColor = Color.White
+        salesHistoryBtn.BackColor = Color.White
+        SalesAnalyticsBtn.BackColor = Color.White
+
+        revenueCustomerBtn.Visible = False
+        revenueServiceBtn.Visible = False
+        salesSummaryBtn.Visible = False
+        salesBtn.Visible = False
+        averageSaleBtn.Visible = False
     End Sub
 End Class

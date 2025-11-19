@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class CustomerInformation
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+Partial Class EmployeeInformation
     Inherits BaseForm
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()>
+    <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,29 +20,25 @@ Partial Class CustomerInformation
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()>
+    <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        components = New ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CustomerInformation))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EmployeeInformation))
         Panel1 = New Panel()
         Panel14 = New Panel()
         TextBoxSearchBar = New TextBox()
         Panel2 = New Panel()
-        PanelVehicleInfo = New Panel()
-        ListViewVehicles = New ListView()
-        FullScreenBtn = New Button()
-        Label5 = New Label()
+        TextBoxAge = New TextBox()
+        ComboBoxGender = New ComboBox()
+        Label4 = New Label()
+        ComboBoxPosition = New ComboBox()
         Label3 = New Label()
         Label2 = New Label()
         TextBoxBarangay = New TextBox()
         Label1 = New Label()
         TextBoxLastName = New TextBox()
-        RemoveVehicleBtn = New Button()
-        customerIDLabel = New Label()
-        AddVehicleBtn = New Button()
+        LabelEmployeeID = New Label()
         UpdateBtn = New Button()
         ViewBtn = New Button()
-        TextBoxVehicle = New TextBox()
         Label67 = New Label()
         Label15 = New Label()
         AddBtn = New Button()
@@ -50,32 +46,28 @@ Partial Class CustomerInformation
         TextBoxName = New TextBox()
         Label11 = New Label()
         Label14 = New Label()
-        TextBoxPlateNumber = New TextBox()
-        TextBoxNumber = New TextBox()
+        TextBoxPhoneNumber = New TextBox()
         Label12 = New Label()
         Label13 = New Label()
         TextBoxAddress = New TextBox()
         TextBoxEmail = New TextBox()
-        DataGridViewCustomerInformation = New DataGridView()
-        SqlConnection1 = New Microsoft.Data.SqlClient.SqlConnection()
-        NameTimer = New Timer(components)
+        DataGridViewEmployee = New DataGridView()
         Panel1.SuspendLayout()
         Panel14.SuspendLayout()
         Panel2.SuspendLayout()
-        PanelVehicleInfo.SuspendLayout()
-        CType(DataGridViewCustomerInformation, ComponentModel.ISupportInitialize).BeginInit()
+        CType(DataGridViewEmployee, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' Panel1
         ' 
         Panel1.Controls.Add(Panel14)
         Panel1.Controls.Add(Panel2)
-        Panel1.Controls.Add(DataGridViewCustomerInformation)
+        Panel1.Controls.Add(DataGridViewEmployee)
         Panel1.Dock = DockStyle.Fill
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(911, 758)
-        Panel1.TabIndex = 0
+        Panel1.TabIndex = 1
         ' 
         ' Panel14
         ' 
@@ -101,20 +93,18 @@ Partial Class CustomerInformation
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
-        Panel2.Controls.Add(PanelVehicleInfo)
-        Panel2.Controls.Add(FullScreenBtn)
-        Panel2.Controls.Add(Label5)
+        Panel2.Controls.Add(TextBoxAge)
+        Panel2.Controls.Add(ComboBoxGender)
+        Panel2.Controls.Add(Label4)
+        Panel2.Controls.Add(ComboBoxPosition)
         Panel2.Controls.Add(Label3)
         Panel2.Controls.Add(Label2)
         Panel2.Controls.Add(TextBoxBarangay)
         Panel2.Controls.Add(Label1)
         Panel2.Controls.Add(TextBoxLastName)
-        Panel2.Controls.Add(RemoveVehicleBtn)
-        Panel2.Controls.Add(customerIDLabel)
-        Panel2.Controls.Add(AddVehicleBtn)
+        Panel2.Controls.Add(LabelEmployeeID)
         Panel2.Controls.Add(UpdateBtn)
         Panel2.Controls.Add(ViewBtn)
-        Panel2.Controls.Add(TextBoxVehicle)
         Panel2.Controls.Add(Label67)
         Panel2.Controls.Add(Label15)
         Panel2.Controls.Add(AddBtn)
@@ -122,8 +112,7 @@ Partial Class CustomerInformation
         Panel2.Controls.Add(TextBoxName)
         Panel2.Controls.Add(Label11)
         Panel2.Controls.Add(Label14)
-        Panel2.Controls.Add(TextBoxPlateNumber)
-        Panel2.Controls.Add(TextBoxNumber)
+        Panel2.Controls.Add(TextBoxPhoneNumber)
         Panel2.Controls.Add(Label12)
         Panel2.Controls.Add(Label13)
         Panel2.Controls.Add(TextBoxAddress)
@@ -134,48 +123,51 @@ Partial Class CustomerInformation
         Panel2.Size = New Size(305, 758)
         Panel2.TabIndex = 1
         ' 
-        ' PanelVehicleInfo
+        ' TextBoxAge
         ' 
-        PanelVehicleInfo.Controls.Add(ListViewVehicles)
-        PanelVehicleInfo.Location = New Point(16, 299)
-        PanelVehicleInfo.Name = "PanelVehicleInfo"
-        PanelVehicleInfo.Size = New Size(260, 102)
-        PanelVehicleInfo.TabIndex = 111
+        TextBoxAge.Font = New Font("Century Gothic", 9F)
+        TextBoxAge.Location = New Point(147, 86)
+        TextBoxAge.Multiline = True
+        TextBoxAge.Name = "TextBoxAge"
+        TextBoxAge.Size = New Size(129, 22)
+        TextBoxAge.TabIndex = 113
         ' 
-        ' ListViewVehicles
+        ' ComboBoxGender
         ' 
-        ListViewVehicles.Dock = DockStyle.Fill
-        ListViewVehicles.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ListViewVehicles.ForeColor = Color.FromArgb(CByte(40), CByte(40), CByte(40))
-        ListViewVehicles.FullRowSelect = True
-        ListViewVehicles.GridLines = True
-        ListViewVehicles.Location = New Point(0, 0)
-        ListViewVehicles.Name = "ListViewVehicles"
-        ListViewVehicles.Size = New Size(260, 102)
-        ListViewVehicles.TabIndex = 100
-        ListViewVehicles.UseCompatibleStateImageBehavior = False
+        ComboBoxGender.AutoCompleteCustomSource.AddRange(New String() {"Male", "Female", "LGBT"})
+        ComboBoxGender.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxGender.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBoxGender.Font = New Font("Century Gothic", 9F)
+        ComboBoxGender.FormattingEnabled = True
+        ComboBoxGender.Items.AddRange(New Object() {"Male", "Female", "LGBT"})
+        ComboBoxGender.Location = New Point(16, 217)
+        ComboBoxGender.Name = "ComboBoxGender"
+        ComboBoxGender.Size = New Size(129, 25)
+        ComboBoxGender.TabIndex = 112
         ' 
-        ' FullScreenBtn
+        ' Label4
         ' 
-        FullScreenBtn.FlatAppearance.BorderSize = 0
-        FullScreenBtn.FlatStyle = FlatStyle.Flat
-        FullScreenBtn.Image = My.Resources.Resources.expand1
-        FullScreenBtn.Location = New Point(127, 265)
-        FullScreenBtn.Name = "FullScreenBtn"
-        FullScreenBtn.Size = New Size(37, 33)
-        FullScreenBtn.TabIndex = 110
-        FullScreenBtn.UseVisualStyleBackColor = True
+        Label4.AutoSize = True
+        Label4.Font = New Font("Century Gothic", 9F)
+        Label4.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
+        Label4.Location = New Point(148, 68)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(33, 17)
+        Label4.TabIndex = 111
+        Label4.Text = "Age"
         ' 
-        ' Label5
+        ' ComboBoxPosition
         ' 
-        Label5.AutoSize = True
-        Label5.Font = New Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label5.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
-        Label5.Location = New Point(16, 207)
-        Label5.Name = "Label5"
-        Label5.Size = New Size(141, 16)
-        Label5.TabIndex = 109
-        Label5.Text = "VEHICLE INFORMATION"
+        ComboBoxPosition.AutoCompleteCustomSource.AddRange(New String() {"Detailer", "Cashier", "Manager"})
+        ComboBoxPosition.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxPosition.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBoxPosition.Font = New Font("Century Gothic", 9F)
+        ComboBoxPosition.FormattingEnabled = True
+        ComboBoxPosition.Items.AddRange(New Object() {"Detailer", "Cashier", "Manager"})
+        ComboBoxPosition.Location = New Point(148, 217)
+        ComboBoxPosition.Name = "ComboBoxPosition"
+        ComboBoxPosition.Size = New Size(129, 25)
+        ComboBoxPosition.TabIndex = 110
         ' 
         ' Label3
         ' 
@@ -227,43 +219,15 @@ Partial Class CustomerInformation
         TextBoxLastName.Size = New Size(129, 22)
         TextBoxLastName.TabIndex = 104
         ' 
-        ' RemoveVehicleBtn
+        ' LabelEmployeeID
         ' 
-        RemoveVehicleBtn.BackColor = Color.FromArgb(CByte(228), CByte(76), CByte(76))
-        RemoveVehicleBtn.FlatAppearance.BorderSize = 0
-        RemoveVehicleBtn.FlatStyle = FlatStyle.Flat
-        RemoveVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        RemoveVehicleBtn.ForeColor = Color.White
-        RemoveVehicleBtn.Location = New Point(201, 270)
-        RemoveVehicleBtn.Name = "RemoveVehicleBtn"
-        RemoveVehicleBtn.Size = New Size(75, 23)
-        RemoveVehicleBtn.TabIndex = 102
-        RemoveVehicleBtn.Text = "Remove"
-        RemoveVehicleBtn.UseVisualStyleBackColor = False
-        ' 
-        ' customerIDLabel
-        ' 
-        customerIDLabel.AutoSize = True
-        customerIDLabel.Font = New Font("Century Gothic", 9F, FontStyle.Underline, GraphicsUnit.Point, CByte(0))
-        customerIDLabel.ForeColor = Color.Red
-        customerIDLabel.Location = New Point(91, 414)
-        customerIDLabel.Name = "customerIDLabel"
-        customerIDLabel.Size = New Size(0, 17)
-        customerIDLabel.TabIndex = 57
-        ' 
-        ' AddVehicleBtn
-        ' 
-        AddVehicleBtn.BackColor = Color.FromArgb(CByte(55), CByte(83), CByte(204))
-        AddVehicleBtn.FlatAppearance.BorderSize = 0
-        AddVehicleBtn.FlatStyle = FlatStyle.Flat
-        AddVehicleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        AddVehicleBtn.ForeColor = Color.White
-        AddVehicleBtn.Location = New Point(16, 270)
-        AddVehicleBtn.Name = "AddVehicleBtn"
-        AddVehicleBtn.Size = New Size(75, 23)
-        AddVehicleBtn.TabIndex = 101
-        AddVehicleBtn.Text = "Add"
-        AddVehicleBtn.UseVisualStyleBackColor = False
+        LabelEmployeeID.AutoSize = True
+        LabelEmployeeID.Font = New Font("Century Gothic", 9F, FontStyle.Underline, GraphicsUnit.Point, CByte(0))
+        LabelEmployeeID.ForeColor = Color.Red
+        LabelEmployeeID.Location = New Point(91, 270)
+        LabelEmployeeID.Name = "LabelEmployeeID"
+        LabelEmployeeID.Size = New Size(0, 17)
+        LabelEmployeeID.TabIndex = 57
         ' 
         ' UpdateBtn
         ' 
@@ -273,11 +237,11 @@ Partial Class CustomerInformation
         UpdateBtn.FlatStyle = FlatStyle.Flat
         UpdateBtn.Font = New Font("Century Gothic", 11.25F)
         UpdateBtn.ForeColor = Color.White
-        UpdateBtn.Location = New Point(16, 536)
+        UpdateBtn.Location = New Point(16, 342)
         UpdateBtn.Name = "UpdateBtn"
         UpdateBtn.Size = New Size(260, 46)
         UpdateBtn.TabIndex = 43
-        UpdateBtn.Text = "Read"
+        UpdateBtn.Text = "Update"
         UpdateBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         UpdateBtn.UseVisualStyleBackColor = False
         ' 
@@ -290,7 +254,7 @@ Partial Class CustomerInformation
         ViewBtn.Font = New Font("Century Gothic", 11.25F)
         ViewBtn.ForeColor = Color.White
         ViewBtn.Image = CType(resources.GetObject("ViewBtn.Image"), Image)
-        ViewBtn.Location = New Point(16, 484)
+        ViewBtn.Location = New Point(16, 394)
         ViewBtn.Name = "ViewBtn"
         ViewBtn.Size = New Size(260, 46)
         ViewBtn.TabIndex = 45
@@ -299,34 +263,26 @@ Partial Class CustomerInformation
         ViewBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         ViewBtn.UseVisualStyleBackColor = False
         ' 
-        ' TextBoxVehicle
-        ' 
-        TextBoxVehicle.Font = New Font("Century Gothic", 9F)
-        TextBoxVehicle.Location = New Point(148, 241)
-        TextBoxVehicle.Name = "TextBoxVehicle"
-        TextBoxVehicle.Size = New Size(129, 22)
-        TextBoxVehicle.TabIndex = 98
-        ' 
         ' Label67
         ' 
         Label67.AutoSize = True
         Label67.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label67.Location = New Point(16, 414)
+        Label67.Location = New Point(16, 270)
         Label67.Name = "Label67"
-        Label67.Size = New Size(80, 17)
+        Label67.Size = New Size(81, 17)
         Label67.TabIndex = 56
-        Label67.Text = "Customer ID"
+        Label67.Text = "Employee ID"
         ' 
         ' Label15
         ' 
         Label15.AutoSize = True
         Label15.Font = New Font("Century Gothic", 9F)
         Label15.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
-        Label15.Location = New Point(147, 223)
+        Label15.Location = New Point(16, 197)
         Label15.Name = "Label15"
-        Label15.Size = New Size(84, 17)
+        Label15.Size = New Size(53, 17)
         Label15.TabIndex = 99
-        Label15.Text = "Vehicle Type"
+        Label15.Text = "Gender"
         ' 
         ' AddBtn
         ' 
@@ -337,11 +293,11 @@ Partial Class CustomerInformation
         AddBtn.Font = New Font("Century Gothic", 11.25F)
         AddBtn.ForeColor = Color.White
         AddBtn.Image = CType(resources.GetObject("AddBtn.Image"), Image)
-        AddBtn.Location = New Point(16, 432)
+        AddBtn.Location = New Point(16, 290)
         AddBtn.Name = "AddBtn"
         AddBtn.Size = New Size(260, 46)
         AddBtn.TabIndex = 42
-        AddBtn.Text = "Add Customer"
+        AddBtn.Text = "Add Employee"
         AddBtn.TextAlign = ContentAlignment.MiddleRight
         AddBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         AddBtn.UseVisualStyleBackColor = False
@@ -381,27 +337,19 @@ Partial Class CustomerInformation
         Label14.AutoSize = True
         Label14.Font = New Font("Century Gothic", 9F)
         Label14.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
-        Label14.Location = New Point(16, 223)
+        Label14.Location = New Point(148, 197)
         Label14.Name = "Label14"
-        Label14.Size = New Size(89, 17)
+        Label14.Size = New Size(54, 17)
         Label14.TabIndex = 95
-        Label14.Text = "Plate Number"
+        Label14.Text = "Position"
         ' 
-        ' TextBoxPlateNumber
+        ' TextBoxPhoneNumber
         ' 
-        TextBoxPlateNumber.Font = New Font("Century Gothic", 9F)
-        TextBoxPlateNumber.Location = New Point(16, 241)
-        TextBoxPlateNumber.Name = "TextBoxPlateNumber"
-        TextBoxPlateNumber.Size = New Size(129, 22)
-        TextBoxPlateNumber.TabIndex = 91
-        ' 
-        ' TextBoxNumber
-        ' 
-        TextBoxNumber.Font = New Font("Century Gothic", 9F)
-        TextBoxNumber.Location = New Point(16, 86)
-        TextBoxNumber.Name = "TextBoxNumber"
-        TextBoxNumber.Size = New Size(129, 22)
-        TextBoxNumber.TabIndex = 88
+        TextBoxPhoneNumber.Font = New Font("Century Gothic", 9F)
+        TextBoxPhoneNumber.Location = New Point(16, 86)
+        TextBoxPhoneNumber.Name = "TextBoxPhoneNumber"
+        TextBoxPhoneNumber.Size = New Size(129, 22)
+        TextBoxPhoneNumber.TabIndex = 88
         ' 
         ' Label12
         ' 
@@ -442,69 +390,51 @@ Partial Class CustomerInformation
         TextBoxEmail.Size = New Size(261, 22)
         TextBoxEmail.TabIndex = 89
         ' 
-        ' DataGridViewCustomerInformation
+        ' DataGridViewEmployee
         ' 
-        DataGridViewCustomerInformation.AllowUserToAddRows = False
-        DataGridViewCustomerInformation.AllowUserToResizeColumns = False
-        DataGridViewCustomerInformation.AllowUserToResizeRows = False
-        DataGridViewCustomerInformation.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        DataGridViewCustomerInformation.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridViewCustomerInformation.BackgroundColor = Color.White
-        DataGridViewCustomerInformation.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCustomerInformation.Location = New Point(0, 35)
-        DataGridViewCustomerInformation.Name = "DataGridViewCustomerInformation"
-        DataGridViewCustomerInformation.ReadOnly = True
-        DataGridViewCustomerInformation.Size = New Size(606, 723)
-        DataGridViewCustomerInformation.TabIndex = 0
+        DataGridViewEmployee.AllowUserToAddRows = False
+        DataGridViewEmployee.AllowUserToResizeColumns = False
+        DataGridViewEmployee.AllowUserToResizeRows = False
+        DataGridViewEmployee.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridViewEmployee.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewEmployee.BackgroundColor = Color.White
+        DataGridViewEmployee.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewEmployee.Location = New Point(0, 35)
+        DataGridViewEmployee.Name = "DataGridViewEmployee"
+        DataGridViewEmployee.ReadOnly = True
+        DataGridViewEmployee.Size = New Size(606, 723)
+        DataGridViewEmployee.TabIndex = 0
         ' 
-        ' SqlConnection1
-        ' 
-        SqlConnection1.AccessTokenCallback = Nothing
-        SqlConnection1.FireInfoMessageEventOnUserErrors = False
-        ' 
-        ' NameTimer
-        ' 
-        NameTimer.Interval = 15
-        ' 
-        ' CustomerInformation
+        ' EmployeeInformation
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(911, 758)
         Controls.Add(Panel1)
         FormBorderStyle = FormBorderStyle.None
-        Name = "CustomerInformation"
-        Text = "CustomerInformation"
+        Name = "EmployeeInformation"
+        Text = "EmployeeInformation"
         Panel1.ResumeLayout(False)
         Panel14.ResumeLayout(False)
         Panel14.PerformLayout()
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
-        PanelVehicleInfo.ResumeLayout(False)
-        CType(DataGridViewCustomerInformation, ComponentModel.ISupportInitialize).EndInit()
+        CType(DataGridViewEmployee, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents DataGridViewCustomerInformation As DataGridView
-    Friend WithEvents SqlConnection1 As Microsoft.Data.SqlClient.SqlConnection
-    Friend WithEvents NameTimer As Timer
     Friend WithEvents Panel14 As Panel
     Friend WithEvents TextBoxSearchBar As TextBox
     Friend WithEvents Panel2 As Panel
-    Friend WithEvents Label5 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents TextBoxBarangay As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents TextBoxLastName As TextBox
-    Friend WithEvents RemoveVehicleBtn As Button
-    Friend WithEvents customerIDLabel As Label
-    Friend WithEvents AddVehicleBtn As Button
+    Friend WithEvents LabelEmployeeID As Label
     Friend WithEvents UpdateBtn As Button
-    Friend WithEvents ListViewVehicles As ListView
     Friend WithEvents ViewBtn As Button
-    Friend WithEvents TextBoxVehicle As TextBox
     Friend WithEvents Label67 As Label
     Friend WithEvents Label15 As Label
     Friend WithEvents AddBtn As Button
@@ -512,12 +442,14 @@ Partial Class CustomerInformation
     Friend WithEvents TextBoxName As TextBox
     Friend WithEvents Label11 As Label
     Friend WithEvents Label14 As Label
-    Friend WithEvents TextBoxPlateNumber As TextBox
-    Friend WithEvents TextBoxNumber As TextBox
+    Friend WithEvents TextBoxPhoneNumber As TextBox
     Friend WithEvents Label12 As Label
     Friend WithEvents Label13 As Label
     Friend WithEvents TextBoxAddress As TextBox
     Friend WithEvents TextBoxEmail As TextBox
-    Friend WithEvents FullScreenBtn As Button
-    Friend WithEvents PanelVehicleInfo As Panel
+    Friend WithEvents DataGridViewEmployee As DataGridView
+    Friend WithEvents ComboBoxPosition As ComboBox
+    Friend WithEvents ComboBoxGender As ComboBox
+    Friend WithEvents Label4 As Label
+    Friend WithEvents TextBoxAge As TextBox
 End Class

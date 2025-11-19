@@ -59,6 +59,7 @@ Public Class Contracts
         TextBoxCheque,
         TextBoxTotalPrice,
         ComboBoxContractStatus,
+        ComboBoxDetailer,
         contractsDatabaseHelper, ' Your ContractsDatabaseHelper instance
         localErrorHandler
     )
@@ -84,6 +85,7 @@ Public Class Contracts
             salesDatabaseHelper.PopulateCustomerNames(TextBoxCustomerName)
             salesDatabaseHelper.PopulatePaymentMethod(ComboBoxPaymentMethod)
             salesDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
+            employeeMangamentDatabaseHelper.PopulateDetailerForUI(ComboBoxDetailer)
             salesDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
             DataGridViewContract.DataSource = contractsDatabaseHelper.ViewContracts()
             ClearFields()
@@ -126,6 +128,7 @@ Public Class Contracts
         TextBoxReferenceID,
         TextBoxCheque,
         ComboBoxContractStatus,
+        ComboBoxDetailer,
         TextBoxTotalPrice,
         contractsDatabaseHelper,
         localErrorHandler
@@ -164,6 +167,7 @@ Public Class Contracts
         TextBoxReferenceID.Clear()
         TextBoxCheque.Clear()
         TextBoxTotalPrice.Text = "0.00"
+        ComboBoxDetailer.SelectedIndex = -1
 
         ListViewServices.Items.Clear()
         AddSaleToListView.ContractServiceList.Clear()
@@ -190,6 +194,7 @@ Public Class Contracts
            TextBoxCheque,
            TextBoxTotalPrice,
            ComboBoxContractStatus,
+           ComboBoxDetailer,
            LabelContractID,
            ListViewServices,
            errorHandler
@@ -200,6 +205,10 @@ Public Class Contracts
         DataGridFormattingService.DataGridCellFormattingPaymentMethod(e, "PaymentMethod", DataGridViewContract)
         DataGridFormattingService.DataGridCellFormattingStatus(e, "ContractStatus", DataGridViewContract)
 
+    End Sub
+
+    Private Sub DataGridViewContract_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridViewContract.CellPainting
+        DataGridTextHighlightService.DataGridViewTextHighlight(e)
     End Sub
 
     Private Sub ClearFieldsBtn_Click(sender As Object, e As EventArgs) Handles ClearFieldsBtn.Click
@@ -262,6 +271,13 @@ Public Class Contracts
 
     Private Sub ComboBoxDiscount_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDiscount.SelectedIndexChanged
         CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
+    End Sub
+
+    Private Sub TextBoxSearchBar_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearchBar.TextChanged
+        SearchBarService.SearchBarFunctionForContract(TextBoxSearchBar, DataGridViewContract)
+    End Sub
+    Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
+        SearchBarTextChangeService.TextBoxSearchBar(TextBoxSearchBar, e)
     End Sub
 End Class
 

@@ -35,6 +35,8 @@ Partial Class Dashboard
         Panel13 = New Panel()
         DataGridViewLatestTransaction = New DataGridView()
         Panel2 = New Panel()
+        ComboBoxDetailer = New ComboBox()
+        Label24 = New Label()
         ComboBoxDiscount = New ComboBox()
         Label23 = New Label()
         Label22 = New Label()
@@ -235,6 +237,8 @@ Partial Class Dashboard
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
+        Panel2.Controls.Add(ComboBoxDetailer)
+        Panel2.Controls.Add(Label24)
         Panel2.Controls.Add(ComboBoxDiscount)
         Panel2.Controls.Add(Label23)
         Panel2.Controls.Add(Label22)
@@ -268,6 +272,25 @@ Partial Class Dashboard
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(292, 680)
         Panel2.TabIndex = 19
+        ' 
+        ' ComboBoxDetailer
+        ' 
+        ComboBoxDetailer.Font = New Font("Century Gothic", 9F)
+        ComboBoxDetailer.FormattingEnabled = True
+        ComboBoxDetailer.Location = New Point(17, 435)
+        ComboBoxDetailer.Name = "ComboBoxDetailer"
+        ComboBoxDetailer.Size = New Size(261, 25)
+        ComboBoxDetailer.TabIndex = 144
+        ' 
+        ' Label24
+        ' 
+        Label24.AutoSize = True
+        Label24.Font = New Font("Century Gothic", 9F)
+        Label24.Location = New Point(16, 415)
+        Label24.Name = "Label24"
+        Label24.Size = New Size(56, 17)
+        Label24.TabIndex = 143
+        Label24.Text = "Detailer"
         ' 
         ' ComboBoxDiscount
         ' 
@@ -414,7 +437,7 @@ Partial Class Dashboard
         LabelSalesID.AutoSize = True
         LabelSalesID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         LabelSalesID.ForeColor = Color.Red
-        LabelSalesID.Location = New Point(69, 449)
+        LabelSalesID.Location = New Point(70, 463)
         LabelSalesID.Name = "LabelSalesID"
         LabelSalesID.Size = New Size(0, 15)
         LabelSalesID.TabIndex = 33
@@ -423,7 +446,7 @@ Partial Class Dashboard
         ' 
         Label1.AutoSize = True
         Label1.Font = New Font("Century Gothic", 9F)
-        Label1.Location = New Point(16, 449)
+        Label1.Location = New Point(17, 463)
         Label1.Name = "Label1"
         Label1.Size = New Size(54, 17)
         Label1.TabIndex = 32
@@ -436,7 +459,7 @@ Partial Class Dashboard
         AddSalesBtn.FlatStyle = FlatStyle.Flat
         AddSalesBtn.Font = New Font("Century Gothic", 11.25F)
         AddSalesBtn.ForeColor = Color.White
-        AddSalesBtn.Location = New Point(16, 469)
+        AddSalesBtn.Location = New Point(17, 483)
         AddSalesBtn.Name = "AddSalesBtn"
         AddSalesBtn.Size = New Size(260, 46)
         AddSalesBtn.TabIndex = 32
@@ -540,7 +563,7 @@ Partial Class Dashboard
         ClearBtn.Font = New Font("Century Gothic", 11.25F)
         ClearBtn.ForeColor = Color.White
         ClearBtn.Image = CType(resources.GetObject("ClearBtn.Image"), Image)
-        ClearBtn.Location = New Point(16, 521)
+        ClearBtn.Location = New Point(17, 535)
         ClearBtn.Name = "ClearBtn"
         ClearBtn.Size = New Size(260, 46)
         ClearBtn.TabIndex = 14
@@ -1028,4 +1051,6 @@ Partial Class Dashboard
     Friend WithEvents TextBoxCheque As TextBox
     Friend WithEvents ComboBoxDiscount As ComboBox
     Friend WithEvents Label23 As Label
+    Friend WithEvents ComboBoxDetailer As ComboBox
+    Friend WithEvents Label24 As Label
 End Class

@@ -9,7 +9,7 @@ Public Class DashboardDatabaseHelper
     ''' <summary>
     ''' View Sales Data from the SalesHistoryTable along with Customer and Service details.
     ''' </summary>
-    Public Function ViewSalesData() As DataTable
+    Public Shared Function ViewSalesData() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
             Try
@@ -167,7 +167,7 @@ Public Class DashboardDatabaseHelper
     ''' <summary>
     ''' Gets the filtered sales data based on the search string and filter column.
     ''' </summary>
-    Public Function GetFilteredList(searchInBar As String, filterColumn As String) As DataTable
+    Public Shared Function GetFilteredList(searchInBar As String, filterColumn As String) As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
             Dim selectQuery As String
@@ -234,4 +234,31 @@ Public Class DashboardDatabaseHelper
     ''' <summary>
     ''' Gets the activity log from the ActivityLogTable.
     ''' </summary>
+    ''' 
+    Public Shared Function GetNextSalesID() As Integer
+        Dim nextId As Integer = 1
+        Dim sql As String = "SELECT ISNULL(MAX(SalesID), 0) FROM RegularSaleTable"
+        Try
+            Using conn As New SqlConnection(constr)
+                Using cmd As New SqlCommand(sql, conn)
+                    conn.Open()
+                    Dim result As Object = cmd.ExecuteScalar()
+                    If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
+                        ' Convert the result (which is the MAX SalesID, or 0) to an integer
+                        Dim maxId As Integer = CInt(result)
+
+                        ' The next SalesID is the Max ID plus 1
+                        nextId = maxId + 1
+                    End If
+
+                End Using
+            End Using
+
+        Catch ex As Exception
+            MessageBox.Show("Database Error generating Sales ID: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return -1
+        End Try
+
+        Return nextId
+    End Function
 End Class

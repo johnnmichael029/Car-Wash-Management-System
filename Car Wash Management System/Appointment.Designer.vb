@@ -24,8 +24,12 @@ Partial Class Appointment
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Appointment))
         Panel1 = New Panel()
+        Panel14 = New Panel()
+        TextBoxSearchBar = New TextBox()
         DataGridViewAppointment = New DataGridView()
         Panel3 = New Panel()
+        ComboBoxDetailer = New ComboBox()
+        Label16 = New Label()
         ComboBoxDiscount = New ComboBox()
         Label14 = New Label()
         Label13 = New Label()
@@ -67,6 +71,7 @@ Partial Class Appointment
         Label1 = New Label()
         PrintDocumentBill = New Printing.PrintDocument()
         Panel1.SuspendLayout()
+        Panel14.SuspendLayout()
         CType(DataGridViewAppointment, ComponentModel.ISupportInitialize).BeginInit()
         Panel3.SuspendLayout()
         PanelServiceInfo.SuspendLayout()
@@ -74,6 +79,7 @@ Partial Class Appointment
         ' 
         ' Panel1
         ' 
+        Panel1.Controls.Add(Panel14)
         Panel1.Controls.Add(DataGridViewAppointment)
         Panel1.Controls.Add(Panel3)
         Panel1.Dock = DockStyle.Fill
@@ -82,24 +88,47 @@ Partial Class Appointment
         Panel1.Size = New Size(911, 758)
         Panel1.TabIndex = 3
         ' 
+        ' Panel14
+        ' 
+        Panel14.BackColor = Color.White
+        Panel14.Controls.Add(TextBoxSearchBar)
+        Panel14.Dock = DockStyle.Top
+        Panel14.Location = New Point(0, 0)
+        Panel14.Name = "Panel14"
+        Panel14.Size = New Size(606, 32)
+        Panel14.TabIndex = 3
+        ' 
+        ' TextBoxSearchBar
+        ' 
+        TextBoxSearchBar.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        TextBoxSearchBar.Font = New Font("Century Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TextBoxSearchBar.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
+        TextBoxSearchBar.Location = New Point(463, 6)
+        TextBoxSearchBar.Name = "TextBoxSearchBar"
+        TextBoxSearchBar.Size = New Size(140, 23)
+        TextBoxSearchBar.TabIndex = 6
+        TextBoxSearchBar.Text = "Search"
+        ' 
         ' DataGridViewAppointment
         ' 
         DataGridViewAppointment.AllowUserToAddRows = False
         DataGridViewAppointment.AllowUserToResizeColumns = False
         DataGridViewAppointment.AllowUserToResizeRows = False
+        DataGridViewAppointment.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         DataGridViewAppointment.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewAppointment.BackgroundColor = Color.White
         DataGridViewAppointment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewAppointment.Dock = DockStyle.Fill
-        DataGridViewAppointment.Location = New Point(0, 0)
+        DataGridViewAppointment.Location = New Point(0, 35)
         DataGridViewAppointment.Name = "DataGridViewAppointment"
         DataGridViewAppointment.ReadOnly = True
-        DataGridViewAppointment.Size = New Size(606, 758)
+        DataGridViewAppointment.Size = New Size(606, 726)
         DataGridViewAppointment.TabIndex = 0
         ' 
         ' Panel3
         ' 
         Panel3.BackColor = Color.White
+        Panel3.Controls.Add(ComboBoxDetailer)
+        Panel3.Controls.Add(Label16)
         Panel3.Controls.Add(ComboBoxDiscount)
         Panel3.Controls.Add(Label14)
         Panel3.Controls.Add(Label13)
@@ -143,6 +172,28 @@ Partial Class Appointment
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(305, 758)
         Panel3.TabIndex = 2
+        ' 
+        ' ComboBoxDetailer
+        ' 
+        ComboBoxDetailer.AutoCompleteCustomSource.AddRange(New String() {"Active", "Expired", "Cancelled"})
+        ComboBoxDetailer.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxDetailer.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBoxDetailer.FormattingEnabled = True
+        ComboBoxDetailer.Items.AddRange(New Object() {"Active", "Expired", "Cancelled"})
+        ComboBoxDetailer.Location = New Point(148, 470)
+        ComboBoxDetailer.Name = "ComboBoxDetailer"
+        ComboBoxDetailer.Size = New Size(129, 23)
+        ComboBoxDetailer.TabIndex = 146
+        ' 
+        ' Label16
+        ' 
+        Label16.AutoSize = True
+        Label16.Font = New Font("Century Gothic", 9F)
+        Label16.Location = New Point(146, 450)
+        Label16.Name = "Label16"
+        Label16.Size = New Size(56, 17)
+        Label16.TabIndex = 145
+        Label16.Text = "Detailer"
         ' 
         ' ComboBoxDiscount
         ' 
@@ -416,7 +467,7 @@ Partial Class Appointment
         ComboBoxAppointmentStatus.Items.AddRange(New Object() {"Pending", "Confirmed", "Cancelled", "No-Show"})
         ComboBoxAppointmentStatus.Location = New Point(16, 470)
         ComboBoxAppointmentStatus.Name = "ComboBoxAppointmentStatus"
-        ComboBoxAppointmentStatus.Size = New Size(261, 23)
+        ComboBoxAppointmentStatus.Size = New Size(129, 23)
         ComboBoxAppointmentStatus.TabIndex = 20
         ' 
         ' TextBoxPrice
@@ -569,6 +620,8 @@ Partial Class Appointment
         Name = "Appointment"
         Text = "Appointment"
         Panel1.ResumeLayout(False)
+        Panel14.ResumeLayout(False)
+        Panel14.PerformLayout()
         CType(DataGridViewAppointment, ComponentModel.ISupportInitialize).EndInit()
         Panel3.ResumeLayout(False)
         Panel3.PerformLayout()
@@ -619,4 +672,8 @@ Partial Class Appointment
     Friend WithEvents TextBoxCheque As TextBox
     Friend WithEvents ComboBoxDiscount As ComboBox
     Friend WithEvents Label14 As Label
+    Friend WithEvents ComboBoxDetailer As ComboBox
+    Friend WithEvents Label16 As Label
+    Friend WithEvents Panel14 As Panel
+    Friend WithEvents TextBoxSearchBar As TextBox
 End Class

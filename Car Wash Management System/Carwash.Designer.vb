@@ -74,6 +74,8 @@ Partial Class Carwash
         SettingsToolStripMenuItem = New ToolStripMenuItem()
         ChangePasswordToolStripMenuItem = New ToolStripMenuItem()
         AdminToolStripMenuItem = New ToolStripMenuItem()
+        AddUserToolStripMenuItem = New ToolStripMenuItem()
+        EmployeeInformationToolStripMenuItem = New ToolStripMenuItem()
         ServiceTrackingToolStripMenuItem = New ToolStripMenuItem()
         ServiceCatalogToolStripMenuItem = New ToolStripMenuItem()
         CustomerInformationToolStripMenuItem = New ToolStripMenuItem()
@@ -130,7 +132,7 @@ Partial Class Carwash
         ' LabelWelcome
         ' 
         LabelWelcome.AutoSize = True
-        LabelWelcome.Font = New Font("Microsoft Sans Serif", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelWelcome.Font = New Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelWelcome.Location = New Point(131, 0)
         LabelWelcome.Name = "LabelWelcome"
         LabelWelcome.RightToLeft = RightToLeft.No
@@ -217,7 +219,7 @@ Partial Class Carwash
         ' LabelEarningsValue
         ' 
         LabelEarningsValue.AutoSize = True
-        LabelEarningsValue.Font = New Font("Century Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        LabelEarningsValue.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         LabelEarningsValue.ForeColor = Color.Green
         LabelEarningsValue.Location = New Point(41, 21)
         LabelEarningsValue.Name = "LabelEarningsValue"
@@ -256,7 +258,7 @@ Partial Class Carwash
         ' NotificationLabel
         ' 
         NotificationLabel.Dock = DockStyle.Right
-        NotificationLabel.Font = New Font("Microsoft Sans Serif", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        NotificationLabel.Font = New Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         NotificationLabel.ForeColor = SystemColors.ControlText
         NotificationLabel.Location = New Point(0, 0)
         NotificationLabel.Name = "NotificationLabel"
@@ -427,7 +429,7 @@ Partial Class Carwash
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Microsoft Sans Serif", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label3.Font = New Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label3.Location = New Point(49, 1)
         Label3.Name = "Label3"
         Label3.RightToLeft = RightToLeft.No
@@ -470,7 +472,7 @@ Partial Class Carwash
         ' 
         revenueCustomerBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         revenueCustomerBtn.FlatStyle = FlatStyle.Flat
-        revenueCustomerBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        revenueCustomerBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         revenueCustomerBtn.ImageAlign = ContentAlignment.MiddleLeft
         revenueCustomerBtn.Location = New Point(0, 431)
         revenueCustomerBtn.Name = "revenueCustomerBtn"
@@ -485,7 +487,7 @@ Partial Class Carwash
         ' 
         revenueServiceBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         revenueServiceBtn.FlatStyle = FlatStyle.Flat
-        revenueServiceBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold)
+        revenueServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
         revenueServiceBtn.ImageAlign = ContentAlignment.MiddleLeft
         revenueServiceBtn.Location = New Point(0, 404)
         revenueServiceBtn.Name = "revenueServiceBtn"
@@ -500,7 +502,7 @@ Partial Class Carwash
         ' 
         salesSummaryBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         salesSummaryBtn.FlatStyle = FlatStyle.Flat
-        salesSummaryBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold)
+        salesSummaryBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
         salesSummaryBtn.ImageAlign = ContentAlignment.MiddleLeft
         salesSummaryBtn.Location = New Point(0, 377)
         salesSummaryBtn.Name = "salesSummaryBtn"
@@ -515,7 +517,7 @@ Partial Class Carwash
         ' 
         averageSaleBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         averageSaleBtn.FlatStyle = FlatStyle.Flat
-        averageSaleBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold)
+        averageSaleBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
         averageSaleBtn.ImageAlign = ContentAlignment.MiddleLeft
         averageSaleBtn.Location = New Point(0, 350)
         averageSaleBtn.Name = "averageSaleBtn"
@@ -530,7 +532,7 @@ Partial Class Carwash
         ' 
         salesBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         salesBtn.FlatStyle = FlatStyle.Flat
-        salesBtn.Font = New Font("Century Gothic", 9.0F, FontStyle.Bold)
+        salesBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold)
         salesBtn.ImageAlign = ContentAlignment.MiddleLeft
         salesBtn.Location = New Point(0, 323)
         salesBtn.Name = "salesBtn"
@@ -555,7 +557,7 @@ Partial Class Carwash
         LogoutBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
         LogoutBtn.FlatAppearance.BorderSize = 0
         LogoutBtn.FlatStyle = FlatStyle.Flat
-        LogoutBtn.Font = New Font("Segoe UI", 9.0F, FontStyle.Underline)
+        LogoutBtn.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         LogoutBtn.Image = My.Resources.Resources.logout
         LogoutBtn.ImageAlign = ContentAlignment.MiddleLeft
         LogoutBtn.Location = New Point(0, 49)
@@ -682,14 +684,14 @@ Partial Class Carwash
         ' ExitToolStripMenuItem
         ' 
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        ExitToolStripMenuItem.Size = New Size(112, 22)
+        ExitToolStripMenuItem.Size = New Size(180, 22)
         ExitToolStripMenuItem.Text = "E&xit"
         ' 
         ' SettingsToolStripMenuItem
         ' 
         SettingsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ChangePasswordToolStripMenuItem})
         SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        SettingsToolStripMenuItem.Size = New Size(112, 22)
+        SettingsToolStripMenuItem.Size = New Size(180, 22)
         SettingsToolStripMenuItem.Text = "Settings"
         ' 
         ' ChangePasswordToolStripMenuItem
@@ -700,9 +702,22 @@ Partial Class Carwash
         ' 
         ' AdminToolStripMenuItem
         ' 
+        AdminToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {AddUserToolStripMenuItem, EmployeeInformationToolStripMenuItem})
         AdminToolStripMenuItem.Name = "AdminToolStripMenuItem"
-        AdminToolStripMenuItem.Size = New Size(112, 22)
+        AdminToolStripMenuItem.Size = New Size(180, 22)
         AdminToolStripMenuItem.Text = "Admin"
+        ' 
+        ' AddUserToolStripMenuItem
+        ' 
+        AddUserToolStripMenuItem.Name = "AddUserToolStripMenuItem"
+        AddUserToolStripMenuItem.Size = New Size(180, 22)
+        AddUserToolStripMenuItem.Text = "Add User"
+        ' 
+        ' EmployeeInformationToolStripMenuItem
+        ' 
+        EmployeeInformationToolStripMenuItem.Name = "EmployeeInformationToolStripMenuItem"
+        EmployeeInformationToolStripMenuItem.Size = New Size(180, 22)
+        EmployeeInformationToolStripMenuItem.Text = "Employee Information"
         ' 
         ' ServiceTrackingToolStripMenuItem
         ' 
@@ -716,31 +731,31 @@ Partial Class Carwash
         ' ServiceCatalogToolStripMenuItem
         ' 
         ServiceCatalogToolStripMenuItem.Name = "ServiceCatalogToolStripMenuItem"
-        ServiceCatalogToolStripMenuItem.Size = New Size(173, 22)
+        ServiceCatalogToolStripMenuItem.Size = New Size(180, 22)
         ServiceCatalogToolStripMenuItem.Text = "&Service Catalog"
         ' 
         ' CustomerInformationToolStripMenuItem
         ' 
         CustomerInformationToolStripMenuItem.Name = "CustomerInformationToolStripMenuItem"
-        CustomerInformationToolStripMenuItem.Size = New Size(173, 22)
+        CustomerInformationToolStripMenuItem.Size = New Size(180, 22)
         CustomerInformationToolStripMenuItem.Text = "Customer &Information"
         ' 
         ' SaleHistoryToolStripMenuItem
         ' 
         SaleHistoryToolStripMenuItem.Name = "SaleHistoryToolStripMenuItem"
-        SaleHistoryToolStripMenuItem.Size = New Size(173, 22)
+        SaleHistoryToolStripMenuItem.Size = New Size(180, 22)
         SaleHistoryToolStripMenuItem.Text = "&Regular Sale"
         ' 
         ' ContractsToolStripMenuItem
         ' 
         ContractsToolStripMenuItem.Name = "ContractsToolStripMenuItem"
-        ContractsToolStripMenuItem.Size = New Size(173, 22)
+        ContractsToolStripMenuItem.Size = New Size(180, 22)
         ContractsToolStripMenuItem.Text = "&Contracts"
         ' 
         ' PickUpToolStripMenuItem
         ' 
         PickUpToolStripMenuItem.Name = "PickUpToolStripMenuItem"
-        PickUpToolStripMenuItem.Size = New Size(173, 22)
+        PickUpToolStripMenuItem.Size = New Size(180, 22)
         PickUpToolStripMenuItem.Text = "Pick Up"
         ' 
         ' BookingToolStripMenuItem
@@ -792,7 +807,7 @@ Partial Class Carwash
         ' 
         ' Carwash
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(241), CByte(244), CByte(254))
         ClientSize = New Size(1385, 788)
@@ -897,4 +912,6 @@ Partial Class Carwash
     Friend WithEvents revenueServiceBtn As Button
     Friend WithEvents salesSummaryBtn As Button
     Friend WithEvents averageSaleBtn As Button
+    Friend WithEvents AddUserToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents EmployeeInformationToolStripMenuItem As ToolStripMenuItem
 End Class

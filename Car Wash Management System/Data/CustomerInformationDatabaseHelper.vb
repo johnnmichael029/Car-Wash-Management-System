@@ -48,6 +48,7 @@ Public Class CustomerInformationDatabaseHelper
             End Using
         End If
     End Sub
+
     Public Sub AddCustomer(firstName As String, lastName As String, number As String, email As String, address As String, barangay As String, VehicleList As List(Of VehicleService))
         Using con As New SqlConnection(constr)
             con.Open()
@@ -108,6 +109,7 @@ Public Class CustomerInformationDatabaseHelper
             End Try
         End Using
     End Sub
+
     Public Sub UpdateCustomer(customerID As String, name As String, lastName As String, number As String, email As String, address As String, barangay As String, vehicleList As List(Of VehicleService))
         Dim iCustomerID As Integer = CInt(customerID)
         Using con As New SqlConnection(constr)
@@ -162,6 +164,7 @@ Public Class CustomerInformationDatabaseHelper
             End Try
         End Using
     End Sub
+
     Public Shared Function ViewCustomer() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -329,6 +332,7 @@ Public Class CustomerInformationDatabaseHelper
         End Using
         Return totalAmount
     End Function
+
     Public Function GetCustomerContractStatus(customerID As Integer) As String
         Dim contractStatus As String = "None"
         Dim query As String = "SELECT TOP 1 ContractStatus FROM ContractsTable WHERE CustomerID = @CustomerID AND ContractStatus = 'Active'"
