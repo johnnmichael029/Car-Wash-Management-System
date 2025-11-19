@@ -350,10 +350,6 @@ Public Class ContractsDatabaseHelper
         Using con As New SqlConnection(constr)
             Try
                 con.Open()
-
-                ' --- 1. CTE: AGGREGATE SERVICES ---
-                ' We join SalesServiceTable to ServicesTable twice to look up the names.
-                ' Then we use STRING_AGG to combine all services (Base and Addon) linked to a single SalesID.
                 Dim aggregateServicesQuery =
             "WITH AggregatedServices AS ( " &
             "   SELECT " &
@@ -367,8 +363,6 @@ Public Class ContractsDatabaseHelper
             "   GROUP BY cst.ContractID " &
             ") "
 
-                ' --- 2. MAIN QUERY: SELECT AND JOIN ---
-                ' Now we join RegularSaleTable to the aggregated data and the CustomersTable.
                 Dim selectQuery =
             aggregateServicesQuery &
             "SELECT " &

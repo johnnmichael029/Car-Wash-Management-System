@@ -133,7 +133,6 @@ Public Class Appointment
         TextBoxNotes.Clear()
         DateTimePickerStartDate.Value = DateTime.Now
         LabelAppointmentID.Text = String.Empty
-        LabelSales.Text = String.Empty
         TextBoxReferenceID.Clear()
         TextBoxTotalPrice.Text = "0.00"
         ComboBoxDetailer.SelectedIndex = -1

@@ -44,7 +44,6 @@ Partial Class Appointment
         TextBoxReferenceID = New TextBox()
         Label7 = New Label()
         PrintBillBtn = New Button()
-        LabelSales = New Label()
         LabelAppointmentID = New Label()
         TextBoxNotes = New TextBox()
         Label3 = New Label()
@@ -118,7 +117,7 @@ Partial Class Appointment
         DataGridViewAppointment.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewAppointment.BackgroundColor = Color.White
         DataGridViewAppointment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewAppointment.Location = New Point(0, 35)
+        DataGridViewAppointment.Location = New Point(-3, 32)
         DataGridViewAppointment.Name = "DataGridViewAppointment"
         DataGridViewAppointment.ReadOnly = True
         DataGridViewAppointment.Size = New Size(606, 726)
@@ -142,7 +141,6 @@ Partial Class Appointment
         Panel3.Controls.Add(TextBoxReferenceID)
         Panel3.Controls.Add(Label7)
         Panel3.Controls.Add(PrintBillBtn)
-        Panel3.Controls.Add(LabelSales)
         Panel3.Controls.Add(LabelAppointmentID)
         Panel3.Controls.Add(TextBoxNotes)
         Panel3.Controls.Add(Label3)
@@ -343,7 +341,7 @@ Partial Class Appointment
         PrintBillBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         PrintBillBtn.ForeColor = Color.White
         PrintBillBtn.Image = CType(resources.GetObject("PrintBillBtn.Image"), Image)
-        PrintBillBtn.Location = New Point(189, 566)
+        PrintBillBtn.Location = New Point(189, 543)
         PrintBillBtn.Name = "PrintBillBtn"
         PrintBillBtn.Size = New Size(87, 30)
         PrintBillBtn.TabIndex = 35
@@ -352,21 +350,12 @@ Partial Class Appointment
         PrintBillBtn.TextImageRelation = TextImageRelation.ImageBeforeText
         PrintBillBtn.UseVisualStyleBackColor = False
         ' 
-        ' LabelSales
-        ' 
-        LabelSales.AutoSize = True
-        LabelSales.ForeColor = Color.Red
-        LabelSales.Location = New Point(204, 556)
-        LabelSales.Name = "LabelSales"
-        LabelSales.Size = New Size(0, 15)
-        LabelSales.TabIndex = 32
-        ' 
         ' LabelAppointmentID
         ' 
         LabelAppointmentID.AutoSize = True
         LabelAppointmentID.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         LabelAppointmentID.ForeColor = Color.Red
-        LabelAppointmentID.Location = New Point(112, 581)
+        LabelAppointmentID.Location = New Point(112, 558)
         LabelAppointmentID.Name = "LabelAppointmentID"
         LabelAppointmentID.Size = New Size(0, 15)
         LabelAppointmentID.TabIndex = 31
@@ -376,7 +365,7 @@ Partial Class Appointment
         TextBoxNotes.Location = New Point(16, 514)
         TextBoxNotes.Multiline = True
         TextBoxNotes.Name = "TextBoxNotes"
-        TextBoxNotes.Size = New Size(260, 49)
+        TextBoxNotes.Size = New Size(261, 23)
         TextBoxNotes.TabIndex = 30
         ' 
         ' Label3
@@ -442,7 +431,7 @@ Partial Class Appointment
         ' 
         Label9.AutoSize = True
         Label9.Font = New Font("Century Gothic", 9F)
-        Label9.Location = New Point(16, 581)
+        Label9.Location = New Point(16, 558)
         Label9.Name = "Label9"
         Label9.Size = New Size(102, 17)
         Label9.TabIndex = 22
@@ -460,11 +449,11 @@ Partial Class Appointment
         ' 
         ' ComboBoxAppointmentStatus
         ' 
-        ComboBoxAppointmentStatus.AutoCompleteCustomSource.AddRange(New String() {"Pending", "Confirmed", "Cancelled", "No-Show"})
+        ComboBoxAppointmentStatus.AutoCompleteCustomSource.AddRange(New String() {"Confirmed", "Cancelled", "No-Show"})
         ComboBoxAppointmentStatus.AutoCompleteSource = AutoCompleteSource.CustomSource
         ComboBoxAppointmentStatus.DropDownStyle = ComboBoxStyle.DropDownList
         ComboBoxAppointmentStatus.FormattingEnabled = True
-        ComboBoxAppointmentStatus.Items.AddRange(New Object() {"Pending", "Confirmed", "Cancelled", "No-Show"})
+        ComboBoxAppointmentStatus.Items.AddRange(New Object() {"Confirmed", "Cancelled", "No-Show"})
         ComboBoxAppointmentStatus.Location = New Point(16, 470)
         ComboBoxAppointmentStatus.Name = "ComboBoxAppointmentStatus"
         ComboBoxAppointmentStatus.Size = New Size(129, 23)
@@ -494,9 +483,9 @@ Partial Class Appointment
         Label6.Font = New Font("Century Gothic", 9F)
         Label6.Location = New Point(16, 277)
         Label6.Name = "Label6"
-        Label6.Size = New Size(120, 17)
+        Label6.Size = New Size(147, 17)
         Label6.TabIndex = 14
-        Label6.Text = "Appointment Date"
+        Label6.Text = "Appointment DateTime"
         ' 
         ' Label5
         ' 
@@ -533,7 +522,7 @@ Partial Class Appointment
         UpdateAppointmentBtn.FlatStyle = FlatStyle.Flat
         UpdateAppointmentBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         UpdateAppointmentBtn.ForeColor = Color.White
-        UpdateAppointmentBtn.Location = New Point(146, 651)
+        UpdateAppointmentBtn.Location = New Point(146, 628)
         UpdateAppointmentBtn.Name = "UpdateAppointmentBtn"
         UpdateAppointmentBtn.Size = New Size(129, 30)
         UpdateAppointmentBtn.TabIndex = 8
@@ -548,7 +537,7 @@ Partial Class Appointment
         ClearFieldsBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ClearFieldsBtn.ForeColor = Color.White
         ClearFieldsBtn.Image = CType(resources.GetObject("ClearFieldsBtn.Image"), Image)
-        ClearFieldsBtn.Location = New Point(16, 651)
+        ClearFieldsBtn.Location = New Point(16, 628)
         ClearFieldsBtn.Name = "ClearFieldsBtn"
         ClearFieldsBtn.Size = New Size(129, 30)
         ClearFieldsBtn.TabIndex = 7
@@ -564,7 +553,7 @@ Partial Class Appointment
         AddAppointmentBtn.FlatStyle = FlatStyle.Flat
         AddAppointmentBtn.Font = New Font("Century Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         AddAppointmentBtn.ForeColor = Color.White
-        AddAppointmentBtn.Location = New Point(16, 599)
+        AddAppointmentBtn.Location = New Point(16, 576)
         AddAppointmentBtn.Name = "AddAppointmentBtn"
         AddAppointmentBtn.Size = New Size(260, 46)
         AddAppointmentBtn.TabIndex = 6
@@ -656,7 +645,6 @@ Partial Class Appointment
     Friend WithEvents TextBoxNotes As TextBox
     Friend WithEvents Label3 As Label
     Friend WithEvents LabelAppointmentID As Label
-    Friend WithEvents LabelSales As Label
     Friend WithEvents PrintBillBtn As Button
     Friend WithEvents PrintDocumentBill As Printing.PrintDocument
     Friend WithEvents TextBoxReferenceID As TextBox

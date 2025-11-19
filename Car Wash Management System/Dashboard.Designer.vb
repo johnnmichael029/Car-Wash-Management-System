@@ -764,7 +764,7 @@ Partial Class Dashboard
         customerIDLabel.AutoSize = True
         customerIDLabel.Font = New Font("Segoe UI", 9F, FontStyle.Underline)
         customerIDLabel.ForeColor = Color.Red
-        customerIDLabel.Location = New Point(85, 449)
+        customerIDLabel.Location = New Point(86, 463)
         customerIDLabel.Name = "customerIDLabel"
         customerIDLabel.Size = New Size(0, 15)
         customerIDLabel.TabIndex = 57
@@ -786,7 +786,7 @@ Partial Class Dashboard
         ClearFieldsBtn.Font = New Font("Century Gothic", 11.25F)
         ClearFieldsBtn.ForeColor = Color.White
         ClearFieldsBtn.Image = CType(resources.GetObject("ClearFieldsBtn.Image"), Image)
-        ClearFieldsBtn.Location = New Point(16, 521)
+        ClearFieldsBtn.Location = New Point(17, 535)
         ClearFieldsBtn.Name = "ClearFieldsBtn"
         ClearFieldsBtn.Size = New Size(260, 46)
         ClearFieldsBtn.TabIndex = 45
@@ -807,7 +807,7 @@ Partial Class Dashboard
         ' 
         Label67.AutoSize = True
         Label67.Font = New Font("Century Gothic", 9F)
-        Label67.Location = New Point(16, 449)
+        Label67.Location = New Point(17, 463)
         Label67.Name = "Label67"
         Label67.Size = New Size(80, 17)
         Label67.TabIndex = 56
@@ -833,7 +833,7 @@ Partial Class Dashboard
         AddCustomerBtn.Font = New Font("Century Gothic", 11.25F)
         AddCustomerBtn.ForeColor = Color.White
         AddCustomerBtn.Image = CType(resources.GetObject("AddCustomerBtn.Image"), Image)
-        AddCustomerBtn.Location = New Point(16, 469)
+        AddCustomerBtn.Location = New Point(17, 483)
         AddCustomerBtn.Name = "AddCustomerBtn"
         AddCustomerBtn.Size = New Size(260, 46)
         AddCustomerBtn.TabIndex = 42

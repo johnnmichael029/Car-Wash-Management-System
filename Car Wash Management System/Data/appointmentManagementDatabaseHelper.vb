@@ -90,6 +90,7 @@ Public Class AppointmentManagementDatabaseHelper
             End Try
         End Using
     End Sub
+
     Public Shared Function ViewAppointment() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
@@ -131,6 +132,8 @@ Public Class AppointmentManagementDatabaseHelper
         End Using
         Return dt
     End Function
+
+
     Public Sub UpdateAppointment(appointmentID As Integer, customerID As Integer, allSaleItems As List(Of AppointmentService), appointmentDateTime As Date, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, appointmentStatus As String, detailer As String, notes As String)
         Using con As New SqlConnection(constr)
             con.Open()
