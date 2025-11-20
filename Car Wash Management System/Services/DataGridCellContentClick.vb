@@ -1,4 +1,5 @@
 ﻿Public Class DataGridCellContentClick
+    ' Highlight the selected row in a DataGridView
     Public Shared Sub HighlightSelectedRow(e As DataGridViewCellEventArgs, dataGridView As DataGridView)
         If e.RowIndex >= 0 Then
             ' Clear previous selection
@@ -8,6 +9,7 @@
         End If
     End Sub
 
+    ' Load data from the selected row into various controls from the Appointment DataGridView
     Public Overloads Shared Sub GetSelectedRowData(
          textBoxCustomerName As TextBox,
          dataGridViewAppointment As DataGridView,
@@ -72,6 +74,7 @@
         End Try
     End Sub
 
+    ' Load data from the selected row into various controls from the Service DataGridView
     Public Overloads Shared Sub GetSelectedRowData(
     TextBoxServiceName As TextBox,
     CheckBoxAddon As CheckBox,
@@ -99,6 +102,7 @@
         End Try
     End Sub
 
+    ' Load data from the selected row into various controls from the Sales DataGridView
     Public Overloads Shared Sub GetSelectedRowData(
        TextBoxCustomerName As TextBox,
        DataGridViewSales As DataGridView,
@@ -157,6 +161,7 @@
         End Try
     End Sub
 
+    ' Load data from the selected row into various controls from the Customer Information DataGridView
     Public Overloads Shared Sub GetSelectedRowData(
         DataGridViewCustomerInformation As DataGridView,
         TextBoxName As TextBox,
@@ -216,6 +221,7 @@
         End Try
     End Sub
 
+    ' Load data from the selected row into various controls from the Contract DataGridView
     Public Overloads Shared Sub GetSelectedRowData(
        DataGridViewContract As DataGridView,
        TextBoxCustomerName As TextBox,
@@ -282,6 +288,7 @@
         End Try
     End Sub
 
+    ' Load data from the selected row into various controls from the Employee DataGridView
     Public Overloads Shared Sub GetSelectedRowData(
        DataGridViewEmployee As DataGridView,
        TextBoxName As TextBox,
@@ -319,6 +326,7 @@
         End Try
     End Sub
 
+    ' Load data from the selected row into various controls from the Pickup DataGridView
     Public Overloads Shared Sub GetSelectedRowData(
         DataGridViewPickup As DataGridView,
         TextBoxCustomerName As TextBox,

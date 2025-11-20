@@ -114,7 +114,7 @@ Public Class PickupManagementDatabaseHelper
         End Using
     End Sub
 
-    Public Sub UpdatePickup(pickupID As Integer, customerID As Integer, allSaleItems As List(Of PickupService), pickupDateTime As DateTime, pickupAddress As String, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, pickupStatus As String, detailer As String, notes As String)
+    Public Overloads Sub UpdatePickup(pickupID As Integer, customerID As Integer, allSaleItems As List(Of PickupService), pickupDateTime As DateTime, pickupAddress As String, paymentMethod As String, referenceID As String, cheque As String, price As Decimal, pickupStatus As String, detailer As String, notes As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Dim transaction As SqlTransaction = con.BeginTransaction()
@@ -202,6 +202,24 @@ Public Class PickupManagementDatabaseHelper
         End Using
     End Sub
 
+    Public Overloads Sub UpdatePickup(pickupID As Integer, pickupAddress As String)
+        Using con As New SqlConnection(constr)
+            con.Open()
+            Try
+                ' SQL query to update a contract.
+                Dim updateQuery As String = "UPDATE PickupTable SET PickupAddress = @PickupAddress WHERE PickupID = @PickupID"
+                Using cmd As New SqlCommand(updateQuery, con)
+                    cmd.Parameters.AddWithValue("@PickupID", pickupID)
+                    cmd.Parameters.AddWithValue("@PickupAddress", pickupAddress)
+                    cmd.ExecuteNonQuery()
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error updating pickup status: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+    End Sub
     ' Get list of services for a specific pickup
     Public Shared Function GetSalesServiceList(pickupID As Integer) As List(Of PickupService)
         Dim serviceList As New List(Of PickupService)
@@ -243,4 +261,70 @@ Public Class PickupManagementDatabaseHelper
         End Using
         Return serviceList
     End Function
+
+    Public Shared Function GetSaleLineItems(pickupID As Integer, constr As String) As List(Of ServiceLineItem)
+        Dim items As New List(Of ServiceLineItem)()
+
+        ' This query retrieves the subtotal, base service name, and addon service name 
+        ' for a given SaleID by joining SalesServiceTable with ServicesTable twice.
+        Dim sql As String = "
+        SELECT 
+            PST.Subtotal,
+            ST_BASE.ServiceName AS BaseServiceName,
+            ST_ADDON.ServiceName AS AddonServiceName
+        FROM 
+            PickupServiceTable AS PST
+        LEFT JOIN 
+            ServicesTable AS ST_BASE ON PST.ServiceID = ST_BASE.ServiceID
+        LEFT JOIN 
+            ServicesTable AS ST_ADDON ON PST.AddonServiceID = ST_ADDON.ServiceID
+        WHERE 
+            PST.PickupID = @PickupID
+        ORDER BY 
+            PST.PickupServiceID ASC;
+    "
+
+        Using conn As New SqlConnection(constr)
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@PickupID", pickupID)
+
+                Try
+                    conn.Open()
+                    Dim reader As SqlDataReader = cmd.ExecuteReader()
+
+                    While reader.Read()
+                        Dim subtotal As Decimal = Convert.ToDecimal(reader("Subtotal"))
+                        Dim baseServiceName As String = reader("BaseServiceName").ToString()
+
+                        ' Safely retrieve AddonServiceName, converting DBNull to an empty string.
+                        Dim addonServiceName As String = If(reader("AddonServiceName") Is DBNull.Value, "", reader("AddonServiceName").ToString())
+
+                        Dim lineItemName As String = ""
+
+                        ' Check if a base service exists for this line item.
+                        If Not String.IsNullOrEmpty(baseServiceName) Then
+                            ' Start with the Base Service Name
+                            lineItemName = baseServiceName
+
+                            ' Append the Add-on Service Name if it exists
+                            If Not String.IsNullOrEmpty(addonServiceName) Then
+                                lineItemName &= " + " & addonServiceName
+                            End If
+                            items.Add(New ServiceLineItem With {
+                            .Name = lineItemName,
+                            .Price = subtotal
+                        })
+                        End If
+                    End While
+                    reader.Close()
+
+                Catch ex As Exception
+                    MessageBox.Show("Error retrieving sale line items: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End Using
+        End Using
+
+        Return items
+    End Function
+
 End Class

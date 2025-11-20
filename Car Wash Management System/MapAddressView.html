@@ -1,202 +1,461 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time Address Tracker Map (Leaflet)</title>
-    
-    <!-- Load Tailwind CSS for modern styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- 1. Leaflet CSS and JS (Core Map Library - REQUIRED ADDITION) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-        crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20n6a9c34z6zW423kR+46sWkL/w1lGkS9GjU2g0E6o8="
-        crossorigin=""></script>
 
-    <!-- 2. Leaflet Geocoding Plugin (REQUIRED ADDITION for address searching) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<html>
+
+<head>
+
+    <title>OpenStreetMap Directions Tracker</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FIX: Force the WebBrowser control to use the highest possible rendering engine -->
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+
+    <!-- Leaflet CSS for map styling -->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+
+          xintegrity="sha512-Rksm5RenBEKSK7S3c4I/HP6yYkFzYk/PqDk2sQJ8D7+XG2E4A7D2W7/B6Wl2Q2y8Q=="
+
+          crossorigin=""/>
 
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f7f9;
-        }
-        /* Style for the map container (using your ID) */
-        #ViewFullAddressPanel {
-            height: 400px; /* Default height for desktop/tablet */
+
+        /* Ensure the map container fills the entire body */
+
+        html, body, #mapid {
+
+            height: 100%;
+
             width: 100%;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-            /* CRITICAL: Leaflet requires the map container to have defined height */
+
+            margin: 0;
+
+            padding: 0;
+
         }
-        /* Make the map responsive on smaller screens */
-        @media (max-width: 640px) {
-            #ViewFullAddressPanel {
-                height: 300px;
-            }
+
+        /* Style for the information box */
+
+        #info-box {
+
+            position: absolute;
+
+            top: 10px;
+
+            left: 10px;
+
+            z-index: 1000;
+
+            background: white;
+
+            padding: 8px 12px;
+
+            border-radius: 6px;
+
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
+            font-family: Arial, sans-serif;
+
+            font-size: 14px;
+
+            border-left: 5px solid #0078A8;
+
+            max-width: 90%;
+
         }
-        /* Custom Status Message Styling */
-        .status-message {
-            padding: 0.5rem 1rem;
-            margin-top: 0.5rem;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
+
+        .error {
+
+            color: red;
+
+            font-weight: bold;
+
         }
-        .error-message {
-            background-color: #fee2e2; /* red-100 */
-            color: #991b1b; /* red-800 */
+
+        .route-info {
+
+            font-weight: bold;
+
+            color: #0078A8;
+
         }
-        .success-message {
-            background-color: #d1fae5; /* green-100 */
-            color: #065f46; /* green-800 */
-        }
-        .info-message {
-            background-color: #fef3c7; /* amber-100 */
-            color: #b45309; /* amber-800 */
-        }
+
     </style>
+
 </head>
-<body class="p-4 sm:p-8">
 
-    <div class="max-w-4xl mx-auto space-y-6">
+<body>
 
-        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Pickup Location Tracker</h1>
-        
-        <!-- Address Input Field -->
-        <div class="p-4 bg-white rounded-lg shadow-md">
-            <label for="TextBoxPickupAddress" class="block text-sm font-medium text-gray-700 mb-2">
-                Pickup Address:
-            </label>
-            <input 
-                type="text" 
-                id="TextBoxPickupAddress" 
-                placeholder="Start typing a full address (e.g., 123 Main Street, Taguig, Metro Manila)"
-                value="Taguig, Metro Manila, Philippines"
-                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-                autocomplete="off"
-            >
-            <p id="mapStatus" class="mt-2 text-sm text-gray-500 info-message">
-                Map initialized with Leaflet/OpenStreetMap. Waiting for address from main application.
-            </p>
-        </div>
 
-        <!-- Map Container (ViewFullAddressPanel) -->
-        <div class="mt-8">
-            <h2 class="text-xl font-semibold text-gray-700 mb-3">Map Preview (ViewFullAddressPanel)</h2>
-            <div id="ViewFullAddressPanel">
-                <!-- Leaflet Map will load here -->
-            </div>
-        </div>
+
+    <!-- Map Container -->
+
+    <div id="mapid"></div>
+
+
+
+    <!-- Info Box for communication -->
+
+    <div id="info-box">
+
+        <p id="status-message">Map initialized. Waiting for pickup and delivery addresses.</p>
 
     </div>
 
+
+
+    <!-- Leaflet JavaScript library -->
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+
+            xintegrity="sha512-XQoYMqMTK8LvdxFBcFM105U7S9kO2LgM8yD28b1yCg4sYcR9d4D2M1qT2x1p28="
+
+            crossorigin=""></script>
+
+
+
     <script>
-        // --- MAP AND GEOCODING LOGIC (Using Leaflet) ---
 
-        let map;
-        let currentMarker;
-        const statusMessage = document.getElementById('mapStatus');
+        var map = L.map('mapid').setView([40.7128, -74.0060], 12); // Default to NYC
 
-        /**
-         * Displays a status message to the user.
-         * @param {string} message The text to display.
-         * @param {string} type 'success', 'error', or 'info'
-         */
-        function showStatus(message, type = 'info') {
-            statusMessage.textContent = message;
-            statusMessage.className = 'status-message'; // Reset classes
+        var markerPickup;
+
+        var markerCarwash;
+
+        var routeLayer;
+
+
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+            maxZoom: 19,
+
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+
+        }).addTo(map);
+
+
+
+        var statusMessage = document.getElementById('status-message');
+
+
+
+        // Helper function for making compatible XHR requests
+
+        function makeXhrRequest(url, callback) {
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', url, true);
+
             
-            if (type === 'success') {
-                statusMessage.classList.add('success-message');
-            } else if (type === 'error') {
-                statusMessage.classList.add('error-message');
-            } else {
-                statusMessage.classList.add('info-message');
-            }
+
+            xhr.onreadystatechange = function() {
+
+                if (xhr.readyState === 4) {
+
+                    if (xhr.status === 200) {
+
+                        try {
+
+                            var data = JSON.parse(xhr.responseText);
+
+                            callback(null, data);
+
+                        } catch (e) {
+
+                            callback('JSON parsing failed: ' + e.message, null);
+
+                        }
+
+                    } else {
+
+                        callback('HTTP Error: ' + xhr.status + ' ' + xhr.statusText, null);
+
+                    }
+
+                }
+
+            };
+
+            xhr.onerror = function() {
+
+                callback('Network error during request.', null);
+
+            };
+
+            xhr.send();
+
         }
 
+
+
         /**
-         * Initializes the Leaflet Map inside the ViewFullAddressPanel container.
+
+         * Geocodes a single address using Nominatim.
+
          */
-        function initMap() {
-            try {
-                // Set initial location to a central point in the Philippines (Manila)
-                const initialLocation = [14.5995, 120.9842]; 
 
-                // 1. Initialize the map object on the user's specified div ID
-                map = L.map('ViewFullAddressPanel').setView(initialLocation, 12);
+        function geocodeAddress(address, callback) {
 
-                // 2. Add the OpenStreetMap tiles (the map graphics)
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            var nominatimUrl = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address) + '&limit=1';
+
+            
+
+            makeXhrRequest(nominatimUrl, function(error, data) {
+
+                if (error) {
+
+                    callback(error, null);
+
+                    return;
+
+                }
+
+                
+
+                if (data && data.length > 0) {
+
+                    callback(null, {
+
+                        lat: parseFloat(data[0].lat),
+
+                        lon: parseFloat(data[0].lon),
+
+                        name: data[0].display_name
+
+                    });
+
+                } else {
+
+                    callback('Address not found.', null);
+
+                }
+
+            });
+
+        }
+
+        
+
+        /**
+
+         * Draws the route between two coordinates using OSRM.
+
+         */
+
+        function drawRoute(coordA, coordB) {
+
+            // coordA and coordB are {lat, lon} objects
+
+            var routeUrl = 'https://router.project-osrm.org/route/v1/driving/' + 
+
+                coordA.lon + ',' + coordA.lat + ';' + 
+
+                coordB.lon + ',' + coordB.lat + 
+
+                '?geometries=geojson&overview=full';
+
+
+
+            makeXhrRequest(routeUrl, function(error, data) {
+
+                if (error || data.code !== 'Ok') {
+
+                    statusMessage.textContent = 'Error calculating route: ' + (error || data.message || 'Unknown error.');
+
+                    statusMessage.classList.add('error');
+
+                    return;
+
+                }
+
+
+
+                if (routeLayer) {
+
+                    map.removeLayer(routeLayer);
+
+                }
+
+
+
+                var geojson = data.routes[0].geometry;
+
+                var duration = data.routes[0].duration; // in seconds
+
+                var distance = data.routes[0].distance; // in meters
+
+
+
+                // Convert distance to km and duration to minutes
+
+                var distanceKm = (distance / 1000).toFixed(1);
+
+                var durationMin = Math.round(duration / 60);
+
+
+
+                // Draw the line
+
+                routeLayer = L.geoJSON(geojson, {
+
+                    style: {
+
+                        color: '#0078A8',
+
+                        weight: 6,
+
+                        opacity: 0.7
+
+                    }
+
                 }).addTo(map);
 
-                showStatus("Map initialized successfully with OpenStreetMap. Ready for location updates.", 'success');
-            } catch (e) {
-                showStatus("Error initializing Leaflet Map: " + e.message, 'error');
-            }
+
+
+                // Zoom to fit the route
+
+                map.fitBounds(routeLayer.getBounds());
+
+                
+
+                statusMessage.innerHTML = 'Route found. <span class="route-info">Distance: ' + distanceKm + ' km, Duration: ' + durationMin + ' min.</span>';
+
+            });
+
         }
 
+        
+
         /**
-         * Public function called by the VB.NET WebBrowser control to update the map location.
-         * Uses the Nominatim free geocoding service via the Leaflet Geocoder control plugin.
-         * @param {string} address The address to search for (e.g., "Taguig, Metro Manila).
+
+         * The VB.NET application calls this function to update the map route.
+
+         * @param {string} pickupAddress The starting pickup address.
+
+         * @param {string} carwashAddress The destination car wash address.
+
          */
-        window.updateMapLocation = function(address) {
-            if (!map) {
-                showStatus("Map is not yet initialized. Please wait.", 'error');
-                return;
-            }
+
+        window.updateMapRoute = function(pickupAddress, carwashAddress) {
+
+            statusMessage.textContent = 'Searching for Pickup and Carwash locations...';
+
+            statusMessage.classList.remove('error');
+
+
+
+            // Clear previous markers and route
+
+            if (markerPickup) map.removeLayer(markerPickup);
+
+            if (markerCarwash) map.removeLayer(markerCarwash);
+
+            if (routeLayer) map.removeLayer(routeLayer);
+
+
+
+            var pickupCoord, carwashCoord;
+
+            var errors = [];
+
             
-            if (!address || address.trim() === "") {
-                showStatus("Address is empty. Map display remains centered.", 'info');
-                if (currentMarker) {
-                    map.removeLayer(currentMarker);
-                }
-                return;
-            }
-            
-            showStatus(`Searching for: ${address}...`, 'info');
 
-            // Use the Nominatim Geocoder (free service)
-            const geocoder = L.Control.Geocoder.nominatim();
+            // --- Step 1: Geocode Pickup Address ---
 
-            geocoder.geocode(address, function(results) {
-                if (results.length > 0) {
-                    const result = results[0];
-                    const latLng = result.center;
-                    const foundAddress = result.name;
+            geocodeAddress(pickupAddress, function(error, coord) {
 
-                    // 1. Remove previous marker if it exists
-                    if (currentMarker) {
-                        map.removeLayer(currentMarker);
-                    }
+                if (error) {
 
-                    // 2. Create and add a new marker (the pin)
-                    currentMarker = L.marker(latLng).addTo(map)
-                        .bindPopup(`<b>${foundAddress}</b><br>Pickup Location`).openPopup();
-                    
-                    // 3. Center the map and set zoom level (15 is a good street level zoom)
-                    map.setView(latLng, 15); 
-                    
-                    showStatus(`Location found for: ${foundAddress}`, 'success');
+                    errors.push('Pickup Address: ' + error);
+
                 } else {
-                    showStatus(`Location not found for "${address}". Try a more specific address.`, 'error');
-                    if (currentMarker) {
-                         map.removeLayer(currentMarker);
-                    }
+
+                    pickupCoord = coord;
+
+                    markerPickup = L.marker([coord.lat, coord.lon], {
+
+                        icon: L.divIcon({className: 'leaflet-div-icon-pickup', html: '<div style="background-color: red; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white;"></div>'})
+
+                    }).addTo(map).bindPopup('<b>A: Pickup Location</b><br>' + pickupAddress);
+
                 }
+
+
+
+                // --- Step 2: Geocode Carwash Address (nested callback for sequential execution) ---
+
+                geocodeAddress(carwashAddress, function(error, coord) {
+
+                    if (error) {
+
+                        errors.push('Carwash Address: ' + error);
+
+                    } else {
+
+                        carwashCoord = coord;
+
+                        markerCarwash = L.marker([coord.lat, coord.lon], {
+
+                            icon: L.divIcon({className: 'leaflet-div-icon-carwash', html: '<div style="background-color: blue; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white;"></div>'})
+
+                        }).addTo(map).bindPopup('<b>B: Carwash/Delivery Location</b><br>' + carwashAddress);
+
+                    }
+
+
+
+                    // --- Step 3: Handle Results ---
+
+                    if (errors.length > 0) {
+
+                        statusMessage.innerHTML = 'Could not find one or both addresses:<br>' + errors.join('<br>');
+
+                        statusMessage.classList.add('error');
+
+                        // Zoom back to default view if both fail, otherwise center on the one that worked
+
+                        if (pickupCoord && !carwashCoord) {
+
+                            map.setView([pickupCoord.lat, pickupCoord.lon], 14);
+
+                        } else if (carwashCoord && !pickupCoord) {
+
+                            map.setView([carwashCoord.lat, carwashCoord.lon], 14);
+
+                        } else {
+
+                            map.setView([14.5995, 120.9842], 12); // Default to Manila, Philippines
+
+                        }
+
+                    } else {
+
+                        // Both coordinates found, draw the route
+
+                        drawRoute(pickupCoord, carwashCoord);
+
+                    }
+
+                });
+
             });
+
         };
 
-        // Initialize the map once the page content is loaded
-        window.onload = initMap;
+        
+
+        // Set default view to Manila, Philippines for relevance
+
+        map.setView([14.5995, 120.9842], 12); 
+
     </script>
 
 </body>
+
 </html>

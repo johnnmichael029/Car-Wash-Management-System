@@ -226,20 +226,10 @@ Public Class Appointment
     End Sub
 
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
-        Dim currentAppointmentID As Integer = 0
-        Dim saleDate As DateTime = DateTime.Now
+        Dim currentAppointmentID As Integer = Convert.ToInt32(DataGridViewAppointment.CurrentRow.Cells(0).Value)
+        Dim saleDate As DateTime = Convert.ToDateTime(DataGridViewAppointment.CurrentRow.Cells(4).Value)
 
-        If DataGridViewAppointment.CurrentRow IsNot Nothing Then
-            ' Ensure the row is valid and the cell value is not null before converting
-            If DataGridViewAppointment.CurrentRow.Cells(0).Value IsNot DBNull.Value Then
-                currentAppointmentID = Convert.ToInt32(DataGridViewAppointment.CurrentRow.Cells(0).Value)
-            End If
-            If DataGridViewAppointment.CurrentRow.Cells(4).Value IsNot DBNull.Value Then
-                saleDate = Convert.ToDateTime(DataGridViewAppointment.CurrentRow.Cells(4).Value)
-            End If
-        End If
 
-        ' 2. Retrieve the list of all services (Base and Add-ons) associated with this sale ID.
         Dim serviceLineItems As New List(Of ServiceLineItem)()
         If currentAppointmentID > 0 AndAlso AppointmentManagementDatabaseHelper IsNot Nothing Then
             ' *** FIX: Now passing the connection string (Me.constr) to the Shared function ***
@@ -255,7 +245,8 @@ Public Class Appointment
            .SaleDate = DateTime.Now,
            .StartDate = saleDate,
            .AppointmentStatus = ComboBoxAppointmentStatus.Text,
-           .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D)
+           .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D),
+           .Detailer = ComboBoxDetailer.Text
        })
     End Sub
 

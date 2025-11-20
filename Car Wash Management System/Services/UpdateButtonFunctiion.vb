@@ -527,4 +527,29 @@
         Return True
     End Function
 
+    Public Overloads Shared Function UpdateDataToDatabase(
+             LabelPickupID As Label,
+             PickupAddres As TextBox,
+             errorHandler As Action(Of String),
+             PickupManagementDatabaseHelper As PickupManagementDatabaseHelper
+        ) As Boolean
+
+        Try
+            If PickupAddres.Text.Trim() = String.Empty Then
+                errorHandler.Invoke("Please enter a valid pickup address.")
+                Return False
+            End If
+
+            PickupManagementDatabaseHelper.UpdatePickup(
+                LabelPickupID.Text,
+                PickupAddres.Text.Trim()
+            )
+            MessageBox.Show("Pickup address updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        Catch ex As Exception
+            errorHandler.Invoke("An error occurred while updating the pickup address: " & ex.Message)
+        End Try
+        Return True
+    End Function
+
 End Class

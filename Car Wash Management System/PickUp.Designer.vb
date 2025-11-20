@@ -77,6 +77,9 @@ Partial Class PickUp
         PanelServiceInfo.SuspendLayout()
         SuspendLayout()
         ' 
+        ' PrintDocumentBill
+        ' 
+        ' 
         ' DataGridViewPickup
         ' 
         DataGridViewPickup.AllowUserToAddRows = False

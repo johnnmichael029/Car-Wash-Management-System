@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing.Printing
 
-Public Class PrintBillInContractsService
+Public Class PrintBillInPickup
+
     Public Shared Sub ShowPrint(PrintDocumentBill As PrintDocument)
         ShowPrintPreview(PrintDocumentBill)
         Dim printPreviewDialog As New PrintPreviewDialog With {
@@ -13,11 +14,12 @@ Public Class PrintBillInContractsService
         doc.DefaultPageSettings.Margins = New Margins(10, 10, 0, 0)
         doc.DefaultPageSettings.PaperSize = New PaperSize("Custom", 300, 500)
     End Sub
-    Public Shared Sub PrintBillInContractsService(e As PrintPageEventArgs, printData As PrintDataInContractsService)
+
+    Public Shared Sub PrintBillInPickup(e As PrintPageEventArgs, printData As PrintDataInPickup)
         If printData Is Nothing Then
-            ' Handle case where no data is set
             Return
         End If
+
         ' --- Font Definitions ---
         Dim f8 As New Font("Calibri", 8, FontStyle.Regular)
         Dim f10 As New Font("Calibri", 10, FontStyle.Regular)
@@ -29,8 +31,8 @@ Public Class PrintBillInContractsService
         Dim centerMargin As Integer = e.PageSettings.PaperSize.Width / 2
         Dim rightMargin As Integer = e.PageSettings.PaperSize.Width - e.PageSettings.Margins.Right
 
-        'Font alignment
-        Dim rightAlign As New StringFormat()
+        ' Font alignment
+        Dim rightAlign As New StringFormat()
         Dim centerAlign As New StringFormat()
         rightAlign.Alignment = StringAlignment.Far
         centerAlign.Alignment = StringAlignment.Center
@@ -52,7 +54,7 @@ Public Class PrintBillInContractsService
         yPos += offset
         e.Graphics.DrawString(printData.SaleDate.ToString("MM/dd/yyy HH:mm tt, ddd"), f10, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
-        e.Graphics.DrawString("InvoiceID: " & InvoiceGeneratorService.CreateInvoiceNumber(printData.ContractID), f10, Brushes.Black, centerMargin, yPos, centerAlign)
+        e.Graphics.DrawString("InvoiceID: " & InvoiceGeneratorService.CreateInvoiceNumber(printData.PickupID), f10, Brushes.Black, centerMargin, yPos, centerAlign)
         yPos += offset
         yPos += offset
         e.Graphics.DrawString("Customer Name: " & printData.CustomerName, f10, Brushes.Black, leftMargin, yPos)
@@ -65,7 +67,8 @@ Public Class PrintBillInContractsService
         e.Graphics.DrawString("Description", f10, Brushes.Black, centerMargin, yPos, centerAlign)
         e.Graphics.DrawString("Amount", f10, Brushes.Black, rightMargin, yPos, rightAlign)
         yPos += offset
-
+        e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
 
         ' --- Table Body (Looping through items) ---
         If printData.ServiceLineItems IsNot Nothing AndAlso printData.ServiceLineItems.Count > 0 Then
@@ -85,42 +88,33 @@ Public Class PrintBillInContractsService
             yPos += offset
         End If
 
-
         Dim finalTotal As Decimal = printData.TotalPrice
 
-        ' --- Subtotal/Total Line ---
+
         e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
+        yPos += offset
+
+        ' --- Additional Info ---
+        e.Graphics.DrawString("Pickup Date:", f10, Brushes.Black, leftMargin, yPos) ' Use bold for total
+        e.Graphics.DrawString(printData.PickupDate, f10, Brushes.Black, rightMargin, yPos, rightAlign) ' Use bold for total amount
         yPos += offset
 
         e.Graphics.DrawString("Detailer:", f10, Brushes.Black, leftMargin, yPos) ' Use bold for total
         e.Graphics.DrawString(printData.Detailer, f10, Brushes.Black, rightMargin, yPos, rightAlign) ' Use bold for total amount
         yPos += offset
 
+        ' --- Subtotal/Total Line ---
         yPos += offset
-        e.Graphics.DrawString("Discount:", f10, Brushes.Black, leftMargin, yPos)
-        e.Graphics.DrawString(printData.Discount & "%", f10b, Brushes.Black, rightMargin, yPos, rightAlign)
+        e.Graphics.DrawString("Discount:", f10b, Brushes.Black, leftMargin, yPos) ' Use bold for total
+        e.Graphics.DrawString(printData.Discount & "%", f10b, Brushes.Black, rightMargin, yPos, rightAlign) ' Use bold for total amount
         yPos += offset
 
-        e.Graphics.DrawString("Subtotal:", f10, Brushes.Black, leftMargin, yPos)
-        e.Graphics.DrawString(finalTotal.ToString("N2"), f10b, Brushes.Black, rightMargin, yPos, rightAlign)
-        yPos += offset
-        yPos += offset
-        ' Additional contract details
-        e.Graphics.DrawString("Start Date: ", f10, Brushes.Black, leftMargin, yPos)
-        e.Graphics.DrawString(printData.StartDate, f10, Brushes.Black, rightMargin, yPos, rightAlign)
-        yPos += offset
-        e.Graphics.DrawString("End Date: ", f10, Brushes.Black, leftMargin, yPos)
-        e.Graphics.DrawString(printData.EndDate, f10, Brushes.Black, rightMargin, yPos, rightAlign)
-        yPos += offset
-        e.Graphics.DrawString("Billing Frequency: ", f10, Brushes.Black, leftMargin, yPos)
-        e.Graphics.DrawString(printData.BillingFrequency, f10, Brushes.Black, rightMargin, yPos, rightAlign)
-        yPos += offset
-        e.Graphics.DrawString("Contract Status: ", f10, Brushes.Black, leftMargin, yPos)
-        e.Graphics.DrawString(printData.ContractStatus, f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        e.Graphics.DrawString("Subtotal:", f10b, Brushes.Black, leftMargin, yPos) ' Use bold for total
+        e.Graphics.DrawString(finalTotal.ToString("N2"), f10b, Brushes.Black, rightMargin, yPos, rightAlign) ' Use bold for total amount
         yPos += offset
         yPos += offset
 
-        ' Payment Details
+        ' --- Payment Section ---
         e.Graphics.DrawString(centerLine, f10, Brushes.Black, 90, yPos)
         e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
         yPos += offset
@@ -130,6 +124,7 @@ Public Class PrintBillInContractsService
         e.Graphics.DrawString(centerLine, f10, Brushes.Black, 90, yPos)
         e.Graphics.DrawString(centerLine, f10, Brushes.Black, 160, yPos)
         yPos += offset
+
         e.Graphics.DrawString(printData.PaymentMethod, f10, Brushes.Black, 90, yPos)
         e.Graphics.DrawString(finalTotal.ToString("N2"), f10, Brushes.Black, 160, yPos)
         yPos += 10
@@ -141,5 +136,4 @@ Public Class PrintBillInContractsService
 
         e.Graphics.DrawString("Thank You!!", f10b, Brushes.Black, centerMargin, yPos, centerAlign)
     End Sub
-
 End Class

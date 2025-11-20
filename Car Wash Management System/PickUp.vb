@@ -1,8 +1,10 @@
 ﻿Public Class PickUp
     Inherits BaseForm
+    Private ReadOnly viewPickupInfo As ViewPickupInfo
     Public Sub New()
         MyBase.New()
         InitializeComponent()
+        viewPickupInfo = New ViewPickupInfo(Me)
     End Sub
 
     Private Sub PickUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -23,8 +25,9 @@
         DataGridCellContentClick.HighlightSelectedRow(e, DataGridViewPickup)
 
         If e.ColumnIndex = DataGridViewPickup.Columns("actionsColumn").Index AndAlso e.RowIndex >= 0 Then
-            ViewPickupInfo.Show()
-            ViewPickupInfo.TextBoxPickupAddress.Text = DataGridViewPickup.CurrentRow.Cells("PickupAddress").Value.ToString()
+            viewPickupInfo.Show()
+            viewPickupInfo.LabelPickupID.Text = DataGridViewPickup.CurrentRow.Cells("PickupID").Value.ToString()
+            viewPickupInfo.TextBoxPickupAddress.Text = DataGridViewPickup.CurrentRow.Cells("PickupAddress").Value.ToString()
         End If
 
         Dim errorHandler As Action(Of String) = Sub(message)
@@ -72,7 +75,6 @@
     Private Sub ClearFields()
 
         DateTimePickerStartDate.Value = DateTime.Now
-
 
         ComboBoxPaymentMethod.SelectedIndex = -1
         ComboBoxDiscount.SelectedIndex = -1
@@ -143,7 +145,7 @@
     Private Sub AddBtnFunction()
 
         Dim errorHandler As Action(Of String) = Sub(message)
-                                                    ' This is the custom error logic: display the message in a modal.
+
                                                     MessageBox.Show(message, "Appointment Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                                                 End Sub
         Dim success As Boolean = AddButtonFunction.AddDataToPickupTable(
@@ -167,13 +169,13 @@
 
 
             ViewPickupData()
-            'PrintBillInSales.ShowPrint(PrintDocumentBill)
+            PrintBillInPickup.ShowPrint(PrintDocumentBill)
             ClearFields()
         End If
 
     End Sub
 
-    Private Sub ViewPickupData()
+    Public Sub ViewPickupData()
         DataGridViewPickup.DataSource = pickupManagementDatabaseHelper.ViewPickupData()
     End Sub
 
@@ -197,10 +199,16 @@
         UpdatePickup()
     End Sub
 
+    Private Sub ShowPrintBillWhenCompleted()
+        If ComboBoxPickupStatus.SelectedItem = "Completed" Then
+            PrintBillInPickup.ShowPrint(PrintDocumentBill)
+        End If
+    End Sub
     Private Sub UpdatePickup()
         Dim localErrorHandler As Action(Of String) = Sub(message)
                                                          MessageBox.Show(message, "Missing Data", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                                                      End Sub
+
 
         Dim success As Boolean = UpdateButtonFunctiion.UpdateDataToDatabase(
             LabelPickupID,
@@ -222,6 +230,8 @@
             Carwash.PopulateAllTotal()
             Carwash.ShowNotification()
             Carwash.NotificationLabel.Text = "Pickup Updated Successfully"
+
+            ShowPrintBillWhenCompleted()
             ViewPickupData()
             ClearFields()
         End If
@@ -234,4 +244,40 @@
     Private Sub FullScreenServiceBtn_Click(sender As Object, e As EventArgs) Handles FullScreenServiceBtn.Click
         ShowPanelDocked.ShowServicesPanelDocked(PanelServiceInfo, ListViewServices)
     End Sub
+
+    Private Sub PrintDocumentBill_PrintPage(sender As Object, e As Printing.PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
+        Dim currentSaleID As Integer = Convert.ToInt32(DataGridViewPickup.CurrentRow.Cells("PickupID").Value)
+        Dim saleDate As DateTime = Convert.ToDateTime(DataGridViewPickup.CurrentRow.Cells("PickupDateTime").Value)
+
+        Dim serviceLineItems As New List(Of ServiceLineItem)()
+        If currentSaleID > 0 AndAlso pickupManagementDatabaseHelper IsNot Nothing Then
+            ' *** FIX: Now passing the connection string (Me.constr) to the Shared function ***
+            serviceLineItems = PickupManagementDatabaseHelper.GetSaleLineItems(currentSaleID, Me.constr)
+        End If
+
+        ' 3. Populate PrintDataInPickup using the comprehensive list.
+        PrintBillInPickup.PrintBillInPickup(e, New PrintDataInPickup With {
+        .PickupID = currentSaleID,
+        .CustomerName = TextBoxCustomerName.Text,
+        .ServiceLineItems = serviceLineItems,
+        .PaymentMethod = ComboBoxPaymentMethod.Text,
+        .SaleDate = saleDate,
+        .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D),
+        .PickupDate = DateTimePickerStartDate.Value,
+        .Detailer = ComboBoxDetailer.Text
+})
+    End Sub
+
+    Private Sub PrintBillBtn_Click(sender As Object, e As EventArgs) Handles PrintBillBtn.Click
+        ValidatePrint()
+    End Sub
+
+    Private Sub ValidatePrint()
+        If String.IsNullOrEmpty(LabelPickupID.Text) Then
+            MessageBox.Show("Please select pickup from the table or add new pickup to print", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Else
+            PrintBillInPickup.ShowPrint(PrintDocumentBill)
+        End If
+    End Sub
+
 End Class

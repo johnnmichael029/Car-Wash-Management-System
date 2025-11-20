@@ -231,7 +231,6 @@ Public Class Contracts
         Dim currentContractID As Integer = Convert.ToInt32(DataGridViewContract.CurrentRow.Cells(0).Value)
         Dim startDate As DateTime = Convert.ToDateTime(DataGridViewContract.CurrentRow.Cells(4).Value)
 
-        ' 2. Retrieve the list of all services (Base and Add-ons) associated with this sale ID.
         Dim serviceLineItems As New List(Of ServiceLineItem)()
         If currentContractID > 0 AndAlso contractsDatabaseHelper IsNot Nothing Then
             ' *** FIX: Now passing the connection string (Me.constr) to the Shared function ***
@@ -248,7 +247,8 @@ Public Class Contracts
            .StartDate = DateTimePickerStartDate.Value,
            .EndDate = DateTimePickerEndDate.Value,
            .ContractStatus = ComboBoxContractStatus.Text,
-           .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D)
+           .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D),
+           .Detailer = ComboBoxDetailer.Text
        })
     End Sub
 

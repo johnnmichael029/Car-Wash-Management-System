@@ -247,7 +247,8 @@ Public Class Dashboard
         .ServiceLineItems = serviceLineItems,
         .PaymentMethod = ComboBoxPaymentMethod.Text,
         .SaleDate = saleDate,
-        .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D)
+        .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D),
+        .Detailer = ComboBoxDetailer.Text
         })
     End Sub
     Private Sub AddSalesActivityLog()

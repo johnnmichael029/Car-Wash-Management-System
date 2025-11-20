@@ -156,22 +156,9 @@ Public Class SalesForm
 
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
 
+        Dim currentSaleID As Integer = Convert.ToInt32(DataGridViewSales.CurrentRow.Cells(0).Value)
+        Dim saleDate As DateTime = Convert.ToDateTime(DataGridViewSales.CurrentRow.Cells(4).Value)
 
-        ' 1. Get the Sales ID of the selected row
-        Dim currentSaleID As Integer = 0
-        Dim saleDate As DateTime = DateTime.Now
-
-        If DataGridViewSales.CurrentRow IsNot Nothing Then
-            ' Ensure the row is valid and the cell value is not null before converting
-            If DataGridViewSales.CurrentRow.Cells(0).Value IsNot DBNull.Value Then
-                currentSaleID = Convert.ToInt32(DataGridViewSales.CurrentRow.Cells(0).Value)
-            End If
-            If DataGridViewSales.CurrentRow.Cells(4).Value IsNot DBNull.Value Then
-                saleDate = Convert.ToDateTime(DataGridViewSales.CurrentRow.Cells(4).Value)
-            End If
-        End If
-
-        ' 2. Retrieve the list of all services (Base and Add-ons) associated with this sale ID.
         Dim serviceLineItems As New List(Of ServiceLineItem)()
         If currentSaleID > 0 AndAlso salesDatabaseHelper IsNot Nothing Then
             ' *** FIX: Now passing the connection string (Me.constr) to the Shared function ***
@@ -185,7 +172,8 @@ Public Class SalesForm
         .ServiceLineItems = serviceLineItems,
         .PaymentMethod = ComboBoxPaymentMethod.Text,
         .SaleDate = saleDate,
-        .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D)
+        .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D),
+        .Detailer = ComboBoxDetailer.Text
 })
     End Sub
 

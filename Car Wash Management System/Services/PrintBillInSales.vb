@@ -94,6 +94,11 @@ Public Class PrintBillInSales
         e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
         yPos += offset
 
+        e.Graphics.DrawString("Detailer:", f10, Brushes.Black, leftMargin, yPos) ' Use bold for total
+        e.Graphics.DrawString(printData.Detailer, f10, Brushes.Black, rightMargin, yPos, rightAlign) ' Use bold for total amount
+        yPos += offset
+
+        yPos += offset
         e.Graphics.DrawString("Discount:", f10b, Brushes.Black, leftMargin, yPos) ' Use bold for total
         e.Graphics.DrawString(printData.Discount & "%", f10b, Brushes.Black, rightMargin, yPos, rightAlign) ' Use bold for total amount
         yPos += offset

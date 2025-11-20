@@ -12,4 +12,5 @@
     Public Property PaymentMethod As String
     Public Property SaleDate As DateTime
     Public Property Discount As Decimal
+    Public Property Detailer As String
 End Class

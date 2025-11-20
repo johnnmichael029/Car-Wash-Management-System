@@ -19,4 +19,5 @@
     Public Property EndDate As DateTime
     Public Property ContractStatus As String
     Public Property Discount As Decimal
+    Public Property Detailer As String
 End Class

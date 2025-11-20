@@ -1,132 +1,177 @@
 ﻿Imports System.IO
 Imports System.Windows.Forms
 Imports System.Threading.Tasks
+Imports System.Text
 
 Public Class ViewPickupInfo
 
-    ' CRITICAL FIX 1: Add WithEvents keyword to allow the Handles clause to work.
-    ' This is the reference to the control used to display the HTML map
-    Private WithEvents WebViewMap As New WebBrowser()
+    Inherits BaseForm
+    Private ReadOnly _parentCustomerForm As Object
 
-    ' CRITICAL FIX 2: Add WithEvents keyword for the Timer.
-    ' Timer used for debouncing the address input (prevents too many API calls while typing)
-    Private WithEvents debounceTimer As New Timer()
+    Public Sub New(parentForm As Object)
+        MyBase.New()
+        ' This call is required by the designer.
+        InitializeComponent()
 
-    ' The actual TextBox control reference found on the form
-    Private addressTextBox As TextBox = Nothing
+        _parentCustomerForm = parentForm
+    End Sub
 
+    Private WithEvents DebounceTimer As New Timer()
+    Private Const DEBOUNCE_DELAY_MS As Integer = 800 ' Wait 800ms after the last keypress
 
-    ' --- SETUP AND INITIALIZATION ---
+    ' The manually declared WebBrowser control
+    Private WithEvents WebBrowserMap As New System.Windows.Forms.WebBrowser()
+
+    ' Flag to ensure the HTML document is loaded before calling JavaScript
+    Private IsDocumentLoaded As Boolean = False
+
     Private Sub ViewPickupInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         CenterToScreen()
+        TextBoxCarwashAddress.Text = "14.529822264353477, 121.08387548216851".Trim
+        ' ***************************************************************
+        ' Setup: Add the WebBrowserMap control to the Panel 
+        ' ASSUMPTION: You have a Panel control on your form named 'ViewWebBrowserMapPanel'
+        ' ***************************************************************
 
-        ' 1. CRITICAL FIX: Suppress script errors that often pop up in WebBrowser controls
-        WebViewMap.ScriptErrorsSuppressed = True
+        Dim panelControl As Control = Me.Controls.Find("ViewWebBrowserMapPanel", True).FirstOrDefault()
 
-        ' 2. **CRITICAL FIX: Add and position the WebBrowser control**
-        '    Assuming you want the map to fill a large area of the form.
-        '    You might need to adjust the Location and Size/Dock property based on your designer layout.
-        With WebViewMap
-            .Dock = DockStyle.Fill ' Fill the entire parent container (the Form, in this case)
-            .Visible = True
-        End With
-
-        ' **VERY IMPORTANT: Add the control to the Form's Controls collection**
-        ' If you are using a Container (like a Panel or GroupBox) to hold the map, 
-        ' replace 'Me.Controls' with 'YourPanelName.Controls'.
-        Me.Controls.Add(WebViewMap)
-
-        ' Ensure the WebViewMap is sent to the back, so other controls (like buttons/textboxes) are visible.
-        WebViewMap.SendToBack()
-
-        ' 3. Find the TextBoxPickupAddress control dynamically
-        Dim textBoxControl As Control = Me.Controls.Find("TextBoxPickupAddress", True).FirstOrDefault()
-
-        If textBoxControl IsNot Nothing AndAlso TypeOf textBoxControl Is TextBox Then
-            ' 4. Store the casted reference
-            addressTextBox = DirectCast(textBoxControl, TextBox)
-
-            ' 5. Attach the event handler once. 
-            AddHandler addressTextBox.TextChanged, AddressOf TextBoxPickupAddress_TextChanged
-
-            ' 6. Setup the debounce timer (waits 1 second after typing stops to update the map)
-            With debounceTimer
-                .Interval = 1000 ' 1 second delay
-                .Stop()
-            End With
-
-            ' 7. Perform the initial map update using the current text
-            UpdateMapFromTextBox(addressTextBox.Text)
-
+        If panelControl IsNot Nothing AndAlso TypeOf panelControl Is Panel Then
+            WebBrowserMap.Dock = DockStyle.Fill
+            WebBrowserMap.ScriptErrorsSuppressed = True ' Hide script error dialogs
+            DirectCast(panelControl, Panel).Controls.Add(WebBrowserMap)
+            WebBrowserMap.BringToFront()
         Else
-            Console.WriteLine("Error: TextBoxPickupAddress control not found on the form.")
+            ' Fallback if panel is not found.
+            WebBrowserMap.Size = New Size(600, 400)
+            WebBrowserMap.Location = New Point(10, 10)
+            Me.Controls.Add(WebBrowserMap)
         End If
 
-        ' 8. This is where the MapAddressView.html is loaded into the WebViewMap
+        ' Initialize the debounce timer
+        DebounceTimer.Interval = DEBOUNCE_DELAY_MS
+        DebounceTimer.Stop()
+
+        ' Load the local HTML file
         Dim htmlPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MapAddressView.html")
+
         If File.Exists(htmlPath) Then
-            WebViewMap.Navigate(htmlPath)
+            WebBrowserMap.Navigate(htmlPath)
         Else
-            ' Fallback if the file copy step was missed
-            Console.WriteLine("Error: MapAddressView.html not found at execution path. Check project build settings.")
+            MessageBox.Show($"Map file not found at: {htmlPath}. Please ensure MapAddressView.html is in the same directory as the executable.", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 
-
-    ' --- DEBOUNCING AND EVENT HANDLERS ---
-
-    ' Event handler for the TextBox (triggered on every key stroke)
-    Private Sub TextBoxPickupAddress_TextChanged(sender As Object, e As EventArgs)
-        ' Reset and start the timer when text changes
-        debounceTimer.Stop()
-        debounceTimer.Start()
-    End Sub
-
-    ' Event handler for the Timer (triggered 1 second after typing stops)
-    Private Sub DebounceTimer_Tick(sender As Object, e As EventArgs) Handles debounceTimer.Tick
-        ' Stop the timer immediately
-        debounceTimer.Stop()
-
-        ' Check if we have a valid reference to the address TextBox
-        If addressTextBox IsNot Nothing Then
-            UpdateMapFromTextBox(addressTextBox.Text)
+    Private Sub WebBrowserMap_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs) Handles WebBrowserMap.DocumentCompleted
+        If e.Url.LocalPath.EndsWith("MapAddressView.html", StringComparison.OrdinalIgnoreCase) Then
+            IsDocumentLoaded = True
+            ' Perform the initial map load using the current address text
+            LoadMap()
         End If
     End Sub
+    ''' <summary>
+    ''' Calls the JavaScript function inside the WebBrowser control to update the map route.
+    ''' </summary>
+    Private Sub LoadMap()
 
-    ' --- MAIN MAP UPDATE FUNCTION ---
+        If Not IsDocumentLoaded OrElse WebBrowserMap.Document Is Nothing Then
+            Exit Sub
+        End If
+
+        Dim pickupAddressText As String = ""
+        Dim carwashAddressText As String = ""
+
+        Try
+            ' --- CRITICAL FIX: SWAPPING ADDRESS ROLES ---
+
+            ' 1. Get the text for the Pickup Location (Source of the vehicle journey)
+            ' This is assumed to be the textbox labeled "Pickup Address" on the form.
+            Dim pickupBox As Control = Me.Controls.Find("TextBoxPickupAddress", True).FirstOrDefault()
+            If pickupBox IsNot Nothing AndAlso TypeOf pickupBox Is TextBox Then
+                pickupAddressText = DirectCast(pickupBox, TextBox).Text.Trim()
+            End If
+
+            ' 2. Get the text for the Carwash/Delivery Location (Destination of the vehicle journey)
+            ' This is assumed to be the textbox labeled "Location" on the form.
+            ' NOTE: If your "Location" textbox is named differently, update the line below.
+            Dim carwashBox As Control = Me.Controls.Find("TextBoxCarwashAddress", True).FirstOrDefault()
+            If carwashBox IsNot Nothing AndAlso TypeOf carwashBox Is TextBox Then
+                carwashAddressText = DirectCast(carwashBox, TextBox).Text.Trim()
+            End If
+
+        Catch ex As Exception
+            Console.WriteLine($"Error accessing address TextBoxes: {ex.Message}")
+            Exit Sub
+        End Try
+
+        ' Ensure we have both addresses before attempting to draw a route
+        If String.IsNullOrWhiteSpace(pickupAddressText) OrElse String.IsNullOrWhiteSpace(carwashAddressText) Then
+            Console.WriteLine("One or both address fields are empty. Route cannot be calculated.")
+            ' Still call the JS function with potentially empty strings to clear old markers/route
+            WebBrowserMap.Document.InvokeScript("updateMapRoute", New Object() {pickupAddressText, carwashAddressText})
+            Exit Sub
+        End If
+
+        ' Call the new JavaScript function updateMapRoute 
+        ' CRITICAL: Order must be (Start Address, End Address)
+        Try
+            WebBrowserMap.Document.InvokeScript("updateMapRoute", New Object() {pickupAddressText, carwashAddressText})
+
+        Catch ex As Exception
+            Console.WriteLine($"Error invoking script: {ex.Message}")
+        End Try
+    End Sub
 
     ''' <summary>
-    ''' Calls the JavaScript function inside the WebBrowser control to update the map.
+    ''' Handles the TextBoxPickupAddress TextChanged event. 
     ''' </summary>
-    ''' <param name="address">The address text to be geocoded.</param>
-    Private Sub UpdateMapFromTextBox(address As String)
-        If WebViewMap.ReadyState = WebBrowserReadyState.Complete Then
-            Try
-                ' This is the critical line that calls the JavaScript function:
-                ' "updateMapLocation" is the JS function name.
-                ' The second argument is the address string (which must be a safe, quoted string).
-                WebViewMap.Document.InvokeScript("updateMapLocation", New Object() {address})
-
-                Console.WriteLine($"Map update requested for: {address}")
-            Catch ex As Exception
-                Console.WriteLine("Error invoking JavaScript: " & ex.Message)
-            End Try
-        Else
-            ' If the map isn't loaded yet, try again after a short delay (or wait for the DocumentCompleted event)
-            Console.WriteLine("Map not ready, deferring update.")
-        End If
+    Private Sub TextBoxPickupAddress_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPickupAddress.TextChanged
+        ' Restart the timer on any keystroke in the Pickup box
+        DebounceTimer.Stop()
+        DebounceTimer.Start()
     End Sub
+    ''' <summary>
+    ''' Handles the TextBoxCarwashAddress TextChanged event. 
+    ''' </summary>
+    Private Sub TextBoxCarwashAddress_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCarwashAddress.TextChanged
+        ' Restart the timer on any keystroke in the Carwash box
+        DebounceTimer.Stop()
+        DebounceTimer.Start()
 
-    ' Correct the argument type for the DocumentCompleted event.
-    Private Sub WebViewMap_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs) Handles WebViewMap.DocumentCompleted
-        ' Re-run the update logic when the map finishes loading to ensure the initial address is set.
-        If addressTextBox IsNot Nothing Then
-            UpdateMapFromTextBox(addressTextBox.Text)
-        End If
+
+    End Sub
+    ''' <summary>
+    ''' This fires when the timer expires (the user has stopped typing for the delay period).
+    ''' </summary>
+    Private Sub debounceTimer_Tick(sender As Object, e As EventArgs) Handles DebounceTimer.Tick
+        DebounceTimer.Stop()
+        ' Now that the user has stopped typing, load the map route
+        LoadMap()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Me.Close()
+        Me.Hide()
     End Sub
 
+    Private Sub UpdateBtn_Click(sender As Object, e As EventArgs) Handles UpdateBtn.Click
+        UpdateAddress()
+    End Sub
+
+    Private Sub UpdateAddress()
+        Dim errorHandler As Action(Of String) = Sub(message)
+                                                    ' This is the custom error logic: display the message in a modal.
+                                                    MessageBox.Show(message, "Pickup Address Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                End Sub
+
+        Dim success As Boolean = UpdateButtonFunctiion.UpdateDataToDatabase(
+            LabelPickupID,
+            TextBoxPickupAddress,
+            errorHandler,
+            pickupManagementDatabaseHelper
+            )
+        If success Then
+
+            _parentCustomerForm.ViewPickupData()
+        End If
+    End Sub
 End Class
