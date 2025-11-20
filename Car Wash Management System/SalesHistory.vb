@@ -27,6 +27,8 @@ Public Class SalesHistory
     Private Sub DataGridViewSalesHIstory_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewSalesHIstory.CellFormatting
 
         DataGridFormattingService.DataGridCellFormattingPaymentMethod(e, "PaymentMethod", DataGridViewSalesHIstory)
+
+        DataGridFormattingService.DataGridCellFormattingFrom(e, "Form", DataGridViewSalesHIstory)
     End Sub
 
     Private Sub DataGridViewSalesFontStyle()
@@ -42,6 +44,7 @@ Public Class SalesHistory
         DataGridViewSalesHIstory.Columns(5).HeaderText = "Payment Method"
         DataGridViewSalesHIstory.Columns(6).HeaderText = "Reference ID"
         DataGridViewSalesHIstory.Columns(8).HeaderText = "Total Price"
+        DataGridViewSalesHIstory.Columns(9).HeaderText = "Sale"
     End Sub
     Private Sub ViewSalesHistory()
         DataGridViewSalesHIstory.DataSource = HistoryDatabaseHelper.ViewHistorySales()

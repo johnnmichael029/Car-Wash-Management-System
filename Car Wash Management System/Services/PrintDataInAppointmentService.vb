@@ -19,4 +19,5 @@
 
     Public Property StartDate As DateTime
     Public Property AppointmentStatus As String
+    Public Property Discount As Decimal
 End Class

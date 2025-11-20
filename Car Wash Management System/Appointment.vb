@@ -254,7 +254,8 @@ Public Class Appointment
            .PaymentMethod = ComboBoxPaymentMethod.Text,
            .SaleDate = DateTime.Now,
            .StartDate = saleDate,
-           .AppointmentStatus = ComboBoxAppointmentStatus.Text
+           .AppointmentStatus = ComboBoxAppointmentStatus.Text,
+           .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D)
        })
     End Sub
 

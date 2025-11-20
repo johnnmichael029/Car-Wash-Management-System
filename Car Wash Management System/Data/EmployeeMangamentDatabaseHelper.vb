@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Data.SqlClient
+﻿Imports System.Transactions
+Imports Microsoft.Data.SqlClient
 
 Public Class EmployeeMangamentDatabaseHelper
     Private ReadOnly constr As String
@@ -26,7 +27,7 @@ Public Class EmployeeMangamentDatabaseHelper
         Return dt
     End Function
 
-    Public Function AddEmployeeData(name As String, lastName As String, phoneNumber As String, age As Integer, email As String, address As String, barangay As String, gender As String, position As String)
+    Public Sub AddEmployeeData(name As String, lastName As String, phoneNumber As String, age As Integer, email As String, address As String, barangay As String, gender As String, position As String)
         Using con As New SqlConnection(constr)
             con.Open()
             Try
@@ -44,15 +45,16 @@ Public Class EmployeeMangamentDatabaseHelper
                     cmd.Parameters.AddWithValue("@Gender", gender)
                     cmd.ExecuteNonQuery()
                 End Using
-                Return True
+
+                Carwash.NotificationLabel.Text = "Employee Added"
+                Carwash.ShowNotification()
             Catch ex As Exception
                 MessageBox.Show("An error occurred while adding employee data: " & ex.Message)
-                Return False
             Finally
                 con.Close()
             End Try
         End Using
-    End Function
+    End Sub
 
     Public Sub PopulateDetailerForUI(targetComboBox As ComboBox)
         Dim dt As New DataTable()

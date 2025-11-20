@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Address Tracker Map (Leaflet)</title>
+    
+    <!-- Load Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 1. Leaflet CSS and JS (Core Map Library - REQUIRED ADDITION) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20n6a9c34z6zW423kR+46sWkL/w1lGkS9GjU2g0E6o8="
+        crossorigin=""></script>
+
+    <!-- 2. Leaflet Geocoding Plugin (REQUIRED ADDITION for address searching) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9;
+        }
+        /* Style for the map container (using your ID) */
+        #ViewFullAddressPanel {
+            height: 400px; /* Default height for desktop/tablet */
+            width: 100%;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            /* CRITICAL: Leaflet requires the map container to have defined height */
+        }
+        /* Make the map responsive on smaller screens */
+        @media (max-width: 640px) {
+            #ViewFullAddressPanel {
+                height: 300px;
+            }
+        }
+        /* Custom Status Message Styling */
+        .status-message {
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+        .error-message {
+            background-color: #fee2e2; /* red-100 */
+            color: #991b1b; /* red-800 */
+        }
+        .success-message {
+            background-color: #d1fae5; /* green-100 */
+            color: #065f46; /* green-800 */
+        }
+        .info-message {
+            background-color: #fef3c7; /* amber-100 */
+            color: #b45309; /* amber-800 */
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto space-y-6">
+
+        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Pickup Location Tracker</h1>
+        
+        <!-- Address Input Field -->
+        <div class="p-4 bg-white rounded-lg shadow-md">
+            <label for="TextBoxPickupAddress" class="block text-sm font-medium text-gray-700 mb-2">
+                Pickup Address:
+            </label>
+            <input 
+                type="text" 
+                id="TextBoxPickupAddress" 
+                placeholder="Start typing a full address (e.g., 123 Main Street, Taguig, Metro Manila)"
+                value="Taguig, Metro Manila, Philippines"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                autocomplete="off"
+            >
+            <p id="mapStatus" class="mt-2 text-sm text-gray-500 info-message">
+                Map initialized with Leaflet/OpenStreetMap. Waiting for address from main application.
+            </p>
+        </div>
+
+        <!-- Map Container (ViewFullAddressPanel) -->
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold text-gray-700 mb-3">Map Preview (ViewFullAddressPanel)</h2>
+            <div id="ViewFullAddressPanel">
+                <!-- Leaflet Map will load here -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- MAP AND GEOCODING LOGIC (Using Leaflet) ---
+
+        let map;
+        let currentMarker;
+        const statusMessage = document.getElementById('mapStatus');
+
+        /**
+         * Displays a status message to the user.
+         * @param {string} message The text to display.
+         * @param {string} type 'success', 'error', or 'info'
+         */
+        function showStatus(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message'; // Reset classes
+            
+            if (type === 'success') {
+                statusMessage.classList.add('success-message');
+            } else if (type === 'error') {
+                statusMessage.classList.add('error-message');
+            } else {
+                statusMessage.classList.add('info-message');
+            }
+        }
+
+        /**
+         * Initializes the Leaflet Map inside the ViewFullAddressPanel container.
+         */
+        function initMap() {
+            try {
+                // Set initial location to a central point in the Philippines (Manila)
+                const initialLocation = [14.5995, 120.9842]; 
+
+                // 1. Initialize the map object on the user's specified div ID
+                map = L.map('ViewFullAddressPanel').setView(initialLocation, 12);
+
+                // 2. Add the OpenStreetMap tiles (the map graphics)
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                showStatus("Map initialized successfully with OpenStreetMap. Ready for location updates.", 'success');
+            } catch (e) {
+                showStatus("Error initializing Leaflet Map: " + e.message, 'error');
+            }
+        }
+
+        /**
+         * Public function called by the VB.NET WebBrowser control to update the map location.
+         * Uses the Nominatim free geocoding service via the Leaflet Geocoder control plugin.
+         * @param {string} address The address to search for (e.g., "Taguig, Metro Manila).
+         */
+        window.updateMapLocation = function(address) {
+            if (!map) {
+                showStatus("Map is not yet initialized. Please wait.", 'error');
+                return;
+            }
+            
+            if (!address || address.trim() === "") {
+                showStatus("Address is empty. Map display remains centered.", 'info');
+                if (currentMarker) {
+                    map.removeLayer(currentMarker);
+                }
+                return;
+            }
+            
+            showStatus(`Searching for: ${address}...`, 'info');
+
+            // Use the Nominatim Geocoder (free service)
+            const geocoder = L.Control.Geocoder.nominatim();
+
+            geocoder.geocode(address, function(results) {
+                if (results.length > 0) {
+                    const result = results[0];
+                    const latLng = result.center;
+                    const foundAddress = result.name;
+
+                    // 1. Remove previous marker if it exists
+                    if (currentMarker) {
+                        map.removeLayer(currentMarker);
+                    }
+
+                    // 2. Create and add a new marker (the pin)
+                    currentMarker = L.marker(latLng).addTo(map)
+                        .bindPopup(`<b>${foundAddress}</b><br>Pickup Location`).openPopup();
+                    
+                    // 3. Center the map and set zoom level (15 is a good street level zoom)
+                    map.setView(latLng, 15); 
+                    
+                    showStatus(`Location found for: ${foundAddress}`, 'success');
+                } else {
+                    showStatus(`Location not found for "${address}". Try a more specific address.`, 'error');
+                    if (currentMarker) {
+                         map.removeLayer(currentMarker);
+                    }
+                }
+            });
+        };
+
+        // Initialize the map once the page content is loaded
+        window.onload = initMap;
+    </script>
+
+</body>
+</html>

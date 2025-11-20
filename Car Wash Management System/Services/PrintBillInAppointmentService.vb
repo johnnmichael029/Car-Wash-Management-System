@@ -101,8 +101,14 @@ Public Class PrintBillInAppointmentService
         ' --- Subtotal/Total Line ---
         e.Graphics.DrawString(line, f10, Brushes.Black, leftMargin, yPos)
         yPos += offset
+
+
+        e.Graphics.DrawString("Discount:", f10, Brushes.Black, leftMargin, yPos)
+        e.Graphics.DrawString(printData.Discount & "%", f10b, Brushes.Black, rightMargin, yPos, rightAlign)
+        yPos += offset
+
         e.Graphics.DrawString("Subtotal:", f10, Brushes.Black, leftMargin, yPos)
-        e.Graphics.DrawString(finalTotal.ToString("N2"), f10, Brushes.Black, rightMargin, yPos, rightAlign)
+        e.Graphics.DrawString(finalTotal.ToString("N2"), f10b, Brushes.Black, rightMargin, yPos, rightAlign)
         yPos += offset
         yPos += offset
         ' Additional contract details

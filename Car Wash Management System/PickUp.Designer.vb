@@ -1,6 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class PickUp
-    Inherits System.Windows.Forms.Form
+    Inherits BaseForm
 
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()>
@@ -24,9 +24,23 @@ Partial Class PickUp
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PickUp))
         PrintDocumentBill = New Printing.PrintDocument()
-        DataGridViewAppointment = New DataGridView()
+        DataGridViewPickup = New DataGridView()
         Panel1 = New Panel()
+        Panel14 = New Panel()
+        TextBoxSearchBar = New TextBox()
         Panel2 = New Panel()
+        TextBoxPickupAddress = New TextBox()
+        Label15 = New Label()
+        UpdatePickupBtn = New Button()
+        ClearFieldsBtn = New Button()
+        TextBoxNotes = New TextBox()
+        Label14 = New Label()
+        ComboBoxDetailer = New ComboBox()
+        DateTimePickerStartDate = New DateTimePicker()
+        Label16 = New Label()
+        Label12 = New Label()
+        Label11 = New Label()
+        ComboBoxPickupStatus = New ComboBox()
         ComboBoxDiscount = New ComboBox()
         Label10 = New Label()
         Label13 = New Label()
@@ -56,54 +70,65 @@ Partial Class PickUp
         Label4 = New Label()
         Label2 = New Label()
         Label3 = New Label()
-        Panel14 = New Panel()
-        TextBoxSearchBar = New TextBox()
-        DateTimePickerStartDate = New DateTimePicker()
-        Label12 = New Label()
-        ComboBoxDetailer = New ComboBox()
-        Label16 = New Label()
-        Label11 = New Label()
-        ComboBoxAppointmentStatus = New ComboBox()
-        TextBoxNotes = New TextBox()
-        Label14 = New Label()
-        UpdatePickupBtn = New Button()
-        ClearFieldsBtn = New Button()
-        CType(DataGridViewAppointment, ComponentModel.ISupportInitialize).BeginInit()
+        CType(DataGridViewPickup, ComponentModel.ISupportInitialize).BeginInit()
         Panel1.SuspendLayout()
+        Panel14.SuspendLayout()
         Panel2.SuspendLayout()
         PanelServiceInfo.SuspendLayout()
-        Panel14.SuspendLayout()
         SuspendLayout()
         ' 
-        ' DataGridViewAppointment
+        ' DataGridViewPickup
         ' 
-        DataGridViewAppointment.AllowUserToAddRows = False
-        DataGridViewAppointment.AllowUserToResizeColumns = False
-        DataGridViewAppointment.AllowUserToResizeRows = False
-        DataGridViewAppointment.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        DataGridViewAppointment.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridViewAppointment.BackgroundColor = Color.White
-        DataGridViewAppointment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewAppointment.Location = New Point(0, 32)
-        DataGridViewAppointment.Name = "DataGridViewAppointment"
-        DataGridViewAppointment.ReadOnly = True
-        DataGridViewAppointment.Size = New Size(606, 726)
-        DataGridViewAppointment.TabIndex = 0
+        DataGridViewPickup.AllowUserToAddRows = False
+        DataGridViewPickup.AllowUserToResizeColumns = False
+        DataGridViewPickup.AllowUserToResizeRows = False
+        DataGridViewPickup.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridViewPickup.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewPickup.BackgroundColor = Color.White
+        DataGridViewPickup.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewPickup.Location = New Point(0, 32)
+        DataGridViewPickup.Name = "DataGridViewPickup"
+        DataGridViewPickup.ReadOnly = True
+        DataGridViewPickup.Size = New Size(606, 726)
+        DataGridViewPickup.TabIndex = 0
         ' 
         ' Panel1
         ' 
         Panel1.Controls.Add(Panel14)
         Panel1.Controls.Add(Panel2)
-        Panel1.Controls.Add(DataGridViewAppointment)
+        Panel1.Controls.Add(DataGridViewPickup)
         Panel1.Dock = DockStyle.Fill
         Panel1.Location = New Point(0, 0)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(911, 758)
         Panel1.TabIndex = 5
         ' 
+        ' Panel14
+        ' 
+        Panel14.BackColor = Color.White
+        Panel14.Controls.Add(TextBoxSearchBar)
+        Panel14.Dock = DockStyle.Top
+        Panel14.Location = New Point(0, 0)
+        Panel14.Name = "Panel14"
+        Panel14.Size = New Size(606, 32)
+        Panel14.TabIndex = 20
+        ' 
+        ' TextBoxSearchBar
+        ' 
+        TextBoxSearchBar.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        TextBoxSearchBar.Font = New Font("Century Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TextBoxSearchBar.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
+        TextBoxSearchBar.Location = New Point(460, 6)
+        TextBoxSearchBar.Name = "TextBoxSearchBar"
+        TextBoxSearchBar.Size = New Size(140, 23)
+        TextBoxSearchBar.TabIndex = 6
+        TextBoxSearchBar.Text = "Search"
+        ' 
         ' Panel2
         ' 
         Panel2.BackColor = Color.White
+        Panel2.Controls.Add(TextBoxPickupAddress)
+        Panel2.Controls.Add(Label15)
         Panel2.Controls.Add(UpdatePickupBtn)
         Panel2.Controls.Add(ClearFieldsBtn)
         Panel2.Controls.Add(TextBoxNotes)
@@ -113,7 +138,7 @@ Partial Class PickUp
         Panel2.Controls.Add(Label16)
         Panel2.Controls.Add(Label12)
         Panel2.Controls.Add(Label11)
-        Panel2.Controls.Add(ComboBoxAppointmentStatus)
+        Panel2.Controls.Add(ComboBoxPickupStatus)
         Panel2.Controls.Add(ComboBoxDiscount)
         Panel2.Controls.Add(Label10)
         Panel2.Controls.Add(Label13)
@@ -147,6 +172,137 @@ Partial Class PickUp
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(305, 758)
         Panel2.TabIndex = 19
+        ' 
+        ' TextBoxPickupAddress
+        ' 
+        TextBoxPickupAddress.Location = New Point(16, 297)
+        TextBoxPickupAddress.Multiline = True
+        TextBoxPickupAddress.Name = "TextBoxPickupAddress"
+        TextBoxPickupAddress.Size = New Size(261, 22)
+        TextBoxPickupAddress.TabIndex = 156
+        ' 
+        ' Label15
+        ' 
+        Label15.AutoSize = True
+        Label15.Font = New Font("Century Gothic", 9F)
+        Label15.Location = New Point(16, 279)
+        Label15.Name = "Label15"
+        Label15.Size = New Size(97, 17)
+        Label15.TabIndex = 155
+        Label15.Text = "Pickup Address"
+        ' 
+        ' UpdatePickupBtn
+        ' 
+        UpdatePickupBtn.BackColor = Color.FromArgb(CByte(84), CByte(98), CByte(161))
+        UpdatePickupBtn.FlatAppearance.BorderSize = 0
+        UpdatePickupBtn.FlatStyle = FlatStyle.Flat
+        UpdatePickupBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        UpdatePickupBtn.ForeColor = Color.White
+        UpdatePickupBtn.Location = New Point(147, 629)
+        UpdatePickupBtn.Name = "UpdatePickupBtn"
+        UpdatePickupBtn.Size = New Size(129, 30)
+        UpdatePickupBtn.TabIndex = 154
+        UpdatePickupBtn.Text = "Update Pickup"
+        UpdatePickupBtn.UseVisualStyleBackColor = False
+        ' 
+        ' ClearFieldsBtn
+        ' 
+        ClearFieldsBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
+        ClearFieldsBtn.FlatAppearance.BorderSize = 0
+        ClearFieldsBtn.FlatStyle = FlatStyle.Flat
+        ClearFieldsBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ClearFieldsBtn.ForeColor = Color.White
+        ClearFieldsBtn.Image = CType(resources.GetObject("ClearFieldsBtn.Image"), Image)
+        ClearFieldsBtn.Location = New Point(17, 629)
+        ClearFieldsBtn.Name = "ClearFieldsBtn"
+        ClearFieldsBtn.Size = New Size(129, 30)
+        ClearFieldsBtn.TabIndex = 153
+        ClearFieldsBtn.Text = "Clear Fields"
+        ClearFieldsBtn.TextAlign = ContentAlignment.MiddleRight
+        ClearFieldsBtn.TextImageRelation = TextImageRelation.ImageBeforeText
+        ClearFieldsBtn.UseVisualStyleBackColor = False
+        ' 
+        ' TextBoxNotes
+        ' 
+        TextBoxNotes.Location = New Point(16, 516)
+        TextBoxNotes.Multiline = True
+        TextBoxNotes.Name = "TextBoxNotes"
+        TextBoxNotes.Size = New Size(261, 22)
+        TextBoxNotes.TabIndex = 152
+        ' 
+        ' Label14
+        ' 
+        Label14.AutoSize = True
+        Label14.Font = New Font("Century Gothic", 9F)
+        Label14.Location = New Point(16, 498)
+        Label14.Name = "Label14"
+        Label14.Size = New Size(43, 17)
+        Label14.TabIndex = 151
+        Label14.Text = "Notes"
+        ' 
+        ' ComboBoxDetailer
+        ' 
+        ComboBoxDetailer.AutoCompleteCustomSource.AddRange(New String() {"Active", "Expired", "Cancelled"})
+        ComboBoxDetailer.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxDetailer.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBoxDetailer.FormattingEnabled = True
+        ComboBoxDetailer.Items.AddRange(New Object() {"Active", "Expired", "Cancelled"})
+        ComboBoxDetailer.Location = New Point(149, 472)
+        ComboBoxDetailer.Name = "ComboBoxDetailer"
+        ComboBoxDetailer.Size = New Size(128, 23)
+        ComboBoxDetailer.TabIndex = 150
+        ' 
+        ' DateTimePickerStartDate
+        ' 
+        DateTimePickerStartDate.CustomFormat = "MM/dd/yyyy hh:mm tt"
+        DateTimePickerStartDate.Format = DateTimePickerFormat.Custom
+        DateTimePickerStartDate.ImeMode = ImeMode.NoControl
+        DateTimePickerStartDate.Location = New Point(16, 253)
+        DateTimePickerStartDate.Name = "DateTimePickerStartDate"
+        DateTimePickerStartDate.Size = New Size(260, 23)
+        DateTimePickerStartDate.TabIndex = 144
+        ' 
+        ' Label16
+        ' 
+        Label16.AutoSize = True
+        Label16.Font = New Font("Century Gothic", 9F)
+        Label16.Location = New Point(147, 452)
+        Label16.Name = "Label16"
+        Label16.Size = New Size(56, 17)
+        Label16.TabIndex = 149
+        Label16.Text = "Detailer"
+        ' 
+        ' Label12
+        ' 
+        Label12.AutoSize = True
+        Label12.Font = New Font("Century Gothic", 9F)
+        Label12.Location = New Point(16, 235)
+        Label12.Name = "Label12"
+        Label12.Size = New Size(107, 17)
+        Label12.TabIndex = 143
+        Label12.Text = "Pickup DateTime"
+        ' 
+        ' Label11
+        ' 
+        Label11.AutoSize = True
+        Label11.Font = New Font("Century Gothic", 9F)
+        Label11.Location = New Point(14, 454)
+        Label11.Name = "Label11"
+        Label11.Size = New Size(87, 17)
+        Label11.TabIndex = 148
+        Label11.Text = "Pickup Status"
+        ' 
+        ' ComboBoxPickupStatus
+        ' 
+        ComboBoxPickupStatus.AutoCompleteCustomSource.AddRange(New String() {"Confirmed", "On-The-Way", "Completed", "Cancelled"})
+        ComboBoxPickupStatus.AutoCompleteSource = AutoCompleteSource.CustomSource
+        ComboBoxPickupStatus.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBoxPickupStatus.FormattingEnabled = True
+        ComboBoxPickupStatus.Items.AddRange(New Object() {"Confirmed", "On-The-Way", "Completed", "Cancelled"})
+        ComboBoxPickupStatus.Location = New Point(16, 472)
+        ComboBoxPickupStatus.Name = "ComboBoxPickupStatus"
+        ComboBoxPickupStatus.Size = New Size(129, 23)
+        ComboBoxPickupStatus.TabIndex = 147
         ' 
         ' ComboBoxDiscount
         ' 
@@ -193,7 +349,7 @@ Partial Class PickUp
         ' PanelServiceInfo
         ' 
         PanelServiceInfo.Controls.Add(ListViewServices)
-        PanelServiceInfo.Location = New Point(16, 173)
+        PanelServiceInfo.Location = New Point(16, 130)
         PanelServiceInfo.Name = "PanelServiceInfo"
         PanelServiceInfo.Size = New Size(260, 102)
         PanelServiceInfo.TabIndex = 132
@@ -216,7 +372,7 @@ Partial Class PickUp
         FullScreenServiceBtn.FlatAppearance.BorderSize = 0
         FullScreenServiceBtn.FlatStyle = FlatStyle.Flat
         FullScreenServiceBtn.Image = My.Resources.Resources.expand1
-        FullScreenServiceBtn.Location = New Point(128, 140)
+        FullScreenServiceBtn.Location = New Point(128, 97)
         FullScreenServiceBtn.Name = "FullScreenServiceBtn"
         FullScreenServiceBtn.Size = New Size(37, 33)
         FullScreenServiceBtn.TabIndex = 131
@@ -248,7 +404,7 @@ Partial Class PickUp
         RemoveServiceBtn.FlatStyle = FlatStyle.Flat
         RemoveServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         RemoveServiceBtn.ForeColor = Color.White
-        RemoveServiceBtn.Location = New Point(202, 144)
+        RemoveServiceBtn.Location = New Point(202, 101)
         RemoveServiceBtn.Name = "RemoveServiceBtn"
         RemoveServiceBtn.Size = New Size(75, 23)
         RemoveServiceBtn.TabIndex = 85
@@ -262,7 +418,7 @@ Partial Class PickUp
         AddServiceBtn.FlatStyle = FlatStyle.Flat
         AddServiceBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         AddServiceBtn.ForeColor = Color.White
-        AddServiceBtn.Location = New Point(16, 144)
+        AddServiceBtn.Location = New Point(16, 101)
         AddServiceBtn.Name = "AddServiceBtn"
         AddServiceBtn.Size = New Size(75, 23)
         AddServiceBtn.TabIndex = 84
@@ -365,7 +521,7 @@ Partial Class PickUp
         ' 
         ComboBoxAddons.Font = New Font("Century Gothic", 9F)
         ComboBoxAddons.FormattingEnabled = True
-        ComboBoxAddons.Location = New Point(150, 113)
+        ComboBoxAddons.Location = New Point(150, 70)
         ComboBoxAddons.Name = "ComboBoxAddons"
         ComboBoxAddons.Size = New Size(126, 25)
         ComboBoxAddons.TabIndex = 29
@@ -374,7 +530,7 @@ Partial Class PickUp
         ' 
         ComboBoxServices.Font = New Font("Century Gothic", 9F)
         ComboBoxServices.FormattingEnabled = True
-        ComboBoxServices.Location = New Point(16, 113)
+        ComboBoxServices.Location = New Point(16, 70)
         ComboBoxServices.Name = "ComboBoxServices"
         ComboBoxServices.Size = New Size(130, 25)
         ComboBoxServices.TabIndex = 28
@@ -382,10 +538,10 @@ Partial Class PickUp
         ' TextBoxCustomerID
         ' 
         TextBoxCustomerID.Font = New Font("Century Gothic", 9F)
-        TextBoxCustomerID.Location = New Point(16, 70)
+        TextBoxCustomerID.Location = New Point(150, 27)
         TextBoxCustomerID.Name = "TextBoxCustomerID"
         TextBoxCustomerID.ReadOnly = True
-        TextBoxCustomerID.Size = New Size(261, 22)
+        TextBoxCustomerID.Size = New Size(127, 22)
         TextBoxCustomerID.TabIndex = 27
         ' 
         ' TextBoxCustomerName
@@ -393,14 +549,14 @@ Partial Class PickUp
         TextBoxCustomerName.Font = New Font("Century Gothic", 9F)
         TextBoxCustomerName.Location = New Point(16, 27)
         TextBoxCustomerName.Name = "TextBoxCustomerName"
-        TextBoxCustomerName.Size = New Size(261, 22)
+        TextBoxCustomerName.Size = New Size(130, 22)
         TextBoxCustomerName.TabIndex = 26
         ' 
         ' Label6
         ' 
         Label6.AutoSize = True
         Label6.Font = New Font("Century Gothic", 9F)
-        Label6.Location = New Point(150, 95)
+        Label6.Location = New Point(150, 52)
         Label6.Name = "Label6"
         Label6.Size = New Size(53, 17)
         Label6.TabIndex = 23
@@ -420,7 +576,7 @@ Partial Class PickUp
         ' 
         Label1.AutoSize = True
         Label1.Font = New Font("Century Gothic", 9F)
-        Label1.Location = New Point(16, 52)
+        Label1.Location = New Point(149, 9)
         Label1.Name = "Label1"
         Label1.Size = New Size(80, 17)
         Label1.TabIndex = 4
@@ -432,15 +588,15 @@ Partial Class PickUp
         Label4.Font = New Font("Century Gothic", 9F)
         Label4.Location = New Point(15, 322)
         Label4.Name = "Label4"
-        Label4.Size = New Size(105, 17)
+        Label4.Size = New Size(110, 17)
         Label4.TabIndex = 15
-        Label4.Text = "Paymen Method"
+        Label4.Text = "Payment Method"
         ' 
         ' Label2
         ' 
         Label2.AutoSize = True
         Label2.Font = New Font("Century Gothic", 9F)
-        Label2.Location = New Point(16, 95)
+        Label2.Location = New Point(16, 52)
         Label2.Name = "Label2"
         Label2.Size = New Size(54, 17)
         Label2.TabIndex = 5
@@ -456,140 +612,6 @@ Partial Class PickUp
         Label3.TabIndex = 6
         Label3.Text = "Subtotal"
         ' 
-        ' Panel14
-        ' 
-        Panel14.BackColor = Color.White
-        Panel14.Controls.Add(TextBoxSearchBar)
-        Panel14.Dock = DockStyle.Top
-        Panel14.Location = New Point(0, 0)
-        Panel14.Name = "Panel14"
-        Panel14.Size = New Size(606, 32)
-        Panel14.TabIndex = 20
-        ' 
-        ' TextBoxSearchBar
-        ' 
-        TextBoxSearchBar.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        TextBoxSearchBar.Font = New Font("Century Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        TextBoxSearchBar.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
-        TextBoxSearchBar.Location = New Point(460, 6)
-        TextBoxSearchBar.Name = "TextBoxSearchBar"
-        TextBoxSearchBar.Size = New Size(140, 23)
-        TextBoxSearchBar.TabIndex = 6
-        TextBoxSearchBar.Text = "Search"
-        ' 
-        ' DateTimePickerStartDate
-        ' 
-        DateTimePickerStartDate.CustomFormat = "MM/dd/yyyy hh:mm tt"
-        DateTimePickerStartDate.Format = DateTimePickerFormat.Custom
-        DateTimePickerStartDate.ImeMode = ImeMode.NoControl
-        DateTimePickerStartDate.Location = New Point(16, 296)
-        DateTimePickerStartDate.Name = "DateTimePickerStartDate"
-        DateTimePickerStartDate.Size = New Size(260, 23)
-        DateTimePickerStartDate.TabIndex = 144
-        ' 
-        ' Label12
-        ' 
-        Label12.AutoSize = True
-        Label12.Font = New Font("Century Gothic", 9F)
-        Label12.Location = New Point(16, 278)
-        Label12.Name = "Label12"
-        Label12.Size = New Size(107, 17)
-        Label12.TabIndex = 143
-        Label12.Text = "Pickup DateTime"
-        ' 
-        ' ComboBoxDetailer
-        ' 
-        ComboBoxDetailer.AutoCompleteCustomSource.AddRange(New String() {"Active", "Expired", "Cancelled"})
-        ComboBoxDetailer.AutoCompleteSource = AutoCompleteSource.CustomSource
-        ComboBoxDetailer.DropDownStyle = ComboBoxStyle.DropDownList
-        ComboBoxDetailer.FormattingEnabled = True
-        ComboBoxDetailer.Items.AddRange(New Object() {"Active", "Expired", "Cancelled"})
-        ComboBoxDetailer.Location = New Point(149, 472)
-        ComboBoxDetailer.Name = "ComboBoxDetailer"
-        ComboBoxDetailer.Size = New Size(128, 23)
-        ComboBoxDetailer.TabIndex = 150
-        ' 
-        ' Label16
-        ' 
-        Label16.AutoSize = True
-        Label16.Font = New Font("Century Gothic", 9F)
-        Label16.Location = New Point(147, 452)
-        Label16.Name = "Label16"
-        Label16.Size = New Size(56, 17)
-        Label16.TabIndex = 149
-        Label16.Text = "Detailer"
-        ' 
-        ' Label11
-        ' 
-        Label11.AutoSize = True
-        Label11.Font = New Font("Century Gothic", 9F)
-        Label11.Location = New Point(14, 454)
-        Label11.Name = "Label11"
-        Label11.Size = New Size(87, 17)
-        Label11.TabIndex = 148
-        Label11.Text = "Pickup Status"
-        ' 
-        ' ComboBoxAppointmentStatus
-        ' 
-        ComboBoxAppointmentStatus.AutoCompleteCustomSource.AddRange(New String() {"Pending", "Confirmed", "Cancelled", "No-Show"})
-        ComboBoxAppointmentStatus.AutoCompleteSource = AutoCompleteSource.CustomSource
-        ComboBoxAppointmentStatus.DropDownStyle = ComboBoxStyle.DropDownList
-        ComboBoxAppointmentStatus.FormattingEnabled = True
-        ComboBoxAppointmentStatus.Items.AddRange(New Object() {"Confirmed", "On-The-Way", "Completed"})
-        ComboBoxAppointmentStatus.Location = New Point(16, 472)
-        ComboBoxAppointmentStatus.Name = "ComboBoxAppointmentStatus"
-        ComboBoxAppointmentStatus.Size = New Size(129, 23)
-        ComboBoxAppointmentStatus.TabIndex = 147
-        ' 
-        ' TextBoxNotes
-        ' 
-        TextBoxNotes.Location = New Point(16, 516)
-        TextBoxNotes.Multiline = True
-        TextBoxNotes.Name = "TextBoxNotes"
-        TextBoxNotes.Size = New Size(261, 22)
-        TextBoxNotes.TabIndex = 152
-        ' 
-        ' Label14
-        ' 
-        Label14.AutoSize = True
-        Label14.Font = New Font("Century Gothic", 9F)
-        Label14.Location = New Point(16, 498)
-        Label14.Name = "Label14"
-        Label14.Size = New Size(43, 17)
-        Label14.TabIndex = 151
-        Label14.Text = "Notes"
-        ' 
-        ' UpdatePickupBtn
-        ' 
-        UpdatePickupBtn.BackColor = Color.FromArgb(CByte(84), CByte(98), CByte(161))
-        UpdatePickupBtn.FlatAppearance.BorderSize = 0
-        UpdatePickupBtn.FlatStyle = FlatStyle.Flat
-        UpdatePickupBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        UpdatePickupBtn.ForeColor = Color.White
-        UpdatePickupBtn.Location = New Point(147, 629)
-        UpdatePickupBtn.Name = "UpdatePickupBtn"
-        UpdatePickupBtn.Size = New Size(129, 30)
-        UpdatePickupBtn.TabIndex = 154
-        UpdatePickupBtn.Text = "Update Pickup"
-        UpdatePickupBtn.UseVisualStyleBackColor = False
-        ' 
-        ' ClearFieldsBtn
-        ' 
-        ClearFieldsBtn.BackColor = Color.FromArgb(CByte(223), CByte(100), CByte(84))
-        ClearFieldsBtn.FlatAppearance.BorderSize = 0
-        ClearFieldsBtn.FlatStyle = FlatStyle.Flat
-        ClearFieldsBtn.Font = New Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ClearFieldsBtn.ForeColor = Color.White
-        ClearFieldsBtn.Image = CType(resources.GetObject("ClearFieldsBtn.Image"), Image)
-        ClearFieldsBtn.Location = New Point(17, 629)
-        ClearFieldsBtn.Name = "ClearFieldsBtn"
-        ClearFieldsBtn.Size = New Size(129, 30)
-        ClearFieldsBtn.TabIndex = 153
-        ClearFieldsBtn.Text = "Clear Fields"
-        ClearFieldsBtn.TextAlign = ContentAlignment.MiddleRight
-        ClearFieldsBtn.TextImageRelation = TextImageRelation.ImageBeforeText
-        ClearFieldsBtn.UseVisualStyleBackColor = False
-        ' 
         ' PickUp
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -599,18 +621,18 @@ Partial Class PickUp
         FormBorderStyle = FormBorderStyle.None
         Name = "PickUp"
         Text = "PickUp"
-        CType(DataGridViewAppointment, ComponentModel.ISupportInitialize).EndInit()
+        CType(DataGridViewPickup, ComponentModel.ISupportInitialize).EndInit()
         Panel1.ResumeLayout(False)
+        Panel14.ResumeLayout(False)
+        Panel14.PerformLayout()
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
         PanelServiceInfo.ResumeLayout(False)
-        Panel14.ResumeLayout(False)
-        Panel14.PerformLayout()
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents PrintDocumentBill As Printing.PrintDocument
-    Friend WithEvents DataGridViewAppointment As DataGridView
+    Friend WithEvents DataGridViewPickup As DataGridView
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Panel2 As Panel
     Friend WithEvents ComboBoxDiscount As ComboBox
@@ -649,9 +671,11 @@ Partial Class PickUp
     Friend WithEvents ComboBoxDetailer As ComboBox
     Friend WithEvents Label16 As Label
     Friend WithEvents Label11 As Label
-    Friend WithEvents ComboBoxAppointmentStatus As ComboBox
+    Friend WithEvents ComboBoxPickupStatus As ComboBox
     Friend WithEvents TextBoxNotes As TextBox
     Friend WithEvents Label14 As Label
     Friend WithEvents UpdatePickupBtn As Button
     Friend WithEvents ClearFieldsBtn As Button
+    Friend WithEvents TextBoxPickupAddress As TextBox
+    Friend WithEvents Label15 As Label
 End Class

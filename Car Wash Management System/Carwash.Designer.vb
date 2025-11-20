@@ -684,14 +684,14 @@ Partial Class Carwash
         ' ExitToolStripMenuItem
         ' 
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        ExitToolStripMenuItem.Size = New Size(180, 22)
+        ExitToolStripMenuItem.Size = New Size(112, 22)
         ExitToolStripMenuItem.Text = "E&xit"
         ' 
         ' SettingsToolStripMenuItem
         ' 
         SettingsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ChangePasswordToolStripMenuItem})
         SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        SettingsToolStripMenuItem.Size = New Size(180, 22)
+        SettingsToolStripMenuItem.Size = New Size(112, 22)
         SettingsToolStripMenuItem.Text = "Settings"
         ' 
         ' ChangePasswordToolStripMenuItem
@@ -704,19 +704,19 @@ Partial Class Carwash
         ' 
         AdminToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {AddUserToolStripMenuItem, EmployeeInformationToolStripMenuItem})
         AdminToolStripMenuItem.Name = "AdminToolStripMenuItem"
-        AdminToolStripMenuItem.Size = New Size(180, 22)
+        AdminToolStripMenuItem.Size = New Size(112, 22)
         AdminToolStripMenuItem.Text = "Admin"
         ' 
         ' AddUserToolStripMenuItem
         ' 
         AddUserToolStripMenuItem.Name = "AddUserToolStripMenuItem"
-        AddUserToolStripMenuItem.Size = New Size(180, 22)
+        AddUserToolStripMenuItem.Size = New Size(175, 22)
         AddUserToolStripMenuItem.Text = "Add User"
         ' 
         ' EmployeeInformationToolStripMenuItem
         ' 
         EmployeeInformationToolStripMenuItem.Name = "EmployeeInformationToolStripMenuItem"
-        EmployeeInformationToolStripMenuItem.Size = New Size(180, 22)
+        EmployeeInformationToolStripMenuItem.Size = New Size(175, 22)
         EmployeeInformationToolStripMenuItem.Text = "Employee Information"
         ' 
         ' ServiceTrackingToolStripMenuItem
@@ -756,7 +756,7 @@ Partial Class Carwash
         ' 
         PickUpToolStripMenuItem.Name = "PickUpToolStripMenuItem"
         PickUpToolStripMenuItem.Size = New Size(180, 22)
-        PickUpToolStripMenuItem.Text = "Pick Up"
+        PickUpToolStripMenuItem.Text = "&Pickup"
         ' 
         ' BookingToolStripMenuItem
         ' 

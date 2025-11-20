@@ -409,4 +409,96 @@ Public Class AddButtonFunction
         End Try
 
     End Function
+
+    ' Overload 7: For adding a new Pickup
+    Public Overloads Shared Function AddDataToPickupTable(
+       TextBoxCustomerID As TextBox,
+       TextBoxPickupAddress As TextBox,
+       DateTimePickerStartDate As DateTimePicker,
+       ComboBoxPaymentMethod As ComboBox,
+       TextBoxReferenceID As TextBox,
+       TextBoxCheque As TextBox,
+       ComboBoxDetailer As ComboBox,
+       TextBoxTotalPrice As TextBox,
+       ComboBoxPickupStatus As ComboBox,
+       TextBoxNotes As TextBox,
+       errorHandler As Action(Of String),
+       PickupManagementDatabaseHelper As PickupManagementDatabaseHelper
+       ) As Boolean
+
+        Try
+
+            Dim customerID As Integer
+            If Not Integer.TryParse(TextBoxCustomerID.Text, customerID) Then
+                errorHandler.Invoke("Customer not found. Please select a valid customer.")
+                Return False
+            End If
+
+            ' The AddSaleToListView class (assumed to' hold the service data) should expose the list
+            If AddSaleToListView.PickupServiceList.Count = 0 Then
+                errorHandler.Invoke("Please add at least one service to the pickup.")
+                Return False
+            End If
+
+            ' Validate if the Start date is not in the past (allowing for a small buffer, e.g., 1 minute)
+            If DateTimePickerStartDate.Value <= DateTime.Now.AddMinutes(-1) Then
+                errorHandler.Invoke("The pickup date and time cannot be in the past.")
+                Return False
+            End If
+
+            If TextBoxPickupAddress.Text.Trim() = String.Empty Then
+                errorHandler.Invoke("Please enter a valid pickup address.")
+                Return False
+            End If
+
+            If ComboBoxPaymentMethod.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please select a payment method.")
+                Return False
+            End If
+
+            ' Validate payment details
+            Dim selectedPaymentMethod As String = ComboBoxPaymentMethod.Text
+            If selectedPaymentMethod.Equals("Gcash", StringComparison.OrdinalIgnoreCase) AndAlso String.IsNullOrWhiteSpace(TextBoxReferenceID.Text) Then
+                errorHandler.Invoke("Please enter a Reference ID for the selected payment method (Gcash).")
+                Return False
+            End If
+            If selectedPaymentMethod.Equals("Cheque", StringComparison.OrdinalIgnoreCase) AndAlso String.IsNullOrWhiteSpace(TextBoxCheque.Text) Then
+                errorHandler.Invoke("Please enter a Cheque Number for the selected payment method (Cheque).")
+                Return False
+            End If
+
+            Dim totalPrice As Decimal
+            If Not Decimal.TryParse(TextBoxTotalPrice.Text, totalPrice) Then
+                errorHandler.Invoke("Please enter a valid total price.")
+                Return False
+            End If
+
+            If ComboBoxPickupStatus.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please select a pickup status.")
+                Return False
+            End If
+
+            If ComboBoxDetailer.SelectedIndex = -1 Then
+                errorHandler.Invoke("Please select a detailer.")
+                Return False
+            End If
+            PickupManagementDatabaseHelper.AddPickup(
+                customerID,
+                AddSaleToListView.PickupServiceList,
+                DateTimePickerStartDate.Value,
+                TextBoxPickupAddress.Text,
+                selectedPaymentMethod,
+                TextBoxReferenceID.Text,
+                TextBoxCheque.Text,
+                totalPrice,
+                ComboBoxPickupStatus.Text.Trim(),
+                ComboBoxDetailer.Text,
+                TextBoxNotes.Text
+            )
+            MessageBox.Show("Pickup added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            errorHandler.Invoke("An error occurred while adding the pickup: " & ex.Message)
+        End Try
+        Return True
+    End Function
 End Class

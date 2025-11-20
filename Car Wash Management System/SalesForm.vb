@@ -148,7 +148,6 @@ Public Class SalesForm
 
     Private Sub DataGridViewSales_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridViewSales.CellFormatting
         DataGridFormattingService.DataGridCellFormattingPaymentMethod(e, "PaymentMethod", DataGridViewSales)
-
     End Sub
 
     Private Sub DataGridViewSales_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridViewSales.CellPainting
@@ -156,6 +155,7 @@ Public Class SalesForm
     End Sub
 
     Private Sub PrintDocumentBill_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocumentBill.PrintPage
+
 
         ' 1. Get the Sales ID of the selected row
         Dim currentSaleID As Integer = 0
@@ -184,7 +184,8 @@ Public Class SalesForm
         .CustomerName = TextBoxCustomerName.Text,
         .ServiceLineItems = serviceLineItems,
         .PaymentMethod = ComboBoxPaymentMethod.Text,
-        .SaleDate = saleDate
+        .SaleDate = saleDate,
+        .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D)
 })
     End Sub
 
@@ -266,6 +267,7 @@ Public Class SalesForm
     Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
         SearchBarTextChangeService.TextBoxSearchBar(TextBoxSearchBar, e)
     End Sub
+
 End Class
 
 

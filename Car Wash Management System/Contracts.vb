@@ -247,7 +247,8 @@ Public Class Contracts
            .SaleDate = DataGridViewContract.CurrentRow.Cells(4).Value,
            .StartDate = DateTimePickerStartDate.Value,
            .EndDate = DateTimePickerEndDate.Value,
-           .ContractStatus = ComboBoxContractStatus.Text
+           .ContractStatus = ComboBoxContractStatus.Text,
+           .Discount = If(ComboBoxDiscount.SelectedItem IsNot Nothing, Convert.ToDecimal(ComboBoxDiscount.SelectedItem), 0D)
        })
     End Sub
 

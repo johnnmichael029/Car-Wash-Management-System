@@ -319,5 +319,64 @@
         End Try
     End Sub
 
+    Public Overloads Shared Sub GetSelectedRowData(
+        DataGridViewPickup As DataGridView,
+        TextBoxCustomerName As TextBox,
+        DateTimePickerStartDate As DateTimePicker,
+        TextBoxPickupAddress As TextBox,
+        ComboBoxPaymentMethod As ComboBox,
+        TextBoxReferenceID As TextBox,
+        TextBoxCheque As TextBox,
+        TextBoxTotalPrice As TextBox,
+        ComboBoxPickupStatus As ComboBox,
+        ComboBoxDetailer As ComboBox,
+        TextBoxNotes As TextBox,
+        LabelPickupID As Label,
+        ListViewServices As ListView,
+        errorHandler As Action(Of String)
+        )
+        Try
+            If DataGridViewPickup.CurrentRow Is Nothing Then Return
 
+            Dim currentRow As DataGridViewRow = DataGridViewPickup.CurrentRow
+            TextBoxCustomerName.Text = currentRow.Cells("CustomerName").Value?.ToString()
+            DateTimePickerStartDate.Value = Convert.ToDateTime(currentRow.Cells("PickupDateTime").Value)
+            TextBoxPickupAddress.Text = currentRow.Cells("PickupAddress").Value?.ToString()
+            ComboBoxPaymentMethod.Text = currentRow.Cells("PaymentMethod").Value?.ToString()
+            Dim paymentMethod As String = ComboBoxPaymentMethod.Text
+
+            Dim referenceValue As String = currentRow.Cells("ReferenceID").Value?.ToString()
+            If paymentMethod.Equals("Gcash", StringComparison.OrdinalIgnoreCase) Then
+                TextBoxReferenceID.Text = referenceValue
+                TextBoxCheque.Clear()
+            ElseIf paymentMethod.Equals("Cheque", StringComparison.OrdinalIgnoreCase) Then
+                TextBoxCheque.Text = referenceValue
+                TextBoxReferenceID.Clear()
+            Else
+                TextBoxCheque.Clear()
+                TextBoxReferenceID.Clear()
+            End If
+            TextBoxTotalPrice.Text = currentRow.Cells("Price").Value?.ToString()
+            ComboBoxPickupStatus.Text = currentRow.Cells("PickupStatus").Value?.ToString()
+            ComboBoxDetailer.Text = currentRow.Cells("Detailer").Value?.ToString()
+            TextBoxNotes.Text = currentRow.Cells("Notes").Value?.ToString()
+            Dim pickupIDValue As String = currentRow.Cells("PickupID").Value?.ToString()
+
+            LabelPickupID.Text = pickupIDValue
+            If String.IsNullOrEmpty(pickupIDValue) Then Return
+
+            Dim pickupID As Integer
+            If Integer.TryParse(pickupIDValue, pickupID) Then
+                LoadService.LoadServicesIntoListViewPickUpForm(pickupID, ListViewServices)
+            Else
+                errorHandler.Invoke("Invalid Pickup ID format.")
+            End If
+
+
+
+        Catch ex As Exception
+            errorHandler.Invoke("Error loading pickup details: " & ex.Message)
+        End Try
+
+    End Sub
 End Class
