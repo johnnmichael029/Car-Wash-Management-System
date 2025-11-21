@@ -14,7 +14,7 @@ Public Class ActivityLog
         LoadActivityLog()
     End Sub
     Private Sub LoadDataActivtyLog()
-        DataGridViewActivityLog.DataSource = ActivityLogManagement.ViewActivityLog()
+        DataGridViewActivityLog.DataSource = activityLogManagement.ViewActivityLog()
     End Sub
     Private Sub ChangeHeaderOfActivityLog()
         DataGridViewActivityLog.Columns(0).HeaderText = "Log ID"
@@ -30,8 +30,12 @@ Public Class ActivityLog
         DataGridFontStyleService.DataGridFontStyle(DataGridViewActivityLog)
     End Sub
     Public Sub LoadActivityLog()
-        DataGridViewActivityLog.DataSource = ActivityLogManagement.ViewActivityLog()
+        DataGridViewActivityLog.DataSource = activityLogManagement.ViewActivityLog()
         DataGridViewActivityLog.Columns("ActionType").HeaderText = "Action Type"
         DataGridViewActivityLog.Columns("Timestamp").HeaderText = "Timestamp"
+    End Sub
+
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
     End Sub
 End Class

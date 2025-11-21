@@ -133,10 +133,10 @@ Public Class CustomerInformation
         DataGridViewCustomerInformation.DataSource = customerInformationDatabaseHelper.ViewCustomer()
     End Sub
 
-    Private Sub DeleteCustomerInformation()
-        customerInformationDatabaseHelper.DeleteCustomer(DataGridViewCustomerInformation)
-        DataGridViewCustomerInformation.DataSource = customerInformationDatabaseHelper.ViewCustomer()
-    End Sub
+    'Private Sub DeleteCustomerInformation()
+    '    customerInformationDatabaseHelper.DeleteCustomer(DataGridViewCustomerInformation)
+    '    DataGridViewCustomerInformation.DataSource = customerInformationDatabaseHelper.ViewCustomer()
+    'End Sub
 
     Public Sub ClearFields()
         TextBoxName.Clear()

@@ -1,10 +1,10 @@
 ﻿Imports Microsoft.Data.SqlClient
 Public Class ServiceDatabaseHelper
-    Private ReadOnly constr As String
+    Private Shared constr As String
     Public Sub New(connectionString As String)
-        Me.constr = connectionString
+        constr = connectionString
     End Sub
-    Public Function CheckIfAdmin(username As String) As Boolean
+    Public Shared Function CheckIfAdmin(username As String) As Boolean
         Dim isAdmin As Boolean = False
         Using con As New SqlConnection(constr)
             Dim selectQuery = "SELECT CASE WHEN is_admin IS NULL THEN 0 ELSE is_admin END AS is_admin FROM userTable WHERE username = @username"

@@ -105,6 +105,29 @@ Public Class SearchBarService
         End If
 
         gridView.DataSource = salesData
+
+        If gridView.Columns.Contains("actionsColumn") Then
+            ' Set the DisplayIndex to the total number of columns minus 1. 
+            ' This ensures it is always the last column.
+            gridView.Columns("actionsColumn").DisplayIndex = gridView.Columns.Count - 1
+
+            ' Optional: Auto-size columns to fit the new data
+            gridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells)
+        End If
+        gridView.Refresh()
+    End Sub
+
+    Public Shared Sub SearchBarFunctionForPickup(searchBar As TextBox, gridView As DataGridView)
+        currentSearchTerm = Trim(searchBar.Text)
+        Dim salesData As DataTable
+
+        If String.IsNullOrWhiteSpace(currentSearchTerm) Then
+            salesData = PickupManagementDatabaseHelper.ViewPickupData()
+        Else
+            salesData = PickupManagementDatabaseHelper.SearchInPuckup(currentSearchTerm)
+        End If
+
+        gridView.DataSource = salesData
         gridView.Refresh()
     End Sub
 End Class

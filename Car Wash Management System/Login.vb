@@ -27,6 +27,11 @@ Public Class Login
     End Sub
 
     Private Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Settings.CheckBoxEnableDiscount.Checked = My.Settings.DiscountEnabled
+        Settings.CheckBoxFixDiscount.Checked = My.Settings.FixDiscount
+        Settings.NumericUpDownDiscount.Value = My.Settings.DiscountValue
+
+
         CenterToScreen()
         LoginService.DoesHaveAnyAccount("admin", "admin123", True)
     End Sub

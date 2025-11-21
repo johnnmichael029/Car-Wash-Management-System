@@ -18,6 +18,9 @@ Public Class Carwash
         NotificationLoad()
         PopulateAllTotal()
         HideButtons()
+
+
+
     End Sub
 
     Private Sub HideButtons()
@@ -292,6 +295,17 @@ Public Class Carwash
         Panel4.Controls.Add(pickUp)
         pickUp.Dock = DockStyle.Fill
         pickUp.Show()
+
+        DashboardBtn.BackColor = Color.White
+        ActivityLogBtn.BackColor = Color.White
+        salesHistoryBtn.BackColor = Color.White
+        SalesAnalyticsBtn.BackColor = Color.White
+
+        revenueCustomerBtn.Visible = False
+        revenueServiceBtn.Visible = False
+        salesSummaryBtn.Visible = False
+        salesBtn.Visible = False
+        averageSaleBtn.Visible = False
     End Sub
     Private Sub AdminToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdminToolStripMenuItem.Click
 
@@ -518,6 +532,25 @@ Public Class Carwash
         Panel4.Controls.Add(EmployeeInformation)
         EmployeeInformation.Dock = DockStyle.Fill
         EmployeeInformation.Show()
+        DashboardBtn.BackColor = Color.White
+        ActivityLogBtn.BackColor = Color.White
+        salesHistoryBtn.BackColor = Color.White
+        SalesAnalyticsBtn.BackColor = Color.White
+
+        revenueCustomerBtn.Visible = False
+        revenueServiceBtn.Visible = False
+        salesSummaryBtn.Visible = False
+        salesBtn.Visible = False
+        averageSaleBtn.Visible = False
+    End Sub
+
+    Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
+        EmployeeInformationSettingsForm()
+    End Sub
+
+    Private Sub EmployeeInformationSettingsForm()
+
+        Settings.ShowDialog()
         DashboardBtn.BackColor = Color.White
         ActivityLogBtn.BackColor = Color.White
         salesHistoryBtn.BackColor = Color.White

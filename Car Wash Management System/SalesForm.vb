@@ -13,12 +13,21 @@ Public Class SalesForm
     End Sub
 
     Private Sub SalesForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+
+        SettingsService.UpdateSingleDiscountComboBox(ComboBoxDiscount)
+        SettingsService.ApplyTotalPriceSettingsOnLoad()
+        SettingsService.DiscountButtonForm(Settings.CheckBoxEnableDiscount)
+
         LoadAllPopulateUI()
         ClearFields()
         DataGridViewSalesFontStyle()
         ChangeHeaderOfDataGridViewSales()
         SetupListViewService.SetupListViewForServices(ListViewServices, 30, 85, 85, 50)
+
     End Sub
+
+
 
     Private Sub ChangeHeaderOfDataGridViewSales()
         DataGridViewSales.Columns(0).HeaderText = "Sales ID"

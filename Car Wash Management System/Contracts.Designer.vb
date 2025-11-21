@@ -303,6 +303,7 @@ Partial Class Contracts
         TextBoxTotalPrice.Font = New Font("Century Gothic", 9F)
         TextBoxTotalPrice.Location = New Point(147, 472)
         TextBoxTotalPrice.Name = "TextBoxTotalPrice"
+        TextBoxTotalPrice.ReadOnly = True
         TextBoxTotalPrice.Size = New Size(129, 22)
         TextBoxTotalPrice.TabIndex = 90
         ' 

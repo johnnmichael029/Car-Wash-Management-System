@@ -174,4 +174,8 @@ Public Class ViewPickupInfo
             _parentCustomerForm.ViewPickupData()
         End If
     End Sub
+
+    Private Sub ViewWebBrowserMapPanel_Paint(sender As Object, e As PaintEventArgs) Handles ViewWebBrowserMapPanel.Paint
+
+    End Sub
 End Class

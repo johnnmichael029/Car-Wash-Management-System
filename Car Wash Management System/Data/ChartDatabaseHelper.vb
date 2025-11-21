@@ -22,6 +22,7 @@ Public Class ChartDatabaseHelper
         }
         PanelChartCustomers.Controls.Add(pieChart)
     End Sub
+
     Public Sub InitializeChartStructureInCustomers()
         Dim chartData As Chart = pieChart ' Use the dynamically created chart
 
@@ -66,6 +67,7 @@ Public Class ChartDatabaseHelper
         }
         chartData.Legends.Add(legend1)
     End Sub
+
     Public Sub LoadCustomersData()
         If pieChart Is Nothing Then
             Console.WriteLine("Chart object is not initialized.")
@@ -170,6 +172,7 @@ Public Class ChartDatabaseHelper
         }
         panelChartAverage.Controls.Add(pieChart)
     End Sub
+
     Public Sub InitializeChartStructure()
         Dim chartData As Chart = pieChart ' Use the dynamically created chart
 
@@ -214,6 +217,7 @@ Public Class ChartDatabaseHelper
         }
         chartData.Legends.Add(legend1)
     End Sub
+
     Public Sub LoadServiceData()
         If pieChart Is Nothing Then
             Console.WriteLine("Chart object is not initialized.")

@@ -30,4 +30,8 @@ Public Class AverageSaleAnalytics
         ' 2. Call the main refresh function using the new period
         SalesAnalytics.ChangePeriodView(nextPeriod)
     End Sub
+
+    Private Sub PanelBarGraphAverage_Paint(sender As Object, e As PaintEventArgs) Handles PanelBarGraphAverage.Paint
+
+    End Sub
 End Class

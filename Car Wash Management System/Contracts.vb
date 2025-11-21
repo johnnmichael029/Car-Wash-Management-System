@@ -13,6 +13,9 @@ Public Class Contracts
         ' Initialize the data access layer
     End Sub
     Private Sub Contracts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        SettingsService.UpdateSingleDiscountComboBox(Me.ComboBoxDiscount)
+        SettingsService.DiscountButtonForm(Settings.CheckBoxEnableDiscount)
+        SettingsService.ApplyTotalPriceSettingsOnLoad()
         PopulateUIForContract()
         DataGridViewFontStyle()
         ChangeHeaderOfDataGridViewContracts()

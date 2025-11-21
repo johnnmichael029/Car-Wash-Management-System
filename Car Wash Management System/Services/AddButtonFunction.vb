@@ -206,9 +206,22 @@ Public Class AddButtonFunction
         errorHandler As Action(Of String)
     ) As Boolean
 
+
+
         ' --- 1. Validation ---
         If String.IsNullOrEmpty(TextBoxName.Text) Or String.IsNullOrEmpty(TextBoxNumber.Text) Or String.IsNullOrEmpty(TextBoxEmail.Text) Or String.IsNullOrEmpty(TextBoxLastName.Text) Then
             errorHandler.Invoke("Please fill in all required customer fields (First Name, Last Name, Phone, Email).")
+            Return False
+        End If
+
+        Dim isMobileNumberValid As Boolean = InputValidationService.IsMobileNumberValid(TextBoxNumber.Text, errorHandler)
+        Dim isEmailValid As Boolean = InputValidationService.IsEmailValid(TextBoxEmail.Text, errorHandler)
+
+        If isMobileNumberValid = False Then
+            Return False
+        End If
+
+        If isEmailValid = False Then
             Return False
         End If
 

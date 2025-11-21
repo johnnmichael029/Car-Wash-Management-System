@@ -130,4 +130,8 @@ Public Class Service
             DeleteServiceBtn.Enabled = True
         End If
     End Sub
+
+    Private Sub LabelIsAdmin_Click(sender As Object, e As EventArgs) Handles LabelIsAdmin.Click
+
+    End Sub
 End Class

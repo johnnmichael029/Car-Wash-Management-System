@@ -16,6 +16,10 @@ Public Class Appointment
 
     End Sub
     Private Sub Appointment_Load(Sender As Object, e As EventArgs) Handles MyBase.Load
+        SettingsService.UpdateSingleDiscountComboBox(Me.ComboBoxDiscount)
+        SettingsService.DiscountButtonForm(Settings.CheckBoxEnableDiscount)
+        SettingsService.ApplyTotalPriceSettingsOnLoad()
+
         PopulateUIForAppointment()
         DataGridViewFontStyle()
         ChangeHeaderOfDataGridViewAppointment()

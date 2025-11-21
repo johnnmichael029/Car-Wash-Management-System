@@ -9,16 +9,24 @@
 
     Private Sub PickUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        ClearFields()
-
         LoadAllPopulateUI()
-        DataGridViewSalesFontStyle()
+
+        ClearFields()
         ChangeHeaderOfDataGridViewSales()
+        DataGridViewSalesFontStyle()
+
+
+        SettingsService.UpdateSingleDiscountComboBox(Me.ComboBoxDiscount)
+        SettingsService.DiscountButtonForm(Settings.CheckBoxEnableDiscount)
         SetupListViewService.SetupListViewForServices(ListViewServices, 30, 85, 85, 50)
-        AddButtonAction()
+        SettingsService.ApplyTotalPriceSettingsOnLoad()
+         AddButtonAction()
     End Sub
     Private Sub AddAppointmentBtn_Click(sender As Object, e As EventArgs)
 
+    End Sub
+    Private Sub DataGridViewPickup_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridViewPickup.CellPainting
+        DataGridTextHighlightService.DataGridViewTextHighlight(e)
     End Sub
 
     Private Sub DataGridViewAppointment_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewPickup.CellContentClick
@@ -280,4 +288,10 @@
         End If
     End Sub
 
+    Private Sub TextBoxSearchBar_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearchBar.TextChanged
+        SearchBarService.SearchBarFunctionForPickup(TextBoxSearchBar, DataGridViewPickup)
+    End Sub
+    Private Sub TextBoxSearchBar_Click(sender As Object, e As EventArgs) Handles TextBoxSearchBar.Click
+        SearchBarTextChangeService.TextBoxSearchBar(TextBoxSearchBar, e)
+    End Sub
 End Class

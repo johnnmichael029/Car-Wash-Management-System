@@ -6,48 +6,48 @@ Public Class CustomerInformationDatabaseHelper
     Public Sub New(connectionString As String)
         constr = connectionString
     End Sub
-    Public Sub DeleteCustomer(dataGridView As DataGridView)
-        If dataGridView.SelectedRows.Count = 0 Then
-            MessageBox.Show("Please select a customer in table row to delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
-        Dim customerID As Integer = Convert.ToInt32(dataGridView.CurrentRow.Cells("CustomerID").Value)
+    'Public Sub DeleteCustomer(dataGridView As DataGridView)
+    '    If dataGridView.SelectedRows.Count = 0 Then
+    '        MessageBox.Show("Please select a customer in table row to delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '        Return
+    '    End If
+    '    Dim customerID As Integer = Convert.ToInt32(dataGridView.CurrentRow.Cells("CustomerID").Value)
 
-        Dim DialogResult = MessageBox.Show("Are you sure you want to delete this record?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
-        If DialogResult = DialogResult.Yes Then
-            Using con As New SqlConnection(constr)
-                con.Open()
-                Dim transaction As SqlTransaction = con.BeginTransaction()
-                Try
-                    Dim deleteVehiclesQuery = "DELETE FROM CustomerVehicleTable WHERE CustomerID = @CustomerID"
-                    Using cmd As New SqlCommand(deleteVehiclesQuery, con, transaction)
-                        cmd.Parameters.AddWithValue("@CustomerID", customerID)
-                        cmd.ExecuteNonQuery()
-                    End Using
+    '    Dim DialogResult = MessageBox.Show("Are you sure you want to delete this record?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+    '    If DialogResult = DialogResult.Yes Then
+    '        Using con As New SqlConnection(constr)
+    '            con.Open()
+    '            Dim transaction As SqlTransaction = con.BeginTransaction()
+    '            Try
+    '                Dim deleteVehiclesQuery = "DELETE FROM CustomerVehicleTable WHERE CustomerID = @CustomerID"
+    '                Using cmd As New SqlCommand(deleteVehiclesQuery, con, transaction)
+    '                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
+    '                    cmd.ExecuteNonQuery()
+    '                End Using
 
-                    Dim deleteCustomerQuery = "DELETE FROM CustomersTable WHERE CustomerID = @CustomerID"
-                    Using cmd As New SqlCommand(deleteCustomerQuery, con, transaction)
-                        cmd.Parameters.AddWithValue("@CustomerID", customerID)
-                        Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
+    '                Dim deleteCustomerQuery = "DELETE FROM CustomersTable WHERE CustomerID = @CustomerID"
+    '                Using cmd As New SqlCommand(deleteCustomerQuery, con, transaction)
+    '                    cmd.Parameters.AddWithValue("@CustomerID", customerID)
+    '                    Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
 
-                        If rowsAffected > 0 Then
-                            transaction.Commit()
-                            Carwash.NotificationLabel.Text = "Customer Information Deleted!"
-                            Carwash.ShowNotification()
-                            MessageBox.Show("Customer deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                            ViewCustomer()
-                        Else
-                            transaction.Rollback()
-                            MessageBox.Show("Customer record not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        End If
-                    End Using
-                Catch ex As Exception
-                    transaction.Rollback()
-                    MessageBox.Show("Error deleting customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End Using
-        End If
-    End Sub
+    '                    If rowsAffected > 0 Then
+    '                        transaction.Commit()
+    '                        Carwash.NotificationLabel.Text = "Customer Information Deleted!"
+    '                        Carwash.ShowNotification()
+    '                        MessageBox.Show("Customer deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    '                        ViewCustomer()
+    '                    Else
+    '                        transaction.Rollback()
+    '                        MessageBox.Show("Customer record not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '                    End If
+    '                End Using
+    '            Catch ex As Exception
+    '                transaction.Rollback()
+    '                MessageBox.Show("Error deleting customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '            End Try
+    '        End Using
+    '    End If
+    'End Sub
 
     Public Sub AddCustomer(firstName As String, lastName As String, number As String, email As String, address As String, barangay As String, VehicleList As List(Of VehicleService))
         Using con As New SqlConnection(constr)

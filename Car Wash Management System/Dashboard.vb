@@ -22,6 +22,9 @@ Public Class Dashboard
 
     End Sub
     Public Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        SettingsService.UpdateSingleDiscountComboBox(Me.ComboBoxDiscount)
+        SettingsService.DiscountButtonForm(Settings.CheckBoxEnableDiscount)
+        SettingsService.ApplyTotalPriceSettingsOnLoad()
         LoadSalesChart()
         LoadLatestTransaction()
         DataGridViewLatestTransactionFontStyle()
@@ -39,6 +42,9 @@ Public Class Dashboard
         SalesDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
         salesDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
         employeeMangamentDatabaseHelper.PopulateDetailerForUI(ComboBoxDetailer)
+
+
+
 
     End Sub
     Private Sub LoadSalesChart()
@@ -362,6 +368,9 @@ Public Class Dashboard
         CalculatePriceService.CalculateTotalPrice(ComboBoxServices, ComboBoxAddons, ComboBoxDiscount, TextBoxPrice)
     End Sub
 
+    Private Sub DataGridViewLatestTransaction_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewLatestTransaction.CellContentClick
+
+    End Sub
 End Class
 
 

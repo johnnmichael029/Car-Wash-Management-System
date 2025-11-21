@@ -9,7 +9,7 @@ Public Class PickupManagementDatabaseHelper
         constr = connectionString
     End Sub
 
-    Public Function ViewPickupData() As DataTable
+    Public Shared Function ViewPickupData() As DataTable
         Dim dt As New DataTable()
         Using con As New SqlConnection(constr)
             con.Open()
@@ -327,4 +327,67 @@ Public Class PickupManagementDatabaseHelper
         Return items
     End Function
 
+    Public Shared Function SearchInPuckup(searchTerm As String) As DataTable
+        Dim dt As New DataTable()
+        ' Ensure constr is defined and accessible here
+        Using con As New SqlConnection(constr)
+            Try
+                con.Open()
+                Dim aggregateServicesQuery =
+            "WITH AggregatedServices AS ( " &
+            "   SELECT " &
+            "       pst.PickupID, " &
+            "       STRING_AGG(sv_base.ServiceName, ', ') AS AllBaseServices, " &
+            "       STRING_AGG(sv_addon.ServiceName, ', ') AS AllAddonServices " &
+            "   FROM " &
+            "       PickupServiceTable pst " &
+            "       INNER JOIN ServicesTable sv_base ON pst.ServiceID = sv_base.ServiceID " &
+            "       LEFT JOIN ServicesTable sv_addon ON pst.AddonServiceID = sv_addon.ServiceID " &
+            "   GROUP BY pst.PickupID " &
+            ") "
+
+                Dim selectQuery =
+            aggregateServicesQuery &
+            "SELECT " &
+                "pt.PickupID, " &
+                "ISNULL(c.Name, '') + ' ' + ISNULL(c.LastName, '') AS CustomerName, " &
+                "aggs.AllBaseServices AS BaseService, " &
+                "aggs.AllAddonServices AS AddonService, " &
+                "pt.PickupAddress, " &
+                "pt.PickupDateTime, " &
+                "pt.PaymentMethod, " &
+                "pt.ReferenceID, " &
+                "pt.Price, " &
+                "pt.PickupStatus, " &
+                "pt.Detailer, " &
+                "pt.Notes " &
+            "FROM " &
+                "PickupTable pt " &
+                "INNER JOIN CustomersTable c ON pt.CustomerID = c.CustomerID " &
+                "INNER JOIN AggregatedServices aggs ON pt.PickupID = aggs.PickupID " &
+            "WHERE " &
+                "pt.PickupID LIKE @SearchTerm OR " &
+                "c.Name LIKE @SearchTerm OR " &
+                "c.LastName LIKE @SearchTerm OR " &
+                "c.Name + ' ' + c.LastName LIKE @SearchTerm OR " &
+                "aggs.AllBaseServices LIKE @SearchTerm OR " &
+                "aggs.AllAddonServices LIKE @SearchTerm OR " &
+                "pt.PaymentMethod LIKE @SearchTerm OR " &
+                "pt.Detailer LIKE @SearchTerm " &
+            "ORDER BY pt.PickupID DESC"
+
+                Using cmd As New SqlCommand(selectQuery, con)
+                    cmd.Parameters.AddWithValue("@SearchTerm", "%" & searchTerm & "%")
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error searching regular sales: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                con.Close()
+            End Try
+        End Using
+        Return dt
+    End Function
 End Class
