@@ -29,6 +29,7 @@ Public Class Carwash
         averageSaleBtn.Visible = False
         salesSummaryBtn.Visible = False
         revenueServiceBtn.Visible = False
+        RevenueCityAnalyticsBtn.Visible = False
     End Sub
     Private Sub ShowButtons()
         revenueCustomerBtn.Visible = True
@@ -36,6 +37,7 @@ Public Class Carwash
         averageSaleBtn.Visible = True
         salesSummaryBtn.Visible = True
         revenueServiceBtn.Visible = True
+        RevenueCityAnalyticsBtn.Visible = True
     End Sub
 
     Private Sub NotificationLoad()
@@ -357,12 +359,15 @@ Public Class Carwash
         DashboardBtn.BackColor = Color.White
         ActivityLogBtn.BackColor = Color.White
         salesHistoryBtn.BackColor = Color.White
+
+
         revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
         revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
         salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
         salesBtn.BackColor = Color.FromArgb(239, 238, 238)
         averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
         SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+        RevenueCityAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
     End Sub
     Private Sub SaleAnalyticsShowForm()
         Panel4.Controls.Clear()
@@ -443,12 +448,14 @@ Public Class Carwash
         Panel4.Controls.Add(averageSaleAnalytics)
         averageSaleAnalytics.Dock = DockStyle.Fill
         averageSaleAnalytics.Show()
+
         revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
         revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
         salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
         salesBtn.BackColor = Color.FromArgb(239, 238, 238)
         averageSaleBtn.BackColor = Color.White
         SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+        RevenueCityAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
     End Sub
 
     Private Sub salesSummaryBtn_Click(sender As Object, e As EventArgs) Handles salesSummaryBtn.Click
@@ -463,12 +470,14 @@ Public Class Carwash
         Panel4.Controls.Add(saleSummaryAnalytics)
         saleSummaryAnalytics.Dock = DockStyle.Fill
         saleSummaryAnalytics.Show()
+
         revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
         revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
         salesSummaryBtn.BackColor = Color.White
         salesBtn.BackColor = Color.FromArgb(239, 238, 238)
         averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
         SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+        RevenueCityAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
     End Sub
 
     Private Sub revenueCustomerBtn_Click(sender As Object, e As EventArgs) Handles revenueCustomerBtn.Click
@@ -483,12 +492,14 @@ Public Class Carwash
         Panel4.Controls.Add(RevenueServiceAnalytics)
         RevenueServiceAnalytics.Dock = DockStyle.Fill
         RevenueServiceAnalytics.Show()
+
         revenueServiceBtn.BackColor = Color.White
         revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
         salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
         salesBtn.BackColor = Color.FromArgb(239, 238, 238)
         averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
         SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+        RevenueCityAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
     End Sub
     Private Sub RevenueCustomerAnalyticsShowForm()
         Panel4.Controls.Clear()
@@ -499,12 +510,14 @@ Public Class Carwash
         Panel4.Controls.Add(revenueCustomerAnalytics)
         revenueCustomerAnalytics.Dock = DockStyle.Fill
         revenueCustomerAnalytics.Show()
+
         revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
         revenueCustomerBtn.BackColor = Color.White
         salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
         salesBtn.BackColor = Color.FromArgb(239, 238, 238)
         averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
         SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
+        RevenueCityAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
     End Sub
 
     Private Sub revenueServiceBtn_Click(sender As Object, e As EventArgs) Handles revenueServiceBtn.Click
@@ -561,5 +574,29 @@ Public Class Carwash
         salesSummaryBtn.Visible = False
         salesBtn.Visible = False
         averageSaleBtn.Visible = False
+    End Sub
+
+    Private Sub RevenueCityBtn_Click(sender As Object, e As EventArgs) Handles RevenueCityAnalyticsBtn.Click
+        RevenueCityShowForm()
+    End Sub
+
+    Private Sub RevenueCityShowForm()
+        Panel4.Controls.Clear()
+        Dim RevenueCityAnalytics As New RevenueCityAnalytics With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None
+        }
+        Panel4.Controls.Add(RevenueCityAnalytics)
+        RevenueCityAnalytics.Dock = DockStyle.Fill
+        RevenueCityAnalytics.Show()
+
+
+        RevenueCityAnalyticsBtn.BackColor = Color.White
+        revenueServiceBtn.BackColor = Color.FromArgb(239, 238, 238)
+        revenueCustomerBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesSummaryBtn.BackColor = Color.FromArgb(239, 238, 238)
+        salesBtn.BackColor = Color.FromArgb(239, 238, 238)
+        averageSaleBtn.BackColor = Color.FromArgb(239, 238, 238)
+        SalesAnalyticsBtn.BackColor = Color.FromArgb(239, 238, 238)
     End Sub
 End Class

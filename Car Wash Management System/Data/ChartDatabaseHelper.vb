@@ -301,6 +301,157 @@ Public Class ChartDatabaseHelper
         End Using
     End Sub
 
+
+    '--- PIE CHART FOR CITY REVENUE DISTRIBUTION ---'
+    Public Sub SetupPieChartControlInRevenueCity(PanelChartRevenueCity As Panel)
+        If RevenueCityAnalytics.Controls.Find("PanelChartRevenueCity", True).Length = 0 Then
+            MessageBox.Show("The PanelChartRevenueCity control was not found on the form.", "UI Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
+
+        pieChart = New Chart With {
+            .Dock = DockStyle.Fill,
+            .BackColor = PanelChartRevenueCity.BackColor
+        }
+        PanelChartRevenueCity.Controls.Add(pieChart)
+    End Sub
+
+    Public Sub InitializeChartStructureForCity()
+        Dim chartData As Chart = pieChart ' Use the dynamically created chart
+
+        ' Clear previous state if this were run multiple times
+        chartData.Titles.Clear()
+        chartData.Series.Clear()
+        chartData.ChartAreas.Clear()
+
+        chartData.Titles.Add("Revenue Distribution by Core City (Live Data)")
+        chartData.Titles(0).Font = New Font("Century Gothic", 12, FontStyle.Bold)
+
+        ' Create Chart Area and apply 3D styling
+        Dim chartArea As New ChartArea()
+        chartData.ChartAreas.Add(chartArea)
+        chartArea.Area3DStyle.Enable3D = True
+        chartArea.Area3DStyle.Inclination = 30
+        chartArea.Area3DStyle.Rotation = 10
+
+        ' Create the Series (the Pie itself)
+        ' ----------------------------------------------------
+        ' 1. Hide the percentage/value labels on the slices
+        ' 2. Hide the service name label on the slices (no text inside the pie)
+        ' ----------------------------------------------------
+        Dim series1 As New Series With {
+            .Name = "CoreCityRevenue",
+            .ChartType = SeriesChartType.Pie,
+            .IsValueShownAsLabel = False,
+            .LabelFormat = "P1", ' Format is still defined, but not shown
+            .LegendText = "#VALX (#PERCENT)", ' Show service name and percentage in legend
+            .Font = New Font("Century Gothic", 10, FontStyle.Bold),
+            .XValueType = ChartValueType.String
+        }
+
+        ' --- CRITICAL ADDITION: DISABLE ALL PIE SLICE LABELS (Failsafe 3) ---
+        series1.CustomProperties = "PieLabelStyle=Disabled"
+        chartData.Series.Add(series1)
+
+        ' Add a Legend
+        Dim legend1 As New Legend With {
+            .Docking = Docking.Bottom,
+            .Alignment = StringAlignment.Center
+        }
+        chartData.Legends.Add(legend1)
+    End Sub
+
+    Public Sub LoadRevenueByLocation()
+        If pieChart Is Nothing Then
+            Console.WriteLine("Chart object is not initialized.")
+            Exit Sub
+        End If
+
+        Dim chartData As Chart = pieChart
+        ' It's good practice to rename the series to reflect the new data purpose
+        Dim series1 As Series = chartData.Series("CoreCityRevenue")
+        series1.Points.Clear() ' Clear any existing points
+
+        ' Store data as Location (String) and Revenue (Double)
+        Dim revenueData As New Dictionary(Of String, Double)
+
+        ' Assuming this function now returns the SQL for grouping by Address/Location
+        Dim sql As String = SalesAnalyticsDatabaseHelper.GetDynamicSalesQueryForCity()
+
+        ' NOTE: Using ConnectionString property defined at class level (constr)
+        Using conn As New SqlConnection(constr)
+            Using cmd As New SqlCommand(sql, conn)
+                Try
+                    conn.Open()
+                    Dim reader As SqlDataReader = cmd.ExecuteReader()
+
+                    While reader.Read()
+                        ' *** IMPORTANT CHANGE: Read "Location" instead of "ServiceName" ***
+                        Dim locationName As String = reader("Location").ToString()
+                        Dim totalRevenue As Double = Convert.ToDouble(reader("TotalRevenue"))
+
+                        revenueData.Add(locationName, totalRevenue)
+                    End While
+
+                    ' Calculate the total revenue for accurate percentage calculation in tooltip
+                    Dim totalRevenueSum As Double = revenueData.Values.Sum()
+
+                    ' 1. Populate the Chart with the data
+                    For Each kvp In revenueData
+                        Dim dataPoint As New DataPoint()
+                        ' Set the X-Value (Label) to the Location name and Y-Value to the Revenue
+                        dataPoint.SetValueXY(kvp.Key, kvp.Value)
+
+                        ' Set ToolTip for hover effect 
+                        If totalRevenueSum > 0 Then
+                            Dim percentage As Double = kvp.Value / totalRevenueSum
+                            ' *** UPDATE TOOLTIP TEXT to show Location ***
+                            dataPoint.ToolTip = String.Format("{0}: {1:P1}", kvp.Key, percentage)
+                        Else
+                            ' Fallback if total is zero
+                            dataPoint.ToolTip = kvp.Key
+                        End If
+
+                        series1.Points.Add(dataPoint)
+                    Next
+
+                    ' Failsafe 2: Ensure all individual point labels are empty (to remove 0%)
+                    For Each point As DataPoint In series1.Points
+                        point.Label = String.Empty
+                    Next
+
+                    ' 2. Custom Coloring (Optional)
+                    ' Assign colors based on index, assuming consistent order
+                    Dim colors As Color() = {Color.SteelBlue, Color.Gold, Color.DarkGreen, Color.DarkRed, Color.Indigo, Color.Tomato}
+                    For i As Integer = 0 To series1.Points.Count - 1
+                        If i < colors.Length Then
+                            series1.Points(i).Color = colors(i)
+                        Else
+                            ' Use a default color or cycle back if more than 6 locations
+                            series1.Points(i).Color = Color.Gray
+                        End If
+                    Next
+
+                    ' 3. Find and Explode the largest revenue slice
+                    If revenueData.Count > 0 Then
+                        Dim maxRevenue As Double = revenueData.Values.Max()
+                        ' Find the data point that corresponds to the max revenue
+                        Dim maxPoint As DataPoint = series1.Points.FirstOrDefault(Function(p) p.YValues(0) = maxRevenue)
+                        If maxPoint IsNot Nothing AndAlso maxRevenue > 0 Then ' Only explode if max is greater than 0
+                            maxPoint.CustomProperties = "Exploded=true"
+                        End If
+                    End If
+
+                Catch ex As Exception
+                    ' Display the specific database error to the user
+                    MessageBox.Show("DATABASE ERROR: " & ex.Message & Environment.NewLine &
+                                "Please check your ConnectionString and ensure the SQL Server is running.",
+                                "Connection Failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End Using
+        End Using
+    End Sub
+
     '--- BAR CHART FOR AVERAGE SALES PER PERIOD ---'    
     Public Shared Sub SetupBarChartControl(panelBarGraphAverage As Panel)
         If SalesAnalytics.Controls.Find("PanelBarGraphAverage", True).Length = 0 Then

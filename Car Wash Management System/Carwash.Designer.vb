@@ -41,17 +41,21 @@ Partial Class Carwash
         NotificationBtn = New Button()
         MenuBtn = New Button()
         Panel11 = New Panel()
+        Label2 = New Label()
         LabelNewCustomer = New Label()
         PictureBoxCustomer = New PictureBox()
         Panel9 = New Panel()
+        Label5 = New Label()
         LabelTotalNewScheduleToday = New Label()
         PictureBoxSchedule = New PictureBox()
         Panel10 = New Panel()
+        Label4 = New Label()
         PictureBoxContracts = New PictureBox()
         LabelTotalNewContractToday = New Label()
         Label3 = New Label()
         Panel6 = New Panel()
         PanelMenuBar = New Panel()
+        RevenueCityAnalyticsBtn = New Button()
         revenueCustomerBtn = New Button()
         revenueServiceBtn = New Button()
         salesSummaryBtn = New Button()
@@ -86,9 +90,6 @@ Partial Class Carwash
         Timer1 = New Timer(components)
         Timer2 = New Timer(components)
         NotificationTimer = New Timer(components)
-        Label2 = New Label()
-        Label4 = New Label()
-        Label5 = New Label()
         Panel2.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         Panel7.SuspendLayout()
@@ -302,6 +303,17 @@ Partial Class Carwash
         Panel11.Size = New Size(173, 54)
         Panel11.TabIndex = 5
         ' 
+        ' Label2
+        ' 
+        Label2.AutoSize = True
+        Label2.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label2.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
+        Label2.Location = New Point(41, 38)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(61, 16)
+        Label2.TabIndex = 27
+        Label2.Text = "This Day"
+        ' 
         ' LabelNewCustomer
         ' 
         LabelNewCustomer.Anchor = AnchorStyles.None
@@ -336,6 +348,17 @@ Partial Class Carwash
         Panel9.Size = New Size(173, 54)
         Panel9.TabIndex = 7
         ' 
+        ' Label5
+        ' 
+        Label5.AutoSize = True
+        Label5.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label5.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
+        Label5.Location = New Point(41, 38)
+        Label5.Name = "Label5"
+        Label5.Size = New Size(61, 16)
+        Label5.TabIndex = 27
+        Label5.Text = "This Day"
+        ' 
         ' LabelTotalNewScheduleToday
         ' 
         LabelTotalNewScheduleToday.Anchor = AnchorStyles.None
@@ -369,6 +392,17 @@ Partial Class Carwash
         Panel10.Name = "Panel10"
         Panel10.Size = New Size(173, 54)
         Panel10.TabIndex = 6
+        ' 
+        ' Label4
+        ' 
+        Label4.AutoSize = True
+        Label4.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label4.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
+        Label4.Location = New Point(41, 38)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(61, 16)
+        Label4.TabIndex = 27
+        Label4.Text = "This Day"
         ' 
         ' PictureBoxContracts
         ' 
@@ -418,6 +452,7 @@ Partial Class Carwash
         ' PanelMenuBar
         ' 
         PanelMenuBar.BackColor = Color.White
+        PanelMenuBar.Controls.Add(RevenueCityAnalyticsBtn)
         PanelMenuBar.Controls.Add(revenueCustomerBtn)
         PanelMenuBar.Controls.Add(revenueServiceBtn)
         PanelMenuBar.Controls.Add(salesSummaryBtn)
@@ -433,6 +468,21 @@ Partial Class Carwash
         PanelMenuBar.Name = "PanelMenuBar"
         PanelMenuBar.Size = New Size(177, 702)
         PanelMenuBar.TabIndex = 2
+        ' 
+        ' RevenueCityAnalyticsBtn
+        ' 
+        RevenueCityAnalyticsBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(238), CByte(238), CByte(238))
+        RevenueCityAnalyticsBtn.FlatStyle = FlatStyle.Flat
+        RevenueCityAnalyticsBtn.Font = New Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        RevenueCityAnalyticsBtn.ImageAlign = ContentAlignment.MiddleLeft
+        RevenueCityAnalyticsBtn.Location = New Point(0, 458)
+        RevenueCityAnalyticsBtn.Name = "RevenueCityAnalyticsBtn"
+        RevenueCityAnalyticsBtn.Padding = New Padding(5, 0, 39, 0)
+        RevenueCityAnalyticsBtn.Size = New Size(174, 28)
+        RevenueCityAnalyticsBtn.TabIndex = 13
+        RevenueCityAnalyticsBtn.Text = "Revenue City"
+        RevenueCityAnalyticsBtn.TextAlign = ContentAlignment.MiddleLeft
+        RevenueCityAnalyticsBtn.UseVisualStyleBackColor = True
         ' 
         ' revenueCustomerBtn
         ' 
@@ -764,39 +814,6 @@ Partial Class Carwash
         ' NotificationTimer
         ' 
         ' 
-        ' Label2
-        ' 
-        Label2.AutoSize = True
-        Label2.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label2.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
-        Label2.Location = New Point(41, 38)
-        Label2.Name = "Label2"
-        Label2.Size = New Size(61, 16)
-        Label2.TabIndex = 27
-        Label2.Text = "This Day"
-        ' 
-        ' Label4
-        ' 
-        Label4.AutoSize = True
-        Label4.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label4.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
-        Label4.Location = New Point(41, 38)
-        Label4.Name = "Label4"
-        Label4.Size = New Size(61, 16)
-        Label4.TabIndex = 27
-        Label4.Text = "This Day"
-        ' 
-        ' Label5
-        ' 
-        Label5.AutoSize = True
-        Label5.Font = New Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label5.ForeColor = Color.FromArgb(CByte(77), CByte(77), CByte(83))
-        Label5.Location = New Point(41, 38)
-        Label5.Name = "Label5"
-        Label5.Size = New Size(61, 16)
-        Label5.TabIndex = 27
-        Label5.Text = "This Day"
-        ' 
         ' Carwash
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -905,4 +922,5 @@ Partial Class Carwash
     Friend WithEvents Label2 As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents Label4 As Label
+    Friend WithEvents RevenueCityAnalyticsBtn As Button
 End Class

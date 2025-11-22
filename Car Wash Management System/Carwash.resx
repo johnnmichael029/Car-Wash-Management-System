@@ -150,6 +150,18 @@
         3PAQaQAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="PictureBoxSales.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
+        4wAAAOMBD+bfpwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEtSURBVFhH7Za7
+        SgRBEEWPJgaGYqyZX+AXmCgifoRsKIKRgSaaGZkr+wNioIaGC/sf6ysUAx/4lpLb0BSNI+7WRH3gssP0
+        7ao7u1vNQOX/zAF3wFemB+DUG6MoBTA9e2M0Y8BZFuDFG6LZUuN7fb55QyQd4ENaUQC7Dmcc2AE+pXXd
+        vwVunHfkzAAXetp3YC1bm5ZCsMK7wKOaXwML3jRq7B8+DxxqvNJv3AWmvDljEjgHXrPpuAKWvLGJflbA
+        vu4TBWpis3A+mC69sYkeMAD2gVm/+AsHheZJrRAaYAI41omXij4BRxpPIzSAHT6+aNKqPKEB9gpFkzbk
+        GSrAsmbcb9zWengAm1e/ydRaAL8hqQaoAWqAGqC1AJEn4Z9eSOy1qRRi2ADWfDHrU/nhG1GEbpq5ySUs
+        AAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="PictureBoxCustomer.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAH
@@ -195,18 +207,6 @@
         p4bjzm1YfHP9rg0BulEV4+qQ5ZvV+vBJodr2BE3UinbEIgSdjkXlPCxabz/Q0epJelF9YXbMVa9X39Ae
         uAhMttitcSRJ5NR/hAvAVp88KBy2hPrGb0rPr3zCUOCQidgSl9P3wE53Hiqo8XwCbkQj+mf8Ad3LR+QZ
         FeW6AAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="PictureBoxSales.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
-        4wAAAOMBD+bfpwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEtSURBVFhH7Za7
-        SgRBEEWPJgaGYqyZX+AXmCgifoRsKIKRgSaaGZkr+wNioIaGC/sf6ysUAx/4lpLb0BSNI+7WRH3gssP0
-        7ao7u1vNQOX/zAF3wFemB+DUG6MoBTA9e2M0Y8BZFuDFG6LZUuN7fb55QyQd4ENaUQC7Dmcc2AE+pXXd
-        vwVunHfkzAAXetp3YC1bm5ZCsMK7wKOaXwML3jRq7B8+DxxqvNJv3AWmvDljEjgHXrPpuAKWvLGJflbA
-        vu4TBWpis3A+mC69sYkeMAD2gVm/+AsHheZJrRAaYAI41omXij4BRxpPIzSAHT6+aNKqPKEB9gpFkzbk
-        GSrAsmbcb9zWengAm1e/ydRaAL8hqQaoAWqAGqC1AJEn4Z9eSOy1qRRi2ADWfDHrU/nhG1GEbpq5ySUs
-        AAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="DashboardBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

@@ -43,6 +43,12 @@ Public Class SalesAnalytics
         chartDatabaseHelper.LoadServiceData()
     End Sub
 
+    Public Sub LoadGraph(PanelChartRevenueCity As Panel)
+        chartDatabaseHelper.SetupPieChartControlInRevenueCity(PanelChartRevenueCity)
+        chartDatabaseHelper.InitializeChartStructureForCity()
+        chartDatabaseHelper.LoadRevenueByLocation()
+    End Sub
+
     Private Sub LoadBarGraphAverage()
         chartDatabaseHelper.SetupBarChartControl(PanelBarGraphAverage)
         chartDatabaseHelper.InitializeBarGraphStructure()
