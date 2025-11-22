@@ -25,19 +25,32 @@
     Public Sub UpdateAppointmentStatus(customerName As String, newStatus As String)
         actitvityLogDBHelper.LogActivity("Appointment Status Update", $"An appointment was scheduled for '{customerName}' was changed to new status '{newStatus}'")
     End Sub
+
     Public Sub RecordActivity(customerName As String, newStatus As String)
         actitvityLogDBHelper.LogActivity("Appointment Status Update", $"An appointment was scheduled for '{customerName}' was changed to new status '{newStatus}'")
     End Sub
+
     Public Sub AddNewContract(customerName As String)
         actitvityLogDBHelper.LogActivity("New Contract Added", $"A new contract was created for: '{customerName}'.")
     End Sub
+
     Public Sub UpdateContractStatus(customerName As String, newStatus As String)
         actitvityLogDBHelper.LogActivity("Contract Status Update", $"Contract for '{customerName}' was changed to new status '{newStatus}'.")
     End Sub
+
     Public Sub UserLogout(username As String)
         actitvityLogDBHelper.LogActivity("User Logout", $"User '{username}' logged out of the system.")
     End Sub
+
     Public Sub UserLogin(username As String)
         actitvityLogDBHelper.LogActivity("User Login", $"User '{username}' logged into the system.")
+    End Sub
+
+    Public Sub AddNewPickup(customerName As String, pickupDate As DateTime)
+        actitvityLogDBHelper.LogActivity("New Pickup Scheduled", $"A new pickup was scheduled for customer: '{customerName}' on {pickupDate}.")
+    End Sub
+
+    Public Sub UpdatePickupStatus(customerName As String, newStatus As String)
+        actitvityLogDBHelper.LogActivity("Pickup Status Update", $"Pickup for '{customerName}' was changed to new status '{newStatus}'.")
     End Sub
 End Class

@@ -353,8 +353,8 @@ Public Class PickupManagementDatabaseHelper
                 "ISNULL(c.Name, '') + ' ' + ISNULL(c.LastName, '') AS CustomerName, " &
                 "aggs.AllBaseServices AS BaseService, " &
                 "aggs.AllAddonServices AS AddonService, " &
-                "pt.PickupAddress, " &
                 "pt.PickupDateTime, " &
+                "pt.PickupAddress, " &
                 "pt.PaymentMethod, " &
                 "pt.ReferenceID, " &
                 "pt.Price, " &

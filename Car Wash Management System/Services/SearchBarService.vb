@@ -106,14 +106,7 @@ Public Class SearchBarService
 
         gridView.DataSource = salesData
 
-        If gridView.Columns.Contains("actionsColumn") Then
-            ' Set the DisplayIndex to the total number of columns minus 1. 
-            ' This ensures it is always the last column.
-            gridView.Columns("actionsColumn").DisplayIndex = gridView.Columns.Count - 1
 
-            ' Optional: Auto-size columns to fit the new data
-            gridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells)
-        End If
         gridView.Refresh()
     End Sub
 
@@ -128,6 +121,12 @@ Public Class SearchBarService
         End If
 
         gridView.DataSource = salesData
+        ' --- 2. FIX: Explicitly set the DisplayIndex of the Action button immediately after binding ---
+        If gridView.Columns.Contains("actionsColumn") Then
+            ' Setting DisplayIndex to the total number of columns minus 1 makes it the last column.
+            gridView.Columns("actionsColumn").DisplayIndex = gridView.Columns.Count - 1
+        End If
+
         gridView.Refresh()
     End Sub
 End Class

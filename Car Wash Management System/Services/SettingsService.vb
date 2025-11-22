@@ -246,8 +246,8 @@ Public Class SettingsService
             If selectedFormName.Equals("Regular", StringComparison.OrdinalIgnoreCase) OrElse selectedFormName.Equals("Select-All", StringComparison.OrdinalIgnoreCase) Then
                 If TypeOf frm Is SalesForm Then
                     Dim salesForm As SalesForm = DirectCast(frm, SalesForm)
-                    If Not IsNothing(salesForm.TextBoxTotalPrice) Then
-                        salesForm.TextBoxTotalPrice.ReadOnly = Not isPriceFieldEnabled
+                    If Not IsNothing(salesForm.TextBoxPrice) Then
+                        salesForm.TextBoxPrice.ReadOnly = Not isPriceFieldEnabled
                     End If
                 End If
             End If
@@ -256,8 +256,8 @@ Public Class SettingsService
             If selectedFormName.Equals("Dashboard", StringComparison.OrdinalIgnoreCase) OrElse selectedFormName.Equals("Select-All", StringComparison.OrdinalIgnoreCase) Then
                 If TypeOf frm Is Dashboard Then
                     Dim dashboardForm As Dashboard = DirectCast(frm, Dashboard)
-                    If Not IsNothing(dashboardForm.TextBoxTotalPrice) Then
-                        dashboardForm.TextBoxTotalPrice.ReadOnly = Not isPriceFieldEnabled
+                    If Not IsNothing(dashboardForm.TextBoxPrice) Then
+                        dashboardForm.TextBoxPrice.ReadOnly = Not isPriceFieldEnabled
                     End If
                 End If
             End If
@@ -266,9 +266,9 @@ Public Class SettingsService
             If selectedFormName.Equals("Pickup", StringComparison.OrdinalIgnoreCase) OrElse selectedFormName.Equals("Select-All", StringComparison.OrdinalIgnoreCase) Then
                 If TypeOf frm Is PickUp Then
                     Dim pickupForm As PickUp = DirectCast(frm, PickUp)
-                    If Not IsNothing(pickupForm.TextBoxTotalPrice) Then
+                    If Not IsNothing(pickupForm.TextBoxPrice) Then
                         ' Note: Pickup uses .Enabled. Ensure behavior is consistent with ReadOnly.
-                        pickupForm.TextBoxTotalPrice.ReadOnly = Not isPriceFieldEnabled
+                        pickupForm.TextBoxPrice.ReadOnly = Not isPriceFieldEnabled
                     End If
                 End If
             End If
@@ -277,8 +277,8 @@ Public Class SettingsService
             If selectedFormName.Equals("Contract", StringComparison.OrdinalIgnoreCase) OrElse selectedFormName.Equals("Select-All", StringComparison.OrdinalIgnoreCase) Then
                 If TypeOf frm Is Contracts Then
                     Dim contractsForm As Contracts = DirectCast(frm, Contracts)
-                    If Not IsNothing(contractsForm.TextBoxTotalPrice) Then
-                        contractsForm.TextBoxTotalPrice.ReadOnly = Not isPriceFieldEnabled
+                    If Not IsNothing(contractsForm.TextBoxPrice) Then
+                        contractsForm.TextBoxPrice.ReadOnly = Not isPriceFieldEnabled
                     End If
                 End If
             End If
@@ -287,8 +287,8 @@ Public Class SettingsService
             If selectedFormName.Equals("Appointment", StringComparison.OrdinalIgnoreCase) OrElse selectedFormName.Equals("Select-All", StringComparison.OrdinalIgnoreCase) Then
                 If TypeOf frm Is Appointment Then
                     Dim appointmentForm As Appointment = DirectCast(frm, Appointment)
-                    If Not IsNothing(appointmentForm.TextBoxTotalPrice) Then
-                        appointmentForm.TextBoxTotalPrice.ReadOnly = Not isPriceFieldEnabled
+                    If Not IsNothing(appointmentForm.TextBoxPrice) Then
+                        appointmentForm.TextBoxPrice.ReadOnly = Not isPriceFieldEnabled
                     End If
                 End If
             End If
@@ -300,7 +300,6 @@ Public Class SettingsService
 
         Next
     End Sub
-
 
     Public Shared Sub ApplyTotalPriceSettingsOnLoad()
         ' Read the saved Boolean setting for the CheckBox state

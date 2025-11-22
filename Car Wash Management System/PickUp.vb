@@ -10,7 +10,7 @@
     Private Sub PickUp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         LoadAllPopulateUI()
-
+        AddButtonAction()
         ClearFields()
         ChangeHeaderOfDataGridViewSales()
         DataGridViewSalesFontStyle()
@@ -20,7 +20,7 @@
         SettingsService.DiscountButtonForm(Settings.CheckBoxEnableDiscount)
         SetupListViewService.SetupListViewForServices(ListViewServices, 30, 85, 85, 50)
         SettingsService.ApplyTotalPriceSettingsOnLoad()
-         AddButtonAction()
+
     End Sub
     Private Sub AddAppointmentBtn_Click(sender As Object, e As EventArgs)
 
@@ -72,13 +72,18 @@
             salesDatabaseHelper.PopulateBaseServicesForUI(ComboBoxServices)
             salesDatabaseHelper.PopulateAddonServicesForUI(ComboBoxAddons)
             employeeMangamentDatabaseHelper.PopulateDetailerForUI(ComboBoxDetailer)
-            DataGridViewPickup.DataSource = pickupManagementDatabaseHelper.ViewPickupData()
+
+            DataGridViewPickup.DataSource = PickupManagementDatabaseHelper.ViewPickupData()
+
+            ' *** FIX 1: Set the display index after data binding for initial load ***
+
             ClearFields()
         Catch ex As Exception
             MessageBox.Show("An error occurred during form loading: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
     End Sub
+
 
     Private Sub ClearFields()
 
@@ -141,13 +146,16 @@
     End Sub
 
     Public Sub AddButtonAction()
-        Dim updateButtonColumn As New DataGridViewButtonColumn With {
-            .HeaderText = "Action",
-            .Text = "View Info",
-            .UseColumnTextForButtonValue = True,
-            .Name = "actionsColumn"
-        }
-        DataGridViewPickup.Columns.Add(updateButtonColumn)
+        If Not DataGridViewPickup.Columns.Contains("actionsColumn") Then
+            Dim updateButtonColumn As New DataGridViewButtonColumn With {
+                .HeaderText = "Action",
+                .Text = "View Info",
+                .UseColumnTextForButtonValue = True,
+                .Name = "actionsColumn" ' Use this name for easy retrieval
+            }
+            DataGridViewPickup.Columns.Add(updateButtonColumn)
+        End If
+
     End Sub
 
     Private Sub AddBtnFunction()
@@ -175,7 +183,7 @@
             Carwash.ShowNotification()
             Carwash.NotificationLabel.Text = "New Pickup Added"
 
-
+            AddNewPickupToActivityLog()
             ViewPickupData()
             PrintBillInPickup.ShowPrint(PrintDocumentBill)
             ClearFields()
@@ -239,10 +247,23 @@
             Carwash.ShowNotification()
             Carwash.NotificationLabel.Text = "Pickup Updated Successfully"
 
+            UpdatePickuptatusActivityLog()
             ShowPrintBillWhenCompleted()
             ViewPickupData()
             ClearFields()
         End If
+    End Sub
+
+    Public Sub UpdatePickuptatusActivityLog()
+        Dim customerName As String = TextBoxCustomerName.Text
+        Dim newtStatus As String = ComboBoxPickupStatus.Text
+        activityLogInDashboardService.UpdatePickupStatus(customerName, newtStatus)
+    End Sub
+
+    Public Sub AddNewPickupToActivityLog()
+        Dim customerName As String = TextBoxCustomerName.Text
+        Dim pickupDate As String = DateTimePickerStartDate.Value.ToString("g")
+        activityLogInDashboardService.AddNewPickup(customerName, pickupDate)
     End Sub
 
     Private Sub ClearFieldsBtn_Click(sender As Object, e As EventArgs) Handles ClearFieldsBtn.Click
@@ -285,6 +306,13 @@
             MessageBox.Show("Please select pickup from the table or add new pickup to print", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Else
             PrintBillInPickup.ShowPrint(PrintDocumentBill)
+        End If
+    End Sub
+
+    Private Sub SetActionButtonIndex()
+        If DataGridViewPickup.Columns.Contains("actionsColumn") Then
+            ' Setting DisplayIndex to the total count minus 1 makes it the last column
+            DataGridViewPickup.Columns("actionsColumn").DisplayIndex = DataGridViewPickup.Columns.Count - 1
         End If
     End Sub
 

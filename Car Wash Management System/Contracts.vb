@@ -111,7 +111,7 @@ Public Class Contracts
     End Sub
 
     Private Sub UpdateContractBtn_Click(sender As Object, e As EventArgs) Handles UpdateContractBtn.Click
-        UpdateContractActivityLog()
+
         ContractUpdated()
 
     End Sub
@@ -142,7 +142,8 @@ Public Class Contracts
             Carwash.NotificationLabel.Text = "Contract Updated"
             Carwash.ShowNotification()
 
-            DataGridViewContract.DataSource = contractsDatabaseHelper.ViewContracts()
+            DataGridViewContract.DataSource = ContractsDatabaseHelper.ViewContracts()
+            UpdateContractActivityLog()
             ClearFields()
         End If
     End Sub

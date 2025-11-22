@@ -172,9 +172,9 @@ Partial Class Settings
         LabelTotalPrice.ForeColor = SystemColors.ControlText
         LabelTotalPrice.Location = New Point(135, 102)
         LabelTotalPrice.Name = "LabelTotalPrice"
-        LabelTotalPrice.Size = New Size(366, 16)
+        LabelTotalPrice.Size = New Size(386, 16)
         LabelTotalPrice.TabIndex = 145
-        LabelTotalPrice.Text = "IF this enable, Total Price Field can now be edited for specific price "
+        LabelTotalPrice.Text = "IF this enable, Subtotal Price Field can now be edited for specific price "
         ' 
         ' CheckBoxTotalPrice
         ' 

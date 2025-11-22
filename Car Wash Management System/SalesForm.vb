@@ -237,6 +237,7 @@ Public Class SalesForm
             Carwash.PopulateAllTotal()
             Carwash.ShowNotification()
             Carwash.NotificationLabel.Text = "Sale Updated"
+
             UpdateSalesActivityLog()
             MessageBox.Show("Sale updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ViewSales()
